@@ -1,7 +1,12 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:use/UI/Core/announcement.dart';
+import 'package:use/UI/Core/course.dart';
+import 'package:use/UI/Core/notification.dart';
+import 'package:use/UI/Core/profile.dart';
 
 class HomeBase extends StatelessWidget {
   const HomeBase({super.key});
@@ -23,10 +28,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  final pageBN = const [
+    HomeBase(),
+    Announcement(),
+    Profile(),
+  ];
   final itemsBN = [
     SalomonBottomBarItem(
       icon: const Icon(
-        Icons.home,
+        Icons.home_outlined,
         size: 20.0
       ), 
       title: const Text(
@@ -35,13 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
           fontSize: 10
         ),
       ),
-      
+      activeIcon: Icon(Icons.home),
       unselectedColor: Colors.white,
       selectedColor: Colors.white,
     ),
     SalomonBottomBarItem(
       icon: const Icon(
-        Icons.campaign,
+        Icons.campaign_outlined,
         size: 20.0
       ), 
       title: const Text(
@@ -50,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           fontSize: 10
         ),
       ),
+      activeIcon: Icon(Icons.campaign_rounded),
       unselectedColor: Colors.white,
       selectedColor: Colors.white,
     ),
@@ -64,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           fontSize: 10
         ),
       ),
+      activeIcon: Icon(Icons.person),
       unselectedColor: Colors.white,
       selectedColor: Colors.white,
     )
@@ -92,7 +104,14 @@ class _HomeScreenState extends State<HomeScreen> {
               Icons.notifications, 
               color: Color.fromARGB(255, 14, 170, 113)
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (context) => notif()
+                )
+              );
+            },
           ),
           SizedBox(width: 15),
         ],
@@ -137,100 +156,115 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 10), 
                     ListBody(
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 8.0,
-                            bottom: 8.0,
-                          ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (context) => courses()
+                              )
+                            );
+                          },
                           child: Container(
                             decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 14, 170, 113),
                               borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color.fromARGB(255, 14, 170, 113),
-                                  Color.fromARGB(255, 14, 170, 113),
-                                ],
-                                stops: [
-                                  0.60,
-                                  0.90
-                                ],
-                              ),
-                              // color: Color.fromARGB(255, 14, 170, 113),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                                  blurRadius: 5,
-                                  offset: Offset(1, 8),
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/vanguards.png',
                                 ),
-                              ],
-                              // image: DecorationImage(
-                              //   image: AssetImage('assets/vanguards.png'),
-                              //   fit: BoxFit.cover, 
-                              // ),
+                                fit: BoxFit.none,
+                                alignment: FractionalOffset.centerRight.add(
+                                  FractionalOffset(-0.6, -0.16)
+                                )
+                                    // FractionalOffset(-1.8, 0.37)
+                              ),
                             ),
                             height: 170,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 20.0,
-                                    left: 30.0
-                                  ),
-                                  child: Text(
-                                    'Health Sciences',
-                                    style: GoogleFonts.inter(
-                                      textStyle: TextStyle (
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(255, 14, 170, 113),
+                                    Color.fromARGB(123, 14, 170, 113),
+                                  ],
+                                  stops: [
+                                    0.50,
+                                    0.70
+                                  ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 5.0,
-                                    left: 30.0
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                                    blurRadius: 5,
+                                    offset: Offset(1, 8),
                                   ),
-                                  child: Text(
-                                    'Courses :',
-                                    style: GoogleFonts.inter(
-                                      textStyle: TextStyle (
-                                        fontSize: 10,
-                                        color: Colors.white54,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 20.0,
+                                      left: 30.0
                                     ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 60.0,
-                                    left: 30.0
-                                  ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.arrow_circle_right_outlined,
-                                        color: Colors.white54,
-                                        size: 20
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        'Show more courses',
-                                        style: GoogleFonts.inter(
-                                          textStyle: TextStyle (
-                                            fontSize: 10,
-                                            color: Colors.white54,
-                                            fontWeight: FontWeight.w200,
-                                          ),
+                                    child: Text(
+                                      'Health Sciences',
+                                      style: GoogleFonts.inter(
+                                        textStyle: TextStyle (
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 30.0
+                                    ),
+                                    child: Text(
+                                      'Courses :',
+                                      style: GoogleFonts.inter(
+                                        textStyle: TextStyle (
+                                          fontSize: 10,
+                                          color: Colors.white54,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: 60.0,
+                                      left: 30.0
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.arrow_circle_right_outlined,
+                                          color: Colors.white54,
+                                          size: 20
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Show more courses',
+                                          style: GoogleFonts.inter(
+                                            textStyle: TextStyle (
+                                              fontSize: 10,
+                                              color: Colors.white54,
+                                              fontWeight: FontWeight.w200,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -247,19 +281,22 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Color.fromARGB(255, 14, 170, 113),
         child: Stack(
           children: <Widget>[
-            Card(
-              margin: const EdgeInsets.only(
-                right: 120.0,
-                left: 120.0
-              ),
-              child: SalomonBottomBar(
-                backgroundColor: Color.fromARGB(255, 14, 170, 113),
-                items: itemsBN,
-                currentIndex: _currentIndex,
-                duration: Duration(seconds: 1),
-                onTap: (index) => setState(() {
-                  _currentIndex = index;
-                })
+            Align(
+              heightFactor: 1.0,
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: 260.0,
+                ),
+                child: SalomonBottomBar(
+                  backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                  items: itemsBN,
+                  currentIndex: _currentIndex,
+                  duration: Duration(seconds: 1),
+                  onTap: (index) => setState(() {
+                    _currentIndex = index;
+                  }),
+                ),
               ),
             ),
           ],
