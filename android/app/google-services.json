@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "735463244310",
+    "project_id": "notification-10397",
+    "storage_bucket": "notification-10397.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735463244310:android:89279cecf1fc25c6176b37",
+        "android_client_info": {
+          "package_name": "com.use.phimaed.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq_7wTrwazAKtjt085FeGRTLruZNYRlQw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

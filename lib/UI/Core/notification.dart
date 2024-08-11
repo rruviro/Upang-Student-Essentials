@@ -9,19 +9,51 @@ class notif extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         title: Container(
           child: Text(
             'Notifications',
             style: GoogleFonts.inter(
               textStyle: TextStyle(
-                fontSize: 18,
-                color: Color.fromARGB(255, 14, 170, 113),
+                fontSize: 20,
+                color: Colors.black,
                 fontWeight: FontWeight.w600
               )
             ),
           ),
         ),
+        actions: [
+          InkWell(
+            onTap: (){}, 
+            child: Align(
+              child: Text(
+                'Mark all as read',
+                style: GoogleFonts.inter(
+                  textStyle: TextStyle(
+                    fontSize: 13,
+                    color:Colors.black54,
+                    fontWeight: FontWeight.w600
+                  )
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 20)
+        ],
+      ),
+      body: ListView(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     ); 
   }
