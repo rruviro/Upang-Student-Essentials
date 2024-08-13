@@ -1,13 +1,16 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-class notif extends StatefulWidget {
-  const notif({super.key});
+import 'package:use/SERVICES/model/Transaction.dart';
+class Transaction extends StatefulWidget {
+  const Transaction({super.key});
   @override
-  State<notif> createState() => _notifState();
+  State<Transaction> createState() => _TransactionState();
 }
 
-class _notifState extends State<notif> {
+class _TransactionState extends State<Transaction> {
   int _currentSelection = 1;
   GlobalKey _Request = GlobalKey();
   GlobalKey _Pending = GlobalKey();
@@ -42,7 +45,7 @@ class _notifState extends State<notif> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'Notification',
+          'Transaction',
           style: GoogleFonts.inter(
             textStyle: TextStyle(
               color: Colors.black,
@@ -63,7 +66,7 @@ class _notifState extends State<notif> {
                     key: _Request,
                     onTap: () => _selectedItem(1),
                     child: Text(
-                      'Inbox',
+                      'Request',
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         color: _currentSelection == 1
@@ -88,7 +91,7 @@ class _notifState extends State<notif> {
                     key: _Pending,
                     onTap: () => _selectedItem(2),
                     child: Text(
-                      'Antique',
+                      'Pending',
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         color: _currentSelection == 2
@@ -113,7 +116,7 @@ class _notifState extends State<notif> {
                     key: __Reserved,
                     onTap: () => _selectedItem(3),
                     child: Text(
-                      'All',
+                      'Reserved',
                       style: GoogleFonts.inter(
                         fontSize: 10,
                         color: _currentSelection == 3
@@ -134,6 +137,20 @@ class _notifState extends State<notif> {
                     ),
                   ),
                   SizedBox(width: 20),
+                  InkWell(
+                    key: _Claim,
+                    onTap: () => _selectedItem(4),
+                    child: Text(
+                      'Claim',
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        color: _currentSelection == 4
+                          ? Color.fromARGB(255, 0, 0, 0)
+                          : Colors.grey,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -150,9 +167,55 @@ class _notifState extends State<notif> {
       ),
       body: ListView(
         children: [
-
+          ItemList(
+            categoryList: status
+                .where(
+                  (element) => element.category == _currentSelection
+                ).toList()
+          )
         ],
-      )
+      ),
+    );
+  }
+}
+
+class ItemList extends StatelessWidget {
+  final List<TransactionStatus> categoryList;
+  const ItemList({Key? key, required this.categoryList}) : super (key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: categoryList
+        .map((e) => ItemCard(
+            visual: e,
+          ))
+        .toList(),
+    );
+  }
+}
+
+class ItemCard extends StatelessWidget {
+  final TransactionStatus visual;
+  const ItemCard({Key? key, required this.visual}) : super (key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2.0,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 10.0,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 100,
+            child: Image.network(
+              visual.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

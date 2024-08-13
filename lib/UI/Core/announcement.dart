@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/local_notif.dart';
-import 'package:use/SERVICES/notification.dart';
+import 'package:use/SERVICES/notification/local_notif.dart';
+import 'package:use/SERVICES/notification/notification.dart';
 import 'package:use/UI/Core/notification.dart';
 
 class Announcement extends StatelessWidget {
@@ -11,6 +11,7 @@ class Announcement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Container(
           width: double.infinity, 
@@ -18,6 +19,17 @@ class Announcement extends StatelessWidget {
           child: Row(
             children: [
               Image.asset('assets/logo.png'),
+              SizedBox(width: 10),
+              Text(
+                'Upang Student Essentials',
+                style: GoogleFonts.inter(
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600
+                  )
+                ),
+              ),
             ],
           ),
         ),
@@ -49,7 +61,15 @@ class Announcement extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  
+                  // NotificationButton(
+                  //   text: "Normal Notification",
+                  //   onPressed: () async {
+                  //     await NotificationService.showNotification(
+                  //       title: "Title of the notification",
+                  //       body: "Body of the notification",
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ],

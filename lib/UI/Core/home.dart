@@ -9,11 +9,27 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Container(
-          width: 35, 
+          width: double.infinity, 
           height: 35, 
-          child: Image.asset('assets/logo.png'),
+          child: Row(
+            children: [
+              Image.asset('assets/logo.png'),
+              SizedBox(width: 10),
+              Text(
+                'Upang Student Essentials',
+                style: GoogleFonts.inter(
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600
+                  )
+                ),
+              ),
+            ],
+          ),
         ),
         centerTitle: false,
         actions: <Widget>[
@@ -102,7 +118,6 @@ class Home extends StatelessWidget {
                                 alignment: FractionalOffset.centerRight.add(
                                   FractionalOffset(-0.6, -0.16)
                                 )
-                                    // FractionalOffset(-1.8, 0.37)
                               ),
                             ),
                             height: 170,
