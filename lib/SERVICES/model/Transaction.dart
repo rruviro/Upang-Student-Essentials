@@ -1,16 +1,68 @@
 class TransactionStatus {
   final String department;
   final String imageUrl;
+  final String reservedDate;
+  final String claimedDate;
+  final String status;
   final category;
-  const TransactionStatus(this.department, this.imageUrl, this.category);
+  const TransactionStatus(this.department, this.imageUrl, this.reservedDate, this.claimedDate, this.status, this.category);
 }
 
-List<TransactionStatus> status = [
-  TransactionStatus('Cite', 'https://tse3.mm.bing.net/th?id=OIP.jri_7Ger--A5c1tAMUAKOgHaHa&pid=Api&P=0&h=180', 1),
-  TransactionStatus('Cite', 'https://cf.shopee.ph/file/4257e1c5e21685f85a70e6cb1401c4dc', 1),
-  TransactionStatus('Cite', 'https://cf.shopee.ph/file/4257e1c5e21685f85a70e6cb1401c4dc', 2),
-  TransactionStatus('Cite', 'https://cf.shopee.ph/file/4257e1c5e21685f85a70e6cb1401c4dc', 2),
-  TransactionStatus('Cite', 'https://cf.shopee.ph/file/4257e1c5e21685f85a70e6cb1401c4dc', 3),
-  TransactionStatus('Cite', 'https://cf.shopee.ph/file/4257e1c5e21685f85a70e6cb1401c4dc', 4),
-  TransactionStatus('Cite', 'https://cf.shopee.ph/file/4257e1c5e21685f85a70e6cb1401c4dc', 4),
+List<TransactionStatus> products = [
+  TransactionStatus(
+    'Cite', 
+    'https://1.bp.blogspot.com/-dHN4KiD3dsU/XRxU5JRV7DI/AAAAAAAAAz4/u1ynpCMIuKwZMA642dHEoXFVKuHQbJvwgCEwYBhgL/s1600/qr-code.png', 
+    '14/01/2024',
+    '14/08/2024',
+    'Request',
+    1
+  ),
+  TransactionStatus(
+    'Cite', 
+    'https://1.bp.blogspot.com/-dHN4KiD3dsU/XRxU5JRV7DI/AAAAAAAAAz4/u1ynpCMIuKwZMA642dHEoXFVKuHQbJvwgCEwYBhgL/s1600/qr-code.png', 
+    '14/01/2024',
+    '14/08/2024',
+    'Request',
+    1
+  ),
+  TransactionStatus(
+    'Cite', 
+    'https://1.bp.blogspot.com/-dHN4KiD3dsU/XRxU5JRV7DI/AAAAAAAAAz4/u1ynpCMIuKwZMA642dHEoXFVKuHQbJvwgCEwYBhgL/s1600/qr-code.png', 
+    '14/01/2024',
+    '14/08/2024',
+    'Request',
+    1
+  ),
+  TransactionStatus(
+    'Cite', 
+    'https://1.bp.blogspot.com/-dHN4KiD3dsU/XRxU5JRV7DI/AAAAAAAAAz4/u1ynpCMIuKwZMA642dHEoXFVKuHQbJvwgCEwYBhgL/s1600/qr-code.png', 
+    '14/01/2024',
+    '14/08/2024',
+    'Request',
+    1
+  ),
+  TransactionStatus(
+    'Cite', 
+    'https://1.bp.blogspot.com/-dHN4KiD3dsU/XRxU5JRV7DI/AAAAAAAAAz4/u1ynpCMIuKwZMA642dHEoXFVKuHQbJvwgCEwYBhgL/s1600/qr-code.png', 
+    '14/01/2024',
+    '14/08/2024',
+    'Pending',
+    2
+  ),
+  TransactionStatus(
+    'Cite', 
+    'https://1.bp.blogspot.com/-dHN4KiD3dsU/XRxU5JRV7DI/AAAAAAAAAz4/u1ynpCMIuKwZMA642dHEoXFVKuHQbJvwgCEwYBhgL/s1600/qr-code.png', 
+    '14/01/2024',
+    '14/08/2024',
+    'Pending',
+    2
+  ),
+  TransactionStatus(
+    'Cite', 
+    'https://1.bp.blogspot.com/-dHN4KiD3dsU/XRxU5JRV7DI/AAAAAAAAAz4/u1ynpCMIuKwZMA642dHEoXFVKuHQbJvwgCEwYBhgL/s1600/qr-code.png', 
+    '14/01/2024',
+    '14/08/2024',
+    'Pending',
+    2
+  ),
 ];

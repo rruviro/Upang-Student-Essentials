@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:use/UI/Core/home.dart';
+import 'package:use/UI/Core/welcome.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       Future.delayed(Duration(milliseconds: 500), () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Home()),
+          MaterialPageRoute(builder: (context) => Welcome()),
         );
       });
     });

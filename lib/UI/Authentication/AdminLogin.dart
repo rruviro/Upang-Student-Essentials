@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:use/UI/Authentication/StudentLogin.dart';
+import 'package:use/UI/Core/admin/navigation.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class AdminLogin extends StatelessWidget {
+  const AdminLogin({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +21,11 @@ class Login extends StatelessWidget {
               ),
             ),
           ),
-          SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 40.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(height: 70),
                 Center(
                   child: Image.asset(
                     "assets/logo.png",
@@ -33,13 +34,12 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
-                
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Student ID', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
+                      Text('Faculty ID', style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
                       SizedBox(height: 8),
                       TextField(
                         style: TextStyle(color: Colors.black),
@@ -64,7 +64,7 @@ class Login extends StatelessWidget {
                           hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
                           contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15.0),
+                            borderRadius: BorderRadius.circular(5.0),
                             borderSide: BorderSide(color: Colors.black),
                           ),
                         ),
@@ -73,71 +73,85 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Password', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
+                      Text('Password', style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
                       SizedBox(height: 8),
                       PasswordField(),
                     ],
                   ),
                 ),
                 SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: () {
-                    // login function chuchu
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 130, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (context) => HomeBase()
+                        )
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF0EAA72),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                     ),
-                    backgroundColor: Color(0xFF0EAA72),
-                  ),
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Row(
                     children: <Widget>[
-                      Expanded(child: Divider(color: Colors.black)),
+                      Expanded(child: Divider(color: Color.fromARGB(86, 0, 0, 0))),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text("other", style: TextStyle(color: Colors.black)),
+                        child: Text("other", style: TextStyle(color: Color.fromARGB(86, 0, 0, 0))),
                       ),
-                      Expanded(child: Divider(color: Colors.black)),
+                      Expanded(child: Divider(color: Color.fromARGB(86, 0, 0, 0))),
                     ],
                   ),
                 ),
-
-                ElevatedButton(
-                  onPressed: () {
-                    // admin function
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 130, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (context) => StudnetLogin()
+                        )
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
                       side: BorderSide(color: Color(0xFF0EAA72), width: 2.0),
+                      foregroundColor: Color(0xFF0EAA72),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                     ),
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    "Admin",
-                    style: TextStyle(
-                      color: Color(0xFF0EAA72),
-                      fontSize: 18,
+                    child: Text(
+                      "Student",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -195,7 +209,7 @@ class _PasswordFieldState extends State<PasswordField> {
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(5.0),
           borderSide: BorderSide(color: Colors.black),
         ),
       ),

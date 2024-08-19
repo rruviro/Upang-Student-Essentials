@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/UI/Authentication/StudentLogin.dart';
+
+import '../Authentication/AdminLogin.dart';
 
 void main() {
   runApp(const Welcome());
@@ -111,7 +114,14 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                           width: double.infinity,
                           height: 50,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                              .push(
+                                MaterialPageRoute(
+                                  builder: (context) => StudnetLogin()
+                                )
+                              );
+                            },
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.white.withOpacity(0.3),
                               side: BorderSide(color: Color(0xFF0EAA72), width: 2.0),
@@ -134,7 +144,14 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context)
+                              .push(
+                                MaterialPageRoute(
+                                  builder: (context) => AdminLogin()
+                                )
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFF0EAA72),
                               foregroundColor: Colors.white,

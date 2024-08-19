@@ -1,13 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:use/UI/Core/announcement.dart';
-import 'package:use/UI/Core/course.dart';
-import 'package:use/UI/Core/home.dart';
-import 'package:use/UI/Core/notification.dart';
-import 'package:use/UI/Core/profile.dart';
+import 'package:use/UI/Core/admin/announcement/announcement.dart';
+import 'package:use/UI/Core/admin/home/home.dart';
+import 'package:use/UI/Core/admin/profile/profile.dart';
 
 class HomeBase extends StatelessWidget {
   const HomeBase({super.key});
@@ -15,7 +11,7 @@ class HomeBase extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Upang Student Essentials',
+      title: 'Upang Admin Essentials',
       home: HomeScreen()
     );
   }
@@ -42,7 +38,7 @@ class _Homedestinationtate extends State<HomeScreen> {
         ),
       ),
       activeIcon: Icon(Icons.home),
-      unselectedColor: Colors.white,
+      unselectedColor: Colors.white60,
       selectedColor: Colors.white,
     ),
     SalomonBottomBarItem(
@@ -57,7 +53,7 @@ class _Homedestinationtate extends State<HomeScreen> {
         ),
       ),
       activeIcon: Icon(Icons.campaign_rounded),
-      unselectedColor: Colors.white,
+      unselectedColor: Colors.white60,
       selectedColor: Colors.white,
     ),
     SalomonBottomBarItem(
@@ -72,7 +68,7 @@ class _Homedestinationtate extends State<HomeScreen> {
         ),
       ),
       activeIcon: Icon(Icons.person),
-      unselectedColor: Colors.white,
+      unselectedColor: Colors.white60,
       selectedColor: Colors.white,
     )
   ];
