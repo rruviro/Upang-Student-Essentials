@@ -14,7 +14,7 @@ class Login extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/loginbg.jpg"),
+                image: AssetImage("assets/loginbg.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -39,7 +39,7 @@ class Login extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Student ID', style: TextStyle(color: Colors.black, fontSize: 16)),
+                      Text('Student ID', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(height: 8),
                       TextField(
                         style: TextStyle(color: Colors.black),
@@ -50,7 +50,7 @@ class Login extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(width: 12),
-                              Icon(Icons.person, color: Colors.black),
+                              Icon(Icons.person_outline, color: Colors.black),
                               SizedBox(width: 8),
                               Container(
                                 width: 1.0,
@@ -79,7 +79,7 @@ class Login extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Password', style: TextStyle(color: Colors.black, fontSize: 16)),
+                      Text('Password', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(height: 8),
                       PasswordField(),
                     ],
@@ -91,9 +91,9 @@ class Login extends StatelessWidget {
                     // login function chuchu
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 130, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 130, vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     backgroundColor: Color(0xFF0EAA72),
                   ),
@@ -101,6 +101,42 @@ class Login extends StatelessWidget {
                     "Login",
                     style: TextStyle(
                       color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(child: Divider(color: Colors.black)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text("other", style: TextStyle(color: Colors.black)),
+                      ),
+                      Expanded(child: Divider(color: Colors.black)),
+                    ],
+                  ),
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    // admin function
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 130, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: BorderSide(color: Color(0xFF0EAA72), width: 2.0),
+                    ),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    "Admin",
+                    style: TextStyle(
+                      color: Color(0xFF0EAA72),
                       fontSize: 18,
                     ),
                   ),
@@ -134,7 +170,7 @@ class _PasswordFieldState extends State<PasswordField> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(width: 12),
-            Icon(Icons.lock, color: Colors.black),
+            Icon(Icons.lock_outline, color: Colors.black),
             SizedBox(width: 8),
             Container(
               width: 1.0,
@@ -148,7 +184,7 @@ class _PasswordFieldState extends State<PasswordField> {
         hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
         suffixIcon: IconButton(
           icon: Icon(
-            _obscureText ? Icons.visibility : Icons.visibility_off,
+            _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
             color: Colors.black,
           ),
           onPressed: () {

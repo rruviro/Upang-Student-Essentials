@@ -102,7 +102,7 @@ class Home extends StatelessWidget {
                             Navigator.of(context)
                             .push(
                               MaterialPageRoute(
-                                builder: (context) => courses()
+                                builder: (context) => Course()
                               )
                             );
                           },
