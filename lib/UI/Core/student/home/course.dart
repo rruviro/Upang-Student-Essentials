@@ -167,7 +167,7 @@ class _CourseState extends State<Course> {
                 ],
               ),
               onTap: () {
-                // function
+                // function 
               },
             ),
           ),
