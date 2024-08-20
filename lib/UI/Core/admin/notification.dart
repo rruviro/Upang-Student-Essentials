@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/Notification.dart';
+import 'package:use/SERVICES/model/student/Notification.dart';
 
 class notif extends StatefulWidget {
   const notif({super.key});
@@ -10,6 +10,7 @@ class notif extends StatefulWidget {
 }
 
 class _notifState extends State<notif> {
+  final TextEditingController _controller = TextEditingController();
   int _currentSelection = 1;
   final GlobalKey _Inbox = GlobalKey();
   final GlobalKey _Antique = GlobalKey();
@@ -130,18 +131,95 @@ class _notifState extends State<notif> {
                 width: double.infinity,
                 decoration: BoxDecoration(color: Colors.white),
                 padding: EdgeInsets.all(10.0),
-                child: ItemList(
-                  status: _currentSelection == 3
-                      ? products 
-                      : products
-                          .where(
-                              (element) => element.category == _currentSelection)
-                          .toList(),
-                ),
+                // child: ItemList(
+                //   status: _currentSelection == 3
+                //       ? products 
+                //       : products
+                //           .where(
+                //               (element) => element.category == _currentSelection)
+                //           .toList(),
+                // ),
               ),
             ],
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                title: Text(
+                  'New Notification',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                content: Container(
+                  width: 200,
+                  height: 40,
+                  child: TextFormField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                      ),
+                      hintText: 'smile for me :>',
+                      hintStyle: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      
+                    },
+                    child: Text(
+                      'Publish',
+                      style: GoogleFonts.inter(
+                        color: Color.fromARGB(255, 14, 170, 113),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); 
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: GoogleFonts.inter(
+                        color: Color.fromARGB(255, 14, 170, 113),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white
+        ),
+        backgroundColor: Color.fromARGB(255, 14, 170, 113),
       ),
     );
   }

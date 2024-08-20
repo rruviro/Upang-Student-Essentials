@@ -3,7 +3,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/Announcement.dart';
+import 'package:use/SERVICES/model/student/Announcement.dart';
 import 'package:use/SERVICES/notification/notification.dart';
 import 'package:use/UI/Core/admin/notification.dart';
 
@@ -15,6 +15,7 @@ class Announcement extends StatefulWidget {
 }
 
 class _AnnouncementState extends State<Announcement> {
+  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,14 +57,6 @@ class _AnnouncementState extends State<Announcement> {
               );
             },
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.backpack, 
-              color: Color.fromARGB(255, 14, 170, 113)
-            ),
-            onPressed: () {
-            },
-          ),
           SizedBox(width: 15),
         ],
         backgroundColor: Colors.white,
@@ -75,6 +68,7 @@ class _AnnouncementState extends State<Announcement> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 30),
+              slides(context),
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -85,14 +79,18 @@ class _AnnouncementState extends State<Announcement> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 30),
-                    // Text(
-                    //   'Announcement',
-                    //   style: GoogleFonts.inter(
-                    //     fontSize: 17,
-                    //     color: Colors.black,
-                    //     fontWeight: FontWeight.w600
-                    //   ),
-                    // ),
+                    Text(
+                      'Announcement',
+                      style: GoogleFonts.inter(
+                        fontSize: 17,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    ItemList(
+                      status : details
+                    )
                   ],
                 ),
               ),
@@ -100,6 +98,228 @@ class _AnnouncementState extends State<Announcement> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                title: Text(
+                  'New Announcement',
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                content: Container(
+                  width: 200,
+                  height: 40,
+                  child: TextFormField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                      ),
+                      hintText: 'smile for me :>',
+                      hintStyle: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      
+                    },
+                    child: Text(
+                      'Publish',
+                      style: GoogleFonts.inter(
+                        color: Color.fromARGB(255, 14, 170, 113),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); 
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: GoogleFonts.inter(
+                        color: Color.fromARGB(255, 14, 170, 113),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white
+        ),
+        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+      ),
+    );
+  }
+}
+
+Widget slides(BuildContext context) {
+  List<String> imageUrls = [
+    'assets/e6cad8e6-4afa-4f35-a78e-2defea59f7e7.png',
+    'assets/e9c4b145-4d7b-4787-bd61-7b38c4b3ba44.png',
+    'assets/0d88f45a-60dc-4518-9641-6f318056db74.png',
+  ];
+  return Container(
+    child: CarouselSlider(
+      items: imageUrls.map((url) {
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.symmetric(horizontal: 0),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 14, 170, 113),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Image.asset(
+              url,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          ),
+        );
+      }).toList(),
+      options: CarouselOptions(
+        height: 140,
+        autoPlay: false, 
+        autoPlayInterval: Duration(seconds: 3), 
+        autoPlayAnimationDuration: Duration(milliseconds: 600),
+        autoPlayCurve: Curves.fastOutSlowIn, 
+        enlargeCenterPage: true,
+      ),
+    ),
+  );
+}
+
+class ItemList extends StatelessWidget {
+  final List<announcement> status;
+  const ItemList({Key? key, required this.status}) : super (key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: status
+        .map((e) => ItemCard(
+            details: e,
+          ))
+        .toList(),
+    );
+  }
+}
+
+class ItemCard extends StatelessWidget {
+  final announcement details;
+  const ItemCard({Key? key, required this.details}) : super (key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(
+            horizontal: 0.0,
+            vertical: 15.0,
+          ),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                blurRadius: 5,
+                offset: Offset(1, 8),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 40,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 14, 170, 113),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 10.0
+                ),
+                child: Text(
+                  details.description,
+                  style: GoogleFonts.inter(
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 10
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 26,
+          left: 10,
+          child: Container(
+            child: Center(
+              child: Text(
+                details.department,
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 10
+                ),
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 26,
+          right: 10,
+          child: Container(
+            child: Center(
+              child: Text(
+                details.published,
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 10
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

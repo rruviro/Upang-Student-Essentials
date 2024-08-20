@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/Department.dart';
+import 'package:image_picker/image_picker.dart';
 class newDepartment extends StatefulWidget {
   const newDepartment({super.key});
   @override
@@ -145,6 +147,18 @@ class _newDepartmentState extends State<newDepartment> {
 
   @override
   Widget build(BuildContext context) {
+
+    File? _image;
+
+    Future<void> _openImagePicker() async {
+      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedImage != null) {
+        setState(() {
+          _image = File(pickedImage.path);
+        });
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -167,9 +181,6 @@ class _newDepartmentState extends State<newDepartment> {
           backgroundColor: Colors.white,
           title: Container(
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white
-            ),
             padding: EdgeInsets.all(5.0),
             child: Visual(context)
           ),
@@ -293,12 +304,66 @@ class _newDepartmentState extends State<newDepartment> {
                         fontWeight: FontWeight.w600
                       ),
                     ),
-                    SizedBox(height: 5),
-                    Container(
-                      height: 100,
-                      width: 100,
-                      color: Colors.grey,
-                    )
+                    SizedBox(height: 10),
+                    InkWell(
+                      onTap: () {
+                        _openImagePicker();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(5)
+                        ),
+                        child: _image != null
+                            ? Image.file(_image!, fit: BoxFit.cover)
+                            : const Text('Please select an image'),
+                      ),
+                    ),
+                    SizedBox(height: 50),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: 0,
+                        left: 0,
+                        bottom: 20,
+                      ),
+                      child: Center(
+                        child: InkWell(
+                          onTap: () {
+                            
+                          },
+                          child: Container(
+                            width: 200,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 14, 170, 113),
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                                  blurRadius: 5,
+                                  offset: Offset(1, 8),
+                                ),
+                              ]
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Deploy',
+                                style: GoogleFonts.inter(
+                                  textStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600
+                                  )
+                                ),
+                              ),
+                            )
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

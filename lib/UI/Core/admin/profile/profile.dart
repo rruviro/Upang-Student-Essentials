@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/History.dart';
+import 'package:use/SERVICES/model/admin/History.dart';
 import 'package:use/UI/Core/admin/notification.dart';
 import 'package:use/UI/Core/admin/profile/transaction.dart';
 
@@ -13,25 +13,6 @@ class Profile extends StatefulWidget {
 }
   
 class _ProfileScreenState extends State<Profile> {
-  int _currentSelection = 1;
-  GlobalKey _Complete = GlobalKey();
-  GlobalKey _Cancelled = GlobalKey();
-  _selectedItem(int id) {
-    _currentSelection = id;
-    GlobalKey selectedGlobalKey;
-    switch (id) {
-      case 1:
-        selectedGlobalKey = _Complete;
-        break;
-      case 2:
-        selectedGlobalKey = _Cancelled;
-        break;
-      default: 
-    }
-    setState(() {
-      
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,14 +52,6 @@ class _ProfileScreenState extends State<Profile> {
                   builder: (context) => notif()
                 )
               );
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.backpack, 
-              color: Color.fromARGB(255, 14, 170, 113)
-            ),
-            onPressed: () {
             },
           ),
           IconButton(
@@ -162,210 +135,153 @@ class _ProfileScreenState extends State<Profile> {
                           ),
                         ],
                       ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        constraints: BoxConstraints(
-                          maxWidth: 260.0,
-                        ),
+                      child: Center(
                         child: Container(
-                          width: 250,
-                          height: 80,
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context)
-                                  .push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Transaction()
-                                    )
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 13),
-                                    Icon(
-                                      Icons.request_page_outlined,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      'Request',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 10,
+                          alignment: Alignment.center,
+                          constraints: BoxConstraints(
+                            maxWidth: 254.0,
+                          ),
+                          child: Container(
+                            height: 80,
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Transaction()
+                                      )
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 13),
+                                      Icon(
+                                        Icons.approval,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w400
+                                        size: 30,
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'Approval',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 30),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context)
-                                  .push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Transaction()
-                                    )
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 13),
-                                    Icon(
-                                      Icons.pending_outlined,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      'Pending',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 10,
+                                SizedBox(width: 25),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Transaction()
+                                      )
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 13),
+                                      Icon(
+                                        Icons.calendar_month_outlined,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w400
+                                        size: 30,
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'Reserved',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 30),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context)
-                                  .push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Transaction()
-                                    )
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 13),
-                                    Icon(
-                                      Icons.calendar_month_outlined,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      'Reserved',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 10,
+                                SizedBox(width: 25),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Transaction()
+                                      )
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 13),
+                                      Icon(
+                                        Icons.pending_outlined,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w400
+                                        size: 30,
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'Pending',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 30),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context)
-                                  .push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Transaction()
-                                    )
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 13),
-                                    Icon(
-                                      Icons.back_hand_outlined,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      'Claim',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 10,
+                                SizedBox(width: 25),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Transaction()
+                                      )
+                                    );
+                                  },
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 13),
+                                      Icon(
+                                        Icons.check_box_outlined,
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w400
+                                        size: 30,
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'Complete',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                     SizedBox(height: 30),
                     Text(
-                      'History',
+                      'Cancelled',
                       style: GoogleFonts.inter(
                         fontSize: 17,
                         color: Colors.black,
                         fontWeight: FontWeight.w600
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        InkWell(
-                          key: _Complete,
-                          onTap: () => _selectedItem(1),
-                          child: Text(
-                            'Complete',
-                            style: GoogleFonts.inter(
-                              fontSize: 10,
-                              color: _currentSelection == 1
-                                ? Color.fromARGB(255, 0, 0, 0)
-                                : Colors.grey,
-                              fontWeight: FontWeight.w600
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        SizedBox(
-                          height: 25,
-                          width: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black26
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        InkWell(
-                          key: _Cancelled,
-                          onTap: () => _selectedItem(2),
-                          child: Text(
-                            'Cancelled',
-                            style: GoogleFonts.inter(
-                              fontSize: 10,
-                              color: _currentSelection == 2
-                                ? Color.fromARGB(255, 0, 0, 0)
-                                : Colors.grey,
-                              fontWeight: FontWeight.w600
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      height: 1,
-                      width: double.infinity,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black26
-                        ),
-                      ),
-                    ),
                     SizedBox(height: 20),
                     ItemList(
                       status : products
-                          .where(
-                            (element) => element.category == _currentSelection
-                          )
-                          .toList()
                     )
                   ],
                 ),
@@ -401,16 +317,14 @@ class ItemCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(
-            bottom: 30.0,
-          ),
+          margin: const EdgeInsets.only(bottom: 30),
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Color.fromARGB(255, 14, 170, 113),
-             boxShadow: [
+            boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                color: Colors.black.withOpacity(0.5),
                 blurRadius: 5,
                 offset: Offset(1, 8),
               ),
@@ -427,7 +341,7 @@ class ItemCard extends StatelessWidget {
                     bottomLeft: Radius.circular(5),
                   ),
                 ),
-                clipBehavior: Clip.hardEdge, 
+                clipBehavior: Clip.hardEdge,
                 child: Image.network(
                   product.imageUrl,
                   fit: BoxFit.contain,
@@ -438,7 +352,7 @@ class ItemCard extends StatelessWidget {
               Stack(
                 children: [
                   Positioned(
-                    top: 55,
+                    top: 59,
                     left: 0,
                     child: SizedBox(
                       height: 1,
@@ -453,34 +367,40 @@ class ItemCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Text(
-                            'Department :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
-                            ),
+                      SizedBox(height: 19),
+                      Text(
+                        product.consumer,
+                        style: GoogleFonts.inter(
+                          textStyle: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
                           ),
-                          SizedBox(width: 5),
-                          Text(
-                            product.department,
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
-                            ),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        product.studentID,
+                        style: GoogleFonts.inter(
+                          textStyle: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white54,
                           ),
-                        ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        product.status, // Use the passed status
+                        style: GoogleFonts.inter(
+                          textStyle: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white70,
+                          ),
+                        ),
                       ),
                       Row(
                         children: [
                           Text(
-                            'Reserved :',
+                            'Reserved:',
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 10,
@@ -501,40 +421,6 @@ class ItemCard extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 10),
-                      SizedBox(height: 10),
-                      Text(
-                        product.status,
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Claimed :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            product.claimedDate,
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
                     ],
                   ),
                 ],
@@ -542,6 +428,7 @@ class ItemCard extends StatelessWidget {
             ],
           ),
         ),
+        // Info Button
         Positioned(
           top: 0,
           right: 0,
@@ -549,7 +436,7 @@ class ItemCard extends StatelessWidget {
             width: 30,
             height: 30,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 255, 255, 255),
+              color: Colors.white,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(5),
                 topRight: Radius.circular(5),
@@ -563,24 +450,26 @@ class ItemCard extends StatelessWidget {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0), 
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
                         title: Text(
                           'Details',
                           style: GoogleFonts.inter(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        content: Image.asset('assets/b19d1b570a8d62ff56f4f351e389c2db.jpg'),
+                        content: Image.asset(
+                          'assets/b19d1b570a8d62ff56f4f351e389c2db.jpg',
+                        ),
                       );
                     },
                   );
                 },
                 child: Icon(
-                  Icons.info_outline, 
+                  Icons.info_outline,
                   size: 15.0,
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: Color.fromARGB(255, 14, 170, 113)
                 ),
               ),
             ),

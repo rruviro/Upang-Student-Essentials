@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/Department.dart';
+import 'package:use/SERVICES/model/student/Department.dart';
 import 'package:use/UI/Core/admin/home/course.dart';
-import 'package:use/UI/Core/student/home/course.dart';
 import 'package:use/UI/Core/student/notification.dart';
 class Home extends StatelessWidget {
   const Home({super.key});

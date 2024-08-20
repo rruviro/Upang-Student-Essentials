@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/Notification.dart';
+import 'package:use/SERVICES/model/student/Notification.dart';
 
 class notif extends StatefulWidget {
   const notif({super.key});

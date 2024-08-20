@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/History.dart';
+import 'package:use/SERVICES/model/student/History.dart';
 import 'package:use/UI/Core/student/notification.dart';
 import 'package:use/UI/Core/student/profile/transaction.dart';
 

@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/Department.dart';
+import 'package:use/SERVICES/model/student/Department.dart';
 import 'package:use/UI/Core/admin/home/course.dart';
+import 'package:use/UI/Core/admin/home/management/Manage.dart';
 import 'package:use/UI/Core/admin/home/management/newDepartment.dart';
 import 'package:use/UI/Core/admin/notification.dart';
 class Home extends StatelessWidget {
@@ -54,14 +55,6 @@ class Home extends StatelessWidget {
                   builder: (context) => notif()
                 )
               );
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.backpack, 
-              color: Color.fromARGB(255, 14, 170, 113)
-            ),
-            onPressed: () {
             },
           ),
           SizedBox(width: 15),
@@ -121,7 +114,11 @@ class Home extends StatelessWidget {
             top: 25,
             right: 30,
             child: InkWell(
-              onTap:() {},
+              onTap:() {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => newDepartment()),
+                );
+              },
               child: Icon(
                 Icons.add,
                 color: Color.fromARGB(255, 14, 170, 113),
@@ -334,7 +331,7 @@ class ItemCard extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => newDepartment()),
+                    MaterialPageRoute(builder: (context) => manage()),
                   );
                 },
                 child: Row(
