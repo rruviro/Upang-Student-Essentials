@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/student/Department.dart';
 import 'package:use/UI/Core/admin/home/course.dart';
-import 'package:use/UI/Core/admin/home/management/Manage.dart';
+import 'package:use/UI/Core/admin/home/management/manage.dart';
 import 'package:use/UI/Core/admin/home/management/newDepartment.dart';
 import 'package:use/UI/Core/admin/notification.dart';
 class Home extends StatelessWidget {
@@ -22,7 +22,7 @@ class Home extends StatelessWidget {
               Image.asset('assets/logo.png'),
               SizedBox(width: 10),
               Text(
-                'Upang Admin Essentials',
+                'Upang Student Essentials',
                 style: GoogleFonts.inter(
                   textStyle: TextStyle(
                     fontSize: 11,

@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:use/UI/Authentication/AdminLogin.dart';
-import 'package:use/UI/Core/student/home/home.dart';
 import 'package:use/UI/Core/student/navigation.dart';
 
 class StudnetLogin extends StatelessWidget {

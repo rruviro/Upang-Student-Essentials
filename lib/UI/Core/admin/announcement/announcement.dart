@@ -29,7 +29,7 @@ class _AnnouncementState extends State<Announcement> {
               Image.asset('assets/logo.png'),
               SizedBox(width: 10),
               Text(
-                'Upang Admin Essentials',
+                'Upang Student Essentials',
                 style: GoogleFonts.inter(
                   textStyle: TextStyle(
                     fontSize: 11,

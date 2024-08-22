@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:use/UI/Core/student/home/course.dart';
 class newDepartment extends StatefulWidget {
   const newDepartment({super.key});
   @override
@@ -13,156 +14,131 @@ class newDepartment extends StatefulWidget {
 
 class _newDepartmentState extends State<newDepartment> {
   
-  TextEditingController _controller = TextEditingController();
-  List<Widget> _rows = [];
-  int _counter = 0;
+  final TextEditingController DepartmentName = TextEditingController();
+  final TextEditingController Courses = TextEditingController();
+  final TextEditingController Bachelor = TextEditingController();
+
   final int maxLength = 25;
+  List<Map<String, dynamic>> _rows = [];
+
+  int _countDepartment = 0;
+  int _countCourse = 0;
+  int _countBachelor = 0;
+
+  File? _image;
+  File? get image => _image;
+
+  final _picker = ImagePicker();
+  Future<void> _openImagePicker() async {
+    final pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_updateCounter);
+    DepartmentName.addListener(_updateCounter);
   }
 
   void _updateCounter() {
     setState(() {
-      _counter = _controller.text.length;
+      _countDepartment = DepartmentName.text.length;
     });
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_updateCounter);
-    _controller.dispose();
+    DepartmentName.removeListener(_updateCounter);
+    DepartmentName.dispose();
     super.dispose();
   }
 
-  void _addRow() {
+  void _deleteItem(int index) {
     setState(() {
-      final screenWidth = MediaQuery.of(context).size.width;
-      _rows.add(
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 100,
-              height: 40,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
-                  ),
-                  hintText: 'BSN',
-                  hintStyle: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  suffix: Text(
-                    '$_counter/$maxLength',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 14, 170, 113),
-                      fontSize: 12,
-                    ),
-                  ),
-                  suffixStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(maxLength),
-                ],
-              ),
-            ),
-            SizedBox(width: 15),
-            Padding(
-              padding: EdgeInsets.only(top: 13),
-              child: SizedBox(
-                height: 28,
-                width: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black26,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(width: 15),
-            Container(
-              width: screenWidth * 0.5,
-              height: 40,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
-                  ),
-                  hintText: 'Bachelor of Science in Nursing',
-                  hintStyle: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  suffix: Text(
-                    '$_counter/$maxLength',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 14, 170, 113),
-                      fontSize: 12,
-                    ),
-                  ),
-                  suffixStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(maxLength),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
+      _rows[index]['coursesController'].dispose();
+      _rows[index]['bachelorController'].dispose();
+      _rows.removeAt(index);
     });
   }
- 
 
-  @override
-  Widget build(BuildContext context) {
+  void _addRow() {
+    bool canAdd = true;
 
-    File? _image;
-
-    Future<void> _openImagePicker() async {
-      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (pickedImage != null) {
-        setState(() {
-          _image = File(pickedImage.path);
-        });
+    for (var row in _rows) {
+      if (row['coursesController'].text.isEmpty || row['bachelorController'].text.isEmpty) {
+        canAdd = false;
+        break;
       }
     }
 
+    if (canAdd) {
+      setState(() {
+        TextEditingController coursesController = TextEditingController();
+        TextEditingController bachelorController = TextEditingController();
+        _rows.add({
+          'coursesController': coursesController,
+          'bachelorController': bachelorController,
+          'countCourse': 0,
+          'countBachelor': 0,
+        });
+      });
+    } else {
+      showDialog(
+        context: context, 
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            title: Container(
+              height: 100,
+              child: Align(
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.error,
+                  color: Color.fromARGB(255, 255, 47, 47),
+                  size: 100,
+                ),
+              )
+            ),
+            content: Container(
+              height: 40,
+              child: Center(
+                child: Text(
+                  'Please fill in the current course field before adding another row.',
+                  style: GoogleFonts.inter(
+                    color: Colors.black,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: const Color.fromARGB(255, 0, 0, 0)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Transform.translate(
           offset: Offset(-15.0, 0.0),
           child: Text(
@@ -182,7 +158,7 @@ class _newDepartmentState extends State<newDepartment> {
           title: Container(
             width: double.infinity,
             padding: EdgeInsets.all(5.0),
-            child: Visual(context)
+            child: Visual(context, DepartmentName.text, _rows, _image)
           ),
           automaticallyImplyLeading: false,
         ),
@@ -213,7 +189,7 @@ class _newDepartmentState extends State<newDepartment> {
                           width: 200,
                           height: 40,
                           child: TextFormField(
-                            controller: _controller,
+                            controller: DepartmentName,
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -227,7 +203,7 @@ class _newDepartmentState extends State<newDepartment> {
                                 fontWeight: FontWeight.w600,
                               ),
                               suffix: Text(
-                                '$_counter/$maxLength', 
+                                '$_countDepartment/23', 
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 14, 170, 113),
                                   fontSize: 12,
@@ -246,7 +222,7 @@ class _newDepartmentState extends State<newDepartment> {
                               fontWeight: FontWeight.w600,
                             ),
                             inputFormatters: [
-                              LengthLimitingTextInputFormatter(maxLength),
+                              LengthLimitingTextInputFormatter(23),
                             ],
                           ),
                         ),
@@ -281,7 +257,7 @@ class _newDepartmentState extends State<newDepartment> {
                                   icon: Icon(Icons.add, color: Color.fromARGB(255, 14, 170, 113)),
                                   onPressed: _addRow
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -289,8 +265,129 @@ class _newDepartmentState extends State<newDepartment> {
                         Container(
                           width: double.infinity,
                           height: 150,
-                          child: ListView(
-                            children: _rows
+                          child: ListView.builder(
+                            itemCount: _rows.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(1.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      height: 40,
+                                      child: TextFormField(
+                                        controller: _rows[index]['coursesController'],
+                                        decoration: InputDecoration(
+                                          border: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.grey),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                          ),
+                                          hintText: 'BSN',
+                                          hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          suffix: Text(
+                                            '${_rows[index]['countCourse']}/10',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(255, 14, 170, 113),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          suffixStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        keyboardType: TextInputType.text,
+                                        textInputAction: TextInputAction.done,
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 0),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(5),
+                                        ],
+                                        onChanged: (text) {
+                                          setState(() {
+                                            _rows[index]['countCourse'] = text.length;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 15),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 13),
+                                      child: SizedBox(
+                                        height: 28,
+                                        width: 1,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 15),
+                                    Container(
+                                      width: screenWidth * 0.34,
+                                      height: 40,
+                                      child: TextFormField(
+                                        controller: _rows[index]['bachelorController'],
+                                        decoration: InputDecoration(
+                                          border: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.grey),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                          ),
+                                          hintText: 'Bachelor of Science in Nursing',
+                                          hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          suffix: Text(
+                                            '${_rows[index]['countBachelor']}/25',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(255, 14, 170, 113),
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          suffixStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        keyboardType: TextInputType.text,
+                                        textInputAction: TextInputAction.done,
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 0),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(25),
+                                        ],
+                                        onChanged: (text) {
+                                          setState(() {
+                                            _rows[index]['countBachelor'] = text.length;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(width: 15),
+                                    IconButton(
+                                      icon: Icon(Icons.delete, color: Colors.red),
+                                      onPressed: () => _deleteItem(index),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -304,23 +401,103 @@ class _newDepartmentState extends State<newDepartment> {
                         fontWeight: FontWeight.w600
                       ),
                     ),
-                    SizedBox(height: 10),
-                    InkWell(
-                      onTap: () {
-                        _openImagePicker();
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(5)
+                    SizedBox(height: 15),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            _openImagePicker();
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 14, 170, 113),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: _image != null
+                                ? Image.file(
+                                    _image!, 
+                                    fit: BoxFit.cover
+                                  )
+                                : Icon(
+                                    Icons.image_search_rounded,color: 
+                                    Colors.white,
+                                  ),
+                          ),
                         ),
-                        child: _image != null
-                            ? Image.file(_image!, fit: BoxFit.cover)
-                            : const Text('Please select an image'),
-                      ),
+                        SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Primary Color',
+                              style: GoogleFonts.inter(
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600
+                                )
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _Circle(0, Color.fromRGBO(6, 143, 255, 1)),
+                                  _Circle(1, const Color.fromARGB(255, 255, 62, 62)),
+                                  _Circle(2, Color.fromARGB(255, 255, 169, 30)),
+                                  _Circle(3, Color.fromARGB(255, 14, 170, 113)),
+                                  Container(
+                                    padding: EdgeInsets.only(right: 13),
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 1,
+                                      child: Container(color:Colors.black26),
+                                    ),
+                                  ),
+                                  _Circle(4, Color.fromARGB(255, 14, 170, 113)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 23),
+                            Text(
+                              'Secondary Color',
+                              style: GoogleFonts.inter(
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600
+                                )
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _Circle(0, Color.fromRGBO(6, 143, 255, 1)),
+                                  _Circle(1, const Color.fromARGB(255, 255, 62, 62)),
+                                  _Circle(2, Color.fromARGB(255, 255, 169, 30)),
+                                  _Circle(3, Color.fromARGB(255, 14, 170, 113)),
+                                  Container(
+                                    padding: EdgeInsets.only(right: 13),
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 1,
+                                      child: Container(color:Colors.black26),
+                                    ),
+                                  ),
+                                  _Circle(4, Color.fromARGB(255, 14, 170, 113)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
                     SizedBox(height: 50),
                     Padding(
@@ -375,13 +552,35 @@ class _newDepartmentState extends State<newDepartment> {
   }
 }
 
-Widget Visual (BuildContext context) {
+Widget _Circle(int index, Color color) {
+  final int _selectedIndex = 1;
+  bool isSelected = _selectedIndex == index;
+
+  return InkWell(
+    onTap: () {
+    },
+    child: Container(
+      margin: EdgeInsets.only(right: 15.0),
+      width: 15.0,
+      height: 15.0,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: isSelected
+            ? Border.all(color: Color.fromARGB(116, 255, 255, 255), width: 2.0) // Stroke when selected
+            : null, // No border when not selected
+      ),
+    ),
+  );
+}
+
+Widget Visual (BuildContext context, String DepartmentName, List<Map<String, dynamic>> courses, File? image) {
   final screenWidth = MediaQuery.of(context).size.width;
   final itemWidth = 50.0;
   final spacing = 10.0;
   final initialSpacing = 50.0;
-  final availableWidth = screenWidth * 0.5 - initialSpacing;
-  final itemsPerRow = (availableWidth / (itemWidth + spacing)).floor();
+  final maxVisibleItems = 4;
+  
   return Container (
     margin: const EdgeInsets.only(
       bottom: 30.0,
@@ -405,17 +604,32 @@ Widget Visual (BuildContext context) {
           right: -20,
           top: -35,
           child: Container(
-            child: Image.asset(
-              'assets/vanguards.png',
-              width: 220,
-              height: 220, 
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(5),
+                bottomRight: Radius.circular(5)
+              )
             ),
+            child: image!=null
+              ? ClipRRect(
+                  child: Image.file(
+                    image!,
+                    width: 220,
+                    height: 220,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              : Image.asset(
+                'assets/vanguards.png',
+                width: 220,
+                height: 220, 
+              ),
+            width: 220,
+            height: 220, 
           ),
         ),
         Positioned(
-          child: InkWell(
-            onTap: () {
-            },
+          child: Container(
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -436,7 +650,9 @@ Widget Visual (BuildContext context) {
                       left: 30.0
                     ),
                     child: Text(
-                      'Health Science',
+                      DepartmentName.isNotEmpty
+                        ? DepartmentName
+                        : 'Department Name',
                       style: GoogleFonts.inter(
                         textStyle: TextStyle (
                           fontSize: 16,
@@ -486,24 +702,51 @@ Widget Visual (BuildContext context) {
               alignment: WrapAlignment.start,
               children: [
                 SizedBox(width: 50),
-                ...List.generate(itemsPerRow * 2, (index) {
-                  return Container(
+                ...List.generate(
+                  courses.length > maxVisibleItems ? maxVisibleItems : courses.length,
+                  (index) {
+                    String displayText = courses[index]['coursesController'].text;
+                    return Container(
+                      width: itemWidth,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
+                            blurRadius: 5,
+                            offset: Offset(1, 5),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          displayText,
+                          style: GoogleFonts.inter(
+                            color: Color.fromARGB(255, 14, 170, 113),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                if (courses.length > maxVisibleItems)
+                  Container(
                     width: itemWidth,
                     height: 20,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.3),
-                          blurRadius: 5,
-                          offset: Offset(1, 5),
-                        ),
-                      ],
+                      border: Border.all(
+                        color: Colors.grey,
+                      ),
                     ),
                     child: Center(
                       child: Text(
-                        'BSN',
+                        '+${courses.length - maxVisibleItems} more',
                         style: GoogleFonts.inter(
                           color: Color.fromARGB(255, 14, 170, 113),
                           fontSize: 10,
@@ -511,8 +754,7 @@ Widget Visual (BuildContext context) {
                         ),
                       ),
                     ),
-                  );
-                }),
+                  ),
               ],
             ),
           ),

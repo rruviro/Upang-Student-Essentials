@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/student/Department.dart';
 import 'package:use/UI/Core/admin/home/course.dart';
+import 'package:use/UI/Core/student/home/uniform.dart';
 import 'package:use/UI/Core/student/notification.dart';
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -39,7 +40,8 @@ class Home extends StatelessWidget {
               Icons.search, 
               color: Color.fromARGB(255, 14, 170, 113)
             ),
-            onPressed: () {},
+            onPressed: () {
+            },
           ),
           IconButton(
             icon: const Icon(

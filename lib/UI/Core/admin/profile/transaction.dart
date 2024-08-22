@@ -42,6 +42,12 @@ class _TransactionState extends State<Transaction> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: const Color.fromARGB(255, 0, 0, 0)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Transform.translate(
           offset: Offset(-15.0, 0.0),
           child: Text(

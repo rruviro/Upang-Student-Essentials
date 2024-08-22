@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/student/History.dart';
+import 'package:use/UI/Authentication/StudentLogin.dart';
 import 'package:use/UI/Core/student/notification.dart';
 import 'package:use/UI/Core/student/profile/transaction.dart';
 
@@ -87,6 +88,86 @@ class _ProfileScreenState extends State<Profile> {
               color: Color.fromARGB(255, 14, 170, 113)
             ),
             onPressed: () {
+              showDialog(
+                context: context, 
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    title: Text(
+                      'Logout',
+                      style: GoogleFonts.inter(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    content: Text(
+                      'Are you sure you wanna logout',
+                      style: GoogleFonts.inter(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    actions: [
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.of(context)
+                          .push(
+                            MaterialPageRoute(
+                              builder: (context) => StudnetLogin()
+                            )
+                          );
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 116,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: Color.fromARGB(255, 14, 170, 113)
+                          ),
+                          child: Center( 
+                            child: Text(
+                              'Continue',
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600 
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 116,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: Color.fromARGB(192, 14, 170, 113)
+                          ),
+                          child: Center(
+                            child:Text(
+                              'Nope',
+                              style: GoogleFonts.inter(
+                                color: const Color.fromARGB(190, 255, 255, 255),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600 
+                              ),
+                            ),
+                          )
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              );
             },
           ),
           SizedBox(width: 15),

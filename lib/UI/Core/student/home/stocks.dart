@@ -18,6 +18,7 @@ class _StocksState extends State<Stocks> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF0EAA72),
+        automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
