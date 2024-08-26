@@ -9,68 +9,109 @@ class Stocks extends StatefulWidget {
 }
 
 class _StocksState extends State<Stocks> {
-  // Track selected items for bottom sheet and container separately
   List<bool> _bottomSheetSelectedBooks = List.generate(5, (index) => false);
   List<bool> _containerSelectedBooks = List.generate(5, (index) => false);
+  String _selectedYear = "First Year";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF0EAA72),
-        automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Container(
-          alignment: Alignment.centerLeft,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Stocks',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              Text(
-                'Course: ',
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-            ],
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Stocks',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            Text(
+              'Course: ',
+              style: TextStyle(color: Colors.white, fontSize: 10),
+            ),
+          ],
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Year',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 100),
+                      child: Text(
+                        'Year',
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ),
+                    Container(
+                      width: 30,
+                      height: 1,
+                      color: Colors.white,
+                      margin: EdgeInsets.only(left: 100),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 40),
+                      child: SizedBox(
+                        width: 100,
+                        height: 20,
+                        child: DropdownButton<String>(
+                          value: _selectedYear,
+                          dropdownColor: Color(0xFF0EAA72),
+                          icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+                          underline: SizedBox(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedYear = newValue!;
+                            });
+                          },
+                          items: <String>[
+                            'First Year',
+                            'Second Year',
+                            'Third Year',
+                            'Fourth Year'
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(color: Colors.white, fontSize: 13),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 4),
-                Container(
-                  width: 30,
-                  height: 1,
-                  color: Colors.white,
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'First Year',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-              ],
-            ),
+              ),
+              VerticalDivider(
+                color: Colors.white,
+                thickness: 1,
+                width: 20,
+              ),
+              IconButton(
+                icon: Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                onPressed: () {
+                  // function
+                },
+              ),
+            ],
           ),
         ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -79,55 +120,119 @@ class _StocksState extends State<Stocks> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
-              Container(
-                height: 300,
-                child: PageView(
-                  controller: PageController(viewportFraction: 0.8),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        height: 550,
-                        width: 300, // Increased width
-                        margin: EdgeInsets.only(right: 16),
-                        padding: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF0EAA72),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4.0,
-                              offset: Offset(0, 2),
+                    Container(
+                      height: 300,
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF0EAA72),
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4.0,
+                            offset: Offset(1, 8),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Positioned.fill(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.asset(
+                                'assets/unif_top.jpg',
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Image.asset(
-                          'assets/unif_top.jpg',
-                          fit: BoxFit.cover,
-                        ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'RSO',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Stocks: 100',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Center(
-                      child: Container(
-                        height: 350,
-                        width: 300, // Increased width
-                        padding: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF0EAA72),
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4.0,
-                              offset: Offset(0, 2),
+                    SizedBox(width: 16),
+                    Container(
+                      height: 300,
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF0EAA72),
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4.0,
+                            offset: Offset(1, 8),
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Positioned.fill(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.asset(
+                                'assets/unif_bottom.jpg',
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ],
-                        ),
-                        child: Image.asset(
-                          'assets/unif_bottom.jpg',
-                          fit: BoxFit.cover,
-                        ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'RSO',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Stocks: 100',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -178,7 +283,7 @@ class _StocksState extends State<Stocks> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black, // Changed text color to black
+                                  color: Colors.black,
                                 ),
                               ),
                               SizedBox(height: 16),
@@ -193,6 +298,7 @@ class _StocksState extends State<Stocks> {
                                           _bottomSheetSelectedBooks[0] = value ?? false;
                                         });
                                       },
+                                      textColor: Colors.black,
                                     ),
                                     BookTile(
                                       index: 2,
@@ -202,6 +308,7 @@ class _StocksState extends State<Stocks> {
                                           _bottomSheetSelectedBooks[1] = value ?? false;
                                         });
                                       },
+                                      textColor: Colors.black,
                                     ),
                                     BookTile(
                                       index: 3,
@@ -211,6 +318,7 @@ class _StocksState extends State<Stocks> {
                                           _bottomSheetSelectedBooks[2] = value ?? false;
                                         });
                                       },
+                                      textColor: Colors.black,
                                     ),
                                     BookTile(
                                       index: 4,
@@ -220,6 +328,7 @@ class _StocksState extends State<Stocks> {
                                           _bottomSheetSelectedBooks[3] = value ?? false;
                                         });
                                       },
+                                      textColor: Colors.black,
                                     ),
                                     BookTile(
                                       index: 5,
@@ -229,6 +338,7 @@ class _StocksState extends State<Stocks> {
                                           _bottomSheetSelectedBooks[4] = value ?? false;
                                         });
                                       },
+                                      textColor: Colors.black,
                                     ),
                                   ],
                                 ),
@@ -262,14 +372,14 @@ class _StocksState extends State<Stocks> {
                               'All Books',
                               style: GoogleFonts.inter(
                                 fontSize: 15,
-                                color: Colors.white, // Text color in container
+                                color: Colors.white,
                               ),
                             ),
                             Text(
                               'as bundle',
                               style: GoogleFonts.inter(
                                 fontSize: 10,
-                                color: Colors.white.withOpacity(0.5), // Text color in container
+                                color: Colors.white.withOpacity(0.5),
                               ),
                             ),
                           ],
@@ -359,11 +469,13 @@ class BookTile extends StatelessWidget {
   final int index;
   final bool isSelected;
   final ValueChanged<bool?> onChanged;
+  final Color textColor;
 
   const BookTile({
     required this.index,
     required this.isSelected,
     required this.onChanged,
+    this.textColor = Colors.white,
   });
 
   @override
@@ -373,13 +485,13 @@ class BookTile extends StatelessWidget {
         ListTile(
           title: Text(
             'Book $index',
-            style: TextStyle(color: Colors.white), // Changed text color to white
+            style: TextStyle(color: textColor),
           ),
           subtitle: Text(
             'Subtitle for Book $index',
-            style: TextStyle(color: Colors.white.withOpacity(0.7)), // Changed text color to white
+            style: TextStyle(color: textColor.withOpacity(0.7)),
           ),
-          iconColor: Colors.white, // Changed icon color to white
+          iconColor: textColor,
           leading: Icon(Icons.book),
           trailing: CustomCircularCheckbox(
             value: isSelected,
@@ -387,13 +499,14 @@ class BookTile extends StatelessWidget {
           ),
         ),
         Divider(
-          color: Color(0xFF0EAA72),
+          color: textColor.withOpacity(0.7),
           thickness: 1,
         ),
       ],
     );
   }
 }
+
 
 class CustomCircularCheckbox extends StatelessWidget {
   final bool value;

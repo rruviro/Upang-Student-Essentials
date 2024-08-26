@@ -19,16 +19,18 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
+  late Animation<double> _textFadeAnimation;
+  bool _textVisible = false;
 
   @override
   void initState() {
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
       vsync: this,
     );
 
@@ -37,14 +39,39 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       curve: Curves.easeInOut,
     );
 
+    _textFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0.5, 1.0, curve: Curves.easeInOut),
+      ),
+    );
+
     _controller.forward().then((_) {
       Future.delayed(Duration(milliseconds: 500), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Welcome()),
-        );
+        if (mounted) {
+          _controller.reverse().then((_) {
+            _navigateToWelcomeScreen();
+          });
+        }
       });
     });
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _textVisible = true;
+        });
+      }
+    });
+  }
+
+  void _navigateToWelcomeScreen() {
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Welcome()),
+      );
+    }
   }
 
   @override
@@ -58,22 +85,29 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
             FadeTransition(
               opacity: _fadeAnimation,
               child: Image.asset('assets/logo.png', width: 200, height: 200),
             ),
-            SizedBox(height: 20),
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: Text(
-                'MAKING LIVES BETTER THROUGH EDUCATION',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black),
-                textAlign: TextAlign.center,
+            if (_textVisible)
+              FadeTransition(
+                opacity: _textFadeAnimation,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 230),
+                  child: Text(
+                    'MAKING LIVES BETTER THROUGH EDUCATION',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-            ),
           ],
         ),
       ),
