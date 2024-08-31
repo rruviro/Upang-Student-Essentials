@@ -1,132 +1,155 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/student/Department.dart';
+import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
+import 'package:use/SERVICES/model/admin/Department.dart';
 import 'package:use/UI/Core/admin/home/course.dart';
 import 'package:use/UI/Core/admin/home/management/manage.dart';
 import 'package:use/UI/Core/admin/home/management/newDepartment.dart';
+import 'package:use/UI/Core/admin/home/uniform.dart';
 import 'package:use/UI/Core/admin/notification.dart';
+
+final AdminExtendedBloc adminBloc = AdminExtendedBloc();
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Container(
-          width: double.infinity, 
-          height: 35, 
-          child: Row(
-            children: [
-              Image.asset('assets/logo.png'),
-              SizedBox(width: 10),
-              Text(
-                'Upang Student Essentials',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontSize: 11,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  )
+    return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
+      bloc: adminBloc,
+      listenWhen: (previous, current) => current is AdminActionState,
+      buildWhen: (previous, current) => current is! AdminActionState,
+      listener: (context, state) {
+        if (state is NotificationPageState) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => notif()));
+        } else if (state is CoursePageState) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => courses()));
+        } else if (state is NewDepartmentPageState) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => newDepartment()));
+        } else if (state is ManagePageState) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => manage()));
+        }
+      },
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case AdminLoadingState():
+            return CircularProgressIndicator();
+          default:
+            return Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                title: Container(
+                  width: double.infinity, 
+                  height: 35, 
+                  child: Row(
+                    children: [
+                      Image.asset('assets/logo.png'),
+                      SizedBox(width: 10),
+                      Text(
+                        'Upang Student Essentials',
+                        style: GoogleFonts.inter(
+                          textStyle: TextStyle(
+                            fontSize: 11,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600
+                          )
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.search, 
-              color: Color.fromARGB(255, 14, 170, 113)
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.notifications, 
-              color: Color.fromARGB(255, 14, 170, 113)
-            ),
-            onPressed: () {
-              Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (context) => notif()
-                )
-              );
-            },
-          ),
-          SizedBox(width: 15),
-        ],
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: Stack(
-        children:[
-          ListView(
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white
+                centerTitle: false,
+                actions: <Widget>[
+                  IconButton(
+                    icon: const Icon(
+                      Icons.search, 
+                      color: Color.fromARGB(255, 14, 170, 113)
                     ),
-                    padding: EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Departments',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600
+                    onPressed: () {
+                      
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.notifications, 
+                      color: Color.fromARGB(255, 14, 170, 113)
+                    ),
+                    onPressed: () {
+                      adminBloc.add(NotificationPageEvent());
+                    },
+                  ),
+                  SizedBox(width: 15),
+                ],
+                backgroundColor: Colors.white,
+                elevation: 0,
+              ),
+              body: Stack(
+                children:[
+                  ListView(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white
+                            ),
+                            padding: EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Departments',
+                                  style: GoogleFonts.inter(
+                                    textStyle: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 3),
+                                Text(
+                                  'Choose your perspective department for --',
+                                  style: GoogleFonts.inter(
+                                    textStyle: TextStyle(
+                                      fontSize: 13,
+                                      color: Color.fromARGB(146, 0, 0, 0),
+                                      fontWeight: FontWeight.w500
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 20), 
+                                ItemList(
+                                  departments : initials
+                                )
+                              ],
                             ),
                           ),
-                        ),
-                        SizedBox(height: 3),
-                        Text(
-                          'Choose your perspective department for --',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 13,
-                              color: Color.fromARGB(146, 0, 0, 0),
-                              fontWeight: FontWeight.w500
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20), 
-                        ItemList(
-                          departments : initials
-                        )
-                      ],
+                        ],
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 25,
+                    right: 30,
+                    child: InkWell(
+                      onTap:() {
+                        adminBloc.add(NewDepartmentPageEvent());
+                      },
+                      child: Icon(
+                        Icons.add,
+                        color: Color.fromARGB(255, 14, 170, 113),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
-          ),
-          Positioned(
-            top: 25,
-            right: 30,
-            child: InkWell(
-              onTap:() {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => newDepartment()),
-                );
-              },
-              child: Icon(
-                Icons.add,
-                color: Color.fromARGB(255, 14, 170, 113),
-              ),
-            ),
-          ),
-        ],
-      ),
+            );
+        }
+      }
     );
   }
 }
@@ -189,7 +212,9 @@ class ItemCard extends StatelessWidget {
           ),
           Positioned(
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                adminBloc.add(CoursePageEvent());
+              },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -330,9 +355,7 @@ class ItemCard extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => manage()),
-                  );
+                  adminBloc.add(ManagePageEvent());
                 },
                 child: Row(
                   children: [

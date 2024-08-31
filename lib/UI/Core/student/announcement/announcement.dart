@@ -2,9 +2,12 @@
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/SERVICES/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Announcement.dart';
-// import 'package:use/SERVICES/notification/notification.dart';
+import 'package:use/UI/Core/student/bag.dart';
+import 'package:use/UI/Core/student/home/home.dart';
 import 'package:use/UI/Core/student/notification.dart';
 
 class Announcement extends StatefulWidget {
@@ -48,10 +51,12 @@ class _AnnouncementState extends State<Announcement> {
               color: Color.fromARGB(255, 14, 170, 113)
             ),
             onPressed: () {
-              Navigator.of(context)
-              .push(
+              Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => notif()
+                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
+                    value: studBloc,
+                    child: const notif(),
+                  ),
                 )
               );
             },
@@ -62,6 +67,14 @@ class _AnnouncementState extends State<Announcement> {
               color: Color.fromARGB(255, 14, 170, 113)
             ),
             onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
+                    value: studBloc,
+                    child: const Bag(),
+                  ),
+                )
+              );
             },
           ),
           SizedBox(width: 15),
@@ -110,9 +123,9 @@ class _AnnouncementState extends State<Announcement> {
 
 Widget slides(BuildContext context) {
   List<String> imageUrls = [
-    'assets/e6cad8e6-4afa-4f35-a78e-2defea59f7e7.png',
-    'assets/e9c4b145-4d7b-4787-bd61-7b38c4b3ba44.png',
-    'assets/0d88f45a-60dc-4518-9641-6f318056db74.png',
+    'assets/announcement_image/e6cad8e6-4afa-4f35-a78e-2defea59f7e7.png',
+    'assets/announcement_image/e9c4b145-4d7b-4787-bd61-7b38c4b3ba44.png',
+    'assets/announcement_image/0d88f45a-60dc-4518-9641-6f318056db74.png',
   ];
   return Container(
     child: CarouselSlider(

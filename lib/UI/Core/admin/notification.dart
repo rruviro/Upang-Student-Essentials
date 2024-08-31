@@ -178,7 +178,7 @@ class _notifState extends State<notif> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
                       ),
-                      hintText: 'smile for me :>',
+                      hintText: 'Good Morning Students!',
                       hintStyle: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -194,26 +194,49 @@ class _notifState extends State<notif> {
                   ),
                 ),
                 actions: [
-                  TextButton(
-                    onPressed: () {
-                      
+                  GestureDetector(
+                    onTap: (){
                     },
-                    child: Text(
-                      'Publish',
-                      style: GoogleFonts.inter(
-                        color: Color.fromARGB(255, 14, 170, 113),
+                    child: Container(
+                      height: 30,
+                      width: 112,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Color.fromARGB(255, 14, 170, 113)
+                      ),
+                      child: Center( 
+                        child: Text(
+                          'Publish',
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600 
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(); 
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
                     },
-                    child: Text(
-                      'Cancel',
-                      style: GoogleFonts.inter(
-                        color: Color.fromARGB(255, 14, 170, 113),
+                    child: Container(
+                      height: 30,
+                      width: 112,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Color.fromARGB(192, 14, 170, 113)
                       ),
+                      child: Center(
+                        child:Text(
+                          'Cancel',
+                          style: GoogleFonts.inter(
+                            color: const Color.fromARGB(190, 255, 255, 255),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600 
+                          ),
+                        ),
+                      )
                     ),
                   ),
                 ],

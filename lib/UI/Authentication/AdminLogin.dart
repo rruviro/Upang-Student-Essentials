@@ -1,8 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
 import 'package:use/UI/Authentication/StudentLogin.dart';
 import 'package:use/UI/Core/admin/navigation.dart';
 
+import '../Core/admin/home/home.dart';
+
+final AdminBottomBloc adminBloc = AdminBottomBloc();
 class AdminLogin extends StatelessWidget {
   const AdminLogin({super.key});
 
@@ -26,14 +31,15 @@ class AdminLogin extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 70),
                 Center(
                   child: Image.asset(
                     "assets/logo.png",
-                    width: 400,
-                    height: 200,
+                    width: 330,
+                    height: 180,
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Column(
@@ -57,11 +63,14 @@ class AdminLogin extends StatelessWidget {
                                 height: 20.0,
                                 color: Colors.black,
                               ),
-                              SizedBox(width: 8),
+                              SizedBox(width: 12),
                             ],
                           ),
                           hintText: 'XX-XXXX-XXXXXX',
-                          hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
+                          hintStyle: TextStyle(
+                            color: Colors.black.withOpacity(0.3),
+                            fontSize: 13
+                          ),
                           contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0),
@@ -90,10 +99,12 @@ class AdminLogin extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context)
-                      .push(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => HomeBase()
+                          builder: (_) => BlocProvider<AdminBottomBloc>.value(
+                            value: adminBloc,
+                            child: const HomeBase(),
+                          ),
                         )
                       );
                     },
@@ -191,11 +202,14 @@ class _PasswordFieldState extends State<PasswordField> {
               height: 20.0,
               color: Colors.black,
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 12),
           ],
         ),
         hintText: 'Password',
-        hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
+        hintStyle: TextStyle(
+          color: Colors.black.withOpacity(0.3),
+          fontSize: 13
+        ),
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,

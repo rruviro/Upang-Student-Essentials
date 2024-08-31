@@ -89,20 +89,6 @@ class _unifromState extends State<unifrom> {
               ],
             ),
           ),
-          SizedBox(
-            height: 25,
-            width: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white
-              ),
-            ),
-          ),
-          SizedBox(width: 5),
-          Icon(
-            Icons.backpack_outlined,
-            color: Colors.white,
-          ),
           SizedBox(width: 15),
         ],
       ),

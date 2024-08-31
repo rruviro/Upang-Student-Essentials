@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+import 'package:use/UI/Core/student/home/home.dart';
 class unifrom extends StatefulWidget {
   const unifrom({super.key});
 
@@ -99,9 +101,11 @@ class _unifromState extends State<unifrom> {
             ),
           ),
           SizedBox(width: 5),
-          Icon(
-            Icons.backpack_outlined,
-            color: Colors.white,
+          IconButton(
+            icon: Icon(Icons.backpack_outlined, color: Colors.white),
+            onPressed: () {
+              studBloc.add(BackpackPageEvent());
+            },
           ),
           SizedBox(width: 15),
         ],

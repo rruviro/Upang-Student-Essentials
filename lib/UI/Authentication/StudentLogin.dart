@@ -1,8 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
+import 'package:use/SERVICES/bloc/student/student_bloc.dart';
 import 'package:use/UI/Authentication/AdminLogin.dart';
 import 'package:use/UI/Core/student/navigation.dart';
+import 'package:use/UI/Core/welcome.dart';
 
+final StudentBottomBloc studentBloc = StudentBottomBloc();
 class StudnetLogin extends StatelessWidget {
   const StudnetLogin({super.key});
 
@@ -26,14 +31,15 @@ class StudnetLogin extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 70),
                 Center(
                   child: Image.asset(
                     "assets/logo.png",
-                    width: 400,
-                    height: 200,
+                    width: 330,
+                    height: 180,
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Column(
@@ -57,11 +63,14 @@ class StudnetLogin extends StatelessWidget {
                                 height: 20.0,
                                 color: Colors.black,
                               ),
-                              SizedBox(width: 8),
+                              SizedBox(width: 12),
                             ],
                           ),
                           hintText: 'XX-XXXX-XXXXXX',
-                          hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
+                          hintStyle: TextStyle(
+                            color: Colors.black.withOpacity(0.3),
+                            fontSize: 13
+                          ),
                           contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0),
@@ -90,11 +99,13 @@ class StudnetLogin extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context)
-                      .push(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => HomeBase()
-                        )
+                          builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                            value: studentBloc,
+                            child: const HomeBase(),
+                          ),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -131,11 +142,13 @@ class StudnetLogin extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context)
-                      .push(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => AdminLogin()
-                        )
+                          builder: (_) => BlocProvider<AuthenticationBloc>.value(
+                            value: authBloc,
+                            child: const AdminLogin(),
+                          ),
+                        ),
                       );
                     },
                     style: TextButton.styleFrom(
@@ -191,11 +204,14 @@ class _PasswordFieldState extends State<PasswordField> {
               height: 20.0,
               color: Colors.black,
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 12),
           ],
         ),
         hintText: 'Password',
-        hintStyle: TextStyle(color: Colors.black.withOpacity(0.3)),
+        hintStyle: TextStyle(
+          color: Colors.black.withOpacity(0.3),
+          fontSize: 13
+        ),
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,

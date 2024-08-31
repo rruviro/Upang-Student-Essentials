@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
 import 'package:use/UI/Core/welcome.dart';
 
 void main() {
@@ -24,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   late Animation<double> _fadeAnimation;
   late Animation<double> _textFadeAnimation;
   bool _textVisible = false;
+  final AuthenticationBloc authBloc = AuthenticationBloc();
 
   @override
   void initState() {
@@ -82,35 +85,51 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: Image.asset('assets/logo.png', width: 200, height: 200),
-            ),
-            if (_textVisible)
-              FadeTransition(
-                opacity: _textFadeAnimation,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 230),
-                  child: Text(
-                    'MAKING LIVES BETTER THROUGH EDUCATION',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      bloc: authBloc,
+      listenWhen: (previous, current) => current is AuthActionState,
+      buildWhen: (previous, current) => current is! AuthActionState,
+      listener: (context, state) {
+        if (state is WelcomePageState) {
+          //need to fix
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: Image.asset('assets/logo.png', width: 160, height: 160),
                   ),
-                ),
+                  if (_textVisible)
+                    FadeTransition(
+                      opacity: _textFadeAnimation,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 230),
+                        child: Text(
+                          'MAKING LIVES BETTER THROUGH EDUCATION',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ),
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 }

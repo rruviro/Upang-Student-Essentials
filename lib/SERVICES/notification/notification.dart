@@ -12,7 +12,7 @@ class NotificationService {
 
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: -1, // -1 is replaced by a random number
+        id: -1, 
         channelKey: 'alerts',
         title: 'Department : Cite',
         body: "Reserve your uniform now there",

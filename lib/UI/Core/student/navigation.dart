@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:use/UI/Core/student/announcement/announcement.dart';
+import 'package:use/SERVICES/bloc/student/student_bloc.dart';
 import 'package:use/UI/Core/student/home/home.dart';
 import 'package:use/UI/Core/student/profile/profile.dart';
 
@@ -79,33 +81,39 @@ class _Homedestinationtate extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: destination[_currentIndex],
-      bottomNavigationBar: Container (
-        color: Color.fromARGB(255, 14, 170, 113),
-        child: Stack(
-          children: <Widget>[
-            Align(
-              heightFactor: 1.0,
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: 260.0,
+    return BlocConsumer<StudentBottomBloc, StudentBottomState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          body: destination.elementAt(state.tabIndex),
+          bottomNavigationBar: Container (
+            color: Color.fromARGB(255, 14, 170, 113),
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  heightFactor: 1.0,
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 260.0,
+                    ),
+                    child: SalomonBottomBar(
+                      backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                      items: itemsBN,
+                      currentIndex: state.tabIndex,
+                      duration: Duration(seconds: 1),
+                      onTap: (index) {
+                        BlocProvider.of<StudentBottomBloc>(context)
+                          .add(TabChange(tabIndex: index));
+                      }
+                    ),
+                  ),
                 ),
-                child: SalomonBottomBar(
-                  backgroundColor: Color.fromARGB(255, 14, 170, 113),
-                  items: itemsBN,
-                  currentIndex: _currentIndex,
-                  duration: Duration(seconds: 1),
-                  onTap: (index) => setState(() {
-                    _currentIndex = index;
-                  }),
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
-      )
+          )
+        );
+      }
     );
   }
 }

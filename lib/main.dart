@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:use/UI/splash-screen.dart';
+import 'package:use/SERVICES/bloc/authentication/Route.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator().generateRoute,
     );
   }
+  
 }

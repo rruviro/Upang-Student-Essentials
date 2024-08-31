@@ -1,0 +1,36 @@
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
+import 'package:use/UI/splash-screen.dart';
+
+class RouteGenerator {
+  AuthenticationBloc authBloc = AuthenticationBloc();
+  Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<AuthenticationBloc>.value(
+            value: authBloc,
+            child: SplashScreen(),
+          ),
+        );
+      default:
+        return _errorRoute();
+    }
+  }
+
+  static Route<dynamic> _errorRoute() {
+    return MaterialPageRoute(builder: (_) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Error'),
+        ),
+        body: const Center(
+          child: Text('ERROR'),
+        ),
+      );
+    });
+  }
+}
