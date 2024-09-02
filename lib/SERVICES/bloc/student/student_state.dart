@@ -11,17 +11,40 @@ final class StudentBottomInitial extends StudentBottomState {
 }
 
 @immutable
-abstract class StudentExtendedState{}
-abstract class StudentActionState extends StudentExtendedState{}
-class StudentExtendedInitial extends StudentActionState{}
+abstract class StudentExtendedState {}
 
-class StudentLoadingState extends StudentActionState{}
-class StudentLoadSuccessState extends StudentActionState{}
+abstract class StudentActionState extends StudentExtendedState {}
+
+class StudentExtendedInitial extends StudentActionState {}
+
+class StudentLoadingState extends StudentActionState {}
+
+class StudentLoadSuccessState extends StudentActionState {}
+
 class StudentErrorState extends StudentActionState {}
 
-class CoursePageState extends StudentActionState{}
-class StockPageState extends StudentActionState{}
-class UniformPageState extends StudentActionState{}
-class BackpackPageState extends StudentActionState{}
-class NotificationPageState extends StudentActionState{}
-class TransactionPageState extends StudentActionState{}
+class CoursePageState extends StudentActionState {}
+
+class StockPageState extends StudentActionState {}
+
+class UniformPageState extends StudentActionState {}
+
+class BackpackPageState extends StudentActionState {}
+
+class NotificationPageState extends StudentActionState {}
+
+class TransactionPageState extends StudentActionState {}
+
+//BY MIRO
+class SpecificStudentLoadingState extends StudentActionState {}
+
+class SpecificStudentLoadSuccessState extends StudentActionState {
+  final StudentProfile studentProfile;
+
+  SpecificStudentLoadSuccessState(this.studentProfile);
+}
+
+class SpecificStudentErrorState extends StudentActionState {
+  final String error;
+  SpecificStudentErrorState(this.error);
+}
