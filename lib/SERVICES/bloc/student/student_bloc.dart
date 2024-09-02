@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:use/SERVICES/model/StudentData/StudentBag.dart';
+import 'package:use/SERVICES/model/StudentData/StudentNotifcation.dart';
 import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/admin/Student.dart';
 
@@ -72,7 +74,7 @@ class StudentExtendedBloc
 
   //BLOC BY MIRO
   Future<void> showStudentData(
-      studentProfileGet event, Emitter<StudentExtendedState> emit) async {
+  studentProfileGet event, Emitter<StudentExtendedState> emit) async {
     try {
       final response = await http.get(
         Uri.parse('http://127.0.0.1:8000/api/students/${event.studentId}'),
@@ -81,36 +83,76 @@ class StudentExtendedBloc
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> responseBody = json.decode(response.body);
+        final responseBody = json.decode(response.body);
 
-        if (responseBody['student'] != null &&
-            responseBody['student']['profile'] != null) {
-          Map<String, dynamic> profileJson = responseBody['student']['profile'];
-          StudentProfile student = StudentProfile.fromJson(profileJson);
-          emit(SpecificStudentLoadSuccessState(student));
+        if (responseBody['student'] != null) {
+          final studentData = responseBody['student'];
+          
+          final profileJson = studentData['profile'] != null 
+              ? studentData['profile'] as Map<String, dynamic> 
+              : null;
+          
+          final studentBagJson = studentData['student_bag'] != null 
+              ? studentData['student_bag'] as Map<String, dynamic> 
+              : null;
+          
+          final notificationJson = studentData['notification'] != null 
+              ? studentData['notification'] as Map<String, dynamic> 
+              : null;
+          
+          final studentProfile = profileJson != null 
+              ? StudentProfile.fromJson(profileJson) 
+              : null;
+          
+          final studentBag = studentBagJson != null 
+              ? StudentBag.fromJson(studentBagJson) 
+              : null;
+          
+          final notification = notificationJson != null 
+              ? StudentNotification.fromJson(notificationJson) 
+              : null;
 
-          print("Student ID: ${student.stuId}");
-          print("Name: ${student.firstName} ${student.lastName}");
-          print("Course: ${student.course}");
-          print("Department: ${student.department}");
-          print("Year: ${student.year}");
-          print("Status: ${student.status}");
-          print("Has Uniform: ${student.hasUUniform}");
-          print("Has L Uniform: ${student.hasLUniform}");
-          print("Has RSO: ${student.hasRSO}");
-          print("Has Books: ${student.hasBooks}");
+          if (studentProfile != null) {
+          emit(SpecificStudentLoadSuccessState(studentProfile, studentBag!, notification!));
+
+            // Print profile details
+            print("Student ID: ${studentProfile.stuId}");
+            print("Name: ${studentProfile.firstName} ${studentProfile.lastName}");
+            print("Course: ${studentProfile.course}");
+            print("Department: ${studentProfile.department}");
+            print("Year: ${studentProfile.year}");
+            print("Status: ${studentProfile.status}");
+            print("Has Uniform: ${studentProfile.hasUUniform}");
+            print("Has L Uniform: ${studentProfile.hasLUniform}");
+            print("Has RSO: ${studentProfile.hasRSO}");
+            print("Has Books: ${studentProfile.hasBooks}");
+
+            // Print student bag details if available
+            if (studentBag != null) {
+              print("Student Bag ID: ${studentBag.id}");
+              print("Student Bag ID: ${studentBag.stuId}");
+            }
+
+            // Print notification details if available
+            if (notification != null) {
+              print("Notification ID: ${notification.id}");
+              print("Notification Student ID: ${notification.stuId}");
+            }
+          } else {
+            emit(SpecificStudentErrorState('Student profile data is incomplete'));
+            print("Student profile data is incomplete");
+          }
         } else {
-          emit(SpecificStudentErrorState('No student profile data found'));
-          print("No student profile data found");
+          emit(SpecificStudentErrorState('No student data found'));
+          print("No student data found");
         }
       } else {
-        emit(SpecificStudentErrorState('Failed to load student'));
-        print("Failed to load student");
+        emit(SpecificStudentErrorState('Failed to load student, status code: ${response.statusCode}'));
+        print("Failed to load student, status code: ${response.statusCode}");
       }
     } catch (e) {
-      print(e.toString());
-      print(event.studentId);
-      emit(SpecificStudentErrorState(e.toString()));
+      print('Exception: ${e.toString()}');
+      emit(SpecificStudentErrorState('An error occurred: ${e.toString()}'));
     }
   }
 }
