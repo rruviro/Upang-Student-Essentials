@@ -13,8 +13,9 @@ import 'package:use/UI/Core/student/profile/transaction.dart';
 final StudentExtendedBloc studBloc = StudentExtendedBloc();
 
 class Profile extends StatefulWidget {
-  final StudentProfile studentProfile;
+  
   const Profile({super.key, required this.studentProfile});
+  final StudentProfile studentProfile;
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -37,6 +38,11 @@ class _ProfileScreenState extends State<Profile> {
     }
     setState(() {});
   }
+  @override
+  void initState() {
+    super.initState();
+    context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +56,7 @@ class _ProfileScreenState extends State<Profile> {
                 context, MaterialPageRoute(builder: (context) => notif()));
           } else if (state is BackpackPageState) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Bag()));
+                context, MaterialPageRoute(builder: (context) => Bag(studentProfile: widget.studentProfile)));
           } else if (state is TransactionPageState) {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => Transaction()));

@@ -46,6 +46,7 @@ class _Homedestinationtate extends State<HomeScreen> {
   int _currentIndex = 0;
   late StudentProfile studentProfile;
   bool isProfileLoaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -97,6 +98,7 @@ class _Homedestinationtate extends State<HomeScreen> {
             studentProfile = state.studentProfile;
             isProfileLoaded = true;
           });
+          //context.read<StudentExtendedBloc>().add(studentBagItem(studentProfile.id,"Complete"));
         }
       },
       builder: (context, state) {

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:use/SERVICES/model/StudentData/StudentBag.dart';
+import 'package:use/SERVICES/model/StudentData/StudentBagData/StudentBagItem.dart';
 import 'package:use/SERVICES/model/StudentData/StudentNotifcation.dart';
 import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/admin/Student.dart';
@@ -34,6 +35,7 @@ class StudentExtendedBloc
 
     //BY MIRO
     on<studentProfileGet>(showStudentData);
+    on<studentBagItem>(showStudenBagItemtData);
   }
 
   FutureOr<void> course_page(
@@ -153,6 +155,44 @@ class StudentExtendedBloc
     } catch (e) {
       print('Exception: ${e.toString()}');
       emit(SpecificStudentErrorState('An error occurred: ${e.toString()}'));
+    }
+  }
+
+  Future<void> showStudenBagItemtData(
+  studentBagItem event, Emitter<StudentExtendedState> emit) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:8000/api/studentbagitems/${event.stubag_id}/${event.status}'),
+      );
+
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+
+        List<dynamic> itemsJson = responseBody['item'];
+        List<StudentBagItem> items = itemsJson.map((json) => StudentBagItem.fromJson(json)).toList();
+
+        for (var item in items) {
+          print('ID: ${item.id}');
+          print('Type: ${item.Type}');
+          print('Body: ${item.Body}');
+          print('Size: ${item.Size}');
+          print('Status: ${item.Status}');
+          print('Code: ${item.Code}');
+          print('Stubag ID: ${item.Stubag_id}');
+          print('---');
+        }
+        emit(StudentBagItemLoadSuccessState(items));
+
+    } else {
+        emit(StudentBagItemErrorState(''));
+        print('http://127.0.0.1:8000/api/studentbagitems/${event.stubag_id}/${event.status}');
+        print("Failed to load student, status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print('Exception: ${e.toString()}');
+      emit(StudentBagItemErrorState('An error occurred: ${e.toString()}'));
     }
   }
 }

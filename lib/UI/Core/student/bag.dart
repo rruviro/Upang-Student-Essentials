@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/backpack.dart';
 
 void main() => runApp(MaterialApp(
@@ -9,7 +10,8 @@ void main() => runApp(MaterialApp(
 ));
 
 class Bag extends StatefulWidget {
-  const Bag({super.key});
+  const Bag({super.key, required this.studentProfile});
+  final StudentProfile studentProfile;
 
   @override
   State<Bag> createState() => BagState();
