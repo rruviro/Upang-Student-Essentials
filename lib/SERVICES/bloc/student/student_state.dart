@@ -50,3 +50,16 @@ class SpecificStudentErrorState extends StudentActionState {
   final String error;
   SpecificStudentErrorState(this.error);
 }
+
+class StudentBagItemLoadingState extends StudentActionState {}
+
+class StudentBagItemLoadSuccessState extends StudentActionState {
+  final List<StudentBagItem> studentBagItem;
+
+  StudentBagItemLoadSuccessState(this.studentBagItem);
+}
+
+class StudentBagItemErrorState extends StudentActionState {
+  final String error;
+  StudentBagItemErrorState(this.error);
+}
