@@ -103,8 +103,12 @@ class _Homedestinationtate extends State<HomeScreen> {
       },
       builder: (context, state) {
         final destination = [
-          Home(),
-          Announcement(),
+          isProfileLoaded
+              ? Home(studentProfile: studentProfile,)
+              : Center(child: CircularProgressIndicator()),
+          isProfileLoaded
+              ? Announcement(studentProfile: studentProfile,)
+              : Center(child: CircularProgressIndicator()),
           isProfileLoaded
               ? Profile(studentProfile: studentProfile)
               : Center(child: CircularProgressIndicator()),

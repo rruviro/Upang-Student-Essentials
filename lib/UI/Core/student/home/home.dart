@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/Department.dart';
 import 'package:use/UI/Core/student/bag.dart';
 import 'package:use/SERVICES/bloc/student/student_bloc.dart';
@@ -13,7 +14,9 @@ import '../../admin/home/stocks.dart';
 
 final StudentExtendedBloc studBloc = StudentExtendedBloc();
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final StudentProfile studentProfile;
+  const Home({super.key, required this.studentProfile});
+  //const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -35,9 +38,9 @@ class _HomeState extends State<Home> {
       buildWhen: (previous, current) => current is! StudentActionState,
       listener: (context, state) {
         if (state is NotificationPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => notif()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => notif(studentProfile: widget.studentProfile)));
         } else if (state is BackpackPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Bag()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status)));
         } else if (state is CoursePageState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => courses()));
         } else if (state is UniformPageState) {

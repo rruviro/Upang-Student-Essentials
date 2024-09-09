@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+import 'package:use/SERVICES/model/StudentData/StudentBagData/StudentBagItem.dart';
 import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/History.dart';
 import 'package:use/UI/Authentication/StudentLogin.dart';
@@ -20,53 +21,46 @@ class Profile extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<Profile> {
-  int _currentSelection = 1;
-  GlobalKey _Complete = GlobalKey();
-  GlobalKey _Cancelled = GlobalKey();
-  _selectedItem(int id) {
-    _currentSelection = id;
-    GlobalKey selectedGlobalKey;
-    switch (id) {
-      case 1:
-        selectedGlobalKey = _Complete;
-        break;
-      case 2:
-        selectedGlobalKey = _Cancelled;
-        break;
-      default:
-    }
-    setState(() {});
-  }
-  @override
-  void initState() {
-    super.initState();
-    context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
-  }
+  class _ProfileScreenState extends State<Profile> {
+    int _currentSelection = 1;
+    GlobalKey _Complete = GlobalKey();
+    GlobalKey _Cancelled = GlobalKey();
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
-        bloc: studBloc,
+    List<StudentBagItem> items = [];
+
+    @override
+    void initState() {
+      super.initState();
+      context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+    }
+
+    void _selectedItem(int id) {
+      setState(() {
+        _currentSelection = id;
+        String status = id == 1 ? "Complete" : "Cancelled";
+        context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, status));
+      });
+    }
+    
+    @override
+    Widget build(BuildContext context) {
+      return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
         listenWhen: (previous, current) => current is StudentActionState,
         buildWhen: (previous, current) => current is! StudentActionState,
         listener: (context, state) {
-          if (state is NotificationPageState) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => notif()));
-          } else if (state is BackpackPageState) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Bag(studentProfile: widget.studentProfile)));
-          } else if (state is TransactionPageState) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Transaction()));
+          if (state is StudentBagItemLoadSuccessState) {
+            setState(() {
+              items = state.studentBagItem;
+              print('StudentBagItemLoadSuccessState received');
+              print('Items: $items');
+            });
           }
         },
         builder: (context, state) {
           switch (state.runtimeType) {
-            case StudentLoadingState():
-              return CircularProgressIndicator();
-            case StudentErrorState():
+            case StudentLoadingState:
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            case StudentErrorState:
               return Scaffold(body: Center(child: Text('Error')));
             default:
               return Scaffold(
@@ -95,15 +89,25 @@ class _ProfileScreenState extends State<Profile> {
                     IconButton(
                       icon: const Icon(Icons.notifications,
                           color: Color.fromARGB(255, 14, 170, 113)),
-                      onPressed: () {
-                        studBloc.add(NotificationPageEvent());
+                      onPressed: () async {
+                        final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => notif(studentProfile: widget.studentProfile)));
+                         if (result == true) {
+                          context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                        } else {
+                          context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                        }
                       },
                     ),
                     IconButton(
                       icon: const Icon(Icons.backpack,
                           color: Color.fromARGB(255, 14, 170, 113)),
-                      onPressed: () {
-                        studBloc.add(BackpackPageEvent());
+                      onPressed: () async {
+                        final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status)));
+                        if (result == true) {
+                          context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                        } else {
+                          context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                        }
                       },
                     ),
                     IconButton(
@@ -265,10 +269,15 @@ class _ProfileScreenState extends State<Profile> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         InkWell(
-                                          onTap: () {
-                                            studBloc
-                                                .add(TransactionPageEvent());
+                                          onTap: () async{
+                                             final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(page: 1, studentProfile: widget.studentProfile, status: 'Request', )));
+                                             if (result == true) {
+                                                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                              } else {
+                                                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                              }
                                           },
+                                          
                                           child: Column(
                                             children: [
                                               SizedBox(height: 13),
@@ -291,35 +300,13 @@ class _ProfileScreenState extends State<Profile> {
                                         ),
                                         SizedBox(width: 30),
                                         InkWell(
-                                          onTap: () {
-                                            studBloc
-                                                .add(TransactionPageEvent());
-                                          },
-                                          child: Column(
-                                            children: [
-                                              SizedBox(height: 13),
-                                              Icon(
-                                                Icons.pending_outlined,
-                                                color: Colors.white,
-                                                size: 30,
-                                              ),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                'Pending',
-                                                style: GoogleFonts.inter(
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(width: 30),
-                                        InkWell(
-                                          onTap: () {
-                                            studBloc
-                                                .add(TransactionPageEvent());
+                                          onTap: () async{
+                                             final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(page: 3, studentProfile: widget.studentProfile, status: 'Reserved', )));
+                                             if (result == true) {
+                                                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                              } else {
+                                                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                              }
                                           },
                                           child: Column(
                                             children: [
@@ -343,9 +330,13 @@ class _ProfileScreenState extends State<Profile> {
                                         ),
                                         SizedBox(width: 30),
                                         InkWell(
-                                          onTap: () {
-                                            studBloc
-                                                .add(TransactionPageEvent());
+                                          onTap: () async{
+                                             final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(page: 4, studentProfile: widget.studentProfile, status: 'Claim', )));
+                                             if (result == true) {
+                                                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                              } else {
+                                                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                              }
                                           },
                                           child: Column(
                                             children: [
@@ -432,10 +423,10 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                               SizedBox(height: 20),
                               ItemList(
-                                  status: products
-                                      .where((element) =>
-                                          element.category == _currentSelection)
-                                      .toList())
+                                status: items.where((item) => 
+                                  item.status == (_currentSelection == 1 ? "Complete" : "Cancelled")
+                                ).toList(),
+                              ),
                             ],
                           ),
                         ),
@@ -450,14 +441,14 @@ class _ProfileScreenState extends State<Profile> {
 }
 
 class ItemList extends StatelessWidget {
-  final List<History> status;
+  final List<StudentBagItem> status;
   const ItemList({Key? key, required this.status}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: status
           .map((e) => ItemCard(
-                product: e,
+                item: e,
               ))
           .toList(),
     );
@@ -465,16 +456,15 @@ class ItemList extends StatelessWidget {
 }
 
 class ItemCard extends StatelessWidget {
-  final History product;
-  const ItemCard({Key? key, required this.product}) : super(key: key);
+  final StudentBagItem item;
+  const ItemCard({Key? key, required this.item}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(
-            bottom: 30.0,
-          ),
+          margin: const EdgeInsets.only(bottom: 30.0),
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
@@ -499,11 +489,7 @@ class ItemCard extends StatelessWidget {
                   ),
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: Image.network(
-                  product.imageUrl,
-                  fit: BoxFit.contain,
-                  alignment: Alignment.centerLeft,
-                ),
+                child: Image.network("assets/b19d1b570a8d62ff56f4f351e389c2db.jpg"), // Placeholder for actual image
               ),
               SizedBox(width: 10),
               Stack(
@@ -538,7 +524,7 @@ class ItemCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            product.department,
+                            item.department,
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 13,
@@ -551,7 +537,7 @@ class ItemCard extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'Reserved :',
+                            'Code :',
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 10,
@@ -561,7 +547,7 @@ class ItemCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            product.reservedDate,
+                            item.code ?? 'N/A',
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 10,
@@ -572,9 +558,8 @@ class ItemCard extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 10),
-                      SizedBox(height: 10),
                       Text(
-                        product.status,
+                        item.status,
                         style: GoogleFonts.inter(
                           textStyle: TextStyle(
                             fontSize: 12,
@@ -595,7 +580,7 @@ class ItemCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            product.claimedDate,
+                            item.dateReceived?.toLocal().toIso8601String() ?? 'N/A',
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 10,
@@ -641,8 +626,62 @@ class ItemCard extends StatelessWidget {
                           style: GoogleFonts.inter(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
-                        content: Image.asset(
-                            'assets/b19d1b570a8d62ff56f4f351e389c2db.jpg'),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Department: ${item.department}',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                'Code: ${item.code ?? 'N/A'}',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                'Type: ${item.type}',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                'Body: ${item.body}',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                'Size: ${item.size}',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                'Status: ${item.status}',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                'Date Received: ${item.dateReceived?.toLocal().toIso8601String() ?? 'N/A'}',
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
                   );

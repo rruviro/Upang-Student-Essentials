@@ -12,9 +12,8 @@ void main() {
         BlocProvider(
           create: (context) => AuthenticationBloc(),
         ),
-        BlocProvider(
-          create: (context) => StudentBottomBloc(),
-        ),
+        BlocProvider(create: (context) => StudentExtendedBloc()),
+        BlocProvider(create: (context) => StudentBottomBloc()),
       ],
       child: MyApp(),
     ),

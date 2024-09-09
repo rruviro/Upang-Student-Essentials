@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+import 'package:use/SERVICES/model/StudentData/StudentNotificationData/StudentNotificationMail.dart';
+import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/Notification.dart';
 
 class notif extends StatefulWidget {
-  const notif({super.key});
-
+  const notif({super.key, required this.studentProfile});
+  final StudentProfile studentProfile;
   @override
   State<notif> createState() => _notifState();
 }
@@ -15,146 +19,115 @@ class _notifState extends State<notif> {
   final GlobalKey _Antique = GlobalKey();
   final GlobalKey _All = GlobalKey();
 
-  void _selectedItem(int id) {
-    setState(() {
-      _currentSelection = id;
-    });
+  List<StudentNotifcationMail> mails = [];
+  
+  @override
+  void initState() {
+    super.initState();
+    context.read<StudentExtendedBloc>().add(studentNotificationMail(widget.studentProfile.id));
+  }
+  
+  Future<bool> _onPop() async {
+    Navigator.pop(context, false);
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    print(123123);
+    return WillPopScope(
+      onWillPop: _onPop,
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: const Color.fromARGB(255, 0, 0, 0)),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Transform.translate(
-          offset: Offset(-15.0, 0.0),
-          child: Text(
-            'Notification',
-            style: GoogleFonts.inter(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_new, color: const Color.fromARGB(255, 0, 0, 0)),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Transform.translate(
+            offset: Offset(-15.0, 0.0),
+            child: Text(
+              'Notification',
+              style: GoogleFonts.inter(
+                textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-        ),
-        bottom: AppBar(
-          toolbarHeight: 35,
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          title: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  InkWell(
-                    key: _Inbox,
-                    onTap: () => _selectedItem(1),
-                    child: Text(
-                      'Inbox',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        color: _currentSelection == 1
-                            ? Color.fromARGB(255, 0, 0, 0)
-                            : Colors.grey,
-                        fontWeight: FontWeight.w600,
+          bottom: AppBar(
+            toolbarHeight: 35,
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            title: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    InkWell(
+                      key: _Inbox,
+                      child: Text(
+                        'Inbox',
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          color: _currentSelection == 1
+                              ? Color.fromARGB(255, 0, 0, 0)
+                              : Colors.grey,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  SizedBox(
-                    height: 25,
-                    width: 1,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.black26),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  InkWell(
-                    key: _Antique,
-                    onTap: () => _selectedItem(2),
-                    child: Text(
-                      'Antique',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        color: _currentSelection == 2
-                            ? Color.fromARGB(255, 0, 0, 0)
-                            : Colors.grey,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  SizedBox(
-                    height: 25,
-                    width: 1,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.black26),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  InkWell(
-                    key: _All,
-                    onTap: () => _selectedItem(3),
-                    child: Text(
-                      'All',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        color: _currentSelection == 3
-                            ? Color.fromARGB(255, 0, 0, 0)
-                            : Colors.grey,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                ],
-              ),
-              SizedBox(height: 10),
-              SizedBox(
-                height: 1,
-                width: double.infinity,
-                child: Container(color: Colors.black26),
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: ListView(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(color: Colors.white),
-                padding: EdgeInsets.all(10.0),
-                child: ItemList(
-                  status: _currentSelection == 3
-                      ? products 
-                      : products
-                          .where(
-                              (element) => element.category == _currentSelection)
-                          .toList(),
+                  ],
                 ),
-              ),
-            ],
+                SizedBox(height: 10),
+                SizedBox(
+                  height: 1,
+                  width: double.infinity,
+                  child: Container(color: Colors.black26),
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
+        body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+          builder: (context, state) {
+            if (state is StudentNotificationMailLoadSuccessState) {
+              mails = state.studentNotifcationMail;
+            } else if (state is StudentNotificationMailLoadingState) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is StudentNotificationMailErrorState) {
+              return Center(child: Text('Error: ${state.error}'));
+            }
+            return ListView(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(color: Colors.white),
+                      padding: EdgeInsets.all(10.0),
+                      child: ItemList(
+                        status: mails.toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          
+        }
       ),
-    );
+    ));
   }
 }
 
 class ItemList extends StatelessWidget {
-  final List<notifModel> status;
+  final List<StudentNotifcationMail> status;
   const ItemList({Key? key, required this.status}) : super(key: key);
 
   @override
@@ -163,7 +136,7 @@ class ItemList extends StatelessWidget {
       children: status
           .map(
             (e) => ItemCard(
-              detail: e,
+              mails: e,
             ),
           )
           .toList(),
@@ -172,8 +145,8 @@ class ItemList extends StatelessWidget {
 }
 
 class ItemCard extends StatelessWidget {
-  final notifModel detail;
-  const ItemCard({Key? key, required this.detail}) : super(key: key);
+  final StudentNotifcationMail mails;
+  const ItemCard({Key? key, required this.mails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +182,7 @@ class ItemCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                            detail.imageUrl,
+                            'assets/b19d1b570a8d62ff56f4f351e389c2db.jpg',
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -236,7 +209,7 @@ class ItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      detail.description,
+                      mails.description,
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                           fontSize: 11,
@@ -245,7 +218,7 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      detail.postDate,
+                      mails.time.toString(),
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                           fontSize: 11,
@@ -264,12 +237,3 @@ class ItemCard extends StatelessWidget {
     );
   }
 }
-
-// InkWell(
-//   onTap: () => NotificationService.createNewNotification(),
-//   child: Container(
-//     color: Colors.black,
-//     height: 100,
-//     width: 100,
-//   )
-// )
