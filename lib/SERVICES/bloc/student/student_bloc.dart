@@ -173,7 +173,7 @@ class StudentExtendedBloc
 
           List<dynamic> MialsJson = responseBody['mails'];
           List<StudentNotifcationMail> mails = MialsJson.map((json) => StudentNotifcationMail.fromJson(json)).toList();
-
+          
           print('Emitting StudentNotificationMailLoadSuccessState with ${mails.length} items');
           emit(StudentNotificationMailLoadSuccessState(mails));
         } else {
@@ -191,9 +191,14 @@ class StudentExtendedBloc
     //STUDENT BAG ITEM AND BOOK
     List<StudentBagItem>? studentBagItems;
     List<StudentBagBook>? studentBagBooks;
+    bool itemsLoaded = false;
+    bool booksLoaded = false;
 
     Future<void> showStudentBagBookData(
       studentBagBook event, Emitter<StudentExtendedState> emit) async {
+      studentBagBooks = [];
+      booksLoaded = false;
+
       try {
         final response = await http.get(
           Uri.parse('http://127.0.0.1:8000/api/bookcollections/${event.stubag_id}/${event.status}'),
@@ -203,20 +208,28 @@ class StudentExtendedBloc
           final responseBody = json.decode(response.body);
           List<dynamic> itemsJson = responseBody['bookCollections'];
           studentBagBooks = itemsJson.map((json) => StudentBagBook.fromJson(json)).toList();
-
-          if (studentBagItems != null && studentBagBooks != null) {
-            emit(StudentBagCombinedLoadSuccessState(studentBagItems!, studentBagBooks!));
-          }
+          booksLoaded = true;
         } else {
           emit(StudentBagBookErrorState('Failed to load bag books'));
+          booksLoaded = true;
+        }
+
+        if (itemsLoaded && booksLoaded) {
+          emit(StudentBagCombinedLoadSuccessState(
+            studentBagItems ?? [], 
+            studentBagBooks ?? [],
+          ));
         }
       } catch (e) {
         emit(StudentBagBookErrorState('An error occurred: ${e.toString()}'));
+        booksLoaded = false;
       }
     }
 
     Future<void> showStudentBagItemData(
       studentBagItem event, Emitter<StudentExtendedState> emit) async {
+      studentBagItems = [];
+      itemsLoaded = false;
       try {
         final response = await http.get(
           Uri.parse('http://127.0.0.1:8000/api/studentbagitems/${event.stubag_id}/${event.status}'),
@@ -226,15 +239,21 @@ class StudentExtendedBloc
           final responseBody = json.decode(response.body);
           List<dynamic> itemsJson = responseBody['items'];
           studentBagItems = itemsJson.map((json) => StudentBagItem.fromJson(json)).toList();
-
-          if (studentBagItems != null && studentBagBooks != null) {
-            emit(StudentBagCombinedLoadSuccessState(studentBagItems!, studentBagBooks!));
-          }
+          itemsLoaded = true;
         } else {
           emit(StudentBagItemErrorState('Failed to load bag items'));
+          itemsLoaded = true;
+        }
+
+        if (itemsLoaded && booksLoaded) {
+          emit(StudentBagCombinedLoadSuccessState(
+            studentBagItems ?? [], 
+            studentBagBooks ?? [],
+          ));
         }
       } catch (e) {
         emit(StudentBagItemErrorState('An error occurred: ${e.toString()}'));
+        itemsLoaded = false;
       }
-  }
+    }
 }

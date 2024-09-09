@@ -22,9 +22,17 @@ class Bag extends StatefulWidget {
 }
 
 class BagState extends State<Bag> {
+  bool _showLoading = true; 
+
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
 
     context.read<StudentExtendedBloc>().add(
       studentBagItem(widget.studentProfile.id, widget.Status),
@@ -70,6 +78,9 @@ class BagState extends State<Bag> {
         ),
         body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
           builder: (context, state) {
+            if (_showLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
             if (state is StudentBagCombinedLoadSuccessState) {
               return SingleChildScrollView(
                 child: Column(
@@ -123,10 +134,11 @@ class BagState extends State<Bag> {
             }
           },
         ),
-      )
+      ),
     );
   }
 }
+
 
 
 
