@@ -215,7 +215,7 @@ class _ProfileScreenState extends State<Profile> {
                                         fontWeight: FontWeight.w600)),
                               ),
                               Text(
-                                '01-1234-432154',
+                                widget.studentProfile.stuId,
                                 style: GoogleFonts.inter(
                                     textStyle: TextStyle(
                                         fontSize: 13,
