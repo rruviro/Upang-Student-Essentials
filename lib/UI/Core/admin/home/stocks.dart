@@ -20,6 +20,11 @@ class Stocks extends StatefulWidget {
 }
 
 final TextEditingController ProdController = TextEditingController();
+final TextEditingController ProdMController = TextEditingController();
+final TextEditingController ProdBController = TextEditingController();
+final TextEditingController ProdBBController = TextEditingController();
+final TextEditingController ProdBMController = TextEditingController();
+final TextEditingController ProdBMMController = TextEditingController();
 final int maxLength = 25;
 int _countProd = 0;
 
@@ -46,11 +51,21 @@ class _StocksState extends State<Stocks> {
   void initState() {
     super.initState();
     ProdController.addListener(_updateCounter);
+    ProdMController.addListener(_updateCounter);
+    ProdBController.addListener(_updateCounter);
+    ProdBBController.addListener(_updateCounter);
+    ProdBMController.addListener(_updateCounter);
+    ProdBMMController.addListener(_updateCounter);
   }
 
   void _updateCounter() {
     setState(() {
       _countProd = ProdController.text.length;
+      _countProd = ProdMController.text.length;
+      _countProd = ProdBController.text.length;
+      _countProd = ProdBBController.text.length;
+      _countProd = ProdBMController.text.length;
+      _countProd = ProdBMMController.text.length;
     });
   }
 
@@ -322,20 +337,241 @@ class _StocksState extends State<Stocks> {
                           ),
                         ),
                         Padding(
+                          padding: EdgeInsets.only(top: 25),
+                          child: Container(
+                                height: 20,
+                                width: double.infinity,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      top: 0,
+                                      left: 20,
+                                      child: Text(
+                                        'Books',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 17,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 20,
+                                      child: InkWell(
+                                        onTap:() {
+                                          showDialog(
+                                            context: context, 
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                ),
+                                                title: Container(
+                                                  height: 45,
+                                                  width: double.infinity,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        'New Book Product',
+                                                        style: GoogleFonts.inter(
+                                                          color: Colors.black,
+                                                          fontSize: 15,
+                                                          fontWeight: FontWeight.w600
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 5),
+                                                      Text(
+                                                        'Book Details',
+                                                        style: GoogleFonts.inter(
+                                                          color: Colors.grey,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w400
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                content: Container(
+                                                  height: 280,
+                                                  width: 200,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: (){
+                                                          _openImagePicker();
+                                                        },
+                                                        child: Container(
+                                                          height: 200,
+                                                          width: double.infinity,
+                                                          decoration: BoxDecoration(
+                                                            color: Color.fromARGB(255, 14, 170, 113),
+                                                            borderRadius: BorderRadius.circular(5)
+                                                          ),
+                                                          child: _image != null
+                                                            ? Image.file(
+                                                                _image!, 
+                                                                fit: BoxFit.contain
+                                                              )
+                                                            : Icon(
+                                                                Icons.image_search_rounded,color: 
+                                                              Colors.white,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 40,
+                                                        width: double.infinity,
+                                                        child: TextFormField(
+                                                          controller: ProdBController,
+                                                          decoration: InputDecoration(
+                                                            border: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: Colors.grey),
+                                                            ),
+                                                            focusedBorder: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                                            ),
+                                                            hintText: 'SSP 012',
+                                                            hintStyle: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.w600,
+                                                            ),
+                                                            suffix: Text(
+                                                              '$_countProd/$maxLength', 
+                                                              style: TextStyle(
+                                                                color: Color.fromARGB(255, 14, 170, 113),
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                            suffixStyle: TextStyle(
+                                                              color: Colors.grey,
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                          keyboardType: TextInputType.text,
+                                                          textInputAction: TextInputAction.done,
+                                                          style: TextStyle(
+                                                            color: Color.fromARGB(255, 0, 0, 0),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                          inputFormatters: [
+                                                            LengthLimitingTextInputFormatter(23),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 40,
+                                                        width: double.infinity,
+                                                        child: TextFormField(
+                                                          controller: ProdBBController,
+                                                          decoration: InputDecoration(
+                                                            border: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: Colors.grey),
+                                                            ),
+                                                            focusedBorder: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                                            ),
+                                                            hintText: 'Student Success Program',
+                                                            hintStyle: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.w600,
+                                                            ),
+                                                            suffix: Text(
+                                                              '$_countProd/$maxLength', 
+                                                              style: TextStyle(
+                                                                color: Color.fromARGB(255, 14, 170, 113),
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                            suffixStyle: TextStyle(
+                                                              color: Colors.grey,
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                          keyboardType: TextInputType.text,
+                                                          textInputAction: TextInputAction.done,
+                                                          style: TextStyle(
+                                                            color: Color.fromARGB(255, 0, 0, 0),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                          inputFormatters: [
+                                                            LengthLimitingTextInputFormatter(23),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ]
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  GestureDetector(
+                                                    onTap: (){
+                                                    },
+                                                    child: Container(
+                                                      height: 30,
+                                                      width: 112,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(2),
+                                                        color: Color.fromARGB(255, 14, 170, 113)
+                                                      ),
+                                                      child: Center( 
+                                                        child: Text(
+                                                          'Deploy',
+                                                          style: GoogleFonts.inter(
+                                                            color: Colors.white,
+                                                            fontSize: 13,
+                                                            fontWeight: FontWeight.w600 
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: (){
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      height: 30,
+                                                      width: 112,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(2),
+                                                        color: Color.fromARGB(192, 14, 170, 113)
+                                                      ),
+                                                      child: Center(
+                                                        child:Text(
+                                                          'Cancel',
+                                                          style: GoogleFonts.inter(
+                                                            color: const Color.fromARGB(190, 255, 255, 255),
+                                                            fontSize: 13,
+                                                            fontWeight: FontWeight.w600 
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                          );
+                                        },
+                                        child: Icon(
+                                          Icons.add,
+                                          color: Color.fromARGB(255, 14, 170, 113),
+                                        ),
+                                      ),
+                                    ),
+                                  ]
+                                ),
+                              ),
+                        ),
+                        Padding(
                           padding: EdgeInsets.all(16),
                           child: Column(
                             children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  'Books',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 17,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600
-                                  ),
-                                ),
-                              ),
                               SizedBox(height: 16),
                               Container(
                                 width: double.infinity,
@@ -674,7 +910,7 @@ class _ItemCardState extends State<ItemCard> {
                                 height: 40,
                                 width: double.infinity,
                                 child: TextFormField(
-                                  controller: ProdController,
+                                  controller: ProdMController,
                                   decoration: InputDecoration(
                                     border: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey),
@@ -826,6 +1062,20 @@ class BookCard extends StatefulWidget {
 }
 class _BookCardState extends State<BookCard> {
   bool isChecked = false;
+  File? _image;
+  File? get image => _image;
+
+  final _picker = ImagePicker();
+  Future<void> _openImagePicker() async {
+    final pickedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -855,14 +1105,228 @@ class _BookCardState extends State<BookCard> {
             Icons.book,
             size: 32,
           ),
-          trailing: CustomCircularCheckbox(
-            value: isChecked,
-            onChanged: (bool? value) {
-              setState(() {
-                isChecked = value ?? false;
-                widget.onChanged?.call(isChecked);
-              });
-            },
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min, 
+            crossAxisAlignment: CrossAxisAlignment.center,  
+            children: [
+              IconButton(
+                onPressed: (){
+                  showDialog(
+                    context: context, 
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        title: Container(
+                          height: 45,
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Manage Book Product',
+                                style: GoogleFonts.inter(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                'Book Details',
+                                style: GoogleFonts.inter(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        content: Container(
+                          height: 280,
+                          width: 200,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  _openImagePicker();
+                                },
+                                child: Container(
+                                  height: 200,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 14, 170, 113),
+                                    borderRadius: BorderRadius.circular(5)
+                                  ),
+                                  child: _image != null
+                                    ? Image.file(
+                                        _image!, 
+                                        fit: BoxFit.contain
+                                      )
+                                    : Icon(
+                                        Icons.image_search_rounded,color: 
+                                      Colors.white,
+                                      ),
+                                    //   Image.asset(
+                                    //     widget.visual.image,
+                                    //     fit: BoxFit.contain,
+                                    // )
+                                ),
+                              ),
+                              Container(
+                                height: 40,
+                                width: double.infinity,
+                                child: TextFormField(
+                                  controller: ProdBMController,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                    ),
+                                    hintText: 'SSP 012',
+                                    hintStyle: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    suffix: Text(
+                                      '$_countProd/$maxLength', 
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 14, 170, 113),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    suffixStyle: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(23),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 40,
+                                width: double.infinity,
+                                child: TextFormField(
+                                  controller: ProdBMMController,
+                                  decoration: InputDecoration(
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                    ),
+                                    hintText: 'Student Success Program',
+                                    hintStyle: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    suffix: Text(
+                                      '$_countProd/$maxLength', 
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 14, 170, 113),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    suffixStyle: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(23),
+                                  ],
+                                ),
+                              ),
+                            ]
+                          ),
+                        ),
+                        actions: [
+                          GestureDetector(
+                            onTap: (){
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 112,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2),
+                                color: Color.fromARGB(255, 14, 170, 113)
+                              ),
+                              child: Center( 
+                                child: Text(
+                                  'Deploy',
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600 
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 112,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2),
+                                color: Color.fromARGB(192, 14, 170, 113)
+                              ),
+                              child: Center(
+                                child:Text(
+                                  'Cancel',
+                                  style: GoogleFonts.inter(
+                                    color: const Color.fromARGB(190, 255, 255, 255),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600 
+                                  ),
+                                ),
+                              )
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  );
+                },
+                icon: Icon(
+                  Icons.dashboard_customize_outlined,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(width: 8),  
+              IconButton(
+                onPressed: (){}, 
+                icon: Icon(
+                  Icons.delete,  
+                  color: Colors.white,  
+                ),
+              ),
+            ],
           ),
         ),
         Divider(

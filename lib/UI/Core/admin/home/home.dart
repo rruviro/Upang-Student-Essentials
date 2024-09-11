@@ -59,6 +59,7 @@ class Home extends StatelessWidget {
                     ],
                   ),
                 ),
+                automaticallyImplyLeading: false,
                 centerTitle: false,
                 actions: <Widget>[
                   IconButton(

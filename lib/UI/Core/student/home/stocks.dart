@@ -10,6 +10,7 @@ class Stocks extends StatefulWidget {
 
   @override
   State<Stocks> createState() => _StocksState();
+  
 }
 
 class _StocksState extends State<Stocks> {

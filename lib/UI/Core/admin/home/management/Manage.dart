@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:use/UI/Core/admin/home/home.dart';
 class manage extends StatefulWidget {
   const manage({super.key});
   @override
@@ -475,7 +476,99 @@ class _manageState extends State<manage> {
                       child: Center(
                         child: InkWell(
                           onTap: () {
-                            
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                  ),
+                                  title: Container(
+                                    height: 100,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.check_circle_outline,
+                                        color: Color.fromARGB(255, 14, 170, 113),
+                                        size: 100,
+                                      ),
+                                    ),
+                                  ),
+                                  content: Container(
+                                    height: 20,
+                                    child: Center(
+                                      child: Text(
+                                        'Modification in this department is already deployed',
+                                        style: GoogleFonts.inter(
+                                          color: Colors.black,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  actions: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => Home()),
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 35,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(2),
+                                                color: Color.fromARGB(255, 14, 170, 113),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  'Home',
+                                                  style: GoogleFonts.inter(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Container(
+                                              height: 35,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(2),
+                                                color: Color.fromARGB(192, 14, 170, 113),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  'Close',
+                                                  style: GoogleFonts.inter(
+                                                    color: Color.fromARGB(190, 255, 255, 255),
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           child: Container(
                             width: 200,

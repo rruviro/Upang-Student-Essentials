@@ -99,56 +99,62 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                             ),
                             actions: [
-                              GestureDetector(
-                                onTap: (){
-                                  Navigator.of(context)
-                                  .push(
-                                    MaterialPageRoute(
-                                      builder: (context) => AdminLogin()
-                                    )
-                                  );
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 112,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    color: Color.fromARGB(255, 14, 170, 113)
-                                  ),
-                                  child: Center( 
-                                    child: Text(
-                                      'Continue',
-                                      style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600 
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => AdminLogin(),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(2),
+                                          color: Color.fromARGB(255, 14, 170, 113),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Continue',
+                                            style: GoogleFonts.inter(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: (){
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 112,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    color: Color.fromARGB(192, 14, 170, 113)
-                                  ),
-                                  child: Center(
-                                    child:Text(
-                                      'Nope',
-                                      style: GoogleFonts.inter(
-                                        color: const Color.fromARGB(190, 255, 255, 255),
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600 
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(2),
+                                          color: Color.fromARGB(192, 14, 170, 113),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Close',
+                                            style: GoogleFonts.inter(
+                                              color: Color.fromARGB(190, 255, 255, 255),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  )
-                                ),
+                                  ),
+                                ],
                               ),
                             ],
                           );
