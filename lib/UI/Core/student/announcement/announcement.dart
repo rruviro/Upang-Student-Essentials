@@ -4,14 +4,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/Announcement.dart';
 import 'package:use/UI/Core/student/bag.dart';
 import 'package:use/UI/Core/student/home/home.dart';
 import 'package:use/UI/Core/student/notification.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
 
 class Announcement extends StatefulWidget {
-  const Announcement({super.key});
+  const Announcement({super.key, required this.studentProfile});
+  final StudentProfile studentProfile;
 
   @override
   State<Announcement> createState() => _AnnouncementState();
@@ -55,7 +57,7 @@ class _AnnouncementState extends State<Announcement> {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
-                    child: const notif(),
+                    child: notif(studentProfile: widget.studentProfile),
                   ),
                 )
               );
@@ -71,7 +73,7 @@ class _AnnouncementState extends State<Announcement> {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
-                    child: const Bag(),
+                    child: Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status),
                   ),
                 )
               );

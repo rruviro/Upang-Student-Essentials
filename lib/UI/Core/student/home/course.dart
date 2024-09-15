@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+
 import 'package:use/SERVICES/model/student/Course.dart';
 import 'package:use/UI/Core/student/bag.dart';
 import 'package:use/UI/Core/student/home/home.dart';
 import 'package:use/UI/Core/student/home/stocks.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
 
 void main() => runApp(MaterialApp(
   home: courses(),

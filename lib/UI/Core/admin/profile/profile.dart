@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
-import 'package:use/SERVICES/model/admin/Student.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/models/admin/Student.dart';
 import 'package:use/UI/Authentication/AdminLogin.dart';
 import 'package:use/UI/Core/admin/notification.dart';
 import 'package:use/UI/Core/admin/profile/transaction.dart';

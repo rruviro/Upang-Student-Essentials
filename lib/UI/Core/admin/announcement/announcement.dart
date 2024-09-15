@@ -2,7 +2,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/student/Announcement.dart';
 import 'package:use/UI/Core/admin/home/home.dart';
 import 'package:use/UI/Core/admin/notification.dart';

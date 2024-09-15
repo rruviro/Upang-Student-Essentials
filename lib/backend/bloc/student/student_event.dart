@@ -28,3 +28,23 @@ class studentProfileGet extends StudentExtendedEvent {
 
   studentProfileGet(this.studentId);
 }
+
+class studentBagItem extends StudentExtendedEvent {
+  final int stubag_id;
+  final String status;
+
+  studentBagItem(this.stubag_id,this.status);
+}
+
+class studentBagBook extends StudentExtendedEvent {
+  final int stubag_id;
+  final String status;
+
+  studentBagBook(this.stubag_id,this.status);
+}
+
+class studentNotificationMail extends StudentExtendedEvent {
+  final int stunotification_id;
+
+  studentNotificationMail(this.stunotification_id);
+}

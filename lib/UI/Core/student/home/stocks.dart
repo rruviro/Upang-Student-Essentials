@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/BookStocks.dart';
 import 'package:use/SERVICES/model/student/Stocks.dart';
 import 'package:use/UI/Core/student/home/home.dart';
@@ -10,7 +10,6 @@ class Stocks extends StatefulWidget {
 
   @override
   State<Stocks> createState() => _StocksState();
-  
 }
 
 class _StocksState extends State<Stocks> {

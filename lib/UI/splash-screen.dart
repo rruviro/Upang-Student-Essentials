@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
+import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
 import 'package:use/UI/Core/welcome.dart';
 
 void main() {

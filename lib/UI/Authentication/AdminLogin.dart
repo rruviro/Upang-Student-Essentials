@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/UI/Authentication/StudentLogin.dart';
 import 'package:use/UI/Core/admin/navigation.dart';
 

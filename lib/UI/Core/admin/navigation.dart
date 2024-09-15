@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:use/UI/Core/admin/announcement/announcement.dart';
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/UI/Core/admin/home/home.dart';
 import 'package:use/UI/Core/admin/profile/profile.dart';
 

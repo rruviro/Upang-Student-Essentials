@@ -7,9 +7,9 @@ import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
-import "package:use/SERVICES/bloc/admin/admin_bloc.dart";
-import "package:use/SERVICES/model/admin/BookStocks.dart";
-import "package:use/SERVICES/model/admin/Stocks.dart";
+import "package:use/backend/bloc/admin/admin_bloc.dart";
+import "package:use/backend/models/admin/BookStocks.dart";
+import "package:use/backend/models/admin/Stocks.dart";
 import "package:use/UI/Core/admin/home/uniform.dart";
 import "package:use/UI/Core/admin/profile/profile.dart";
 

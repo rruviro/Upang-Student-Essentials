@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/admin/Transaction.dart';
+import 'package:use/backend/models/admin/Transaction.dart';
 class Transaction extends StatefulWidget {
   const Transaction({super.key});
   @override
