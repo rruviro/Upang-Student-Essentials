@@ -85,6 +85,9 @@ class StudentBagBookErrorState extends StudentActionState {
   StudentBagBookErrorState(this.error);
 }
 
+class BookDataDeleted extends StudentActionState{
+}
+
 //STUDENT BAG AND ITEM
 class StudentBagCombinedLoadSuccessState extends StudentExtendedState {
   final List<StudentBagItem> studentBagItems;

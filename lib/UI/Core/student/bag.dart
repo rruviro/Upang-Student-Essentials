@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/student/backpack.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
@@ -34,6 +33,23 @@ class BagState extends State<Bag> {
       });
     });
 
+    context.read<StudentExtendedBloc>().add(
+      studentBagItem(widget.studentProfile.id, widget.Status),
+    );
+
+    context.read<StudentExtendedBloc>().add(
+      studentBagBook(widget.studentProfile.id, widget.Status),
+    );
+  }
+
+  Future<void> refreshData() async {
+
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+    print("asd");
     context.read<StudentExtendedBloc>().add(
       studentBagItem(widget.studentProfile.id, widget.Status),
     );
@@ -81,6 +97,9 @@ class BagState extends State<Bag> {
             if (_showLoading) {
               return Center(child: CircularProgressIndicator());
             }
+            if(state is BookDataDeleted){
+              refreshData();
+            }
             if (state is StudentBagCombinedLoadSuccessState) {
               return SingleChildScrollView(
                 child: Column(
@@ -116,7 +135,9 @@ class BagState extends State<Bag> {
                             ),
                           ),
                           SizedBox(height: 8.0),
-                          BookList(status: state.studentBagBooks),
+                          BookList(
+                            status: state.studentBagBooks, refresh: refreshData,
+                            ),
                         ],
                       ),
                     ),
@@ -128,9 +149,9 @@ class BagState extends State<Bag> {
               return Center(child: CircularProgressIndicator());
             } else if (state is StudentBagItemErrorState ||
                       state is StudentBagBookErrorState) {
-              return Center(child: Text('Failed to load data'));
+              return Center(child: CircularProgressIndicator());
             } else {
-              return Center(child: Text('Loading data...'));
+              return Center(child: CircularProgressIndicator());
             }
           },
         ),
@@ -327,13 +348,20 @@ class _ItemCardState extends State<ItemCard> {
 
 class BookList extends StatelessWidget {
   final List<StudentBagBook> status;
-  const BookList({Key? key, required this.status}) : super (key: key);
+  final Future<void> Function() refresh;
+  const BookList({Key? key, required this.status, required this.refresh}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: status
         .map((e) => BookCard(
-            book: e,
+            book: e, onpressed: () async { 
+              print(e.id);
+                context.read<StudentExtendedBloc>().add(
+                  deleteBookData(e.id),
+                );
+                await refresh;
+             },
           ))
         .toList(),
     );
@@ -342,7 +370,8 @@ class BookList extends StatelessWidget {
 
 class BookCard extends StatefulWidget { 
   final StudentBagBook book;
-  const BookCard({Key? key, required this.book}) : super(key: key);
+  final VoidCallback onpressed;
+  const BookCard({Key? key, required this.book, required this.onpressed}) : super(key: key);
 
   @override
   _BookCardState createState() => _BookCardState();
@@ -480,7 +509,7 @@ class _BookCardState extends State<BookCard> {
           right: 0,
           child: Container(
             child: IconButton(
-              onPressed: () {},
+              onPressed: widget.onpressed,
               icon: Icon(
                 Icons.delete,
                 size: 20,

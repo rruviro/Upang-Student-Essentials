@@ -48,3 +48,9 @@ class studentNotificationMail extends StudentExtendedEvent {
 
   studentNotificationMail(this.stunotification_id);
 }
+
+class deleteBookData extends StudentExtendedEvent{
+  final int id;
+
+  deleteBookData(this.id);
+}

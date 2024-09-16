@@ -1,21 +1,25 @@
 import 'package:use/backend/apiservice/studentApi/srepo.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
+import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/models/student/StudentData/Student.dart';
 import 'package:use/backend/models/student/StudentData/StudentBag.dart';
 import 'package:use/backend/models/student/StudentData/StudentNotifcation.dart';
 import 'dart:convert';
 
+import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
+
 
 
   class StudentRepositoryImpl extends Studentrepo {
-  static const String baseUrl = 'http://127.0.0.1:8000/api/students';
+  static const String baseUrl = 'http://127.0.0.1:8000/api';
 
   @override
   Future<Student> showStudentData(String studentId) async {
-    final response = await http.get(Uri.parse('$baseUrl/$studentId'));
-
+    final response = await http.get(Uri.parse('$baseUrl/students/$studentId'));
+    print(response);
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
 
@@ -67,20 +71,50 @@ import 'dart:convert';
 
 
   @override
-  Future<void> showStudenNotificationMailData(int stunotification_id) async {
-    print("1");
+  Future<List<StudentNotifcationMail>> showStudenNotificationMailData(int stunotification_id) async {
+    final response = await http.get(Uri.parse('$baseUrl/mails/$stunotification_id'));
+
+    if(response.statusCode == 200){
+      final responseBody = json.decode(response.body);
+      List<dynamic> itemsJson = responseBody['mails'];
+      return itemsJson.map((json) => StudentNotifcationMail.fromJson(json)).toList();
+    }
+    else{
+      throw Exception(response.statusCode);
+    }
   }
 
   @override
-  Future<void> showStudentBagBookData(int stubag_id, String status) async{
-    print("2");
+  Future<List<StudentBagBook>> showStudentBagBookData(int stubag_id, String status) async{
+    final response = await http.get(Uri.parse('$baseUrl/bookcollections/${stubag_id}/${status}'));
+      if (response.statusCode == 200) {
+          final responseBody = json.decode(response.body);
+          List<dynamic> itemsJson = responseBody['bookCollections'];
+          return itemsJson.map((json) => StudentBagBook.fromJson(json)).toList();
+      } else {
+        throw Exception(response.statusCode);
+      }
   }
 
   @override
-  Future<void> showStudentBagItemData(int stubag_id, String status) async{
-    print("3");
-  }
-
-
-  
+  Future<List<StudentBagItem>> showStudentBagItemData(int stubag_id, String status) async{
+    final response = await http.get(Uri.parse('$baseUrl/studentbagitems/${stubag_id}/${status}'));
+      if (response.statusCode == 200) {
+          final responseBody = json.decode(response.body);
+          List<dynamic> itemsJson = responseBody['items'];
+          return itemsJson.map((json) => StudentBagItem.fromJson(json)).toList();
+      } else {
+        throw Exception('Empty');
+      }
+    }
+    
+    @override
+    Future<void> deleteStudentBookData(int id) async {
+      final response = await http.delete(Uri.parse('$baseUrl/bookcollections/$id'));
+      if(response.statusCode == 200){
+      }
+      else{
+        throw Exception('Failed');
+      }
+    }
 }
