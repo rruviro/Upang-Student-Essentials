@@ -40,20 +40,11 @@ class StudentExtendedBloc extends Bloc<StudentExtendedEvent, StudentExtendedStat
       //BY MIRO
       on<studentProfileGet>((event, emit) async {
         try {
-          print("object");
           emit(SpecificStudentLoadingState());
-          
-          // Fetch student data
           final studentData = await _studentrepo.showStudentData(event.studentId);
-
-          // Debugging: Print the fetched data to check if it's not null and contains the expected information
-          print('Fetched student data: $studentData');
           
-          // Check if studentData is not null and contains expected fields
           if (studentData != null) {
-            print('Student profile: ${studentData.profile}');
-            print('Student bag: ${studentData.studentBag}');
-            print('Student notifications: ${studentData.notification}');
+            print('Student data received.');
           } else {
             print('No student data received.');
           }
