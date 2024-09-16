@@ -3,11 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
+import 'package:use/backend/apiservice/studentApi/srepo.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/backend/models/student/StudentData/Student.dart';
 import 'package:use/backend/models/student/StudentData/StudentBag.dart';
 import 'package:use/backend/models/student/StudentData/StudentNotifcation.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
 
 
@@ -25,18 +27,47 @@ class StudentBottomBloc extends Bloc<StudentBottomEvent, StudentBottomState> {
   }
 }
 
-class StudentExtendedBloc
-  extends Bloc<StudentExtendedEvent, StudentExtendedState> {
-    StudentExtendedBloc() : super(StudentExtendedInitial()) {
+class StudentExtendedBloc extends Bloc<StudentExtendedEvent, StudentExtendedState> {
+      final Studentrepo _studentrepo;
+
+      StudentExtendedBloc(this._studentrepo) : super(StudentExtendedInitial()) {
       on<CoursePageEvent>(course_page);
       on<StockPageEvent>(stock_page);
-      on<UniformPageEvent>(uniform_page);
       on<BackpackPageEvent>(backpack_page);
       on<NotificationPageEvent>(notification_page);
       on<TransactionPageEvent>(transaction_page);
 
       //BY MIRO
-      on<studentProfileGet>(showStudentData);
+      on<studentProfileGet>((event, emit) async {
+        try {
+          print("object");
+          emit(SpecificStudentLoadingState());
+          
+          // Fetch student data
+          final studentData = await _studentrepo.showStudentData(event.studentId);
+
+          // Debugging: Print the fetched data to check if it's not null and contains the expected information
+          print('Fetched student data: $studentData');
+          
+          // Check if studentData is not null and contains expected fields
+          if (studentData != null) {
+            print('Student profile: ${studentData.profile}');
+            print('Student bag: ${studentData.studentBag}');
+            print('Student notifications: ${studentData.notification}');
+          } else {
+            print('No student data received.');
+          }
+          
+          emit(SpecificStudentLoadSuccessState(
+            studentProfile: studentData.profile,
+            studentBag: studentData.studentBag,
+            studentNotification: studentData.notification,
+          ));
+        } catch (e) {
+          print(e);
+          emit(SpecificStudentErrorState('An error occurred: ${e.toString()}'));
+        }
+      });
       on<studentBagItem>(showStudentBagItemData);
       on<studentNotificationMail>(showStudenNotificationMailData);
       on<studentBagBook>(showStudentBagBookData);
@@ -79,87 +110,6 @@ class StudentExtendedBloc
     }
 
     //BLOC BY MIRO
-    Future<void> showStudentData(
-    studentProfileGet event, Emitter<StudentExtendedState> emit) async {
-      try {
-        final response = await http.get(
-          Uri.parse('http://127.0.0.1:8000/api/students/${event.studentId}'),
-        );
-
-        if (response.statusCode == 200) {
-          final responseBody = json.decode(response.body);
-
-          if (responseBody['student'] != null) {
-            final studentData = responseBody['student'];
-            
-            final profileJson = studentData['profile'] != null 
-                ? studentData['profile'] as Map<String, dynamic> 
-                : null;
-            
-            final studentBagJson = studentData['student_bag'] != null 
-                ? studentData['student_bag'] as Map<String, dynamic> 
-                : null;
-            
-            final notificationJson = studentData['notification'] != null 
-                ? studentData['notification'] as Map<String, dynamic> 
-                : null;
-            
-            final studentProfile = profileJson != null 
-                ? StudentProfile.fromJson(profileJson) 
-                : null;
-            
-            final studentBag = studentBagJson != null 
-                ? StudentBag.fromJson(studentBagJson) 
-                : null;
-            
-            final notification = notificationJson != null 
-                ? StudentNotification.fromJson(notificationJson) 
-                : null;
-
-            if (studentProfile != null) {
-            emit(SpecificStudentLoadSuccessState(studentProfile, studentBag!, notification!));
-
-              // Print profile details
-              /*print("Student ID: ${studentProfile.stuId}");
-              print("Name: ${studentProfile.firstName} ${studentProfile.lastName}");
-              print("Course: ${studentProfile.course}");
-              print("Department: ${studentProfile.department}");
-              print("Year: ${studentProfile.year}");
-              print("Status: ${studentProfile.status}");
-              print("Has Uniform: ${studentProfile.hasUUniform}");
-              print("Has L Uniform: ${studentProfile.hasLUniform}");
-              print("Has RSO: ${studentProfile.hasRSO}");
-              print("Has Books: ${studentProfile.hasBooks}");*/
-
-              // Print student bag details if available
-              if (studentBag != null) {
-                //print("Student Bag ID: ${studentBag.id}");
-                //print("Student Bag ID: ${studentBag.stuId}");
-              }
-
-              // Print notification details if available
-              if (notification != null) {
-                //print("Notification ID: ${notification.id}");
-                //print("Notification Student ID: ${notification.stuId}");
-              }
-            } else {
-              emit(SpecificStudentErrorState('Student profile data is incomplete'));
-              //print("Student profile data is incomplete");
-            }
-          } else {
-            emit(SpecificStudentErrorState('No student data found'));
-            //print("No student data found");
-          }
-        } else {
-          emit(SpecificStudentErrorState('Failed to load student, status code: ${response.statusCode}'));
-
-        }
-      } catch (e) {
-        //print('Exception: ${e.toString()}');
-        emit(SpecificStudentErrorState('An error occurred: ${e.toString()}'));
-      }
-    }
-
     //STUDENT NOTIFICATION
     Future<void> showStudenNotificationMailData(
     studentNotificationMail event, Emitter<StudentExtendedState> emit) async {

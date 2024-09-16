@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/backpack.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
 class Bag extends StatefulWidget {
   const Bag({

@@ -45,7 +45,11 @@ class SpecificStudentLoadSuccessState extends StudentActionState {
   final StudentBag studentBag;
   final StudentNotification studentNotification;
 
-  SpecificStudentLoadSuccessState(this.studentProfile,this.studentBag, this.studentNotification);
+  SpecificStudentLoadSuccessState({
+    required this.studentProfile,
+    required this.studentBag,
+    required this.studentNotification,
+  });
 }
 
 class SpecificStudentErrorState extends StudentActionState {

@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
+import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/UI/Core/student/announcement/announcement.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/UI/Core/student/home/home.dart';
@@ -19,7 +20,7 @@ class HomeBase extends StatelessWidget {
       providers: [
         BlocProvider<StudentExtendedBloc>(
           create: (context) =>
-              StudentExtendedBloc()..add(studentProfileGet(studentId)),
+              StudentExtendedBloc(StudentRepositoryImpl())..add(studentProfileGet(studentId)),
         ),
         BlocProvider<StudentBottomBloc>(
           create: (context) => StudentBottomBloc(),
@@ -51,6 +52,7 @@ class _Homedestinationtate extends State<HomeScreen> {
   void initState() {
     super.initState();
     print(widget.studentID);
+    print("herehre");
     context
         .read<StudentExtendedBloc>()
         .add(studentProfileGet(widget.studentID));

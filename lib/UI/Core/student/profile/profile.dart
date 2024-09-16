@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
-import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/History.dart';
 import 'package:use/UI/Authentication/StudentLogin.dart';
 import 'package:use/UI/Core/student/bag.dart';
@@ -12,7 +13,7 @@ import 'package:use/UI/Core/student/profile/transaction.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 
-final StudentExtendedBloc studBloc = StudentExtendedBloc();
+final StudentExtendedBloc studBloc = StudentExtendedBloc(StudentRepositoryImpl());
 
 class Profile extends StatefulWidget {
   const Profile({super.key, required this.studentProfile});

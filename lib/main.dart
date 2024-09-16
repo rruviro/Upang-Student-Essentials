@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/authentication/Route.dart';
 import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
@@ -12,7 +13,7 @@ void main() {
         BlocProvider(
           create: (context) => AuthenticationBloc(),
         ),
-        BlocProvider(create: (context) => StudentExtendedBloc()),
+        BlocProvider(create: (context) => StudentExtendedBloc(StudentRepositoryImpl())),
         BlocProvider(create: (context) => StudentBottomBloc()),
       ],
       child: MyApp(),

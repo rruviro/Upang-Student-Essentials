@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
-import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/Notification.dart';
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
 
@@ -98,6 +98,7 @@ class _notifState extends State<notif> {
             if (state is StudentNotificationMailLoadSuccessState) {
               mails = state.studentNotifcationMail;
             } else if (state is StudentNotificationMailLoadingState) {
+              print("here");
               return Center(child: CircularProgressIndicator());
             } else if (state is StudentNotificationMailErrorState) {
               return Center(child: Text('Error: ${state.error}'));

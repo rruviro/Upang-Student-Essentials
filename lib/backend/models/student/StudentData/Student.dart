@@ -1,4 +1,4 @@
-import 'package:use/SERVICES/model/StudentData/StudentProfile.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/models/student/StudentData/StudentBag.dart';
 import 'package:use/backend/models/student/StudentData/StudentNotifcation.dart';
 
