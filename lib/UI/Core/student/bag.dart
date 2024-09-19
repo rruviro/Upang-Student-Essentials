@@ -169,7 +169,7 @@ Widget build(BuildContext context) {
                           ),
                         ),
                         SizedBox(height: 8.0),
-                        ItemList(status: state.studentBagItems, refresh: refreshData, onCheckboxChanged: updateCheckedItemIds),
+                        ItemList(status: state.studentBagItems, refresh: refreshData, onCheckboxChanged: updateCheckedItemIds, checkedItemIds: checkedItemIds,),
                       ],
                     ),
                   ),
@@ -189,7 +189,7 @@ Widget build(BuildContext context) {
                         BookList(
                           status: state.studentBagBooks, 
                           refresh: refreshData,
-                          onCheckboxChanged: updateCheckedBookIds,
+                          onCheckboxChanged: updateCheckedBookIds, checkedBookIds: checkedBookIds,
                         ),
                       ],
                     ),
@@ -480,7 +480,8 @@ class ItemList extends StatelessWidget {
   final List<StudentBagItem> status;
   final Future<void> Function() refresh;
   final Function(int id, bool isChecked) onCheckboxChanged;
-  const ItemList({Key? key, required this.status, required this.refresh, required this.onCheckboxChanged}) : super (key: key);
+  final List<int> checkedItemIds;
+  const ItemList({Key? key, required this.status, required this.refresh, required this.onCheckboxChanged, required this.checkedItemIds}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -492,7 +493,8 @@ class ItemList extends StatelessWidget {
                 );
                 await refresh;
             },
-            onCheckboxChanged: onCheckboxChanged,
+            onCheckboxChanged: onCheckboxChanged, 
+            isChecked: checkedItemIds.contains(e.id),
           ))
         .toList(),
     );
@@ -503,7 +505,8 @@ class ItemCard extends StatefulWidget {
   final StudentBagItem item;
   final VoidCallback onpressed;
   final Function(int id, bool isChecked) onCheckboxChanged;
-  const ItemCard({Key? key, required this.item, required this.onpressed, required this.onCheckboxChanged}) : super(key: key);
+  final bool isChecked; // Add this parameter
+  const ItemCard({Key? key, required this.item, required this.onpressed, required this.onCheckboxChanged, required this.isChecked}) : super(key: key);
 
   @override
   _ItemCardState createState() => _ItemCardState();
@@ -624,11 +627,10 @@ class _ItemCardState extends State<ItemCard> {
               Transform.scale(
                 scale: 0.99,
                 child: Checkbox(
-                  value: isChecked,
+                  value: widget.isChecked, 
                   onChanged: (bool? value) {
                     setState(() {
-                      isChecked = value!;
-                      widget.onCheckboxChanged(widget.item.id, isChecked);
+                      widget.onCheckboxChanged(widget.item.id, value!); 
                     });
                   },
                   activeColor: Colors.white,
@@ -674,12 +676,13 @@ class BookList extends StatelessWidget {
   final List<StudentBagBook> status;
   final Future<void> Function() refresh;
   final Function(int id, bool isChecked) onCheckboxChanged;
+  final List<int> checkedBookIds;
 
   const BookList({
     Key? key,
     required this.status,
     required this.refresh,
-    required this.onCheckboxChanged,
+    required this.onCheckboxChanged, required this.checkedBookIds,
   }) : super(key: key);
 
   @override
@@ -692,7 +695,7 @@ class BookList extends StatelessWidget {
                   context.read<StudentExtendedBloc>().add(deleteBookData(e.id));
                   await refresh();
                 },
-                onCheckboxChanged: onCheckboxChanged,
+                onCheckboxChanged: onCheckboxChanged, isChecked: checkedBookIds.contains(e.id)
               ))
           .toList(),
     );
@@ -703,7 +706,8 @@ class BookCard extends StatefulWidget {
   final StudentBagBook book;
   final VoidCallback onpressed;
   final Function(int id, bool isChecked) onCheckboxChanged;
-  const BookCard({Key? key, required this.book, required this.onpressed, required this.onCheckboxChanged}) : super(key: key);
+  final bool isChecked; // Add this parameter
+  const BookCard({Key? key, required this.book, required this.onpressed, required this.onCheckboxChanged, required this.isChecked}) : super(key: key);
 
   @override
   _BookCardState createState() => _BookCardState();
@@ -810,11 +814,10 @@ class _BookCardState extends State<BookCard> {
               Transform.scale(
                 scale: 0.99,
                 child: Checkbox(
-                  value: isChecked,
+                  value: widget.isChecked, 
                   onChanged: (bool? value) {
                     setState(() {
-                      isChecked = value!;
-                      widget.onCheckboxChanged(widget.book.id, isChecked);
+                      widget.onCheckboxChanged(widget.book.id, value!); 
                     });
                   },
                   activeColor: Colors.white,
