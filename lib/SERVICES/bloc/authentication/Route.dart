@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
-import 'package:use/UI/splash-screen.dart';
+import 'package:use/frontend/splash-screen.dart';
 
 class RouteGenerator {
   AuthenticationBloc authBloc = AuthenticationBloc();

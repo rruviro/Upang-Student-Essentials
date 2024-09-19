@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:use/UI/Core/student/notification.dart';
+import 'package:use/frontend/student/notification.dart';
 import 'package:use/main.dart';
 import 'package:flutter/material.dart';
 
