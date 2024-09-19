@@ -54,3 +54,29 @@ class deleteBookData extends StudentExtendedEvent{
 
   deleteBookData(this.id);
 }
+
+class deleteItemData extends StudentExtendedEvent{
+  final int id;
+
+  deleteItemData(this.id);
+}
+
+class changeItemStatus extends StudentExtendedEvent{
+  final int id;
+  final String status;
+
+  changeItemStatus(this.id, this.status);
+}
+
+class changeBookStatus extends StudentExtendedEvent{
+  final int id;
+  final String status;
+
+  changeBookStatus(this.id, this.status);
+}
+
+class showAnnouncementData extends StudentExtendedEvent{
+  final String dept;
+
+  showAnnouncementData(this.dept);
+}

@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:use/UI/Core/admin/home/home.dart';
-import 'package:use/UI/Core/student/home/course.dart';
 class newDepartment extends StatefulWidget {
   const newDepartment({super.key});
   @override
@@ -23,8 +22,6 @@ class _newDepartmentState extends State<newDepartment> {
   List<Map<String, dynamic>> _rows = [];
 
   int _countDepartment = 0;
-  int _countCourse = 0;
-  int _countBachelor = 0;
 
   File? _image;
   File? get image => _image;
@@ -672,7 +669,6 @@ Widget Visual (BuildContext context, String DepartmentName, List<Map<String, dyn
   final screenWidth = MediaQuery.of(context).size.width;
   final itemWidth = 50.0;
   final spacing = 10.0;
-  final initialSpacing = 50.0;
   final maxVisibleItems = 4;
   
   return Container (
@@ -707,7 +703,7 @@ Widget Visual (BuildContext context, String DepartmentName, List<Map<String, dyn
             child: image!=null
               ? ClipRRect(
                   child: Image.file(
-                    image!,
+                    image,
                     width: 220,
                     height: 220,
                     fit: BoxFit.cover,

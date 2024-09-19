@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
-import 'package:use/SERVICES/model/student/History.dart';
 import 'package:use/UI/Authentication/StudentLogin.dart';
 import 'package:use/UI/Core/student/bag.dart';
 import 'package:use/UI/Core/student/notification.dart';
@@ -864,7 +863,7 @@ class BookCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            book.code ?? 'N/A',
+                            book.code,
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 10,
@@ -955,7 +954,7 @@ class BookCard extends StatelessWidget {
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
-                                'Subject Code : ${book.subjectCode ?? 'N/A'}',
+                                'Subject Code : ${book.subjectCode}',
                                 style: GoogleFonts.inter(
                                     fontSize: 14,
                                     color: Colors.black87,

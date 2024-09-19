@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:use/backend/apiservice/studentApi/srepo.dart';
+import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentBag.dart';
@@ -43,6 +44,33 @@ class StudentExtendedBloc extends Bloc<StudentExtendedEvent, StudentExtendedStat
           
         } catch (e) {
           
+        }
+      });
+
+      on<deleteItemData>((event, emit) async {
+        try {
+          await _studentrepo.deleteStudentItemData(event.id);
+          emit(ItemDataDeleted());
+        } catch (e) {
+          
+        }
+      });
+
+      on<changeBookStatus>((event,emit) async {
+        try {
+          await _studentrepo.changeStudentBookStatus(event.id,event.status);
+          emit(BookStatusChanged());
+        } catch (e) {
+          print('Error: $e to change Book status.');
+        }
+      });
+
+      on<changeItemStatus>((event,emit) async {
+        try {
+          await _studentrepo.changeStudentItemStatus(event.id,event.status);
+          emit(ItemStatusChanged());
+        } catch (e) {
+          print('Error: $e to change Item status.');
         }
       });
 
@@ -88,7 +116,7 @@ class StudentExtendedBloc extends Bloc<StudentExtendedEvent, StudentExtendedStat
           
         } catch (e) {
           emit(StudentBagItemErrorState('An error occurred: ${e.toString()}'));
-          itemsLoaded = true;
+          itemsLoaded = false;
         }
       });
       
@@ -125,7 +153,21 @@ class StudentExtendedBloc extends Bloc<StudentExtendedEvent, StudentExtendedStat
           print(e);
         }
       });
+      
+      on<showAnnouncementData>((event, emit) async {
+        emit(announcementLoadingData());
+        try {
+          final announcementData = await _studentrepo.showAnnouncementData(event.dept);
+          emit(announcementLoadSuccessData(announcementData));
+        } catch (e) {
+          print(e);
+          emit(announcementLoadErrorData('An error occurred: ${e.toString()}'));
+        }
+      });
+
+
     }
+    
 
     FutureOr<void> course_page(
         CoursePageEvent event, Emitter<StudentExtendedState> emit) {

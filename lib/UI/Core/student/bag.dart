@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/UI/Core/student/profile/transaction.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
@@ -22,12 +23,17 @@ class Bag extends StatefulWidget {
 
 class BagState extends State<Bag> {
   bool _showLoading = true; 
+  List<int> checkedBookIds = [];
+  List<int> checkedItemIds = [];
+
+  bool isAllBooksChecked = false; 
+  bool isAllItemsChecked = false;
 
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         _showLoading = false;
       });
@@ -44,7 +50,7 @@ class BagState extends State<Bag> {
 
   Future<void> refreshData() async {
 
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(Duration(milliseconds: 400), () {
       setState(() {
         _showLoading = false;
       });
@@ -64,114 +70,429 @@ class BagState extends State<Bag> {
     return false;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onPop,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 14, 170, 113),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-          ),
-          title: Transform.translate(
-            offset: Offset(-15.0, 0.0),
-            child: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Backpack',
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
+  void updateCheckedBookIds(int id, bool isChecked) {
+    setState(() {
+      if (isChecked) {
+        checkedBookIds.add(id);
+      } else {
+        checkedBookIds.remove(id);
+      }
+    });
+  }
+
+  void updateCheckedItemIds(int id, bool isChecked) {
+    setState(() {
+      if (isChecked) {
+        checkedItemIds.add(id);
+      } else {
+        checkedItemIds.remove(id);
+      }
+    });
+  }
+
+  void toggleSelectAllBooks(bool? value, List<StudentBagBook> studentBagBooks) {
+    setState(() {
+      isAllBooksChecked = value ?? false;
+      if (isAllBooksChecked) {
+        checkedBookIds = studentBagBooks.map((book) => book.id).toList();
+      } else {
+        checkedBookIds.clear();
+      }
+    });
+  }
+
+  void toggleSelectAllItems(bool? value, List<StudentBagItem> studentBagItems) {
+    setState(() {
+      isAllItemsChecked = value ?? false;
+      if (isAllItemsChecked) {
+        checkedItemIds = studentBagItems.map((item) => item.id).toList();
+      } else {
+        checkedItemIds.clear();
+      }
+    });
+  }
+
+@override
+Widget build(BuildContext context) {
+  bool isChecked = false;
+  return WillPopScope(
+    onWillPop: _onPop,
+    child: Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+        title: Transform.translate(
+          offset: Offset(-15.0, 0.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Backpack',
+              style: GoogleFonts.inter(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
         ),
-        body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
-          builder: (context, state) {
-            if (_showLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if(state is BookDataDeleted){
-              refreshData();
-            }
-            if (state is StudentBagCombinedLoadSuccessState) {
-              return SingleChildScrollView(
-                child: Column(
+      ),
+      body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+        builder: (context, state) {
+          if (_showLoading) {
+            print('loading...');
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is BookDataDeleted || state is ItemDataDeleted) {
+            refreshData();
+            print(state);
+          }
+          if (state is StudentBagCombinedLoadSuccessState) {
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'UNIFORMS',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        ItemList(status: state.studentBagItems, refresh: refreshData, onCheckboxChanged: updateCheckedItemIds),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'BOOKS',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        BookList(
+                          status: state.studentBagBooks, 
+                          refresh: refreshData,
+                          onCheckboxChanged: updateCheckedBookIds,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else if (state is StudentBagItemLoadingState ||
+              state is StudentBagBookLoadingState) {
+            print("loading: $state");
+            return Center(child: CircularProgressIndicator());
+          } else if (state is StudentBagItemErrorState ||
+              state is StudentBagBookErrorState) {
+            print("error: $state");
+            return Center(child: CircularProgressIndicator());
+          } else {
+            print("error");
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      bottomNavigationBar: Container(
+        alignment: Alignment.bottomCenter,
+        width: double.infinity,
+        height: 70,
+        color: Color.fromARGB(255, 14, 170, 113),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 15,
+              bottom: 15,
+              left: 20,
+              child: Container(
+                width: 150,
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'UNIFORMS',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8.0), 
-                          ItemList(status: state.studentBagItems),
-                        ],
+                    Center(
+                      child: Transform.scale(
+                        scale: 0.99,
+                        child: Checkbox(
+                          value: isAllItemsChecked,
+                          onChanged: (bool? value) {
+                            final state = context.read<StudentExtendedBloc>().state;
+                            toggleSelectAllItems(value, (state as StudentBagCombinedLoadSuccessState).studentBagItems);
+                            toggleSelectAllBooks(value, (state).studentBagBooks);
+                            
+                          },
+                          activeColor: Colors.white,
+                          checkColor: Color.fromARGB(255, 14, 170, 113),
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'BOOKS',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          BookList(
-                            status: state.studentBagBooks, refresh: refreshData,
-                            ),
-                        ],
+                    SizedBox(width: 5),
+                    Center(
+                      child: Text(
+                        'Select All Items',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
+                    )
                   ],
                 ),
-              );
-            } else if (state is StudentBagItemLoadingState ||
-                      state is StudentBagBookLoadingState) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is StudentBagItemErrorState ||
-                      state is StudentBagBookErrorState) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
+              ),
+            ),
+            Positioned(
+              top: 15,
+              bottom: 15,
+              right: 20,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 40,
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      print("Checked Book IDs: ${checkedBookIds.join(', ')}");
+                      if(checkedBookIds.length == 0 && checkedItemIds.length == 0) {
+                        showDialog(context: context, 
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            title: Container(
+                              height: 100,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.error_outline,
+                                  color: Colors.red,
+                                  size: 100,
+                                ),
+                              ),
+                            ),
+                            content: Container(
+                              height: 20,
+                              child: Center(
+                                child: Text(
+                                  'Please select an item to request.',
+                                  style: GoogleFonts.inter(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                      }
+                      else{
+                        if(checkedBookIds.length > 0){
+                          for(var i in checkedBookIds){
+                            context.read<StudentExtendedBloc>().add(changeBookStatus(i,'Request'));
+                          }
+                        }
+                        if(checkedItemIds.length > 0){
+                          for(var i in checkedItemIds){
+                            context.read<StudentExtendedBloc>().add(changeItemStatus(i,'Request'));
+                          }
+                        }
+                        checkedBookIds.clear();
+                        checkedItemIds.clear();
+                        setState(() {
+                          isAllItemsChecked = false;
+                        });
+                        
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            title: Container(
+                              height: 100,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.check_circle_outline,
+                                  color: Color.fromARGB(255, 14, 170, 113),
+                                  size: 100,
+                                ),
+                              ),
+                            ),
+                            content: Container(
+                              height: 20,
+                              child: Center(
+                                child: Text(
+                                  'Successful, Check your order in your transaction now.',
+                                  style: GoogleFonts.inter(
+                                    color: Colors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            actions: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: ()async {
+                                        final result = await Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Transaction(page: 1, studentProfile: widget.studentProfile, status: 'Request'),
+                                          ),
+                                        );
+                                        if (result == true) {
+                                          print(result);
+                                          refreshData();
+                                        }
+                                        else{
+                                          print(result);
+                                          refreshData();
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(2),
+                                          color: Color.fromARGB(255, 14, 170, 113),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Transaction',
+                                            style: GoogleFonts.inter(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        refreshData();
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(2),
+                                          color: Color.fromARGB(192, 14, 170, 113),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Close',
+                                            style: GoogleFonts.inter(
+                                              color: Color.fromARGB(190, 255, 255, 255),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      }
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                            blurRadius: 5,
+                            offset: Offset(1, 8),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Request',
+                          style: GoogleFonts.inter(
+                            color: Color.fromARGB(255, 14, 170, 113),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
-    );
+    ));
   }
 }
 
 
 
 
+
 class ItemList extends StatelessWidget {
   final List<StudentBagItem> status;
-  const ItemList({Key? key, required this.status}) : super (key: key);
+  final Future<void> Function() refresh;
+  final Function(int id, bool isChecked) onCheckboxChanged;
+  const ItemList({Key? key, required this.status, required this.refresh, required this.onCheckboxChanged}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: status
         .map((e) => ItemCard(
-            item: e,
+            item: e, onpressed: () async { 
+              context.read<StudentExtendedBloc>().add(
+                  deleteItemData(e.id),
+                );
+                await refresh;
+            },
+            onCheckboxChanged: onCheckboxChanged,
           ))
         .toList(),
     );
@@ -180,7 +501,9 @@ class ItemList extends StatelessWidget {
 
 class ItemCard extends StatefulWidget { 
   final StudentBagItem item;
-  const ItemCard({Key? key, required this.item}) : super(key: key);
+  final VoidCallback onpressed;
+  final Function(int id, bool isChecked) onCheckboxChanged;
+  const ItemCard({Key? key, required this.item, required this.onpressed, required this.onCheckboxChanged}) : super(key: key);
 
   @override
   _ItemCardState createState() => _ItemCardState();
@@ -305,6 +628,7 @@ class _ItemCardState extends State<ItemCard> {
                   onChanged: (bool? value) {
                     setState(() {
                       isChecked = value!;
+                      widget.onCheckboxChanged(widget.item.id, isChecked);
                     });
                   },
                   activeColor: Colors.white,
@@ -332,7 +656,7 @@ class _ItemCardState extends State<ItemCard> {
           right: 0,
           child: Container(
             child: IconButton(
-              onPressed: () {},
+              onPressed:widget.onpressed,
               icon: Icon(
                 Icons.delete,
                 size: 20,
@@ -349,21 +673,28 @@ class _ItemCardState extends State<ItemCard> {
 class BookList extends StatelessWidget {
   final List<StudentBagBook> status;
   final Future<void> Function() refresh;
-  const BookList({Key? key, required this.status, required this.refresh}) : super (key: key);
+  final Function(int id, bool isChecked) onCheckboxChanged;
+
+  const BookList({
+    Key? key,
+    required this.status,
+    required this.refresh,
+    required this.onCheckboxChanged,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: status
-        .map((e) => BookCard(
-            book: e, onpressed: () async { 
-              print(e.id);
-                context.read<StudentExtendedBloc>().add(
-                  deleteBookData(e.id),
-                );
-                await refresh;
-             },
-          ))
-        .toList(),
+          .map((e) => BookCard(
+                book: e,
+                onpressed: () async {
+                  context.read<StudentExtendedBloc>().add(deleteBookData(e.id));
+                  await refresh();
+                },
+                onCheckboxChanged: onCheckboxChanged,
+              ))
+          .toList(),
     );
   }
 }
@@ -371,7 +702,8 @@ class BookList extends StatelessWidget {
 class BookCard extends StatefulWidget { 
   final StudentBagBook book;
   final VoidCallback onpressed;
-  const BookCard({Key? key, required this.book, required this.onpressed}) : super(key: key);
+  final Function(int id, bool isChecked) onCheckboxChanged;
+  const BookCard({Key? key, required this.book, required this.onpressed, required this.onCheckboxChanged}) : super(key: key);
 
   @override
   _BookCardState createState() => _BookCardState();
@@ -482,6 +814,7 @@ class _BookCardState extends State<BookCard> {
                   onChanged: (bool? value) {
                     setState(() {
                       isChecked = value!;
+                      widget.onCheckboxChanged(widget.book.id, isChecked);
                     });
                   },
                   activeColor: Colors.white,

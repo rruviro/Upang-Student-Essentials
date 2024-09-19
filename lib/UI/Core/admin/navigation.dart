@@ -26,7 +26,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _Homedestinationtate extends State<HomeScreen> {
-  int _currentIndex = 0;
   final itemsBN = [
     SalomonBottomBarItem(
       icon: const Icon(

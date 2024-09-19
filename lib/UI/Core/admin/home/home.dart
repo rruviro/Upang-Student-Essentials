@@ -7,7 +7,6 @@ import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/UI/Core/admin/home/course.dart';
 import 'package:use/UI/Core/admin/home/management/manage.dart';
 import 'package:use/UI/Core/admin/home/management/newDepartment.dart';
-import 'package:use/UI/Core/admin/home/uniform.dart';
 import 'package:use/UI/Core/admin/notification.dart';
 
 final AdminExtendedBloc adminBloc = AdminExtendedBloc();

@@ -3,9 +3,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
-import 'package:use/SERVICES/model/student/Announcement.dart';
 import 'package:use/UI/Core/admin/home/home.dart';
-import 'package:use/UI/Core/admin/notification.dart';
+import 'package:use/backend/models/admin/Announcement.dart';
 
 class Announcement extends StatefulWidget {
   const Announcement({super.key});
@@ -16,6 +15,7 @@ class Announcement extends StatefulWidget {
 
 class _AnnouncementState extends State<Announcement> {
   final TextEditingController _controller = TextEditingController();
+  List<announcement> announcements = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +84,7 @@ class _AnnouncementState extends State<Announcement> {
                     ),
                     SizedBox(height: 10),
                     ItemList(
-                      status : details
+                      status : announcements
                     )
                   ],
                 ),
@@ -244,7 +244,7 @@ class ItemList extends StatelessWidget {
     return Column(
       children: status
         .map((e) => ItemCard(
-            details: e,
+            info: e,
           ))
         .toList(),
     );
@@ -252,8 +252,8 @@ class ItemList extends StatelessWidget {
 }
 
 class ItemCard extends StatelessWidget {
-  final announcement details;
-  const ItemCard({Key? key, required this.details}) : super (key: key);
+  final announcement info;
+  const ItemCard({Key? key, required this.info}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -296,7 +296,7 @@ class ItemCard extends StatelessWidget {
                   vertical: 10.0
                 ),
                 child: Text(
-                  details.description,
+                  info.body,
                   style: GoogleFonts.inter(
                     color: const Color.fromARGB(255, 0, 0, 0),
                     fontSize: 10
@@ -313,7 +313,7 @@ class ItemCard extends StatelessWidget {
           child: Container(
             child: Center(
               child: Text(
-                details.department,
+                info.department,
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 10
@@ -328,7 +328,7 @@ class ItemCard extends StatelessWidget {
           child: Container(
             child: Center(
               child: Text(
-                details.published,
+                info.date,
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 10

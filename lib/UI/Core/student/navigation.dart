@@ -44,7 +44,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _Homedestinationtate extends State<HomeScreen> {
-  int _currentIndex = 0;
   late StudentProfile studentProfile;
   bool isProfileLoaded = false;
 

@@ -672,7 +672,7 @@ Widget Visual (BuildContext context, String DepartmentName, List<Map<String, dyn
             child: image!=null
               ? ClipRRect(
                   child: Image.file(
-                    image!,
+                    image,
                     width: 220,
                     height: 220,
                     fit: BoxFit.cover,

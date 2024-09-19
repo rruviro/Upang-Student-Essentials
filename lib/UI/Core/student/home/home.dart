@@ -12,7 +12,6 @@ import 'package:use/UI/Core/student/home/uniform.dart';
 import 'package:use/UI/Core/student/notification.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 
-import '../../admin/home/stocks.dart';
 
 final StudentExtendedBloc studBloc = StudentExtendedBloc(StudentRepositoryImpl());
 class Home extends StatefulWidget {

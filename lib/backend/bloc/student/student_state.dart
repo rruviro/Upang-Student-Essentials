@@ -88,6 +88,15 @@ class StudentBagBookErrorState extends StudentActionState {
 class BookDataDeleted extends StudentActionState{
 }
 
+class ItemDataDeleted extends StudentActionState{
+}
+
+class BookStatusChanged extends StudentActionState{
+}
+
+class ItemStatusChanged extends StudentActionState{
+}
+
 //STUDENT BAG AND ITEM
 class StudentBagCombinedLoadSuccessState extends StudentExtendedState {
   final List<StudentBagItem> studentBagItems;
@@ -108,6 +117,19 @@ class StudentNotificationMailLoadSuccessState extends StudentActionState {
 class StudentNotificationMailErrorState extends StudentActionState {
   final String error;
   StudentNotificationMailErrorState(this.error);
+}
+
+//ANOUNCEMENT
+class announcementLoadingData extends StudentActionState {}
+
+class announcementLoadSuccessData extends StudentActionState {
+  final List<announcement> Announcement;
+  announcementLoadSuccessData(this.Announcement);
+}
+
+class announcementLoadErrorData extends StudentActionState {
+  final String error;
+  announcementLoadErrorData(this.error);
 }
 
 

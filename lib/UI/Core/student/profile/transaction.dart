@@ -28,7 +28,6 @@ class _TransactionState extends State<Transaction> {
   void initState() {
     super.initState();
     _currentSelection = widget.page;
-    final bloc = context.read<StudentExtendedBloc>();
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         _showLoading = false;
@@ -39,16 +38,15 @@ class _TransactionState extends State<Transaction> {
   }
   
   Future<bool> _onPop() async {
-    Navigator.pop(context, false);
-    return false;
+    Navigator.pop(context, true);
+    return true;
   }
 
   final GlobalKey _requestKey = GlobalKey();
-  final GlobalKey _pendingKey = GlobalKey();
   final GlobalKey _reservedKey = GlobalKey();
   final GlobalKey _claimKey = GlobalKey();
 
- void _selectedItem(int id) {
+  void _selectedItem(int id) {
     setState(() {
       _currentSelection = id;
       String status;
@@ -582,7 +580,7 @@ class BookCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            book.code ?? 'N/A',
+                            book.code,
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 10,
@@ -673,7 +671,7 @@ class BookCard extends StatelessWidget {
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
-                                'Subject Code : ${book.subjectCode ?? 'N/A'}',
+                                'Subject Code : ${book.subjectCode}',
                                 style: GoogleFonts.inter(
                                     fontSize: 14,
                                     color: Colors.black87,
