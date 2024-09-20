@@ -98,11 +98,7 @@ class _ProfileScreenState extends State<Profile> {
         create: (context) => AdminExtendedBloc(AdminRepositoryImpl()),
         child: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
           listener: (context, state) {
-            if (state is NotificationPageState) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => notif()));
-            } else if (state is TransactionPageState) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction()));
-            } else if (state is itemCodeDataLoaded) {
+            if (state is itemCodeDataLoaded) {
               setState(() {
                 itemCode = state.studentBagItem;
               });
@@ -312,7 +308,7 @@ class _ProfileScreenState extends State<Profile> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        adminBloc.add(TransactionPageEvent());
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(id: 1)));
                                       },
                                       child: Column(
                                         children: [
@@ -337,7 +333,7 @@ class _ProfileScreenState extends State<Profile> {
                                     SizedBox(width: 25),
                                     InkWell(
                                       onTap: () {
-                                        adminBloc.add(TransactionPageEvent());
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(id: 2)));
                                       },
                                       child: Column(
                                         children: [
@@ -362,7 +358,7 @@ class _ProfileScreenState extends State<Profile> {
                                     SizedBox(width: 25),
                                     InkWell(
                                       onTap: () {
-                                        adminBloc.add(TransactionPageEvent());
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(id: 3)));
                                       },
                                       child: Column(
                                         children: [

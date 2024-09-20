@@ -3,33 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/admin/Transaction.dart';
 class Transaction extends StatefulWidget {
-  const Transaction({super.key});
+  final int id;
+  const Transaction({super.key, required this.id});
   @override
   State<Transaction> createState() => _TransactionState();
 }
 
 class _TransactionState extends State<Transaction> {
-  int _currentSelection = 1;
+  late int _currentSelection;
   GlobalKey _Request = GlobalKey();
   GlobalKey __Reserved = GlobalKey();
   GlobalKey Complete = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSelection = widget.id;
+  }
+
   _selectedItem(int id) {
-    _currentSelection = id;
-    GlobalKey selectedGlobalKey;
-    switch (id) {
-      case 1:
-        selectedGlobalKey = _Request;
-        break;
-      case 2:
-        selectedGlobalKey = __Reserved;
-        break;
-      case 3:
-        selectedGlobalKey = Complete;
-        break;
-      default: 
-    }
     setState(() {
-      
+      _currentSelection = id;
+      GlobalKey selectedGlobalKey;
+      switch (id) {
+        case 1:
+          selectedGlobalKey = _Request;
+          break;
+        case 2:
+          selectedGlobalKey = __Reserved;
+          break;
+        case 3:
+          selectedGlobalKey = Complete;
+          break;
+        default: 
+      }
     });
   }
   @override
