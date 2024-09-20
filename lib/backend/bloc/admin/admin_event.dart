@@ -20,3 +20,29 @@ class NotificationPageEvent extends AdminExtendedEvent {}
 class TransactionPageEvent extends AdminExtendedEvent{}
 class NewDepartmentPageEvent extends AdminExtendedEvent{}
 class ManagePageEvent extends AdminExtendedEvent{}
+
+class showCodeBookData extends AdminExtendedEvent{
+  final String code;
+
+  showCodeBookData(this.code);
+}
+
+class showCodeItemData extends AdminExtendedEvent{
+  final String code;
+
+  showCodeItemData(this.code);
+}
+
+class changeItemStatus extends AdminExtendedEvent{
+  final int id;
+  final String status;
+
+  changeItemStatus(this.id, this.status);
+}
+
+class changeBookStatus extends AdminExtendedEvent{
+  final int id;
+  final String status;
+
+  changeBookStatus(this.id, this.status);
+}

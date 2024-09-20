@@ -1,9 +1,28 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:use/SERVICES/bloc/authentication/Route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
+import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/bloc/authentication/Route.dart';
+import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
+
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthenticationBloc(),
+        ),
+        BlocProvider(create: (context) => StudentExtendedBloc(StudentRepositoryImpl())),
+        BlocProvider(create: (context) => StudentBottomBloc()),
+        BlocProvider(create: (context) => AdminExtendedBloc(AdminRepositoryImpl())),
+        BlocProvider(create: (context) => AdminBottomBloc()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,5 +38,4 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: RouteGenerator().generateRoute,
     );
   }
-  
 }

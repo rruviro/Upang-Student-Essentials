@@ -4,20 +4,38 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
-import 'package:use/SERVICES/model/student/Announcement.dart';
+import 'package:use/backend/models/admin/Announcement.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/notification.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
 
 class Announcement extends StatefulWidget {
-  const Announcement({super.key});
+  const Announcement({super.key, required this.studentProfile});
+  final StudentProfile studentProfile;
 
   @override
   State<Announcement> createState() => _AnnouncementState();
 }
 
 class _AnnouncementState extends State<Announcement> {
+  
+  List<announcement> announcements = [];
+
+  bool _showLoading = true; 
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+    context.read<StudentExtendedBloc>().add(showAnnouncementData(widget.studentProfile.department));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +73,7 @@ class _AnnouncementState extends State<Announcement> {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
-                    child: const notif(),
+                    child: notif(studentProfile: widget.studentProfile),
                   ),
                 )
               );
@@ -71,7 +89,7 @@ class _AnnouncementState extends State<Announcement> {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
-                    child: const Bag(),
+                    child: Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status),
                   ),
                 )
               );
@@ -82,41 +100,57 @@ class _AnnouncementState extends State<Announcement> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30),
-              slides(context),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white
-                ),
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 30),
-                    Text(
-                      'Announcement',
-                      style: GoogleFonts.inter(
-                        fontSize: 17,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600
+      body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+        builder: (context, state) {
+            if (_showLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (state is announcementLoadSuccessData) {
+              announcements = state.Announcement;
+              return ListView(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 30),
+                      slides(context),
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white
+                        ),
+                        padding: EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 30),
+                            Text(
+                              'Announcement',
+                              style: GoogleFonts.inter(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600
+                              ),
+                            ),
+                            ItemList(status: announcements,
+                              
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    ItemList(
-                      status : details
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+                    ],
+                  ),
+                ],
+              );
+            }
+            if (state is announcementLoadErrorData) {
+              return Center(child: Text('Failed to load announcements.'));
+            }
+            else{
+              return Center(child: CircularProgressIndicator());
+            }
+        }
+      )
     );
   }
 }
@@ -168,7 +202,7 @@ class ItemList extends StatelessWidget {
     return Column(
       children: status
         .map((e) => ItemCard(
-            details: e,
+            info: e,
           ))
         .toList(),
     );
@@ -176,8 +210,8 @@ class ItemList extends StatelessWidget {
 }
 
 class ItemCard extends StatelessWidget {
-  final announcement details;
-  const ItemCard({Key? key, required this.details}) : super (key: key);
+  final announcement info;
+  const ItemCard({Key? key, required this.info}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -193,9 +227,9 @@ class ItemCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.shade400,
+                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
                 blurRadius: 5,
-                offset: Offset(1, 5),
+                offset: Offset(1, 8),
               ),
             ],
           ),
@@ -220,7 +254,7 @@ class ItemCard extends StatelessWidget {
                   vertical: 10.0
                 ),
                 child: Text(
-                  details.description,
+                  info.body,
                   style: GoogleFonts.inter(
                     color: const Color.fromARGB(255, 0, 0, 0),
                     fontSize: 10
@@ -237,7 +271,7 @@ class ItemCard extends StatelessWidget {
           child: Container(
             child: Center(
               child: Text(
-                details.department,
+                info.department,
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 10
@@ -252,7 +286,7 @@ class ItemCard extends StatelessWidget {
           child: Container(
             child: Center(
               child: Text(
-                details.published,
+                info.date,
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 10

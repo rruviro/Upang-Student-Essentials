@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:use/backend/apiservice/adminApi/arepo.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
+import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
+import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 
 part 'admin_event.dart';
 part 'admin_state.dart';
@@ -19,7 +23,9 @@ class AdminBottomBloc extends Bloc<AdminBottomEvent, AdminBottomState> {
 }
 
 class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
-  AdminExtendedBloc() : super(AdminExtendedInitial()) {
+  final Adminrepo _adminrepo;
+
+  AdminExtendedBloc(this._adminrepo) : super(AdminExtendedInitial()) {
     on<CoursePageEvent>(course_page);
     on<StockPageEvent>(stock_page);
     on<NewUniformPageEvent>(newUniform_page);
@@ -29,6 +35,59 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     on<TransactionPageEvent>(transaction_page);
     on<NewDepartmentPageEvent>(newDepartment_page);
     on<ManagePageEvent>(manage_page);
+
+    on<showCodeBookData>((event, emit) async {
+        emit(itemCodeDataLoading());
+        try {
+          final bookData = await _adminrepo.showCodeBook(event.code);
+          emit(bookCodeDataLoaded(bookData));
+          print(bookData);
+        } catch (e) {
+          emit(bookCodeDataError(e.toString()));
+        }
+      });
+
+      on<showCodeItemData>((event, emit) async {
+        emit(itemCodeDataLoading());
+        try {
+          
+          final itemData = await _adminrepo.showCodeItem(event.code);
+          emit(itemCodeDataLoaded(itemData));
+          print(itemData.gender);
+          print(itemData.claimingSchedule);
+          print(itemData.code);
+          print(itemData.course);
+          print(itemData.dateReceived);
+          print(itemData.department);
+          print(itemData.id);
+          print(itemData.reservationNumber);
+          print(itemData.size);
+          print(itemData.status);
+          print(itemData.stubagId);
+          print(itemData.type);
+        } catch (e) {
+          emit(itemCodeDataError(e.toString()));
+          print("$e");
+        }
+      });
+
+      on<changeBookStatus>((event,emit) async {
+        try {
+          await _adminrepo.changeStudentBookStatus(event.id,event.status);
+          emit(BookStatusChanged());
+        } catch (e) {
+          print('Error: $e to change Book status.');
+        }
+      });
+
+      on<changeItemStatus>((event,emit) async {
+        try {
+          await _adminrepo.changeStudentItemStatus(event.id,event.status);
+          emit(ItemStatusChanged());
+        } catch (e) {
+          print('Error: $e to change Item status.');
+        }
+      });
   }
 
   FutureOr<void> course_page(

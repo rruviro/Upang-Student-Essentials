@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/admin/Course.dart';
 import 'package:use/frontend/admin/home/stocks.dart';
 import 'package:use/frontend/admin/profile/profile.dart';

@@ -28,3 +28,39 @@ class NotificationPageState extends AdminActionState{}
 class TransactionPageState extends AdminActionState{}
 class NewDepartmentPageState extends AdminActionState{}
 class ManagePageState extends AdminActionState{}
+
+class itemCodeDataLoading extends AdminActionState {
+
+}
+
+class itemCodeDataLoaded extends AdminActionState {
+  final StudentBagItem studentBagItem;
+
+  itemCodeDataLoaded(this.studentBagItem);
+}
+
+class itemCodeDataError extends AdminActionState {
+  final String error;
+  itemCodeDataError(this.error);
+}
+
+class bookCodeDataLoading extends AdminActionState {
+
+}
+
+class bookCodeDataLoaded extends AdminActionState {
+  final StudentBagBook studentBagBook;
+
+  bookCodeDataLoaded(this.studentBagBook);
+}
+
+class bookCodeDataError extends AdminActionState {
+  final String error;
+  bookCodeDataError(this.error);
+}
+
+class BookStatusChanged extends AdminActionState{
+}
+
+class ItemStatusChanged extends AdminActionState{
+}

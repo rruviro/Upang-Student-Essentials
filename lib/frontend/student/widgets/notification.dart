@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/student/Notification.dart';
+import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
+
+class ItemList extends StatelessWidget {
+  final List<StudentNotifcationMail> status;
+  const ItemList({Key? key, required this.status}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: status
+          .map(
+            (e) => ItemCard(
+              mails: e,
+            ),
+          )
+          .toList(),
+    );
+  }
+}
 
 class ItemCard extends StatelessWidget {
-  final notifModel detail;
-  const ItemCard({Key? key, required this.detail}) : super(key: key);
+  final StudentNotifcationMail mails;
+  const ItemCard({Key? key, required this.mails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +36,7 @@ class ItemCard extends StatelessWidget {
         color: Color.fromARGB(255, 14, 170, 113),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
             blurRadius: 5,
             offset: Offset(1, 8),
           ),
@@ -40,7 +58,7 @@ class ItemCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(
-                            detail.imageUrl,
+                            'assets/b19d1b570a8d62ff56f4f351e389c2db.jpg',
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -67,7 +85,7 @@ class ItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      detail.description,
+                      mails.description,
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                           fontSize: 11,
@@ -76,7 +94,7 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      detail.postDate,
+                      mails.time.toString(),
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                           fontSize: 11,
@@ -95,4 +113,3 @@ class ItemCard extends StatelessWidget {
     );
   }
 }
-
