@@ -29,7 +29,7 @@ class StudnetLogin extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentBottomBloc>.value(
                     value: studentBloc,
-                    child: HomeBase(studentId: state.StudentId),
+                    child: SHomeBase(studentId: state.StudentId),
                   ),
                 ),
               );

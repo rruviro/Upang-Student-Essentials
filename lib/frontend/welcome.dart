@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/backend/apiservice/authApi/aurepoimpl.dart';
 import 'package:use/frontend/Authentication/StudentLogin.dart';
 import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
 
@@ -18,7 +19,7 @@ class Welcome extends StatefulWidget {
   _WelcomeState createState() => _WelcomeState();
 }
 
-final AuthenticationBloc authBloc = AuthenticationBloc();
+final AuthenticationBloc authBloc = AuthenticationBloc(AuthenticationImplementation());
 
 class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
   final List<String> _images = [

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -142,7 +143,9 @@ class _ProfileScreenState extends State<Profile> {
                     ),
                     actions: [
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          final SharedPreferences logout = await SharedPreferences.getInstance();
+                          logout.clear();
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => StudnetLogin()),
                           );
