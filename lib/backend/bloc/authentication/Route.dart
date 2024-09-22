@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/backend/apiservice/authApi/aurepo.dart';
+import 'package:use/backend/apiservice/authApi/aurepoimpl.dart';
 import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
 import 'package:use/frontend/splash-screen.dart';
 
 class RouteGenerator {
-  AuthenticationBloc authBloc = AuthenticationBloc();
+  AuthenticationBloc authBloc = AuthenticationBloc(AuthenticationImplementation());
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':

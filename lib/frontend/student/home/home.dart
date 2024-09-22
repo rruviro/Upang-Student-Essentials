@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/Department.dart';
+import 'package:use/backend/notificationService/notificationService.dart';
 import 'package:use/frontend/student/bag.dart';
 
 import 'package:use/frontend/student/home/course.dart';
@@ -25,10 +26,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  NotificationService? _notificationService;
   @override
   void initState() {
     super.initState();
+    _notificationService = NotificationService();
+    _notificationService?.startPolling(widget.studentProfile.id);
   }
   
   @override 

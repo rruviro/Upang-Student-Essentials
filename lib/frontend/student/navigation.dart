@@ -9,10 +9,10 @@ import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/profile/profile.dart';
 
-class HomeBase extends StatelessWidget {
+class SHomeBase extends StatelessWidget {
   final String studentId;
 
-  HomeBase({required this.studentId, Key? key}) : super(key: key);
+  SHomeBase({required this.studentId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

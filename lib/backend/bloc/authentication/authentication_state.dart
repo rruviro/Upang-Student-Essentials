@@ -48,4 +48,8 @@ class LoginError extends AuthenticationState {
   LoginError(this.message);
 }
 
+class LoginLoading extends AuthenticationState {
+
+}
+
 
