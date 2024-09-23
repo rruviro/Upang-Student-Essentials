@@ -12,8 +12,11 @@ class NotificationService {
   factory NotificationService() {
     return instance;
   }
+  
 
-  NotificationService._internal();
+  NotificationService._internal(){
+    redirect("");
+  }
   Future<void> startPolling(int studentId) async {
     print('Starting polling');
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -27,7 +30,8 @@ class NotificationService {
         final List notifications = json.decode(response.body)['mails'];
 
         for (var notification in notifications) {
-          if (notification['id'] > lastNotificationId) {
+          if(notification['isDone'] == 0){
+            if (notification['id'] > lastNotificationId) {
               AwesomeNotifications().createNotification(
                 content: NotificationContent(
                   id: notification['id'],
@@ -37,21 +41,36 @@ class NotificationService {
                   notificationLayout: NotificationLayout.Default,
                 ),
               );
+              await http.put(Uri.parse('http://10.0.2.2:8000/api/notificationdone/${notification['id']}'));
             lastNotificationId = notification['id'];
             await prefs.setInt('last_notification_id', lastNotificationId);
-          }
+            redirect(notification['redirectTo']);
+          }}
+          
         }
       }
       else{
         print('Failed to fetch notifications: ${response.statusCode} - ${response.body}');
       }
+
     });
     
   }
 
   void stopPolling() async {
+    print('Stopped polling');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    timer?.cancel();
+    timer?.cancel(); 
+  }
+
+  void redirect(String redirectTo){ 
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod: (receivedNotification) async {
+        if(redirectTo != "Announcement"){
+          print("hello world");
+        }
+      }
+    );
   }
 }
