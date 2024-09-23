@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
+import 'package:use/backend/notificationService/notificationService.dart';
 import 'package:use/frontend/Authentication/StudentLogin.dart';
 import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/student/notification.dart';
@@ -30,12 +31,13 @@ class _ProfileScreenState extends State<Profile> {
 
   List<StudentBagItem> items = [];
   List<StudentBagBook> books = [];
-
+  NotificationService? _notificationService;
   bool _showLoading = true; 
 
   @override
   void initState() {
     super.initState();
+    _notificationService = NotificationService();
     final bloc = context.read<StudentExtendedBloc>();
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
@@ -144,6 +146,7 @@ class _ProfileScreenState extends State<Profile> {
                     actions: [
                       GestureDetector(
                         onTap: () async {
+                          _notificationService?.stopPolling();
                           final SharedPreferences logout = await SharedPreferences.getInstance();
                           logout.clear();
                           Navigator.of(context).push(
