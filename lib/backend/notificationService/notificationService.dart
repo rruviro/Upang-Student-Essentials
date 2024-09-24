@@ -15,7 +15,7 @@ class NotificationService {
   
 
   NotificationService._internal(){
-    redirect("");
+    redirect();
   }
   Future<void> startPolling(int studentId) async {
     print('Starting polling');
@@ -39,12 +39,14 @@ class NotificationService {
                   title: 'New Notification',
                   body: notification['description'],
                   notificationLayout: NotificationLayout.Default,
+                  payload: {
+                    'redirectTo': notification['redirectTo'],
+                  },
                 ),
               );
               await http.put(Uri.parse('http://10.0.2.2:8000/api/notificationdone/${notification['id']}'));
             lastNotificationId = notification['id'];
             await prefs.setInt('last_notification_id', lastNotificationId);
-            redirect(notification['redirectTo']);
           }}
           
         }
@@ -52,7 +54,6 @@ class NotificationService {
       else{
         print('Failed to fetch notifications: ${response.statusCode} - ${response.body}');
       }
-
     });
     
   }
@@ -64,13 +65,39 @@ class NotificationService {
     timer?.cancel(); 
   }
 
-  void redirect(String redirectTo){ 
+  void redirect() {
     AwesomeNotifications().setListeners(
       onActionReceivedMethod: (receivedNotification) async {
-        if(redirectTo != "Announcement"){
-          print("hello world");
+        String? redirectTo = receivedNotification.payload?['redirectTo'];
+        switch (redirectTo) {
+
+          case "Announcement":
+            print('Redirect to Announcement');
+            break;
+
+          case "Claim":
+            print('Redirect to Claim');
+            break;
+          
+          case "Request":
+            print('Redirect to Request');
+            break;
+
+          case "Complete":
+            print('Redirect to Complete');
+            break;
+
+          case "Cancelled":
+            print('Redirect to Cancel');
+            break;
+
+          case "Reserve":
+            print('Redirect to Reserve');
+            break;
+          default:
+            print("Nothing to do");
         }
-      }
+      },
     );
   }
 }
