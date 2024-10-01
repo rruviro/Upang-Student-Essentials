@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
@@ -17,8 +18,6 @@ class courses extends StatefulWidget {
 }
 
 class _coursesState extends State<courses> {
-  String _selectedYear = "First Year";
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(

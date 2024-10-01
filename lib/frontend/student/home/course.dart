@@ -54,7 +54,7 @@ class _coursesState extends State<courses> {
                       children: [
                         Text(
                           'Course',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          style: TextStyle(color: Colors.white, fontSize: 15),
                         ),
                         Text(
                           'Department: ',

@@ -66,32 +66,13 @@ class _ProfileScreenState extends State<Profile> {
             return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
-                title: Container(
-                  width: double.infinity, 
-                  height: 35, 
-                  child: Row(
-                    children: [
-                      Image.asset('assets/logo.png'),
-                      SizedBox(width: 10),
-                      Text(
-                        'Upang Student Essentials',
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 11,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600
-                          )
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                backgroundColor: Color.fromARGB(255, 14, 170, 113),
                 centerTitle: false,
                 actions: <Widget>[
                   IconButton(
                     icon: const Icon(
                       Icons.notifications, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: Colors.white
                     ),
                     onPressed: () {
                       studBloc.add(NotificationPageEvent());
@@ -100,7 +81,7 @@ class _ProfileScreenState extends State<Profile> {
                   IconButton(
                     icon: const Icon(
                       Icons.backpack, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: Colors.white
                     ),
                     onPressed: () {
                       studBloc.add(BackpackPageEvent());
@@ -109,7 +90,7 @@ class _ProfileScreenState extends State<Profile> {
                   IconButton(
                     icon: const Icon(
                       Icons.logout, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: Colors.white
                     ),
                     onPressed: () {
                       showDialog(
@@ -122,7 +103,7 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             title: Text(
                               'Logout',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600
@@ -130,7 +111,7 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             content: Text(
                               'Are you sure you wanna logout',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600
@@ -156,7 +137,7 @@ class _ProfileScreenState extends State<Profile> {
                                   child: Center( 
                                     child: Text(
                                       'Continue',
-                                      style: GoogleFonts.inter(
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600 
@@ -179,7 +160,7 @@ class _ProfileScreenState extends State<Profile> {
                                   child: Center(
                                     child:Text(
                                       'Nope',
-                                      style: GoogleFonts.inter(
+                                      style: TextStyle(
                                         color: const Color.fromARGB(190, 255, 255, 255),
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600 
@@ -196,7 +177,6 @@ class _ProfileScreenState extends State<Profile> {
                   ),
                   SizedBox(width: 15),
                 ],
-                backgroundColor: Colors.white,
                 elevation: 0,
               ),
               body: ListView(
@@ -214,25 +194,43 @@ class _ProfileScreenState extends State<Profile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Ramon Montenegro',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.w600
-                                )
-                              ),
-                            ),
+                          "Montenegah, Ramon",
+                          style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          "Course: Bachelor of information and technology",
+                          style: GoogleFonts.inter(
+                            color: Colors.grey,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text(
-                              '01-1234-432154',
+                              "01-1113-023898 | Year: Third Year |",
                               style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400
-                                )
+                                color: Colors.grey,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Enrolled',
+                              style: GoogleFonts.inter(
+                                color: Color.fromARGB(255, 14, 170, 113),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
                             SizedBox(height: 20),
                             SizedBox(
                               height: 1,
@@ -243,11 +241,11 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 15),
                             Text(
                               'Transaction',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
+                              style: TextStyle(
+                                fontSize: 15,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600
                               ),
@@ -257,7 +255,7 @@ class _ProfileScreenState extends State<Profile> {
                               width: double.infinity,
                               height: 90,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(5),
                                 color: Color.fromARGB(255, 14, 170, 113),
                                 boxShadow: [
                                   BoxShadow(
@@ -291,7 +289,7 @@ class _ProfileScreenState extends State<Profile> {
                                             SizedBox(height: 10),
                                             Text(
                                               'Request',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400
@@ -316,7 +314,7 @@ class _ProfileScreenState extends State<Profile> {
                                             SizedBox(height: 10),
                                             Text(
                                               'Reserved',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400
@@ -341,7 +339,7 @@ class _ProfileScreenState extends State<Profile> {
                                             SizedBox(height: 10),
                                             Text(
                                               'Claim',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400
@@ -355,16 +353,16 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 30),
+                            SizedBox(height: 15),
                             Text(
                               'History',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
+                              style: TextStyle(
+                                fontSize: 15,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600
                               ),
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 15),
                             Row(
                               children: [
                                 InkWell(
@@ -372,7 +370,7 @@ class _ProfileScreenState extends State<Profile> {
                                   onTap: () => _selectedItem(1),
                                   child: Text(
                                     'Complete',
-                                    style: GoogleFonts.inter(
+                                    style: TextStyle(
                                       fontSize: 10,
                                       color: _currentSelection == 1
                                         ? Color.fromARGB(255, 0, 0, 0)
@@ -383,7 +381,7 @@ class _ProfileScreenState extends State<Profile> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 20),
+                                SizedBox(width: 15),
                                 SizedBox(
                                   height: 25,
                                   width: 1,
@@ -393,13 +391,13 @@ class _ProfileScreenState extends State<Profile> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 20),
+                                SizedBox(width: 15),
                                 InkWell(
                                   key: _Cancelled,
                                   onTap: () => _selectedItem(2),
                                   child: Text(
                                     'Cancelled',
-                                    style: GoogleFonts.inter(
+                                    style: TextStyle(
                                       fontSize: 10,
                                       color: _currentSelection == 2
                                         ? Color.fromARGB(255, 0, 0, 0)

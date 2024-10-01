@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
@@ -37,32 +38,13 @@ class _ProfileScreenState extends State<Profile> {
             return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
-                title: Container(
-                  width: double.infinity, 
-                  height: 35, 
-                  child: Row(
-                    children: [
-                      Image.asset('assets/logo.png'),
-                      SizedBox(width: 10),
-                      Text(
-                        'Upang Student Essentials',
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 11,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600
-                          )
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                backgroundColor: Color.fromARGB(255, 14, 170, 113),
                 centerTitle: false,
                 actions: <Widget>[
                   IconButton(
                     icon: const Icon(
                       Icons.notifications, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: Colors.white
                     ),
                     onPressed: () {
                       adminBloc.add(NotificationPageEvent());
@@ -71,7 +53,7 @@ class _ProfileScreenState extends State<Profile> {
                   IconButton(
                     icon: const Icon(
                       Icons.logout, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: Colors.white
                     ),
                     onPressed: () {
                       showDialog(
@@ -84,7 +66,7 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             title: Text(
                               'Logout',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600
@@ -92,7 +74,7 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             content: Text(
                               'Are you sure you wanna logout',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w400
@@ -119,7 +101,7 @@ class _ProfileScreenState extends State<Profile> {
                                         child: Center(
                                           child: Text(
                                             'Continue',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w600,
@@ -144,7 +126,7 @@ class _ProfileScreenState extends State<Profile> {
                                         child: Center(
                                           child: Text(
                                             'Close',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               color: Color.fromARGB(190, 255, 255, 255),
                                               fontSize: 12,
                                               fontWeight: FontWeight.w600,
@@ -164,7 +146,6 @@ class _ProfileScreenState extends State<Profile> {
                   ),
                   SizedBox(width: 15),
                 ],
-                backgroundColor: Colors.white,
                 elevation: 0,
               ),
               body: ListView(
@@ -183,15 +164,13 @@ class _ProfileScreenState extends State<Profile> {
                           children: [
                             Text(
                               'Ramon Montenegro',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.w600
-                                )
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600
                               ),
                             ),
-                            SizedBox(height: 30),
+                            SizedBox(height: 20),
                             SizedBox(
                               height: 1,
                               width: double.infinity,
@@ -201,11 +180,11 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 15),
                             Text(
                               'Transaction',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
+                              style: TextStyle(
+                                fontSize: 15,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600
                               ),
@@ -215,7 +194,7 @@ class _ProfileScreenState extends State<Profile> {
                               width: double.infinity,
                               height: 90,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(5),
                                 color: Color.fromARGB(255, 14, 170, 113),
                                 boxShadow: [
                                   BoxShadow(
@@ -248,7 +227,7 @@ class _ProfileScreenState extends State<Profile> {
                                           SizedBox(height: 10),
                                           Text(
                                             'Approval',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w400
@@ -273,7 +252,7 @@ class _ProfileScreenState extends State<Profile> {
                                           SizedBox(height: 10),
                                           Text(
                                             'Reserved',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w400
@@ -298,7 +277,7 @@ class _ProfileScreenState extends State<Profile> {
                                           SizedBox(height: 10),
                                           Text(
                                             'Complete',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w400
@@ -311,24 +290,24 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 30),
+                            SizedBox(height: 15),
                             Text(
                               'Pick-Up Code',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
+                              style: TextStyle(
+                                fontSize: 15,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600
                               ),
                             ),
                             Text(
                               'Student product code for claiming',
-                              style: GoogleFonts.inter(
-                                fontSize: 11,
+                              style: TextStyle(
+                                fontSize: 10,
                                 color: Colors.grey,
                                 fontWeight: FontWeight.w400
                               ),
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 15),
                             Container(
                               width: double.infinity,
                               height: 150,
@@ -339,7 +318,7 @@ class _ProfileScreenState extends State<Profile> {
                                   BoxShadow(
                                     color: Colors.grey.shade400,
                                     blurRadius: 5,
-                                    offset: Offset(1, 5),
+                                    offset: Offset(1, 1),
                                   ),
                                 ],
                               ),
@@ -399,16 +378,52 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 30),
-                            Text(
-                              'Student Details',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600
+                            SizedBox(height: 10),
+                            Container(
+                              width: double.infinity,
+                              height: 50,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 5,
+                                    left: 0,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Overview",
+                                          style: GoogleFonts.inter(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600
+                                          ),
+                                        ),
+                                        Text(
+                                          "Student Details",
+                                          style: GoogleFonts.inter(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400
+                                          )
+                                        ),
+                                      ],
+                                    )
+                                  ),
+                                  Positioned(
+                                    top: 3,
+                                    right: 0,
+                                    child: IconButton(
+                                      iconSize: 15,
+                                      icon: Icon(Icons.add, color: Color.fromARGB(255, 14, 170, 113)),
+                                      onPressed: (){
+                                        _showCreateDialog(context);
+                                      }
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: 10),
                             ItemList(
                               students : details
                             )
@@ -458,64 +473,128 @@ class ItemCard extends StatelessWidget {
             },
             child: Container(
               width: double.infinity,
-              height: 70,
+              height: 100,
               decoration: BoxDecoration(
-                color: Color(0xFF0EAA72),
-                borderRadius: BorderRadius.circular(5),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade400,
+                    color: const Color.fromARGB(138, 0, 0, 0).withOpacity(0.2),
                     blurRadius: 5,
-                    offset: Offset(1, 5),
+                    offset: const Offset(1, 1),
                   ),
                 ],
               ),
               child: Stack( 
                 children: [
                   Positioned(
-                    top: 15,
-                    left: 35,
+                    top: 20,
+                    left: 30,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          visual.studentName,
+                          "${visual.lastname}, ${visual.firstname}",
                           style: GoogleFonts.inter(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 2),
                         Text(
-                          visual.studentID,
+                          "Course: ${visual.course}",
                           style: GoogleFonts.inter(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400
+                            color: Colors.grey,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
                           ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${visual.studentID} | Year: ${visual.year} |",
+                              style: GoogleFonts.inter(
+                                color: Colors.grey,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              visual.enrolled ? 'Enrolled' : 'Not Enrolled',
+                              style: GoogleFonts.inter(
+                                color: visual.enrolled
+                                    ? Color.fromARGB(255, 14, 170, 113)
+                                    : Colors.red,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                   Positioned(
                     top: 0,
-                    right: 60,
-                    child: SizedBox(
-                      height: 70,
-                      width: 1,
-                      child: Container(
-                        color: Colors.white,
+                    left: 0,
+                    child: Container(
+                      height: 100,
+                      width: 10,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 14, 170, 113),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
                       ),
                     ),
                   ),
                   Positioned(
-                    top: 23,
-                    right: 20,
-                    child: Icon(
-                      Icons.arrow_forward_ios, 
-                      color: Colors.white,
-                      size: 20,
+                    top: 15,
+                    right: 15,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showUpdate(context);
+                          },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 14, 170, 113),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_outward_rounded,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () {
+                            _showDeleteDialog(context);
+                          },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 238, 67, 58),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -526,4 +605,498 @@ class ItemCard extends StatelessWidget {
       ],
     );
   }
+}
+
+void _showCreateDialog(BuildContext context) {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _courseController = TextEditingController();
+  String _selectedYear = 'First Year';
+  bool _isEnrolled = true;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Container(
+          width: double.infinity,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Icon(Icons.drive_folder_upload_outlined),
+              ),
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Create New Student',
+                    style: GoogleFonts.inter(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    'Enter new student details',
+                    style: GoogleFonts.inter(
+                      color: Colors.grey,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        content: Container(
+          height: 300,
+          width: double.infinity,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _firstNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            ),
+                            hintText: 'First Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                          validator: (value) => value == null || value.isEmpty ? 'First name is required' : null,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _lastNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            ),
+                            hintText: 'Last Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _courseController,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                      ),
+                      hintText: 'Course',
+                      hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedYear,
+                    items: [
+                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: GoogleFonts.inter(fontSize: 13))),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedYear = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      labelText: 'Year',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: const Icon(Icons.calendar_month_outlined, color: Color.fromARGB(255, 14, 170, 113)),
+                    ),
+                    validator: (value) => value == null ? 'Year is required' : null,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text('Enrolled', style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13)),
+                      ),
+                      const Spacer(),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch(
+                          value: _isEnrolled,
+                          onChanged: (value) {
+                            setState(() {
+                              _isEnrolled = value;
+                              print("Switch is now: $_isEnrolled");
+                            });
+                          },
+                          activeColor: Color.fromARGB(255, 14, 170, 113),
+                          inactiveThumbColor: Colors.red,
+                          inactiveTrackColor: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: (){},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Create',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
+}
+  
+void _showUpdate(BuildContext context) {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _courseController = TextEditingController();
+  String _selectedYear = 'First Year';
+  bool _isEnrolled = true;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Container(
+          width: double.infinity,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Icon(Icons.drive_folder_upload_outlined),
+              ),
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Update Student',
+                    style: GoogleFonts.inter(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    'Update Student details',
+                    style: GoogleFonts.inter(
+                      color: Colors.grey,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        content: Container(
+          height: 300,
+          width: double.infinity,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _firstNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            ),
+                            hintText: 'First Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                          validator: (value) => value == null || value.isEmpty ? 'First name is required' : null,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _lastNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            ),
+                            hintText: 'Last Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _courseController,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                      ),
+                      hintText: 'Course',
+                      hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedYear,
+                    items: [
+                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: GoogleFonts.inter(fontSize: 13))),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedYear = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      labelText: 'Year',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: const Icon(Icons.calendar_month_outlined, color: Color.fromARGB(255, 14, 170, 113)),
+                    ),
+                    validator: (value) => value == null ? 'Year is required' : null,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text('Enrolled', style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13)),
+                      ),
+                      const Spacer(),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch(
+                          value: _isEnrolled,
+                          onChanged: (value) {
+                            setState(() {
+                              _isEnrolled = value;
+                              print("Switch is now: $_isEnrolled");
+                            });
+                          },
+                          activeColor: Color.fromARGB(255, 14, 170, 113),
+                          inactiveThumbColor: Colors.red,
+                          inactiveTrackColor: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: (){},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Create',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void _showDeleteDialog (BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Delete',
+              style: GoogleFonts.inter(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+            Text(
+              'Do you insist deleting Louise\'s details',
+              style: GoogleFonts.inter(
+                color: Colors.grey,
+                fontSize: 11,
+                fontWeight: FontWeight.w400
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          GestureDetector(
+            onTap: (){
+            },
+            child: Container(
+              height: 30,
+              width: 112,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                color: Color.fromARGB(255, 14, 170, 113)
+              ),
+              child: Center( 
+                child: Text(
+                  'Yes',
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600 
+                  ),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 30,
+              width: 112,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                color: Color.fromARGB(190, 14, 170, 113),
+              ),
+              child: Center(
+                child:Text(
+                  'No',
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600 
+                  ),
+                ),
+              )
+            ),
+          ),
+        ],
+      );
+    }
+  );
 }

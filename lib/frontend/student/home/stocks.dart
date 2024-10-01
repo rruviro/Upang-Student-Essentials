@@ -133,8 +133,8 @@ class _StocksState extends State<Stocks> {
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
                     'Uniform',
-                    style: GoogleFonts.inter(
-                      fontSize: 17,
+                    style: TextStyle(
+                      fontSize: 15,
                       color: Colors.black,
                       fontWeight: FontWeight.w600
                     ),
@@ -163,8 +163,8 @@ class _StocksState extends State<Stocks> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Books',
-                          style: GoogleFonts.inter(
-                            fontSize: 17,
+                          style: TextStyle(
+                            fontSize: 15,
                             color: Colors.black,
                             fontWeight: FontWeight.w600
                           ),
@@ -253,14 +253,14 @@ class _StocksState extends State<Stocks> {
                                           children: [
                                             Text(
                                               'All Books',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.white,
                                               ),
                                             ),
                                             Text(
                                               'As bundle',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white.withOpacity(0.7),
                                                 fontWeight: FontWeight.w400

@@ -34,7 +34,7 @@ class ItemCard extends StatelessWidget {
           width: 250,
           decoration: BoxDecoration(
             color: Color(0xFF0EAA72),
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(5),
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
@@ -48,7 +48,7 @@ class ItemCard extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(5),
                   child: Image.asset(
                     visual.image,
                     fit: BoxFit.cover,

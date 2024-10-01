@@ -60,7 +60,7 @@ class ItemCard extends StatelessWidget {
                       children: [
                         Text(
                           'BSN',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                               fontSize: 15,
                               color: Colors.white,
                               fontWeight: FontWeight.w600
@@ -68,7 +68,7 @@ class ItemCard extends StatelessWidget {
                         ),
                         Text(
                           'Bachelor of Science in Nursing',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                               fontSize: 10,
                               color: Colors.white,
                               fontWeight: FontWeight.w400

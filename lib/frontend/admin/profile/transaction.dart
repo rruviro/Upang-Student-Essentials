@@ -210,7 +210,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildRequest(BuildContext context) {
     return _buildBaseCard(
       context: context,
-      color: Color.fromARGB(255, 14, 170, 113),
+      color: Color.fromARGB(255, 11, 166, 222),
       status: 'Request',
     );
   }
@@ -218,7 +218,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildReserved(BuildContext context) {
     return _default(
       context: context,
-      color: Color.fromARGB(255, 14, 170, 113),
+      color: Color.fromARGB(255, 11, 166, 222),
       status: 'Reserved',
     );
   }
@@ -226,7 +226,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildComplete(BuildContext context) {
     return _default(
       context: context,
-      color: Color.fromARGB(255, 14, 170, 113),
+      color: Color.fromARGB(255, 11, 166, 222),
       status: 'Complete',
     );
   }
@@ -372,7 +372,7 @@ class ItemCard extends StatelessWidget {
                                   style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(255, 14, 170, 113),
+                                    color: Color.fromARGB(255, 11, 166, 222),
                                   ),
                                 ),
                               ),
@@ -394,7 +394,7 @@ class ItemCard extends StatelessWidget {
                                   style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(255, 14, 170, 113),
+                                    color: Color.fromARGB(255, 11, 166, 222),
                                   ),
                                 ),
                               ),

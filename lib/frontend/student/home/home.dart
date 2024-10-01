@@ -53,24 +53,27 @@ class _HomeState extends State<Home> {
             return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
-                title: Container(
-                  width: double.infinity, 
-                  height: 35, 
-                  child: Row(
-                    children: [
-                      Image.asset('assets/logo.png'),
-                      SizedBox(width: 10),
-                      Text(
-                        'Upang Student Essentials',
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 11,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600
-                          )
-                        ),
+                backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                title: Transform.translate(
+                  offset: Offset(-15.0, 0.0),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Departments',
+                            style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            'Choose your perspective department for -',
+                            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
+                          ),
+                        ],
                       ),
-                    ],
+                    )
                   ),
                 ),
                 centerTitle: false,
@@ -78,7 +81,7 @@ class _HomeState extends State<Home> {
                   IconButton(
                     icon: const Icon(
                       Icons.notifications, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: Colors.white
                     ),
                     onPressed: () {
                       studBloc.add(NotificationPageEvent());
@@ -87,7 +90,7 @@ class _HomeState extends State<Home> {
                   IconButton(
                     icon: const Icon(
                       Icons.backpack, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: Colors.white
                     ),
                     onPressed: () {
                       studBloc.add(BackpackPageEvent());
@@ -95,7 +98,6 @@ class _HomeState extends State<Home> {
                   ),
                   SizedBox(width: 15),
                 ],
-                backgroundColor: Colors.white,
                 elevation: 0,
               ),
               body: ListView(
@@ -108,32 +110,11 @@ class _HomeState extends State<Home> {
                         decoration: BoxDecoration(
                           color: Colors.white
                         ),
-                        padding: EdgeInsets.all(20.0),
+                        padding: EdgeInsets.all(15.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              'Departments',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 3),
-                            Text(
-                              'Choose your perspective department for --',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w300
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 20), 
+                            SizedBox(height: 10),
                             home_widget (
                               departments : initials
                             )

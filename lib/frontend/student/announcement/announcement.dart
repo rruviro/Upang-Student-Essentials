@@ -23,32 +23,13 @@ class _AnnouncementState extends State<Announcement> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Container(
-          width: double.infinity, 
-          height: 35, 
-          child: Row(
-            children: [
-              Image.asset('assets/logo.png'),
-              SizedBox(width: 10),
-              Text(
-                'Upang Student Essentials',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontSize: 11,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  )
-                ),
-              ),
-            ],
-          ),
-        ),
+        backgroundColor: Color.fromARGB(255, 14, 170, 113),
         centerTitle: false,
         actions: <Widget>[
           IconButton(
             icon: const Icon(
               Icons.notifications, 
-              color: Color.fromARGB(255, 14, 170, 113)
+              color: Colors.white
             ),
             onPressed: () {
               Navigator.of(context).push(
@@ -64,7 +45,7 @@ class _AnnouncementState extends State<Announcement> {
           IconButton(
             icon: const Icon(
               Icons.backpack, 
-              color: Color.fromARGB(255, 14, 170, 113)
+              color: Colors.white
             ),
             onPressed: () {
               Navigator.of(context).push(
@@ -79,7 +60,6 @@ class _AnnouncementState extends State<Announcement> {
           ),
           SizedBox(width: 15),
         ],
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: ListView(
@@ -98,15 +78,16 @@ class _AnnouncementState extends State<Announcement> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 30),
+                    SizedBox(height: 5),
                     Text(
                       'Announcement',
-                      style: GoogleFonts.inter(
-                        fontSize: 17,
+                      style: TextStyle(
+                        fontSize: 15,
                         color: Colors.black,
                         fontWeight: FontWeight.w600
                       ),
                     ),
+                    SizedBox(height: 5),
                     ItemList(
                       status : details
                     )

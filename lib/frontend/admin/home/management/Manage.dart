@@ -80,7 +80,9 @@ class _manageState extends State<manage> {
       setState(() {
         TextEditingController coursesController = TextEditingController();
         TextEditingController bachelorController = TextEditingController();
-        _rows.add({
+        
+        // Insert the new row at the beginning (index 0) for descending order
+        _rows.insert(0, {
           'coursesController': coursesController,
           'bachelorController': bachelorController,
           'countCourse': 0,
@@ -90,7 +92,26 @@ class _manageState extends State<manage> {
     } else {
       print('Please fill in the current course field before adding another row.');
     }
+  }
 
+  Color _currentColor = Colors.blue;
+  final List<Color> availableColors = [
+    Color.fromARGB(255, 255, 0, 0),   // Red
+    Color.fromARGB(255, 0, 255, 0),   // Green
+    Color.fromARGB(255, 0, 0, 255),   // Blue
+    Color.fromARGB(255, 255, 255, 0),  // Yellow
+    Color.fromARGB(255, 255, 165, 0),  // Orange
+    Color.fromARGB(255, 128, 0, 128),  // Purple
+    Color.fromARGB(255, 255, 192, 203), // Pink
+    Color.fromARGB(255, 0, 0, 0),       // Black
+    Color.fromARGB(255, 128, 128, 128), // Gray
+  ];
+  int? _selectedIndex;
+
+  void _selectColor(Color color) {
+    setState(() {
+      _currentColor = color;
+    });
   }
 
   @override
@@ -99,35 +120,28 @@ class _manageState extends State<manage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 14, 170, 113),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Transform.translate(
           offset: Offset(-15.0, 0.0),
-          child: Text(
-            'Manage',
-            style: GoogleFonts.inter(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Manage',
+                style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-            ),
-          ),
-        ),
-        bottom: AppBar(
-          toolbarHeight: 200,
-          backgroundColor: Colors.white,
-          title: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(5.0),
-            child: Visual(context, DepartmentName.text, _rows, _image)
-          ),
-          automaticallyImplyLeading: false,
+              Text(
+                'manage health and science details ',
+                style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
+              ),
+            ],
+          )
         ),
       ),
       body: Stack(
@@ -149,7 +163,7 @@ class _manageState extends State<manage> {
                           style: GoogleFonts.inter(
                             color: Colors.black,
                             fontSize: 15,
-                            fontWeight: FontWeight.w600
+                            fontWeight: FontWeight.w500
                           ),
                         ),
                         Container(
@@ -195,7 +209,7 @@ class _manageState extends State<manage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -212,7 +226,7 @@ class _manageState extends State<manage> {
                                   style: GoogleFonts.inter(
                                     color: Colors.black,
                                     fontSize: 15,
-                                    fontWeight: FontWeight.w600
+                                    fontWeight: FontWeight.w500
                                   ),
                                 ),
                               ),
@@ -228,51 +242,64 @@ class _manageState extends State<manage> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 5),
                         Container(
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 14, 170, 113),
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 3,
+                                offset: Offset(1, 1),
+                              ),
+                            ]
+                          ),
                           width: double.infinity,
-                          height: 150,
+                          height: 250,
                           child: ListView.builder(
                             itemCount: _rows.length,
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(1.0),
+                              return Container(
+                                margin: EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
+                                  right: 20,
+                                  left: 20
+                                ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      width: 100,
-                                      height: 40,
+                                    Expanded(
                                       child: TextFormField(
                                         controller: _rows[index]['coursesController'],
                                         decoration: InputDecoration(
                                           border: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.grey),
+                                            borderSide: BorderSide(color: Colors.white),
                                           ),
                                           focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                            borderSide: BorderSide(color: Colors.white),
                                           ),
-                                          hintText: 'BSN',
-                                          hintStyle: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400,
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.white),
                                           ),
+                                          hintText: 'BSIT',
+                                          hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                                           suffix: Text(
                                             '${_rows[index]['countCourse']}/10',
                                             style: TextStyle(
-                                              color: Color.fromARGB(255, 14, 170, 113),
+                                              color: Colors.white,
                                               fontSize: 12,
                                             ),
                                           ),
                                           suffixStyle: TextStyle(
-                                            color: Colors.grey,
+                                            color: Colors.white,
                                             fontSize: 12,
                                           ),
                                         ),
                                         keyboardType: TextInputType.text,
                                         textInputAction: TextInputAction.done,
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -294,45 +321,43 @@ class _manageState extends State<manage> {
                                         width: 1,
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: Colors.black26,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),
                                     ),
                                     SizedBox(width: 15),
-                                    Container(
-                                      width: screenWidth * 0.34,
-                                      height: 40,
+                                    Expanded(
                                       child: TextFormField(
                                         controller: _rows[index]['bachelorController'],
                                         decoration: InputDecoration(
                                           border: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.grey),
+                                            borderSide: BorderSide(color: Colors.white),
                                           ),
                                           focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                            borderSide: BorderSide(color: Colors.white),
                                           ),
-                                          hintText: 'Bachelor of Science in Nursing',
-                                          hintStyle: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400,
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.white),
                                           ),
+                                          hintText: 'Bachelor of information in technology',
+                                          hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                                           suffix: Text(
                                             '${_rows[index]['countBachelor']}/25',
                                             style: TextStyle(
-                                              color: Color.fromARGB(255, 14, 170, 113),
+                                              color: Colors.white,
                                               fontSize: 12,
                                             ),
                                           ),
                                           suffixStyle: TextStyle(
-                                            color: Colors.grey,
+                                            color: Colors.white,
                                             fontSize: 12,
                                           ),
                                         ),
                                         keyboardType: TextInputType.text,
                                         textInputAction: TextInputAction.done,
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400,
                                         ),
@@ -346,43 +371,40 @@ class _manageState extends State<manage> {
                                         },
                                       ),
                                     ),
-                                    SizedBox(width: 15),
-                                    IconButton(
-                                      icon: Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () => _deleteItem(index),
+                                    SizedBox(width: 5),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 5),
+                                      child: IconButton(
+                                        icon: Icon(Icons.delete, color: Colors.red),
+                                        onPressed: () => _deleteItem(index),
+                                      ),
                                     ),
+                                    SizedBox(width: 5),
                                   ],
                                 ),
                               );
                             },
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 40),
-                    Text(
-                      'Department Logo',
-                      style: GoogleFonts.inter(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                        SizedBox(height: 20),
                         InkWell(
                           onTap: () {
                             _openImagePicker();
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            width: 120,
+                            width: double.infinity,
                             height: 120,
                             decoration: BoxDecoration(
                               color: Color.fromARGB(255, 14, 170, 113),
-                              borderRadius: BorderRadius.circular(5)
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 3,
+                                  offset: Offset(1, 1),
+                                ),
+                              ]
                             ),
                             child: _image != null
                                 ? Image.file(
@@ -395,78 +417,54 @@ class _manageState extends State<manage> {
                                   ),
                           ),
                         ),
-                        SizedBox(width: 20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Primary Color',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600
-                                )
-                              ),
+                        SizedBox(height: 15),
+                        Text(
+                          'Primary Color',
+                          style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Container(
+                          width: 200,
+                          height: 50, // Adjusted height to give GridView enough space
+                          child: GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 7, // Number of columns for the grid
+                              childAspectRatio: 1, // Aspect ratio to keep squares
                             ),
-                            SizedBox(height: 10),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _Circle(0, Color.fromRGBO(6, 143, 255, 1)),
-                                  _Circle(1, const Color.fromARGB(255, 255, 62, 62)),
-                                  _Circle(2, Color.fromARGB(255, 255, 169, 30)),
-                                  _Circle(3, Color.fromARGB(255, 14, 170, 113)),
-                                  Container(
-                                    padding: EdgeInsets.only(right: 13),
-                                    child: SizedBox(
-                                      height: 20,
-                                      width: 1,
-                                      child: Container(color:Colors.black26),
-                                    ),
+                            itemCount: availableColors.length - 2,
+                            itemBuilder: (context, index) {
+                              final color = availableColors[index + 2]; // Adjust index for remaining colors
+                              final isSelected = _selectedIndex == index; // Check if the color is selected
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedIndex = index; // Update selected index
+                                  });
+                                  _selectColor(color);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    shape: BoxShape.circle, // Make the container circular
+                                    border: isSelected
+                                        ? Border.all(
+                                            color: const Color.fromARGB(255, 187, 187, 187), // Stroke color
+                                            width: 2.0, // Stroke width
+                                          )
+                                        : null,
                                   ),
-                                  _Circle(4, Color.fromARGB(255, 14, 170, 113)),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 23),
-                            Text(
-                              'Secondary Color',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600
-                                )
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _Circle(0, Color.fromRGBO(6, 143, 255, 1)),
-                                  _Circle(1, const Color.fromARGB(255, 255, 62, 62)),
-                                  _Circle(2, Color.fromARGB(255, 255, 169, 30)),
-                                  _Circle(3, Color.fromARGB(255, 14, 170, 113)),
-                                  Container(
-                                    padding: EdgeInsets.only(right: 13),
-                                    child: SizedBox(
-                                      height: 20,
-                                      width: 1,
-                                      child: Container(color:Colors.black26),
-                                    ),
-                                  ),
-                                  _Circle(4, Color.fromARGB(255, 14, 170, 113)),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
+                                  margin: EdgeInsets.all(4.0),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     ),
-                    SizedBox(height: 50),
                     Padding(
                       padding: EdgeInsets.only(
                         right: 0,
@@ -474,129 +472,25 @@ class _manageState extends State<manage> {
                         bottom: 20,
                       ),
                       child: Center(
-                        child: InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  title: Container(
-                                    height: 100,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Icon(
-                                        Icons.check_circle_outline,
-                                        color: Color.fromARGB(255, 14, 170, 113),
-                                        size: 100,
-                                      ),
-                                    ),
-                                  ),
-                                  content: Container(
-                                    height: 20,
-                                    child: Center(
-                                      child: Text(
-                                        'Modification in this department is already deployed',
-                                        style: GoogleFonts.inter(
-                                          color: Colors.black,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  actions: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => Home()),
-                                              );
-                                            },
-                                            child: Container(
-                                              height: 35,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(2),
-                                                color: Color.fromARGB(255, 14, 170, 113),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  'Home',
-                                                  style: GoogleFonts.inter(
-                                                    color: Colors.white,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Container(
-                                              height: 35,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(2),
-                                                color: Color.fromARGB(192, 14, 170, 113),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  'Close',
-                                                  style: GoogleFonts.inter(
-                                                    color: Color.fromARGB(190, 255, 255, 255),
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: Container(
-                            width: 200,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 14, 170, 113),
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  blurRadius: 5,
-                                  offset: Offset(1, 8),
-                                ),
-                              ]
+                        child: ElevatedButton(
+                          onPressed: (){},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 14, 170, 113), 
+                            minimumSize: Size(double.infinity, 60), 
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10), 
                             ),
-                            child: Center(
-                              child: Text(
-                                'Deploy',
-                                style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600
-                                  )
-                                ),
-                              ),
-                            )
                           ),
+                          child: Center(
+                            child: Text(
+                              'Update',
+                              style: GoogleFonts.inter(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600
+                              ),
+                            ),
+                          )
                         ),
                       ),
                     ),
@@ -629,213 +523,6 @@ Widget _Circle(int index, Color color) {
             ? Border.all(color: Color.fromARGB(116, 255, 255, 255), width: 2.0) // Stroke when selected
             : null, // No border when not selected
       ),
-    ),
-  );
-}
-
-Widget Visual (BuildContext context, String DepartmentName, List<Map<String, dynamic>> courses, File? image) {
-  final screenWidth = MediaQuery.of(context).size.width;
-  final itemWidth = 50.0;
-  final spacing = 10.0;
-  final initialSpacing = 50.0;
-  final maxVisibleItems = 4;
-  
-  return Container (
-    margin: const EdgeInsets.only(
-      bottom: 30.0,
-    ),
-    height: 150,
-    decoration: BoxDecoration(
-      color: Color.fromARGB(255, 14, 170, 113),
-      borderRadius: BorderRadius.circular(10),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.5),
-          blurRadius: 5,
-          offset: Offset(1, 8),
-        ),
-      ],
-    ),
-    width: double.infinity,
-    child: Stack(
-      children: [
-        Positioned(
-          right: -20,
-          top: -35,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(5),
-                bottomRight: Radius.circular(5)
-              )
-            ),
-            child: image!=null
-              ? ClipRRect(
-                  child: Image.file(
-                    image!,
-                    width: 220,
-                    height: 220,
-                    fit: BoxFit.cover,
-                  ),
-                )
-              : Image.asset(
-                'assets/vanguards.png',
-                width: 220,
-                height: 220, 
-              ),
-            width: 220,
-            height: 220, 
-          ),
-        ),
-        Positioned(
-          child: Container(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 14, 170, 113),
-                    Color.fromARGB(123, 14, 170, 113),
-                  ],
-                  stops: [0.50, 0.70],
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 20.0,
-                      left: 30.0
-                    ),
-                    child: Text(
-                      DepartmentName.isNotEmpty
-                        ? DepartmentName
-                        : 'Department Name',
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle (
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 9.0,
-                      left: 30.0
-                    ),
-                    child: Text(
-                      'Courses :',
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle (
-                          fontSize: 10,
-                          color: Colors.white54,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 55.0,
-                      left: 30.0
-                    ),
-                    child: Container(),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 46,
-          left: 30,
-          child: Container(
-            width: screenWidth * 0.5,
-            height: 40,
-            child: Wrap(
-              spacing: spacing, 
-              runSpacing: spacing,
-              alignment: WrapAlignment.start,
-              children: [
-                SizedBox(width: 50),
-                ...List.generate(
-                  courses.length > maxVisibleItems ? maxVisibleItems : courses.length,
-                  (index) {
-                    String displayText = courses[index]['coursesController'].text;
-                    return Container(
-                      width: itemWidth,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          displayText,
-                          style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                if (courses.length > maxVisibleItems)
-                  Container(
-                    width: itemWidth,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '+${courses.length - maxVisibleItems} more',
-                        style: GoogleFonts.inter(
-                          color: Color.fromARGB(255, 14, 170, 113),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 15,
-          left: 30,
-          child: Row(
-            children: <Widget>[
-              Icon(
-                Icons.arrow_circle_right_outlined,
-                color: Colors.white54,
-                size: 20
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Show more courses',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle (
-                    fontSize: 10,
-                    color: Colors.white54,
-                    fontWeight: FontWeight.w200,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     ),
   );
 }

@@ -22,32 +22,13 @@ class _AnnouncementState extends State<Announcement> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Container(
-          width: double.infinity, 
-          height: 35, 
-          child: Row(
-            children: [
-              Image.asset('assets/logo.png'),
-              SizedBox(width: 10),
-              Text(
-                'Upang Student Essentials',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontSize: 11,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  )
-                ),
-              ),
-            ],
-          ),
-        ),
+        backgroundColor: Color.fromARGB(255, 14, 170, 113),
         centerTitle: false,
         actions: <Widget>[
           IconButton(
             icon: const Icon(
               Icons.notifications, 
-              color: Color.fromARGB(255, 14, 170, 113)
+              color: Colors.white
             ),
             onPressed: () {
               adminBloc.add(NotificationPageEvent());
@@ -55,7 +36,6 @@ class _AnnouncementState extends State<Announcement> {
           ),
           SizedBox(width: 15),
         ],
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: ListView(
@@ -112,29 +92,57 @@ class _AnnouncementState extends State<Announcement> {
                 ),
                 content: Container(
                   width: double.infinity,
-                  height: 40,
-                  child: TextFormField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                          ),
+                          hintText: 'Department',
+                          hintStyle: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                      TextFormField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                          ),
+                          hintText: 'Message',
+                          hintStyle: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                      hintText: 'Every single second of your life is worthy.',
-                      hintStyle: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    ]
                   ),
                 ),
                 actions: [

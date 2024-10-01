@@ -26,7 +26,7 @@ class ItemCard extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(
-            bottom: 30.0,
+            bottom: 20.0,
           ),
           width: double.infinity,
           decoration: BoxDecoration(
