@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer__ructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,11 +13,15 @@ import 'package:use/frontend/student/notification.dart';
 import 'package:use/frontend/student/profile/transaction.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/frontend/student/widgets/profile/uniform.dart';
+
+import '../../colors/colors.dart';
+import '../widgets/profile/book.dart';
 
 final StudentExtendedBloc studBloc = StudentExtendedBloc(StudentRepositoryImpl());
 
 class Profile extends StatefulWidget {
-  const Profile({super.key, required this.studentProfile});
+   Profile({super.key, required this.studentProfile});
   final StudentProfile studentProfile;
 
   @override
@@ -61,6 +65,7 @@ class _ProfileScreenState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Container(
           width: double.infinity,
@@ -71,12 +76,10 @@ class _ProfileScreenState extends State<Profile> {
               SizedBox(width: 10),
               Text(
                 'Upang Student Essentials',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontSize: 11,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -85,7 +88,7 @@ class _ProfileScreenState extends State<Profile> {
         centerTitle: false,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.notifications, color: Color.fromARGB(255, 14, 170, 113)),
+            icon: Icon(Icons.notifications, color: primary_color),
             onPressed: () async {
               final result = await Navigator.push(
                 context,
@@ -101,7 +104,7 @@ class _ProfileScreenState extends State<Profile> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.backpack, color: Color.fromARGB(255, 14, 170, 113)),
+            icon: Icon(Icons.backpack, color: primary_color),
             onPressed: () async {
               final result = await Navigator.push(
                 context,
@@ -117,7 +120,7 @@ class _ProfileScreenState extends State<Profile> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.logout, color: Color.fromARGB(255, 14, 170, 113)),
+            icon:  Icon(Icons.logout, color: primary_color),
             onPressed: () {
               showDialog(
                 context: context,
@@ -129,7 +132,7 @@ class _ProfileScreenState extends State<Profile> {
                     ),
                     title: Text(
                       'Logout',
-                      style: GoogleFonts.inter(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -137,7 +140,7 @@ class _ProfileScreenState extends State<Profile> {
                     ),
                     content: Text(
                       'Are you sure you wanna logout?',
-                      style: GoogleFonts.inter(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
@@ -158,12 +161,12 @@ class _ProfileScreenState extends State<Profile> {
                           width: 112,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(2),
-                            color: Color.fromARGB(255, 14, 170, 113),
+                            color: primary_color,
                           ),
                           child: Center(
                             child: Text(
                               'Continue',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -186,7 +189,7 @@ class _ProfileScreenState extends State<Profile> {
                           child: Center(
                             child: Text(
                               'Nope',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Color.fromARGB(190, 255, 255, 255),
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600,
@@ -215,7 +218,6 @@ class _ProfileScreenState extends State<Profile> {
             items = state.studentBagItems;
             books = state.studentBagBooks;
           }
-
           switch (state.runtimeType) {
             case StudentLoadingState:
               return Center(child: CircularProgressIndicator());
@@ -227,48 +229,123 @@ class _ProfileScreenState extends State<Profile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 20),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(color: Colors.white),
-                        padding: EdgeInsets.all(20.0),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "${widget.studentProfile.firstName} ${widget.studentProfile.lastName}",
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.w600,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 54,
+                                  width: 54,
+                                  decoration: BoxDecoration(
+                                    color: primary_color,
+                                    borderRadius: BorderRadius.circular(2)
+                                  ),
                                 ),
-                              ),
-                            ),
-                            Text(
-                              widget.studentProfile.stuId,
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w500,
+                                VerticalDivider(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${widget.studentProfile.firstName} ${widget.studentProfile.lastName}",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Course: Bachelor of information and technology",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${widget.studentProfile.stuId} | Year: Third Year |",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          'Enrolled',
+                                          style: TextStyle(
+                                            color: primary_color,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ],
                             ),
                             SizedBox(height: 20),
-                            SizedBox(
-                              height: 1,
+                            Container(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 1.2,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: double.infinity,
+                                  child: Container(
+                                    decoration: BoxDecoration(color: secondary_color),
+                                  ),
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              height: 20,
                               width: double.infinity,
-                              child: Container(
-                                decoration: BoxDecoration(color: Colors.black26),
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Text(
-                              'Transaction',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    left: 0,
+                                    child: Text(
+                                      'Transaction',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    child: InkWell(
+                                      onTap:(){},
+                                      child: Container(
+                                        height: 20,
+                                        width: 100,
+                                        child: Center(
+                                          child: Text(
+                                            'View Transaction >',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: tertiary_color,
+                                              fontWeight: FontWeight.w400
+                                            ),
+                                          ),
+                                        )
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                             SizedBox(height: 15),
@@ -276,20 +353,20 @@ class _ProfileScreenState extends State<Profile> {
                               width: double.infinity,
                               height: 90,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color.fromARGB(255, 14, 170, 113),
+                                borderRadius: BorderRadius.circular(5),
+                                color: primary_color,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+                                    color: Colors.grey.shade400,
                                     blurRadius: 5,
-                                    offset: Offset(1, 8),
+                                    offset: Offset(1, 4),
                                   ),
                                 ],
                               ),
                               child: Container(
                                 width: double.infinity,
                                 height: 80,
-                                padding: const EdgeInsets.only(top: 5),
+                                padding:  EdgeInsets.only(top: 5),
                                 child: Center(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -320,7 +397,7 @@ class _ProfileScreenState extends State<Profile> {
                                             SizedBox(height: 10),
                                             Text(
                                               'Request',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400,
@@ -355,7 +432,7 @@ class _ProfileScreenState extends State<Profile> {
                                             SizedBox(height: 10),
                                             Text(
                                               'Reserved',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400,
@@ -390,7 +467,7 @@ class _ProfileScreenState extends State<Profile> {
                                             SizedBox(height: 10),
                                             Text(
                                               'Claim',
-                                              style: GoogleFonts.inter(
+                                              style: TextStyle(
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w400,
@@ -405,15 +482,29 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 30),
+                            Container(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 1.2,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: double.infinity,
+                                  child: Container(
+                                    decoration: BoxDecoration(color: secondary_color),
+                                  ),
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 20),
                             Text(
                               'History',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
+                              style: TextStyle(
+                                fontSize: 13,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w600
                               ),
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 15),
                             Row(
                               children: [
                                 InkWell(
@@ -421,70 +512,141 @@ class _ProfileScreenState extends State<Profile> {
                                   onTap: () => _selectedItem(1),
                                   child: Text(
                                     'Complete',
-                                    style: GoogleFonts.inter(
+                                    style: TextStyle(
                                       fontSize: 10,
-                                      color: _currentSelection == 1 ? Color.fromARGB(255, 0, 0, 0) : Colors.grey,
-                                      fontWeight: FontWeight.w600,
+                                      color: _currentSelection == 1
+                                        ? primary_color
+                                        : tertiary_color,
+                                      fontWeight: _currentSelection == 1
+                                        ? FontWeight.w500
+                                        : FontWeight.w400
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 20),
-                                SizedBox(
-                                  height: 25,
-                                  width: 1,
-                                  child: Container(
-                                    decoration: BoxDecoration(color: Colors.black26),
-                                  ),
-                                ),
-                                SizedBox(width: 20),
+                                SizedBox(width: 15),
                                 InkWell(
                                   key: _Cancelled,
                                   onTap: () => _selectedItem(2),
                                   child: Text(
                                     'Cancelled',
-                                    style: GoogleFonts.inter(
+                                    style: TextStyle(
                                       fontSize: 10,
-                                      color: _currentSelection == 2 ? Color.fromARGB(255, 0, 0, 0) : Colors.grey,
-                                      fontWeight: FontWeight.w600,
+                                      color: _currentSelection == 2
+                                        ? primary_color
+                                        : tertiary_color,
+                                      fontWeight: _currentSelection == 2
+                                        ? FontWeight.w500
+                                        : FontWeight.w400
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 15),
                             SizedBox(
                               height: 1,
                               width: double.infinity,
                               child: Container(
                                 decoration: BoxDecoration(color: Colors.black26),
                               ),
-                            ),Text(
-                              'Uniform',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                              ),
                             ),
-                            SizedBox(height: 10),
-                            ItemList(
-                              status: items.where((item) =>
-                                item.status == (_currentSelection == 1 ? "Complete" : "Cancelled")
-                              ).toList(),
+                            SizedBox(height: 15),
+                            Container(
+                              height: 20,
+                              width: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    left: 0,
+                                    child: Text(
+                                      'Books',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: -5,
+                                    child: InkWell(
+                                      onTap:(){},
+                                      child: Container(
+                                        height: 20,
+                                        width: 100,
+                                        child: Center(
+                                          child: Text(
+                                            'View All Books >',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: tertiary_color,
+                                              fontWeight: FontWeight.w400
+                                            ),
+                                          ),
+                                        )
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                             SizedBox(height: 20),
-                            Text(
-                              'Books',
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
+                            Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(left: 40),
+                              child: FractionallySizedBox(
+                                widthFactor: 1.2,
+                                child: book_list(
+                                  status: books.where((book) =>
+                                    book.status == (_currentSelection == 1 ? "Complete" : "Cancelled")
+                                  ).toList(),
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 15),
+                            Container(
+                              height: 20,
+                              width: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    left: 0,
+                                    child: Text(
+                                      'Uniform',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: -5,
+                                    child: InkWell(
+                                      onTap:(){},
+                                      child: Container(
+                                        height: 20,
+                                        width: 100,
+                                        child: Center(
+                                          child: Text(
+                                            'View All Uniform >',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: tertiary_color,
+                                              fontWeight: FontWeight.w400
+                                            ),
+                                          ),
+                                        )
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            SizedBox(height: 10),
-                            BookList(
-                              status: books.where((book) =>
-                                book.status == (_currentSelection == 1 ? "Complete" : "Cancelled")
+                            SizedBox(height: 20),
+                            uniform_list(
+                              status: items.where((item) =>
+                                item.status == (_currentSelection == 1 ? "Complete" : "Cancelled")
                               ).toList(),
                             ),
                           ],
@@ -500,511 +662,3 @@ class _ProfileScreenState extends State<Profile> {
     );
   }
 }
-
-
-class ItemList extends StatelessWidget {
-  final List<StudentBagItem> status;
-  const ItemList({Key? key, required this.status}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: status
-          .map((e) => ItemCard(
-                item: e,
-              ))
-          .toList(),
-    );
-  }
-}
-
-class ItemCard extends StatelessWidget {
-  final StudentBagItem item;
-  const ItemCard({Key? key, required this.item}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 30.0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color.fromARGB(255, 14, 170, 113),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                blurRadius: 5,
-                offset: Offset(1, 8),
-              ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 115,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                  ),
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: Image.network("assets/b19d1b570a8d62ff56f4f351e389c2db.jpg"), // Placeholder for actual image
-              ),
-              SizedBox(width: 10),
-              Stack(
-                children: [
-                  Positioned(
-                    top: 55,
-                    left: 0,
-                    child: SizedBox(
-                      height: 1,
-                      width: 500,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Text(
-                            'Department :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            item.department,
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Code :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            item.code ?? 'N/A',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        item.status,
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Claimed :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            item.dateReceived?.toLocal().toIso8601String() ?? 'N/A',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 255, 255, 255),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(5),
-                topRight: Radius.circular(5),
-              ),
-            ),
-            child: Center(
-              child: InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        title: Text(
-                          'Details',
-                          style: GoogleFonts.inter(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Department: ${item.department}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Code: ${item.code ?? 'N/A'}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Type: ${item.type}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Body: ${item.body}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Size: ${item.size}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Status: ${item.status}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Date Received: ${item.dateReceived?.toLocal().toIso8601String() ?? 'N/A'}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Icon(
-                  Icons.info_outline,
-                  size: 15.0,
-                  color: Color.fromARGB(255, 14, 170, 113),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class BookList extends StatelessWidget {
-  final List<StudentBagBook> status;
-  const BookList({Key? key, required this.status}) : super (key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: status
-        .map((e) => BookCard(
-            book: e,
-          ))
-        .toList(),
-    );
-  }
-}
-
-class BookCard extends StatelessWidget {
-  final StudentBagBook book;
-  const BookCard({Key? key, required this.book}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 30.0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Color.fromARGB(255, 14, 170, 113),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                blurRadius: 5,
-                offset: Offset(1, 8),
-              ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 115,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                  ),
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: Image.network("assets/b19d1b570a8d62ff56f4f351e389c2db.jpg"), // Placeholder for actual image
-              ),
-              SizedBox(width: 10),
-              Stack(
-                children: [
-                  Positioned(
-                    top: 55,
-                    left: 0,
-                    child: SizedBox(
-                      height: 1,
-                      width: 500,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Text(
-                            'Book :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            book.bookName,
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Code :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            book.code,
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        book.status,
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Claimed :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            book.dateReceived?.toLocal().toIso8601String() ?? 'N/A',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 255, 255, 255),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(5),
-                topRight: Radius.circular(5),
-              ),
-            ),
-            child: Center(
-              child: InkWell(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        title: Text(
-                          'Details',
-                          style: GoogleFonts.inter(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Book : ${book.bookName}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Subject Code : ${book.subjectCode}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Subject Desc : ${book.subjectDesc}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Status: ${book.status}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                'Date Received: ${book.dateReceived?.toLocal().toIso8601String() ?? 'N/A'}',
-                                style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Icon(
-                  Icons.info_outline,
-                  size: 15.0,
-                  color: Color.fromARGB(255, 14, 170, 113),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-

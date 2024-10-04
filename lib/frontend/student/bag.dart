@@ -7,6 +7,8 @@ import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
+import '../colors/colors.dart';
+
 class Bag extends StatefulWidget {
   const Bag({
     Key? key,
@@ -119,7 +121,7 @@ Widget build(BuildContext context) {
     onWillPop: _onPop,
     child: Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        backgroundColor: primary_color,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
@@ -162,14 +164,19 @@ Widget build(BuildContext context) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'UNIFORMS',
+                          'Books',
                           style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600
                           ),
                         ),
                         SizedBox(height: 8.0),
-                        ItemList(status: state.studentBagItems, refresh: refreshData, onCheckboxChanged: updateCheckedItemIds, checkedItemIds: checkedItemIds,),
+                        BookList(
+                          status: state.studentBagBooks, 
+                          refresh: refreshData,
+                          onCheckboxChanged: updateCheckedBookIds, checkedBookIds: checkedBookIds,
+                        ),
                       ],
                     ),
                   ),
@@ -179,18 +186,15 @@ Widget build(BuildContext context) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'BOOKS',
+                          'Uniform',
                           style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600
                           ),
                         ),
                         SizedBox(height: 8.0),
-                        BookList(
-                          status: state.studentBagBooks, 
-                          refresh: refreshData,
-                          onCheckboxChanged: updateCheckedBookIds, checkedBookIds: checkedBookIds,
-                        ),
+                        ItemList(status: state.studentBagItems, refresh: refreshData, onCheckboxChanged: updateCheckedItemIds, checkedItemIds: checkedItemIds,),
                       ],
                     ),
                   ),
@@ -215,7 +219,7 @@ Widget build(BuildContext context) {
         alignment: Alignment.bottomCenter,
         width: double.infinity,
         height: 70,
-        color: Color.fromARGB(255, 14, 170, 113),
+        color: primary_color,
         child: Stack(
           children: [
             Positioned(
@@ -239,7 +243,7 @@ Widget build(BuildContext context) {
                             
                           },
                           activeColor: Colors.white,
-                          checkColor: Color.fromARGB(255, 14, 170, 113),
+                          checkColor: primary_color,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                       ),
@@ -344,7 +348,7 @@ Widget build(BuildContext context) {
                                 alignment: Alignment.center,
                                 child: Icon(
                                   Icons.check_circle_outline,
-                                  color: Color.fromARGB(255, 14, 170, 113),
+                                  color: primary_color,
                                   size: 100,
                                 ),
                               ),
@@ -387,7 +391,7 @@ Widget build(BuildContext context) {
                                         height: 35,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(2),
-                                          color: Color.fromARGB(255, 14, 170, 113),
+                                          color: primary_color,
                                         ),
                                         child: Center(
                                           child: Text(
@@ -454,7 +458,7 @@ Widget build(BuildContext context) {
                         child: Text(
                           'Request',
                           style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
+                            color: primary_color,
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                           ),
@@ -542,7 +546,7 @@ class _ItemCardState extends State<ItemCard> {
                 height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     topRight: Radius.circular(5),
@@ -558,7 +562,7 @@ class _ItemCardState extends State<ItemCard> {
                     height: 80,
                     width: 80,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 14, 170, 113),
+                      color: primary_color,
                     ),
                     child: Image.asset(
                       'assets/b19d1b570a8d62ff56f4f351e389c2db.jpg',
@@ -573,7 +577,7 @@ class _ItemCardState extends State<ItemCard> {
                         Text(
                           widget.item.gender,
                           style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
+                            color: primary_color,
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
@@ -634,7 +638,7 @@ class _ItemCardState extends State<ItemCard> {
                     });
                   },
                   activeColor: Colors.white,
-                  checkColor: Color.fromARGB(255, 14, 170, 113),
+                  checkColor: primary_color,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),
@@ -743,7 +747,7 @@ class _BookCardState extends State<BookCard> {
                 height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     topRight: Radius.circular(5),
@@ -759,7 +763,7 @@ class _BookCardState extends State<BookCard> {
                     height: 80,
                     width: 80,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 14, 170, 113),
+                      color: primary_color,
                     ),
                     child: Image.asset(
                       'assets/b19d1b570a8d62ff56f4f351e389c2db.jpg',
@@ -774,7 +778,7 @@ class _BookCardState extends State<BookCard> {
                         Text(
                           widget.book.bookName,
                           style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
+                            color: primary_color,
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
@@ -821,7 +825,7 @@ class _BookCardState extends State<BookCard> {
                     });
                   },
                   activeColor: Colors.white,
-                  checkColor: Color.fromARGB(255, 14, 170, 113),
+                  checkColor: primary_color,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),

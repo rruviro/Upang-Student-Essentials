@@ -9,6 +9,8 @@ import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/profile/profile.dart';
 
+import '../colors/colors.dart';
+
 class SHomeBase extends StatelessWidget {
   final String studentId;
 
@@ -65,8 +67,8 @@ class _Homedestinationtate extends State<HomeScreen> {
         style: TextStyle(fontSize: 10),
       ),
       activeIcon: Icon(Icons.home),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
+      unselectedColor: tertiary_color,
+      selectedColor: primary_color,
     ),
     SalomonBottomBarItem(
       icon: const Icon(Icons.campaign_outlined, size: 20.0),
@@ -75,8 +77,8 @@ class _Homedestinationtate extends State<HomeScreen> {
         style: TextStyle(fontSize: 10),
       ),
       activeIcon: Icon(Icons.campaign_rounded),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
+      unselectedColor: tertiary_color,
+      selectedColor: primary_color,
     ),
     SalomonBottomBarItem(
       icon: const Icon(Icons.person_outline_sharp, size: 20.0),
@@ -85,8 +87,8 @@ class _Homedestinationtate extends State<HomeScreen> {
         style: TextStyle(fontSize: 10),
       ),
       activeIcon: Icon(Icons.person),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
+      unselectedColor: tertiary_color,
+      selectedColor: primary_color,
     )
   ];
 
@@ -120,7 +122,7 @@ class _Homedestinationtate extends State<HomeScreen> {
             return Scaffold(
               body: destination.elementAt(bottomState.tabIndex),
               bottomNavigationBar: Container(
-                color: Color.fromARGB(255, 14, 170, 113),
+                color: Colors.white,
                 child: Stack(
                   children: <Widget>[
                     Align(
@@ -129,7 +131,7 @@ class _Homedestinationtate extends State<HomeScreen> {
                       child: Container(
                         constraints: BoxConstraints(maxWidth: 260.0),
                         child: SalomonBottomBar(
-                          backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                          backgroundColor: Colors.white,
                           items: itemsBN,
                           currentIndex: bottomState.tabIndex,
                           duration: Duration(seconds: 1),

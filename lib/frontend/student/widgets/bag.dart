@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/student/backpack.dart';
 
+import '../../colors/colors.dart';
+
 class bag_widget  extends StatelessWidget {
   final List<backpack> status;
   const bag_widget ({Key? key, required this.status}) : super (key: key);
@@ -55,7 +57,7 @@ class _ItemCardState extends State<ItemCard> {
                 height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     topRight: Radius.circular(5),
@@ -71,7 +73,7 @@ class _ItemCardState extends State<ItemCard> {
                     height: 80,
                     width: 80,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 14, 170, 113),
+                      color: primary_color,
                     ),
                     child: Image.asset(
                       widget.details.image,
@@ -86,7 +88,7 @@ class _ItemCardState extends State<ItemCard> {
                         Text(
                           widget.details.product, 
                           style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
+                            color: primary_color,
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                           ),
@@ -162,7 +164,7 @@ class _ItemCardState extends State<ItemCard> {
                     });
                   },
                   activeColor: Colors.white,
-                  checkColor: Color.fromARGB(255, 14, 170, 113),
+                  checkColor: primary_color,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),
