@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/admin/Course.dart';
 import 'package:use/frontend/admin/home/stocks.dart';
 import 'package:use/frontend/admin/profile/profile.dart';
 import 'package:use/frontend/admin/widgets/home/course.dart';
+
+import '../../colors/colors.dart';
 void main() => runApp(MaterialApp(
   home: courses(),
 ));
@@ -17,8 +18,6 @@ class courses extends StatefulWidget {
 }
 
 class _coursesState extends State<courses> {
-  String _selectedYear = "First Year";
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
@@ -37,7 +36,7 @@ class _coursesState extends State<courses> {
           default:
             return Scaffold(
               appBar: AppBar(
-                backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                backgroundColor: primary_color,
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
                   onPressed: () {

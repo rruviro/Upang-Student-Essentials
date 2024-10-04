@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/admin/Transaction.dart';
+import '../../colors/colors.dart';
+
 class Transaction extends StatefulWidget {
   final int id;
   const Transaction({super.key, required this.id});
@@ -217,7 +219,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildRequest(BuildContext context) {
     return _buildBaseCard(
       context: context,
-      color: Color.fromARGB(255, 14, 170, 113),
+      color: primary_color,
       status: 'Request',
     );
   }
@@ -225,7 +227,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildReserved(BuildContext context) {
     return _default(
       context: context,
-      color: Color.fromARGB(255, 14, 170, 113),
+      color: primary_color,
       status: 'Reserved',
     );
   }
@@ -233,7 +235,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildComplete(BuildContext context) {
     return _default(
       context: context,
-      color: Color.fromARGB(255, 14, 170, 113),
+      color: primary_color,
       status: 'Complete',
     );
   }
@@ -241,7 +243,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildDefaultCard(BuildContext context) {
     return _buildBaseCard(
       context: context,
-      color: Colors.grey,
+      color: primary_color,
       status: 'Unknown',
     );
   }

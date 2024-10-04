@@ -7,6 +7,8 @@ import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/frontend/admin/home/home.dart';
 import 'package:use/frontend/admin/profile/profile.dart';
 
+import '../colors/colors.dart';
+
 class HomeBase extends StatelessWidget {
   const HomeBase({super.key});
   @override
@@ -40,8 +42,8 @@ class _Homedestinationtate extends State<HomeScreen> {
         ),
       ),
       activeIcon: Icon(Icons.home),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
+      unselectedColor: tertiary_color,
+      selectedColor:primary_color,
     ),
     SalomonBottomBarItem(
       icon: const Icon(
@@ -55,8 +57,8 @@ class _Homedestinationtate extends State<HomeScreen> {
         ),
       ),
       activeIcon: Icon(Icons.campaign_rounded),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
+      unselectedColor: tertiary_color,
+      selectedColor: primary_color,
     ),
     SalomonBottomBarItem(
       icon: const Icon(
@@ -70,8 +72,8 @@ class _Homedestinationtate extends State<HomeScreen> {
         ),
       ),
       activeIcon: Icon(Icons.person),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
+      unselectedColor: tertiary_color,
+      selectedColor: primary_color,
     )
   ];
 
@@ -87,7 +89,7 @@ class _Homedestinationtate extends State<HomeScreen> {
         return Scaffold(
           body: destination.elementAt(state.tabIndex),
           bottomNavigationBar: Container (
-            color: Color.fromARGB(255, 14, 170, 113),
+            color: Colors.white,
             child: Stack(
               children: <Widget>[
                 Align(
@@ -98,7 +100,7 @@ class _Homedestinationtate extends State<HomeScreen> {
                       maxWidth: 260.0,
                     ),
                     child: SalomonBottomBar(
-                      backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                      backgroundColor: Colors.white,
                       items: itemsBN,
                       currentIndex: state.tabIndex,
                       duration: Duration(seconds: 1),

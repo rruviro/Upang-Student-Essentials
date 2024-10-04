@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/student/Announcement.dart';
 import 'package:use/frontend/admin/home/home.dart';
-import 'package:use/frontend/admin/notification.dart';
-import 'package:use/frontend/admin/widgets/announcement/announcement.dart';
+
+import '../../colors/colors.dart';
 
 class Announcement extends StatefulWidget {
   const Announcement({super.key});
@@ -41,13 +41,13 @@ class _AnnouncementState extends State<Announcement> {
               ),
             ],
           ),
-        ),
+        ),        
         centerTitle: false,
         actions: <Widget>[
           IconButton(
             icon: const Icon(
               Icons.notifications, 
-              color: Color.fromARGB(255, 14, 170, 113)
+              color: Colors.white
             ),
             onPressed: () {
               adminBloc.add(NotificationPageEvent());
@@ -55,7 +55,6 @@ class _AnnouncementState extends State<Announcement> {
           ),
           SizedBox(width: 15),
         ],
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: ListView(
@@ -74,17 +73,17 @@ class _AnnouncementState extends State<Announcement> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 30),
+                    SizedBox(height: 5),
                     Text(
                       'Announcement',
-                      style: GoogleFonts.inter(
-                        fontSize: 17,
+                      style: TextStyle(
+                        fontSize: 15,
                         color: Colors.black,
                         fontWeight: FontWeight.w600
                       ),
                     ),
-                    SizedBox(height: 10),
-                    ItemList (
+                    SizedBox(height: 5),
+                    ItemList(
                       status : details
                     )
                   ],
@@ -112,29 +111,57 @@ class _AnnouncementState extends State<Announcement> {
                 ),
                 content: Container(
                   width: double.infinity,
-                  height: 40,
-                  child: TextFormField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
+                  height: 100,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primary_color),
+                          ),
+                          hintText: 'Department',
+                          hintStyle: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                      TextFormField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primary_color),
+                          ),
+                          hintText: 'Message',
+                          hintStyle: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                      hintText: 'Every single second of your life is worthy.',
-                      hintStyle: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    ]
                   ),
                 ),
                 actions: [
@@ -146,7 +173,7 @@ class _AnnouncementState extends State<Announcement> {
                       width: 112,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: Color.fromARGB(255, 14, 170, 113)
+                        color: primary_color
                       ),
                       child: Center( 
                         child: Text(
@@ -192,7 +219,7 @@ class _AnnouncementState extends State<Announcement> {
           Icons.add,
           color: Colors.white
         ),
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        backgroundColor: primary_color,
       ),
     );
   }
@@ -211,7 +238,7 @@ Widget slides(BuildContext context) {
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.symmetric(horizontal: 0),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 14, 170, 113),
+            color: primary_color,
             borderRadius: BorderRadius.circular(5),
           ),
           child: ClipRRect(
@@ -226,7 +253,7 @@ Widget slides(BuildContext context) {
         );
       }).toList(),
       options: CarouselOptions(
-        height: 140,
+        height: 160,
         autoPlay: false, 
         autoPlayInterval: Duration(seconds: 3), 
         autoPlayAnimationDuration: Duration(milliseconds: 600),
@@ -270,9 +297,9 @@ class ItemCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.shade400,
-                blurRadius: 5,
-                offset: Offset(1, 5),
+                color: Colors.grey,
+                blurRadius: 2,
+                offset: Offset(1, 1),
               ),
             ],
           ),
@@ -283,7 +310,7 @@ class ItemCard extends StatelessWidget {
                 height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     topRight: Radius.circular(5),

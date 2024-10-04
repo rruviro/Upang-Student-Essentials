@@ -7,9 +7,10 @@ import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/admin/Department.dart';
 import 'package:use/frontend/admin/home/course.dart';
 import 'package:use/frontend/admin/home/management/manage.dart';
-import 'package:use/frontend/admin/home/management/newDepartment.dart';
 import 'package:use/frontend/admin/home/uniform.dart';
 import 'package:use/frontend/admin/notification.dart';
+
+import '../../colors/colors.dart';
 
 final AdminExtendedBloc adminBloc = AdminExtendedBloc(AdminRepositoryImpl());
 class Home extends StatelessWidget {
@@ -26,8 +27,6 @@ class Home extends StatelessWidget {
           Navigator.push(context, MaterialPageRoute(builder: (context) => notif()));
         } else if (state is CoursePageState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => courses()));
-        } else if (state is NewDepartmentPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => newDepartment()));
         } else if (state is ManagePageState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => manage()));
         }
@@ -64,9 +63,9 @@ class Home extends StatelessWidget {
                 centerTitle: false,
                 actions: <Widget>[
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.notifications, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: primary_color
                     ),
                     onPressed: () {
                       adminBloc.add(NotificationPageEvent());
@@ -89,30 +88,17 @@ class Home extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.white
                             ),
-                            padding: EdgeInsets.all(20.0),
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   'Departments',
-                                  style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600
-                                    ),
-                                  ),
+                                  style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
                                 ),
-                                SizedBox(height: 3),
                                 Text(
-                                  'Choose your perspective department for --',
-                                  style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w300
-                                    ),
-                                  ),
+                                  'Choose your perspective department for -',
+                                  style: TextStyle(color: tertiary_color, fontSize: 10, fontWeight: FontWeight.w400),
                                 ),
                                 SizedBox(height: 20), 
                                 ItemList (
@@ -126,15 +112,15 @@ class Home extends StatelessWidget {
                     ],
                   ),
                   Positioned(
-                    top: 25,
-                    right: 30,
+                    top: 5,
+                    right: 23,
                     child: InkWell(
                       onTap:() {
                         adminBloc.add(NewDepartmentPageEvent());
                       },
                       child: Icon(
                         Icons.add,
-                        color: Color.fromARGB(255, 14, 170, 113),
+                        color: primary_color,
                       ),
                     ),
                   ),
@@ -175,17 +161,17 @@ class ItemCard extends StatelessWidget {
     final itemsPerRow = (availableWidth / (itemWidth + spacing)).floor();
     return Container (
       margin: const EdgeInsets.only(
-        bottom: 30.0,
+        bottom: 20.0,
       ),
-      height: 150,
+      height: 80,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 14, 170, 113),
-        borderRadius: BorderRadius.circular(10),
+        color: primary_color,
+        borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade400,
-            blurRadius: 5,
-            offset: Offset(1, 5),
+            color: Colors.grey,
+            blurRadius: 2,
+            offset: Offset(1, 1),
           ),
         ],
       ),
@@ -213,8 +199,8 @@ class ItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   gradient: LinearGradient(
                     colors: [
-                      Color.fromARGB(255, 14, 170, 113),
-                      Color.fromARGB(123, 14, 170, 113),
+                      primary_color,
+                      Color.fromARGB(43, 14, 170, 113),
                     ],
                     stops: [0.50, 0.70],
                   ),
@@ -224,39 +210,20 @@ class ItemCard extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(
-                        top: 20.0,
+                        top: 25.0,
                         left: 30.0
                       ),
                       child: Text(
                         visual.department,
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle (
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: 5.0,
-                        left: 30.0
-                      ),
-                      child: Text(
-                        'Courses :',
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle (
-                            fontSize: 10,
-                            color: Colors.white54,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 55.0,
                         left: 30.0
                       ),
                       child: Container(),
@@ -264,66 +231,6 @@ class ItemCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            top: 46,
-            left: 30,
-            child: Container(
-              width: screenWidth * 0.5,
-              height: 40,
-              child: Wrap(
-                spacing: spacing, 
-                runSpacing: spacing,
-                alignment: WrapAlignment.start,
-                children: [
-                  SizedBox(width: 50),
-                  ...List.generate(itemsPerRow * 2, (index) {
-                    return Container(
-                      width: itemWidth,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          visual.courses,
-                          style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 15,
-            left: 30,
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.arrow_circle_right_outlined,
-                  color: Colors.white54,
-                  size: 20
-                ),
-                SizedBox(width: 10),
-                Text(
-                  'Show more courses',
-                  style: GoogleFonts.inter(
-                    textStyle: TextStyle (
-                      fontSize: 10,
-                      color: Colors.white54,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
           Positioned(
@@ -337,7 +244,7 @@ class ItemCard extends StatelessWidget {
                   bottomLeft: Radius.circular(5),
                   topRight: Radius.circular(5),
                 ),
-                color: Color.fromARGB(227, 255, 255, 255)
+                color: primary_color
               ),
               child: InkWell(
                 onTap: () {
@@ -351,15 +258,15 @@ class ItemCard extends StatelessWidget {
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                           fontSize: 10.5,
-                          color: Color.fromARGB(255, 14, 170, 113),
-                          fontWeight: FontWeight.w600
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500
                         ),
                       ),
                     ),
                     SizedBox(width: 8),
                     Icon(
                       Icons.dashboard_customize_outlined,
-                      color: Color.fromARGB(255, 14, 170, 113),
+                      color: Colors.white,
                       size: 15,
                     )
                   ],

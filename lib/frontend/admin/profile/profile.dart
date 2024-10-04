@@ -1,16 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
-import 'package:use/SERVICES/model/admin/Student.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/frontend/authentication/AdminLogin.dart';
 import 'package:use/frontend/admin/notification.dart';
 import 'package:use/frontend/admin/profile/transaction.dart';
 import 'package:use/frontend/student/profile/profile.dart';
+
+import '../../../backend/models/admin/Student.dart';
+import '../../colors/colors.dart';
 
 final AdminExtendedBloc adminBloc = AdminExtendedBloc(AdminRepositoryImpl());class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -149,13 +152,13 @@ class _ProfileScreenState extends State<Profile> {
               centerTitle: false,
               actions: <Widget>[
                 IconButton(
-                  icon: const Icon(Icons.notifications, color: Color.fromARGB(255, 14, 170, 113)),
+                  icon: Icon(Icons.notifications, color: primary_color),
                   onPressed: () {
                     context.read<AdminExtendedBloc>().add(NotificationPageEvent());
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.logout, color: Color.fromARGB(255, 14, 170, 113)),
+                  icon: Icon(Icons.logout, color: primary_color),
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -247,54 +250,58 @@ class _ProfileScreenState extends State<Profile> {
               elevation: 0,
             ),
             body: ListView(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Ramon Montenegro',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white
+                        ),
+                        padding: EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Ramon Montenegro',
+                              style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 23,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600
                               ),
                             ),
-                          ),
-                          SizedBox(height: 30),
-                          SizedBox(
-                            height: 1,
-                            width: double.infinity,
-                            child: Container(decoration: BoxDecoration(color: Colors.black26)),
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            'Transaction',
-                            style: GoogleFonts.inter(
-                              fontSize: 17,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
+                            SizedBox(height: 20),
+                            SizedBox(
+                              height: 1,
+                              width: double.infinity,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black26
+                                ),
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 15),
+                            SizedBox(height: 15),
+                            Text(
+                              'Transaction',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600
+                              ),
+                            ),
+                            SizedBox(height: 15),
                             Container(
                               width: double.infinity,
                               height: 90,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color.fromARGB(255, 14, 170, 113),
+                                borderRadius: BorderRadius.circular(5),
+                                color: primary_color,
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.grey.shade400,
                                     blurRadius: 5,
-                                    offset: Offset(1, 5),
+                                    offset: Offset(1, 4),
                                   ),
                                 ],
                               ),
@@ -321,7 +328,7 @@ class _ProfileScreenState extends State<Profile> {
                                           SizedBox(height: 10),
                                           Text(
                                             'Approval',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w400
@@ -346,7 +353,7 @@ class _ProfileScreenState extends State<Profile> {
                                           SizedBox(height: 10),
                                           Text(
                                             'Reserved',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w400
@@ -371,7 +378,7 @@ class _ProfileScreenState extends State<Profile> {
                                           SizedBox(height: 10),
                                           Text(
                                             'Complete',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w400
@@ -384,136 +391,185 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                          SizedBox(height: 30),
-                          Text(
-                            'Pick-Up Code',
-                            style: GoogleFonts.inter(
-                              fontSize: 17,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
+                            SizedBox(height: 15),
+                            Text(
+                              'Pick-Up Code',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Student product code for claiming',
-                            style: GoogleFonts.inter(
-                              fontSize: 11,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w400,
+                            Text(
+                              'Student product code for claiming',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w400
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            width: double.infinity,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 14, 170, 113),
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade400,
-                                  blurRadius: 5,
-                                  offset: Offset(1, 5),
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                            SizedBox(height: 15),
+                            Container(
                               width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text('Item', style: TextStyle(color: Colors.white)),
-                                      Switch(
-                                        value: isBook,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            isBook = value;
-                                            print(isBook);
-                                          });
+                              height: 150,
+                              decoration: BoxDecoration(
+                                color: primary_color,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 5,
+                                    offset: Offset(1, 1),
+                                  ),
+                                ],
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        // Wrap TextFormField with Flexible to allow it to resize dynamically
+                                        Flexible(
+                                          child: TextFormField(
+                                            decoration: InputDecoration(
+                                              border: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Colors.white),
+                                              ),
+                                              focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Colors.white),
+                                              ),
+                                              hintText: 'ENTER THE CODE',
+                                              hintStyle: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            keyboardType: TextInputType.text,
+                                            textInputAction: TextInputAction.done,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        Container(
+                                          color: Colors.white,
+                                          width: 1,
+                                          height: 30,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text('Item', style: TextStyle(color: Colors.white)),
+                                        Transform.scale(
+                                          scale: 0.8, 
+                                          child: Switch(
+                                            value: isBook,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                isBook = value;
+                                              });
+                                            },
+                                            activeColor: Colors.white,
+                                          ),
+                                        ),
+                                        Text('Book', style: TextStyle(color: Colors.white)),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 15),
+                                    Container(
+                                      width: double.infinity,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          if (isBook) {
+                                            context.read<AdminExtendedBloc>().add(showCodeBookData(codeController.text));
+                                          } else {
+                                            context.read<AdminExtendedBloc>().add(showCodeItemData(codeController.text));
+                                          }
                                         },
-                                        activeColor: Colors.white,
-                                      ),
-                                      Text('Book', style: TextStyle(color: Colors.white)),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  TextFormField(
-                                    controller: codeController,
-                                    decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.white),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.white),
-                                      ),
-                                      hintText: 'ENTER CODE',
-                                      hintStyle: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Complete",
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Color(0xFF0EAA72),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    keyboardType: TextInputType.text,
-                                    textInputAction: TextInputAction.done,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              width: double.infinity,
+                              height: 50,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 5,
+                                    left: 0,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Overview",
+                                          style: GoogleFonts.inter(
+                                            color: Colors.black,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600
+                                          ),
+                                        ),
+                                        Text(
+                                          "Student Details",
+                                          style: GoogleFonts.inter(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400
+                                          )
+                                        ),
+                                      ],
+                                    )
                                   ),
-                                  SizedBox(height: 15),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 50,
-                                    child: ElevatedButton(
-                                    onPressed: () {
-                                      if (isBook) {
-                                        context.read<AdminExtendedBloc>().add(showCodeBookData(codeController.text));
-                                      } else {
-                                        context.read<AdminExtendedBloc>().add(showCodeItemData(codeController.text));
+                                  Positioned(
+                                    top: 3,
+                                    right: 0,
+                                    child: IconButton(
+                                      iconSize: 15,
+                                      icon: Icon(Icons.add, color: primary_color),
+                                      onPressed: (){
+                                        _showCreateDialog(context);
                                       }
-                                    },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: Color(0xFF0EAA72),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "Complete",
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Color(0xFF0EAA72),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                          SizedBox(height: 30),
-                          Text(
-                            'Student Details',
-                            style: GoogleFonts.inter(
-                              fontSize: 17,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          ItemList(students: details),
-                        ],
+                            SizedBox(height: 10),
+                            ItemList(
+                              students : details
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    ],
+                  ),
+                ],
+              ),
           );
         },
       ),
@@ -544,8 +600,8 @@ class ItemCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          padding: EdgeInsets.only(
-            bottom: 13
+          margin: const EdgeInsets.only(
+            bottom: 15.0,
           ),
           child: InkWell(
             onTap: () {
@@ -553,64 +609,128 @@ class ItemCard extends StatelessWidget {
             },
             child: Container(
               width: double.infinity,
-              height: 70,
+              height: 100,
               decoration: BoxDecoration(
-                color: Color(0xFF0EAA72),
-                borderRadius: BorderRadius.circular(5),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade400,
-                    blurRadius: 5,
-                    offset: Offset(1, 5),
+                    color: Colors.grey,
+                    blurRadius: 2,
+                    offset: Offset(1, 1),
                   ),
                 ],
               ),
               child: Stack( 
                 children: [
                   Positioned(
-                    top: 15,
-                    left: 35,
+                    top: 20,
+                    left: 30,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          visual.studentName,
+                          "${visual.lastname}, ${visual.firstname}",
                           style: GoogleFonts.inter(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 2),
                         Text(
-                          visual.studentID,
+                          "Course: ${visual.course}",
                           style: GoogleFonts.inter(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400
+                            color: Colors.grey,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
                           ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${visual.studentID} | Year: ${visual.year} |",
+                              style: GoogleFonts.inter(
+                                color: Colors.grey,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              visual.enrolled ? 'Enrolled' : 'Not Enrolled',
+                              style: GoogleFonts.inter(
+                                color: visual.enrolled
+                                    ? primary_color
+                                    : Colors.red,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                   Positioned(
                     top: 0,
-                    right: 60,
-                    child: SizedBox(
-                      height: 70,
-                      width: 1,
-                      child: Container(
-                        color: Colors.white,
+                    left: 0,
+                    child: Container(
+                      height: 100,
+                      width: 10,
+                      decoration: BoxDecoration(
+                        color: primary_color,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
                       ),
                     ),
                   ),
                   Positioned(
-                    top: 23,
-                    right: 20,
-                    child: Icon(
-                      Icons.arrow_forward_ios, 
-                      color: Colors.white,
-                      size: 20,
+                    top: 15,
+                    right: 15,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showUpdate(context);
+                          },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: primary_color,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_outward_rounded,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () {
+                            _showDeleteDialog(context);
+                          },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 238, 67, 58),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -621,4 +741,502 @@ class ItemCard extends StatelessWidget {
       ],
     );
   }
+}
+
+void _showCreateDialog(BuildContext context) {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _courseController = TextEditingController();
+  String _selectedYear = 'First Year';
+  bool _isEnrolled = true;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Container(
+          width: double.infinity,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Icon(Icons.drive_folder_upload_outlined),
+              ),
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Create New Student',
+                    style: GoogleFonts.inter(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    'Enter new student details',
+                    style: GoogleFonts.inter(
+                      color: Colors.grey,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        content: Container(
+          height: 300,
+          width: double.infinity,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _firstNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: primary_color),
+                            ),
+                            hintText: 'First Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                          validator: (value) => value == null || value.isEmpty ? 'First name is required' : null,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _lastNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: primary_color),
+                            ),
+                            hintText: 'Last Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _courseController,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: primary_color),
+                      ),
+                      hintText: 'Course',
+                      hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedYear,
+                    items: [
+                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: GoogleFonts.inter(fontSize: 13))),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedYear = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      labelText: 'Year',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Icon(Icons.calendar_month_outlined, color: primary_color),
+                    ),
+                    validator: (value) => value == null ? 'Year is required' : null,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text('Enrolled', style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13)),
+                      ),
+                      const Spacer(),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch(
+                          value: _isEnrolled,
+                          onChanged: (value) {
+                            setState(() {
+                              _isEnrolled = value;
+                              print("Switch is now: $_isEnrolled");
+                            });
+                          },
+                          activeColor: primary_color,
+                          inactiveThumbColor: Colors.red,
+                          inactiveTrackColor: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: (){},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primary_color,
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Create',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
+
+}
+  
+void _showUpdate(BuildContext context) {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _courseController = TextEditingController();
+  String _selectedYear = 'First Year';
+  bool _isEnrolled = true;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Container(
+          width: double.infinity,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: Icon(Icons.drive_folder_upload_outlined),
+              ),
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Update Student',
+                    style: GoogleFonts.inter(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    'Update Student details',
+                    style: GoogleFonts.inter(
+                      color: Colors.grey,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        content: Container(
+          height: 300,
+          width: double.infinity,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _firstNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: primary_color),
+                            ),
+                            hintText: 'First Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                          validator: (value) => value == null || value.isEmpty ? 'First name is required' : null,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _lastNameController,
+                          decoration: InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: primary_color),
+                            ),
+                            hintText: 'Last Name',
+                            hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(15),
+                          ],
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _courseController,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: primary_color),
+                      ),
+                      hintText: 'Course',
+                      hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedYear,
+                    items: [
+                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: GoogleFonts.inter(fontSize: 13))),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedYear = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      labelText: 'Year',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Icon(Icons.calendar_month_outlined, color: primary_color),
+                    ),
+                    validator: (value) => value == null ? 'Year is required' : null,
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text('Enrolled', style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13)),
+                      ),
+                      const Spacer(),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch(
+                          value: _isEnrolled,
+                          onChanged: (value) {
+                            setState(() {
+                              _isEnrolled = value;
+                              print("Switch is now: $_isEnrolled");
+                            });
+                          },
+                          activeColor: primary_color,
+                          inactiveThumbColor: Colors.red,
+                          inactiveTrackColor: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: (){},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primary_color,
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Create',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+    },
+  );
+
+}
+
+void _showDeleteDialog (BuildContext context) {
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Delete',
+              style: GoogleFonts.inter(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w600
+              ),
+            ),
+            Text(
+              'Do you insist deleting Louise\'s details',
+              style: GoogleFonts.inter(
+                color: Colors.grey,
+                fontSize: 11,
+                fontWeight: FontWeight.w400
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          GestureDetector(
+            onTap: (){
+            },
+            child: Container(
+              height: 30,
+              width: 112,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                color: primary_color
+              ),
+              child: Center( 
+                child: Text(
+                  'Yes',
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600 
+                  ),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 30,
+              width: 112,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                color: Color.fromARGB(190, 14, 170, 113),
+              ),
+              child: Center(
+                child:Text(
+                  'No',
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600 
+                  ),
+                ),
+              )
+            ),
+          ),
+        ],
+      );
+    }
+  );
+
 }

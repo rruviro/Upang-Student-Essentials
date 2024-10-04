@@ -13,6 +13,8 @@ import "package:use/SERVICES/model/admin/Stocks.dart";
 import "package:use/frontend/admin/home/uniform.dart";
 import "package:use/frontend/admin/profile/profile.dart";
 
+import "../../colors/colors.dart";
+
 class Stocks extends StatefulWidget {
   const Stocks({super.key});
   @override
@@ -98,7 +100,7 @@ class _StocksState extends State<Stocks> {
           default:
             return Scaffold(
               appBar: AppBar(
-                backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                backgroundColor: primary_color,
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
                   onPressed: () {
@@ -132,7 +134,6 @@ class _StocksState extends State<Stocks> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 10),
                         Container(
                           height: 20,
                           width: double.infinity,
@@ -144,7 +145,7 @@ class _StocksState extends State<Stocks> {
                                 child: Text(
                                   'Uniform',
                                   style: GoogleFonts.inter(
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600
                                   ),
@@ -203,7 +204,7 @@ class _StocksState extends State<Stocks> {
                                                     height: 200,
                                                     width: double.infinity,
                                                     decoration: BoxDecoration(
-                                                      color: Color.fromARGB(255, 14, 170, 113),
+                                                      color: primary_color,
                                                       borderRadius: BorderRadius.circular(5)
                                                     ),
                                                     child: _image != null
@@ -227,7 +228,7 @@ class _StocksState extends State<Stocks> {
                                                         borderSide: BorderSide(color: Colors.grey),
                                                       ),
                                                       focusedBorder: UnderlineInputBorder(
-                                                        borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                                        borderSide: BorderSide(color: primary_color),
                                                       ),
                                                       hintText: 'Corporate Top',
                                                       hintStyle: TextStyle(
@@ -237,7 +238,7 @@ class _StocksState extends State<Stocks> {
                                                       suffix: Text(
                                                         '$_countProd/$maxLength', 
                                                         style: TextStyle(
-                                                          color: Color.fromARGB(255, 14, 170, 113),
+                                                          color: primary_color,
                                                           fontSize: 12,
                                                         ),
                                                       ),
@@ -270,7 +271,7 @@ class _StocksState extends State<Stocks> {
                                                 width: 112,
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(2),
-                                                  color: Color.fromARGB(255, 14, 170, 113)
+                                                  color: primary_color
                                                 ),
                                                 child: Center( 
                                                   child: Text(
@@ -314,7 +315,7 @@ class _StocksState extends State<Stocks> {
                                   },
                                   child: Icon(
                                     Icons.add,
-                                    color: Color.fromARGB(255, 14, 170, 113),
+                                    color: primary_color,
                                   ),
                                 ),
                               ),
@@ -337,247 +338,247 @@ class _StocksState extends State<Stocks> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 25),
+                          padding: EdgeInsets.only(top: 15),
                           child: Container(
-                                height: 20,
-                                width: double.infinity,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      top: 0,
-                                      left: 20,
-                                      child: Text(
-                                        'Books',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 17,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600
-                                        ),
-                                      ),
+                            height: 20,
+                            width: double.infinity,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: 0,
+                                  left: 20,
+                                  child: Text(
+                                    'Books',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600
                                     ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 20,
-                                      child: InkWell(
-                                        onTap:() {
-                                          showDialog(
-                                            context: context, 
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                backgroundColor: Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(5.0),
-                                                ),
-                                                title: Container(
-                                                  height: 45,
-                                                  width: double.infinity,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        'New Book Product',
-                                                        style: GoogleFonts.inter(
-                                                          color: Colors.black,
-                                                          fontSize: 15,
-                                                          fontWeight: FontWeight.w600
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 5),
-                                                      Text(
-                                                        'Book Details',
-                                                        style: GoogleFonts.inter(
-                                                          color: Colors.grey,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w400
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                content: Container(
-                                                  height: 280,
-                                                  width: 200,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: (){
-                                                          _openImagePicker();
-                                                        },
-                                                        child: Container(
-                                                          height: 200,
-                                                          width: double.infinity,
-                                                          decoration: BoxDecoration(
-                                                            color: Color.fromARGB(255, 14, 170, 113),
-                                                            borderRadius: BorderRadius.circular(5)
-                                                          ),
-                                                          child: _image != null
-                                                            ? Image.file(
-                                                                _image!, 
-                                                                fit: BoxFit.contain
-                                                              )
-                                                            : Icon(
-                                                                Icons.image_search_rounded,color: 
-                                                              Colors.white,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: double.infinity,
-                                                        child: TextFormField(
-                                                          controller: ProdBController,
-                                                          decoration: InputDecoration(
-                                                            border: UnderlineInputBorder(
-                                                              borderSide: BorderSide(color: Colors.grey),
-                                                            ),
-                                                            focusedBorder: UnderlineInputBorder(
-                                                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
-                                                            ),
-                                                            hintText: 'SSP 012',
-                                                            hintStyle: TextStyle(
-                                                              fontSize: 13,
-                                                              fontWeight: FontWeight.w400,
-                                                            ),
-                                                            suffix: Text(
-                                                              '$_countProd/$maxLength', 
-                                                              style: TextStyle(
-                                                                color: Color.fromARGB(255, 14, 170, 113),
-                                                                fontSize: 12,
-                                                              ),
-                                                            ),
-                                                            suffixStyle: TextStyle(
-                                                              color: Colors.grey,
-                                                              fontSize: 12,
-                                                            ),
-                                                          ),
-                                                          keyboardType: TextInputType.text,
-                                                          textInputAction: TextInputAction.done,
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                          inputFormatters: [
-                                                            LengthLimitingTextInputFormatter(23),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 40,
-                                                        width: double.infinity,
-                                                        child: TextFormField(
-                                                          controller: ProdBBController,
-                                                          decoration: InputDecoration(
-                                                            border: UnderlineInputBorder(
-                                                              borderSide: BorderSide(color: Colors.grey),
-                                                            ),
-                                                            focusedBorder: UnderlineInputBorder(
-                                                              borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
-                                                            ),
-                                                            hintText: 'Student Success Program',
-                                                            hintStyle: TextStyle(
-                                                              fontSize: 13,
-                                                              fontWeight: FontWeight.w400,
-                                                            ),
-                                                            suffix: Text(
-                                                              '$_countProd/$maxLength', 
-                                                              style: TextStyle(
-                                                                color: Color.fromARGB(255, 14, 170, 113),
-                                                                fontSize: 12,
-                                                              ),
-                                                            ),
-                                                            suffixStyle: TextStyle(
-                                                              color: Colors.grey,
-                                                              fontSize: 12,
-                                                            ),
-                                                          ),
-                                                          keyboardType: TextInputType.text,
-                                                          textInputAction: TextInputAction.done,
-                                                          style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                          inputFormatters: [
-                                                            LengthLimitingTextInputFormatter(23),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ]
-                                                  ),
-                                                ),
-                                                actions: [
-                                                  GestureDetector(
-                                                    onTap: (){
-                                                    },
-                                                    child: Container(
-                                                      height: 30,
-                                                      width: 112,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(2),
-                                                        color: Color.fromARGB(255, 14, 170, 113)
-                                                      ),
-                                                      child: Center( 
-                                                        child: Text(
-                                                          'Deploy',
-                                                          style: GoogleFonts.inter(
-                                                            color: Colors.white,
-                                                            fontSize: 13,
-                                                            fontWeight: FontWeight.w600 
-                                                          ),
-                                                        ),
-                                                      ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 20,
+                                  child: InkWell(
+                                    onTap:() {
+                                      showDialog(
+                                        context: context, 
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            backgroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(5.0),
+                                            ),
+                                            title: Container(
+                                              height: 45,
+                                              width: double.infinity,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'New Book Product',
+                                                    style: GoogleFonts.inter(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w600
                                                     ),
                                                   ),
-                                                  GestureDetector(
-                                                    onTap: (){
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Container(
-                                                      height: 30,
-                                                      width: 112,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(2),
-                                                        color: Color.fromARGB(192, 14, 170, 113)
-                                                      ),
-                                                      child: Center(
-                                                        child:Text(
-                                                          'Cancel',
-                                                          style: GoogleFonts.inter(
-                                                            color: const Color.fromARGB(190, 255, 255, 255),
-                                                            fontSize: 13,
-                                                            fontWeight: FontWeight.w600 
-                                                          ),
-                                                        ),
-                                                      )
+                                                  SizedBox(height: 5),
+                                                  Text(
+                                                    'Book Details',
+                                                    style: GoogleFonts.inter(
+                                                      color: Colors.grey,
+                                                      fontSize: 13,
+                                                      fontWeight: FontWeight.w400
                                                     ),
                                                   ),
                                                 ],
-                                              );
-                                            }
+                                              ),
+                                            ),
+                                            content: Container(
+                                              height: 280,
+                                              width: 200,
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: (){
+                                                      _openImagePicker();
+                                                    },
+                                                    child: Container(
+                                                      height: 200,
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                        color: primary_color,
+                                                        borderRadius: BorderRadius.circular(5)
+                                                      ),
+                                                      child: _image != null
+                                                        ? Image.file(
+                                                            _image!, 
+                                                            fit: BoxFit.contain
+                                                          )
+                                                        : Icon(
+                                                            Icons.image_search_rounded,color: 
+                                                          Colors.white,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 40,
+                                                    width: double.infinity,
+                                                    child: TextFormField(
+                                                      controller: ProdBController,
+                                                      decoration: InputDecoration(
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(color: Colors.grey),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(color: primary_color),
+                                                        ),
+                                                        hintText: 'SSP 012',
+                                                        hintStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                        suffix: Text(
+                                                          '$_countProd/$maxLength', 
+                                                          style: TextStyle(
+                                                            color: primary_color,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                        suffixStyle: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                      keyboardType: TextInputType.text,
+                                                      textInputAction: TextInputAction.done,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                      inputFormatters: [
+                                                        LengthLimitingTextInputFormatter(23),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 40,
+                                                    width: double.infinity,
+                                                    child: TextFormField(
+                                                      controller: ProdBBController,
+                                                      decoration: InputDecoration(
+                                                        border: UnderlineInputBorder(
+                                                          borderSide: BorderSide(color: Colors.grey),
+                                                        ),
+                                                        focusedBorder: UnderlineInputBorder(
+                                                          borderSide: BorderSide(color: primary_color),
+                                                        ),
+                                                        hintText: 'Student Success Program',
+                                                        hintStyle: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                        suffix: Text(
+                                                          '$_countProd/$maxLength', 
+                                                          style: TextStyle(
+                                                            color: primary_color,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                        suffixStyle: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                      keyboardType: TextInputType.text,
+                                                      textInputAction: TextInputAction.done,
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                      inputFormatters: [
+                                                        LengthLimitingTextInputFormatter(23),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ]
+                                              ),
+                                            ),
+                                            actions: [
+                                              GestureDetector(
+                                                onTap: (){
+                                                },
+                                                child: Container(
+                                                  height: 30,
+                                                  width: 112,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(2),
+                                                    color: primary_color
+                                                  ),
+                                                  child: Center( 
+                                                    child: Text(
+                                                      'Deploy',
+                                                      style: GoogleFonts.inter(
+                                                        color: Colors.white,
+                                                        fontSize: 13,
+                                                        fontWeight: FontWeight.w600 
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                onTap: (){
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  height: 30,
+                                                  width: 112,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(2),
+                                                    color: Color.fromARGB(192, 14, 170, 113)
+                                                  ),
+                                                  child: Center(
+                                                    child:Text(
+                                                      'Cancel',
+                                                      style: GoogleFonts.inter(
+                                                        color: const Color.fromARGB(190, 255, 255, 255),
+                                                        fontSize: 13,
+                                                        fontWeight: FontWeight.w600 
+                                                      ),
+                                                    ),
+                                                  )
+                                                ),
+                                              ),
+                                            ],
                                           );
-                                        },
-                                        child: Icon(
-                                          Icons.add,
-                                          color: Color.fromARGB(255, 14, 170, 113),
-                                        ),
-                                      ),
+                                        }
+                                      );
+                                    },
+                                    child: Icon(
+                                      Icons.add,
+                                      color: primary_color,
                                     ),
-                                  ]
+                                  ),
                                 ),
-                              ),
+                              ]
+                            ),
+                          ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             children: [
-                              SizedBox(height: 16),
+                              SizedBox(height: 20),
                               Container(
                                 width: double.infinity,
                                 height: 70,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF0EAA72),
+                                  color: primary_color,
                                   borderRadius: BorderRadius.circular(5),
                                   boxShadow: [
                                     BoxShadow(
@@ -613,7 +614,7 @@ class _StocksState extends State<Stocks> {
                                                   height: 5,
                                                   width: 100,
                                                   decoration: BoxDecoration(
-                                                    color: Color(0xFF0EAA72),
+                                                    color: primary_color,
                                                     borderRadius: BorderRadius.circular(5)
                                                   ),
                                                 ),
@@ -685,7 +686,7 @@ class _StocksState extends State<Stocks> {
                                 width: double.infinity,
                                 height: 400,
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF0EAA72),
+                                  color: primary_color,
                                   borderRadius: BorderRadius.circular(5),
                                   boxShadow: [
                                     BoxShadow(
@@ -773,13 +774,13 @@ class _ItemCardState extends State<ItemCard> {
               height: 250,
               width: 250,
               decoration: BoxDecoration(
-                color: Color(0xFF0EAA72),
-                borderRadius: BorderRadius.circular(8.0),
+                color: primary_color,
+                borderRadius: BorderRadius.circular(5),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade400,
-                    blurRadius: 5,
-                    offset: Offset(1, 5),
+                    color: Colors.grey,
+                    blurRadius: 2,
+                    offset: Offset(1, 1),
                   ),
                 ],
               ),
@@ -788,7 +789,7 @@ class _ItemCardState extends State<ItemCard> {
                 children: [
                   Positioned.fill(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(5),
                       child: Image.asset(
                         widget.visual.image,
                         fit: BoxFit.cover,
@@ -894,7 +895,7 @@ class _ItemCardState extends State<ItemCard> {
                                   height: 200,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 14, 170, 113),
+                                    color: primary_color,
                                     borderRadius: BorderRadius.circular(5)
                                   ),
                                   child: _image != null
@@ -918,7 +919,7 @@ class _ItemCardState extends State<ItemCard> {
                                       borderSide: BorderSide(color: Colors.grey),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                      borderSide: BorderSide(color: primary_color),
                                     ),
                                     hintText: 'Corporate Top',
                                     hintStyle: TextStyle(
@@ -928,7 +929,7 @@ class _ItemCardState extends State<ItemCard> {
                                     suffix: Text(
                                       '$_countProd/$maxLength', 
                                       style: TextStyle(
-                                        color: Color.fromARGB(255, 14, 170, 113),
+                                        color: primary_color,
                                         fontSize: 12,
                                       ),
                                     ),
@@ -961,7 +962,7 @@ class _ItemCardState extends State<ItemCard> {
                               width: 112,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(2),
-                                color: Color.fromARGB(255, 14, 170, 113)
+                                color: primary_color
                               ),
                               child: Center( 
                                 child: Text(
@@ -1011,7 +1012,7 @@ class _ItemCardState extends State<ItemCard> {
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                           fontSize: 10.5,
-                          color: Color.fromARGB(255, 14, 170, 113),
+                          color: primary_color,
                           fontWeight: FontWeight.w600
                         ),
                       ),
@@ -1019,7 +1020,7 @@ class _ItemCardState extends State<ItemCard> {
                     SizedBox(width: 8),
                     Icon(
                       Icons.dashboard_customize_outlined,
-                      color: Color.fromARGB(255, 14, 170, 113),
+                      color: primary_color,
                       size: 15,
                     )
                   ],
@@ -1161,7 +1162,7 @@ class _BookCardState extends State<BookCard> {
                                   height: 200,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 14, 170, 113),
+                                    color: primary_color,
                                     borderRadius: BorderRadius.circular(5)
                                   ),
                                   child: _image != null
@@ -1189,7 +1190,7 @@ class _BookCardState extends State<BookCard> {
                                       borderSide: BorderSide(color: Colors.grey),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                      borderSide: BorderSide(color: primary_color),
                                     ),
                                     hintText: 'SSP 012',
                                     hintStyle: TextStyle(
@@ -1199,7 +1200,7 @@ class _BookCardState extends State<BookCard> {
                                     suffix: Text(
                                       '$_countProd/$maxLength', 
                                       style: TextStyle(
-                                        color: Color.fromARGB(255, 14, 170, 113),
+                                        color: primary_color,
                                         fontSize: 12,
                                       ),
                                     ),
@@ -1230,7 +1231,7 @@ class _BookCardState extends State<BookCard> {
                                       borderSide: BorderSide(color: Colors.grey),
                                     ),
                                     focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                      borderSide: BorderSide(color: primary_color),
                                     ),
                                     hintText: 'Student Success Program',
                                     hintStyle: TextStyle(
@@ -1240,7 +1241,7 @@ class _BookCardState extends State<BookCard> {
                                     suffix: Text(
                                       '$_countProd/$maxLength', 
                                       style: TextStyle(
-                                        color: Color.fromARGB(255, 14, 170, 113),
+                                        color: primary_color,
                                         fontSize: 12,
                                       ),
                                     ),
@@ -1273,7 +1274,7 @@ class _BookCardState extends State<BookCard> {
                               width: 112,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(2),
-                                color: Color.fromARGB(255, 14, 170, 113)
+                                color: primary_color
                               ),
                               child: Center( 
                                 child: Text(
@@ -1366,24 +1367,24 @@ class AllBooksCard extends StatelessWidget {
             visual.subjectCode,
             style: TextStyle(
               fontSize: 16,
-              color: Color(0xFF0EAA72),
+              color: primary_color,
             ),
           ),
           subtitle: Text(
             visual.bookName,
             style: TextStyle(
               fontSize: 11,
-              color: Color(0xFF0EAA72).withOpacity(0.7),
+              color: primary_color.withOpacity(0.7),
             ),
           ),
-          iconColor: Color(0xFF0EAA72),
+          iconColor: primary_color,
           leading: Icon(
             Icons.book,
             size: 32,
           ),
         ),
         Divider(
-          color: Color(0xFF0EAA72).withOpacity(0.7),
+          color: primary_color.withOpacity(0.7),
           thickness: 1,
         ),
       ],
