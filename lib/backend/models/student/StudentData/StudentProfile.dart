@@ -4,10 +4,6 @@ class StudentProfile {
   final String lastName;
   final String course;
   final String department;
-  final bool hasUUniform;
-  final bool hasLUniform;
-  final bool hasRSO;
-  final bool hasBooks;
   final int year;
   final String status;
   final String stuId;
@@ -18,10 +14,6 @@ class StudentProfile {
     required this.lastName,
     required this.course,
     required this.department,
-    required this.hasUUniform,
-    required this.hasLUniform,
-    required this.hasRSO,
-    required this.hasBooks,
     required this.year,
     required this.status,
     required this.stuId,
@@ -34,10 +26,6 @@ class StudentProfile {
       lastName: json['LastName'],
       course: json['Course'],
       department: json['Department'],
-      hasUUniform: json['hasUUniform'],
-      hasLUniform: json['hasLUniform'],
-      hasRSO: json['hasRSO'],
-      hasBooks: json['hasBooks'],
       year: json['Year'],
       status: json['Status'],
       stuId: json['stu_id'],
