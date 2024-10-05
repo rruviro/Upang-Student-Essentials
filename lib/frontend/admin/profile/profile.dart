@@ -138,12 +138,10 @@ class _ProfileScreenState extends State<Profile> {
                     SizedBox(width: 10),
                     Text(
                       'Upang Student Essentials',
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle(
-                          fontSize: 11,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -170,7 +168,7 @@ class _ProfileScreenState extends State<Profile> {
                           ),
                           title: Text(
                             'Logout',
-                            style: GoogleFonts.inter(
+                            style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -178,7 +176,7 @@ class _ProfileScreenState extends State<Profile> {
                           ),
                           content: Text(
                             'Are you sure you wanna logout',
-                            style: GoogleFonts.inter(
+                            style: TextStyle(
                               color: Colors.grey,
                               fontSize: 10,
                               fontWeight: FontWeight.w400,
@@ -201,7 +199,7 @@ class _ProfileScreenState extends State<Profile> {
                                       child: Center(
                                         child: Text(
                                           'Continue',
-                                          style: GoogleFonts.inter(
+                                          style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600,
@@ -226,7 +224,7 @@ class _ProfileScreenState extends State<Profile> {
                                       child: Center(
                                         child: Text(
                                           'Close',
-                                          style: GoogleFonts.inter(
+                                          style: TextStyle(
                                             color: Color.fromARGB(190, 255, 255, 255),
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600,
@@ -272,16 +270,20 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 20),
-                            SizedBox(
-                              height: 1,
-                              width: double.infinity,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black26
+                            Container(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 1.2,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: double.infinity,
+                                  child: Container(
+                                    decoration: BoxDecoration(color: secondary_color),
+                                  ),
                                 ),
-                              ),
+                              )
                             ),
-                            SizedBox(height: 15),
+                            SizedBox(height: 20),
                             Text(
                               'Transaction',
                               style: TextStyle(
@@ -391,11 +393,25 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 15),
+                            SizedBox(height: 30),
+                            Container(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 1.2,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: double.infinity,
+                                  child: Container(
+                                    decoration: BoxDecoration(color: secondary_color),
+                                  ),
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 20),
                             Text(
                               'Pick-Up Code',
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 13,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600
                               ),
@@ -404,7 +420,7 @@ class _ProfileScreenState extends State<Profile> {
                               'Student product code for claiming',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Colors.grey,
+                                color: tertiary_color,
                                 fontWeight: FontWeight.w400
                               ),
                             ),
@@ -514,7 +530,21 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 30),
+                            Container(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 1.2,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: double.infinity,
+                                  child: Container(
+                                    decoration: BoxDecoration(color: secondary_color),
+                                  ),
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 20),
                             Container(
                               width: double.infinity,
                               height: 50,
@@ -528,7 +558,7 @@ class _ProfileScreenState extends State<Profile> {
                                       children: [
                                         Text(
                                           "Overview",
-                                          style: GoogleFonts.inter(
+                                          style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 13,
                                             fontWeight: FontWeight.w600
@@ -536,9 +566,9 @@ class _ProfileScreenState extends State<Profile> {
                                         ),
                                         Text(
                                           "Student Details",
-                                          style: GoogleFonts.inter(
-                                            color: Colors.grey,
+                                          style: TextStyle(
                                             fontSize: 10,
+                                            color: tertiary_color,
                                             fontWeight: FontWeight.w400
                                           )
                                         ),
@@ -631,7 +661,7 @@ class ItemCard extends StatelessWidget {
                       children: [
                         Text(
                           "${visual.lastname}, ${visual.firstname}",
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -639,7 +669,7 @@ class ItemCard extends StatelessWidget {
                         ),
                         Text(
                           "Course: ${visual.course}",
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w400,
@@ -650,7 +680,7 @@ class ItemCard extends StatelessWidget {
                           children: [
                             Text(
                               "${visual.studentID} | Year: ${visual.year} |",
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
@@ -659,7 +689,7 @@ class ItemCard extends StatelessWidget {
                             const SizedBox(width: 5),
                             Text(
                               visual.enrolled ? 'Enrolled' : 'Not Enrolled',
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: visual.enrolled
                                     ? primary_color
                                     : Colors.red,
@@ -773,7 +803,7 @@ void _showCreateDialog(BuildContext context) {
                 children: [
                   Text(
                     'Create New Student',
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -781,7 +811,7 @@ void _showCreateDialog(BuildContext context) {
                   ),
                   Text(
                     'Enter new student details',
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       color: Colors.grey,
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
@@ -873,11 +903,11 @@ void _showCreateDialog(BuildContext context) {
                   DropdownButtonFormField<String>(
                     value: _selectedYear,
                     items: [
-                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: TextStyle(fontSize: 13))),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -898,7 +928,7 @@ void _showCreateDialog(BuildContext context) {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 10),
-                        child: Text('Enrolled', style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13)),
+                        child: Text('Enrolled', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                       ),
                       const Spacer(),
                       Transform.scale(
@@ -931,7 +961,7 @@ void _showCreateDialog(BuildContext context) {
                     child: Center(
                       child: Text(
                         'Create',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
@@ -980,7 +1010,7 @@ void _showUpdate(BuildContext context) {
                 children: [
                   Text(
                     'Update Student',
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -988,7 +1018,7 @@ void _showUpdate(BuildContext context) {
                   ),
                   Text(
                     'Update Student details',
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       color: Colors.grey,
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
@@ -1080,11 +1110,11 @@ void _showUpdate(BuildContext context) {
                   DropdownButtonFormField<String>(
                     value: _selectedYear,
                     items: [
-                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: GoogleFonts.inter(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: GoogleFonts.inter(fontSize: 13))),
+                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: TextStyle(fontSize: 13))),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -1105,7 +1135,7 @@ void _showUpdate(BuildContext context) {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 10),
-                        child: Text('Enrolled', style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 13)),
+                        child: Text('Enrolled', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                       ),
                       const Spacer(),
                       Transform.scale(
@@ -1138,7 +1168,7 @@ void _showUpdate(BuildContext context) {
                     child: Center(
                       child: Text(
                         'Create',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
@@ -1172,7 +1202,7 @@ void _showDeleteDialog (BuildContext context) {
           children: [
             Text(
               'Delete',
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 color: Colors.black,
                 fontSize: 15,
                 fontWeight: FontWeight.w600
@@ -1180,7 +1210,7 @@ void _showDeleteDialog (BuildContext context) {
             ),
             Text(
               'Do you insist deleting Louise\'s details',
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 color: Colors.grey,
                 fontSize: 11,
                 fontWeight: FontWeight.w400
@@ -1202,7 +1232,7 @@ void _showDeleteDialog (BuildContext context) {
               child: Center( 
                 child: Text(
                   'Yes',
-                  style: GoogleFonts.inter(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 13,
                     fontWeight: FontWeight.w600 
@@ -1225,7 +1255,7 @@ void _showDeleteDialog (BuildContext context) {
               child: Center(
                 child:Text(
                   'No',
-                  style: GoogleFonts.inter(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 13,
                     fontWeight: FontWeight.w600 

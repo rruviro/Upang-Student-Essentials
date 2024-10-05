@@ -140,7 +140,6 @@ class StudnetLogin extends StatelessWidget {
                         onPressed: () {
                           String studentId = studentIdController.text;
                           String password = passwordController.text;
-
                           context
                               .read<AuthenticationBloc>()
                               .add(StudentLogin(studentId, password));

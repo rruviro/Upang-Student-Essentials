@@ -4,6 +4,8 @@ import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Department.dart';
 import 'package:use/frontend/student/home/home.dart';
 
+import '../../../colors/colors.dart';
+
 class home_widget extends StatelessWidget {
   final List<Departments> departments;
   const home_widget({Key? key, required this.departments}) : super (key: key);
@@ -32,17 +34,17 @@ class ItemCard extends StatelessWidget {
     final itemsPerRow = (availableWidth / (itemWidth + spacing)).floor();
     return Container (
       margin: const EdgeInsets.only(
-        bottom: 30.0,
+        bottom: 20.0,
       ),
-      height: 150,
+      height: 80,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 14, 170, 113),
-        borderRadius: BorderRadius.circular(10),
+        color: primary_color,
+        borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade400,
-            blurRadius: 5,
-            offset: Offset(1, 5),
+            color: Colors.grey,
+            blurRadius: 2,
+            offset: Offset(1, 1),
           ),
         ],
       ),
@@ -70,8 +72,8 @@ class ItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   gradient: LinearGradient(
                     colors: [
-                      Color.fromARGB(255, 14, 170, 113),
-                      Color.fromARGB(123, 14, 170, 113),
+                      primary_color,
+                      Color.fromARGB(43, 14, 170, 113),
                     ],
                     stops: [0.50, 0.70],
                   ),
@@ -81,39 +83,20 @@ class ItemCard extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(
-                        top: 20.0,
+                        top: 25.0,
                         left: 30.0
                       ),
                       child: Text(
                         visual.department,
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle (
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: 5.0,
-                        left: 30.0
-                      ),
-                      child: Text(
-                        'Courses :',
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle (
-                            fontSize: 10,
-                            color: Colors.white54,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 55.0,
                         left: 30.0
                       ),
                       child: Container(),
@@ -123,66 +106,6 @@ class ItemCard extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 46,
-            left: 30,
-            child: Container(
-              width: screenWidth * 0.5,
-              height: 40,
-              child: Wrap(
-                spacing: spacing, 
-                runSpacing: spacing,
-                alignment: WrapAlignment.start,
-                children: [
-                  SizedBox(width: 50),
-                  ...List.generate(itemsPerRow * 2, (index) {
-                    return Container(
-                      width: itemWidth,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          visual.courses,
-                          style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 15,
-            left: 30,
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.arrow_circle_right_outlined,
-                  color: Colors.white54,
-                  size: 20
-                ),
-                SizedBox(width: 10),
-                Text(
-                  'Show more courses',
-                  style: GoogleFonts.inter(
-                    textStyle: TextStyle (
-                      fontSize: 10,
-                      color: Colors.white54,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );
