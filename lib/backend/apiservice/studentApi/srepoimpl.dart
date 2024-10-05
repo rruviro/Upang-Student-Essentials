@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/backend/models/student/StudentData/CreateStudentData.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/models/student/StudentData/Student.dart';
 import 'package:use/backend/models/student/StudentData/StudentBag.dart';
@@ -212,4 +213,136 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
       throw Exception('Failed');
     }
   }
+
+  @override
+  Future<void> createStudent(String firstName, String lastName, String course, String department, int year, bool status) async {
+    final response = await http.post(Uri.parse('$baseUrl/stundets'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+          'FirstName': firstName,
+          'LastName': lastName,
+          'Course': course,
+          'Department': department,
+          'Year': year,
+          'Status"': status
+        }),
+      );
+
+      if (response.statusCode == 200) {
+      } else {
+        throw UnimplementedError();
+      }
+  }
+
+  @override
+  Future<void> deleteStudent(int id) async {
+    final response = await http.delete(Uri.parse('$baseUrl/stundets/$id'));
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  @override
+  Future<List<StudentProfile>> showAllStudentProfileData() async {
+    final response = await http.get(Uri.parse('$baseUrl/stundets'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> studentsJson = json.decode(response.body)['profiles'];
+      return studentsJson.map((json) => StudentProfile.fromJson(json)).toList();
+    } else {
+      throw UnimplementedError();
+    }
+    
+  }
+
+  @override
+  Future<StudentProfile> showStudentProfileData(String studentId) async {
+    final response = await http.get(Uri.parse('$baseUrl/students/$studentId'));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> studentJson = json.decode(response.body)['profile'];
+        StudentProfile student = StudentProfile.fromJson(studentJson);
+        return student;
+    } else {
+      throw UnimplementedError();
+    }
+  }
+
+  @override
+  Future<void> updateStudent(String firstName, String lastName, String course, String department, int year, bool status, int id ) async {
+          final response = await http.put(Uri.parse('$baseUrl/profiles/$id'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'FirstName': firstName,
+          'LastName': lastName,
+          'Course': course,
+          'Department': department,
+          'Year': year,
+          'Status"': status
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Handle successful update
+      } else {
+        throw UnimplementedError();
+      }
+    
+  }
+  
+  @override
+  Future<void> addStudentBookData(int id, String department, String bookName, String subjectCode, String subjectDesc, String status) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/bookcollections'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'Department': department,
+        'BookName': bookName,
+        'SubjectCode': subjectCode,
+        'SubjectDesc': subjectDesc,
+        'Status': status,
+        'stubag_id': id, 
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Handle successful update
+      print("Student book data successfully added.");
+    } else {
+      throw Exception("Failed to add student book data: ${response.body}");
+    }
+  }
+  
+  @override
+  Future<void> addStudentItemData(int id, String department, String course, String gender, String type, String body, String size, String status) async {
+    final response = await http.put(
+        Uri.parse('$baseUrl/studentbagitems'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'Department': department,
+          'Course': course,
+          'Gender': gender,
+          'Type': type,
+          'Body': body,
+          'Size': size,
+          'Status': status,
+          'stubag_id': id,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Student item data successfully added.");
+      } else {
+        throw Exception("Failed to add student item data: ${response.body}");
+      }
+    }
 }

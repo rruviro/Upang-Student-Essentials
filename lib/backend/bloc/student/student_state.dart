@@ -132,7 +132,47 @@ class announcementLoadErrorData extends StudentActionState {
   announcementLoadErrorData(this.error);
 }
 
+class studentLoading extends StudentExtendedState {}
 
+class studentLoaded extends StudentExtendedState {
+  final List<StudentProfile> students;
+  studentLoaded(this.students);
+}
+
+class studentError extends StudentExtendedState {
+  final String error;
+  studentError(this.error);
+}
+
+class studentDelete extends StudentExtendedState {
+  final int id;
+
+  studentDelete(this.id);
+}
+
+class specificStudentLoaded extends StudentExtendedState {
+  final StudentProfile student;
+
+  specificStudentLoaded(this.student);
+}
+
+class studentUpdated extends StudentExtendedState {}
+
+class studentCreated extends StudentExtendedState {}
+
+class itemAdded extends StudentExtendedState {}
+
+class bookAdded extends StudentExtendedState {}
+
+class itemError extends StudentExtendedState {
+  final String error;
+  itemError(this.error);
+}
+
+class bookError extends StudentExtendedState {
+  final String error;
+  bookError(this.error);
+}
 
 
 
