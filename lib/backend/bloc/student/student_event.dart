@@ -33,14 +33,26 @@ class studentBagItem extends StudentExtendedEvent {
   final int stubag_id;
   final String status;
 
-  studentBagItem(this.stubag_id,this.status);
+  studentBagItem(this.stubag_id, this.status);
 }
 
 class studentBagBook extends StudentExtendedEvent {
   final int stubag_id;
   final String status;
 
-  studentBagBook(this.stubag_id,this.status);
+  studentBagBook(this.stubag_id, this.status);
+}
+
+class allstudentBagItem extends StudentExtendedEvent {
+  final int stubag_id;
+
+  allstudentBagItem(this.stubag_id);
+}
+
+class allstudentBagBook extends StudentExtendedEvent {
+  final int stubag_id;
+
+  allstudentBagBook(this.stubag_id);
 }
 
 class studentNotificationMail extends StudentExtendedEvent {
@@ -49,35 +61,46 @@ class studentNotificationMail extends StudentExtendedEvent {
   studentNotificationMail(this.stunotification_id);
 }
 
-class deleteBookData extends StudentExtendedEvent{
+class deleteBookData extends StudentExtendedEvent {
   final int id;
 
   deleteBookData(this.id);
 }
 
-class deleteItemData extends StudentExtendedEvent{
+class deleteItemData extends StudentExtendedEvent {
   final int id;
 
   deleteItemData(this.id);
 }
 
-class changeItemStatus extends StudentExtendedEvent{
+class changeItemStatus extends StudentExtendedEvent {
   final int id;
   final String status;
 
   changeItemStatus(this.id, this.status);
 }
 
-class changeBookStatus extends StudentExtendedEvent{
+class changeBookStatus extends StudentExtendedEvent {
   final int id;
   final String status;
 
   changeBookStatus(this.id, this.status);
 }
 
-class showAnnouncementData extends StudentExtendedEvent{
+class changeReservedItemStatus extends StudentExtendedEvent {
+  final int count;
+
+  changeReservedItemStatus(this.count);
+}
+
+class changeReservedBookStatus extends StudentExtendedEvent {
+  final int count;
+
+  changeReservedBookStatus(this.count);
+}
+
+class showAnnouncementData extends StudentExtendedEvent {
   final String dept;
 
   showAnnouncementData(this.dept);
 }
-
