@@ -281,7 +281,7 @@ class _ProfileScreenState extends State<Profile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Ramon Montenegro',
+                              'TANGINA MO JEPOY DIZON, BETLOG MO PARANG JOLENS',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
