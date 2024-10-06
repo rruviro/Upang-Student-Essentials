@@ -4,6 +4,8 @@ import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Course.dart';
 import 'package:use/frontend/student/home/home.dart';
 
+import '../../../colors/colors.dart';
+
 class course_widget extends StatelessWidget {
   final List<course> status;
   const course_widget({Key? key, required this.status}) : super (key: key);
@@ -40,7 +42,7 @@ class ItemCard extends StatelessWidget {
               width: double.infinity,
               height: 70,
               decoration: BoxDecoration(
-                color: Color(0xFF0EAA72),
+                color: primary_color,
                 borderRadius: BorderRadius.circular(5),
                 boxShadow: [
                   BoxShadow(

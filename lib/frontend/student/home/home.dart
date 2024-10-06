@@ -85,18 +85,18 @@ class _HomeState extends State<Home> {
                 centerTitle: false,
                 actions: <Widget>[
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.notifications, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: primary_color
                     ),
                     onPressed: () {
                       studBloc.add(NotificationPageEvent());
                     },
                   ),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.backpack, 
-                      color: Color.fromARGB(255, 14, 170, 113)
+                      color: primary_color
                     ),
                     onPressed: () {
                       studBloc.add(BackpackPageEvent());

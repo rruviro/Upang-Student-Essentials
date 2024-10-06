@@ -1,7 +1,6 @@
 // ignore_for_file: prefer__ructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
@@ -10,9 +9,11 @@ import 'package:use/backend/notificationService/notificationService.dart';
 import 'package:use/frontend/Authentication/StudentLogin.dart';
 import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/student/notification.dart';
+import 'package:use/frontend/student/profile/books.dart';
 import 'package:use/frontend/student/profile/transaction.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/frontend/student/profile/uniforms.dart';
 import 'package:use/frontend/student/widgets/profile/uniform.dart';
 
 import '../../colors/colors.dart';
@@ -328,7 +329,8 @@ class _ProfileScreenState extends State<Profile> {
                                   Positioned(
                                     right: 0,
                                     child: InkWell(
-                                      onTap:(){},
+                                      onTap:(){
+                                      },
                                       child: Container(
                                         height: 20,
                                         width: 100,
@@ -570,7 +572,12 @@ class _ProfileScreenState extends State<Profile> {
                                   Positioned(
                                     right: -5,
                                     child: InkWell(
-                                      onTap:(){},
+                                      onTap:(){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => Books()),
+                                        );
+                                      },
                                       child: Container(
                                         height: 20,
                                         width: 100,
@@ -603,7 +610,7 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               )
                             ),
-                            SizedBox(height: 15),
+                            SizedBox(height: 20),
                             Container(
                               height: 20,
                               width: double.infinity,
@@ -623,7 +630,12 @@ class _ProfileScreenState extends State<Profile> {
                                   Positioned(
                                     right: -5,
                                     child: InkWell(
-                                      onTap:(){},
+                                      onTap:(){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => uniforms()),
+                                        );
+                                      },
                                       child: Container(
                                         height: 20,
                                         width: 100,

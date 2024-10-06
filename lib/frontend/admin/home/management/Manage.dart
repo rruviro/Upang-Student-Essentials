@@ -276,6 +276,13 @@ class _manageState extends State<manage> {
                                       child: TextFormField(
                                         controller: _rows[index]['coursesController'],
                                         decoration: InputDecoration(
+                                          hintText: 'BSIT',
+                                          hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          hoverColor: Colors.white,
                                           border: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
@@ -283,10 +290,8 @@ class _manageState extends State<manage> {
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
                                           enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white),
+                                            borderSide: BorderSide(color: Colors.white), // Color when unfocused
                                           ),
-                                          hintText: 'BSIT',
-                                          hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                                           suffix: Text(
                                             '${_rows[index]['countCourse']}/10',
                                             style: TextStyle(
@@ -334,6 +339,13 @@ class _manageState extends State<manage> {
                                       child: TextFormField(
                                         controller: _rows[index]['bachelorController'],
                                         decoration: InputDecoration(
+                                          hintText: 'Bachelor of information in technology',
+                                          hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          hoverColor: Colors.white,
                                           border: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
@@ -343,8 +355,6 @@ class _manageState extends State<manage> {
                                           enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
-                                          hintText: 'Bachelor of information in technology',
-                                          hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                                           suffix: Text(
                                             '${_rows[index]['countBachelor']}/25',
                                             style: TextStyle(
@@ -378,7 +388,7 @@ class _manageState extends State<manage> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 5),
                                       child: IconButton(
-                                        icon: Icon(Icons.delete, color: Colors.red),
+                                        icon: Icon(Icons.delete, color: Colors.white),
                                         onPressed: () => _deleteItem(index),
                                       ),
                                     ),

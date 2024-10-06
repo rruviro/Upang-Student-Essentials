@@ -129,7 +129,6 @@ class _StocksState extends State<Stocks> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10),
                 Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
@@ -141,7 +140,7 @@ class _StocksState extends State<Stocks> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 15),
                 Container(
                   height: 270,
                   width: double.infinity,
@@ -165,18 +164,18 @@ class _StocksState extends State<Stocks> {
                         child: Text(
                           'Books',
                           style: GoogleFonts.inter(
-                            fontSize: 17,
+                            fontSize: 13,
                             color: Colors.black,
                             fontWeight: FontWeight.w600
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 20),
                       Container(
                         width: double.infinity,
                         height: 70,
                         decoration: BoxDecoration(
-                          color: Color(0xFF0EAA72),
+                          color: primary_color,
                           borderRadius: BorderRadius.circular(5),
                           boxShadow: [
                             BoxShadow(
@@ -212,7 +211,7 @@ class _StocksState extends State<Stocks> {
                                           height: 5,
                                           width: 100,
                                           decoration: BoxDecoration(
-                                            color: Color(0xFF0EAA72),
+                                            color: primary_color,
                                             borderRadius: BorderRadius.circular(5)
                                           ),
                                         ),
@@ -283,7 +282,7 @@ class _StocksState extends State<Stocks> {
                         width: double.infinity,
                         height: 400,
                         decoration: BoxDecoration(
-                          color: Color(0xFF0EAA72),
+                          color: primary_color,
                           borderRadius: BorderRadius.circular(5),
                           boxShadow: [
                             BoxShadow(
@@ -359,14 +358,14 @@ class _BookCardState extends State<BookCard> {
           title: Text(
             widget.visual.subjectCode,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 13,
               color: Colors.white,
             ),
           ),
           subtitle: Text(
             widget.visual.bookName,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 10,
               color: Colors.white.withOpacity(0.7),
             ),
           ),
@@ -420,24 +419,24 @@ class AllBooksCard extends StatelessWidget {
             visual.subjectCode,
             style: TextStyle(
               fontSize: 16,
-              color: Color(0xFF0EAA72),
+              color: primary_color,
             ),
           ),
           subtitle: Text(
             visual.bookName,
             style: TextStyle(
               fontSize: 11,
-              color: Color(0xFF0EAA72).withOpacity(0.7),
+              color: primary_color.withOpacity(0.7),
             ),
           ),
-          iconColor: Color(0xFF0EAA72),
+          iconColor: primary_color,
           leading: Icon(
             Icons.book,
             size: 32,
           ),
         ),
         Divider(
-          color: Color(0xFF0EAA72).withOpacity(0.7),
+          color: primary_color.withOpacity(0.7),
           thickness: 1,
         ),
       ],

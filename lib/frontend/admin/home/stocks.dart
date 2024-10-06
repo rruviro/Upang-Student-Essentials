@@ -145,7 +145,7 @@ class _StocksState extends State<Stocks> {
                                 child: Text(
                                   'Uniform',
                                   style: GoogleFonts.inter(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600
                                   ),
@@ -350,7 +350,7 @@ class _StocksState extends State<Stocks> {
                                   child: Text(
                                     'Books',
                                     style: GoogleFonts.inter(
-                                      fontSize: 15,
+                                      fontSize: 13,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600
                                     ),
@@ -1013,7 +1013,7 @@ class _ItemCardState extends State<ItemCard> {
                         textStyle: TextStyle(
                           fontSize: 10.5,
                           color: primary_color,
-                          fontWeight: FontWeight.w600
+                          fontWeight: FontWeight.w500
                         ),
                       ),
                     ),

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/apiservice/authApi/aurepoimpl.dart';
 import 'package:use/frontend/Authentication/StudentLogin.dart';
 import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
+import 'package:use/frontend/colors/colors.dart';
 
 import '../frontend/Authentication/AdminLogin.dart';
 
@@ -114,20 +115,20 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                 SizedBox(height: 450),
                                 Text(
                                   "Welcome to\nUpang Student Essentials",
-                                  style: GoogleFonts.inter(
+                                  style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0EAA72),
+                                    color: primary_color,
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
                                   "Where you can reserve and check the availability of the items you need.",
-                                  style: GoogleFonts.inter(
+                                  style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(159, 14, 170, 113),
+                                    color: primary_color,
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
@@ -146,9 +147,9 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                           backgroundColor:
                                               Colors.white.withOpacity(0.3),
                                           side: BorderSide(
-                                              color: Color(0xFF0EAA72),
+                                              color: primary_color,
                                               width: 2.0),
-                                          foregroundColor: Color(0xFF0EAA72),
+                                          foregroundColor: primary_color,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5),
@@ -172,7 +173,7 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                           authBloc.add(AdminPageEvent());
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color(0xFF0EAA72),
+                                          backgroundColor: primary_color,
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:

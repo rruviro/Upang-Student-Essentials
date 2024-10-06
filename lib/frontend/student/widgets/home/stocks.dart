@@ -1,10 +1,10 @@
-// test
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Stocks.dart';
 import 'package:use/frontend/student/home/home.dart';
+
+import '../../../colors/colors.dart';
 
 class stocks_widget  extends StatelessWidget {
   final List<stocks> list;
@@ -35,7 +35,7 @@ class ItemCard extends StatelessWidget {
           height: 250,
           width: 250,
           decoration: BoxDecoration(
-            color: Color(0xFF0EAA72),
+            color: primary_color,
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(

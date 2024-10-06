@@ -452,17 +452,22 @@ class _ProfileScreenState extends State<Profile> {
                                         Flexible(
                                           child: TextFormField(
                                             decoration: InputDecoration(
+                                              hintText: 'ENTER THE CODE',
+                                              hintStyle: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              hoverColor: Colors.white,
                                               border: UnderlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.white),
                                               ),
                                               focusedBorder: UnderlineInputBorder(
                                                 borderSide: BorderSide(color: Colors.white),
                                               ),
-                                              hintText: 'ENTER THE CODE',
-                                              hintStyle: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                              enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Colors.white), // Color when unfocused
+                                              )
                                             ),
                                             keyboardType: TextInputType.text,
                                             textInputAction: TextInputAction.done,

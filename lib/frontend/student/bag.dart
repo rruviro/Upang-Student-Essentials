@@ -134,7 +134,7 @@ Widget build(BuildContext context) {
             alignment: Alignment.centerLeft,
             child: Text(
               'Backpack',
-              style: GoogleFonts.inter(
+              style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
@@ -252,10 +252,10 @@ Widget build(BuildContext context) {
                     Center(
                       child: Text(
                         'Select All Items',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     )
@@ -306,7 +306,7 @@ Widget build(BuildContext context) {
                               child: Center(
                                 child: Text(
                                   'Please select an item to request.',
-                                  style: GoogleFonts.inter(
+                                  style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -358,7 +358,7 @@ Widget build(BuildContext context) {
                               child: Center(
                                 child: Text(
                                   'Successful, Check your order in your transaction now.',
-                                  style: GoogleFonts.inter(
+                                  style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
@@ -396,7 +396,7 @@ Widget build(BuildContext context) {
                                         child: Center(
                                           child: Text(
                                             'Transaction',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w600,
@@ -422,7 +422,7 @@ Widget build(BuildContext context) {
                                         child: Center(
                                           child: Text(
                                             'Close',
-                                            style: GoogleFonts.inter(
+                                            style: TextStyle(
                                               color: Color.fromARGB(190, 255, 255, 255),
                                               fontSize: 12,
                                               fontWeight: FontWeight.w600,
@@ -446,18 +446,11 @@ Widget build(BuildContext context) {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                            blurRadius: 5,
-                            offset: Offset(1, 8),
-                          ),
-                        ],
                       ),
                       child: Center(
                         child: Text(
                           'Request',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: primary_color,
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
@@ -576,7 +569,7 @@ class _ItemCardState extends State<ItemCard> {
                       children: [
                         Text(
                           widget.item.gender,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: primary_color,
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -585,7 +578,7 @@ class _ItemCardState extends State<ItemCard> {
                         SizedBox(height: 2),
                         Text(
                           'Gender : ' + widget.item.gender,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -593,7 +586,7 @@ class _ItemCardState extends State<ItemCard> {
                         ),
                         Text(
                           'Course : ' + widget.item.course,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -605,7 +598,7 @@ class _ItemCardState extends State<ItemCard> {
                           children: [
                             Text(
                               'Size : ' + widget.item.size,
-                              style: GoogleFonts.inter(
+                              style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
@@ -647,7 +640,7 @@ class _ItemCardState extends State<ItemCard> {
                 child: Center(
                   child: Text(
                     widget.item.department,
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 10,
                     ),
@@ -777,7 +770,7 @@ class _BookCardState extends State<BookCard> {
                       children: [
                         Text(
                           widget.book.bookName,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: primary_color,
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -786,7 +779,7 @@ class _BookCardState extends State<BookCard> {
                         SizedBox(height: 2),
                         Text(
                           'Subject Code : ' + widget.book.subjectCode,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -794,7 +787,7 @@ class _BookCardState extends State<BookCard> {
                         ),
                         Text(
                           widget.book.subjectDesc,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             color: Colors.grey,
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
@@ -834,7 +827,7 @@ class _BookCardState extends State<BookCard> {
                 child: Center(
                   child: Text(
                     "BOOK",
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 10,
                     ),

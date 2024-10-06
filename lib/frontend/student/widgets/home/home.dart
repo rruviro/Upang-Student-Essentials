@@ -91,7 +91,7 @@ class ItemCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

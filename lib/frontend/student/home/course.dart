@@ -8,6 +8,8 @@ import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/home/stocks.dart';
 import 'package:use/frontend/student/widgets/home/course.dart';
 
+import '../../colors/colors.dart';
+
 void main() => runApp(MaterialApp(
   home: courses(),
 ));
@@ -38,7 +40,7 @@ class _coursesState extends State<courses> {
           default:
             return Scaffold(
               appBar: AppBar(
-                backgroundColor: Color.fromARGB(255, 14, 170, 113),
+                backgroundColor: primary_color,
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
                   onPressed: () {

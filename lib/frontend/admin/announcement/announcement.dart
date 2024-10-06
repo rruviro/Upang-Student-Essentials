@@ -22,6 +22,7 @@ class _AnnouncementState extends State<Announcement> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Container(
           width: double.infinity, 
           height: 35, 
@@ -45,9 +46,9 @@ class _AnnouncementState extends State<Announcement> {
         centerTitle: false,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.notifications, 
-              color: Colors.white
+              color: primary_color
             ),
             onPressed: () {
               adminBloc.add(NotificationPageEvent());
