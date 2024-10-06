@@ -29,8 +29,14 @@ class _ProfileScreenState extends State<Profile> {
   StudentBagBook? bookCode;
   TextEditingController codeController = TextEditingController();
   List<StudentProfile> student = [];
+  bool _showLoading = true; 
   @override
   void initState() {
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
     print("showStudentProfileData");
     context.read<AdminExtendedBloc>().add(getStudent());
     super.initState();
@@ -127,6 +133,9 @@ class _ProfileScreenState extends State<Profile> {
               }
           },
         builder: (context, state) {
+          if (_showLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
           if (state is AdminLoadingState) {
             print(state);
             return Center(child: CircularProgressIndicator());

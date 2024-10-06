@@ -122,7 +122,7 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
   @override
   Future<void> updateStudent(String firstName, String lastName, String course, String department, int year, String status, int id ) async {
-          final response = await http.put(Uri.parse('$baseUrl/profiles/$id'),
+          final response = await http.put(Uri.parse('$baseUrl/updateprofile/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
