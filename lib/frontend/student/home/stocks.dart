@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/BookStocks.dart';
 import 'package:use/SERVICES/model/student/Stocks.dart';
+import 'package:use/frontend/colors/colors.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/widgets/home/stocks.dart';
 
@@ -23,7 +24,7 @@ class _StocksState extends State<Stocks> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        backgroundColor: primary_color,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
@@ -74,7 +75,7 @@ class _StocksState extends State<Stocks> {
                     height: 20,
                     child: DropdownButton<String>(
                       value: _selectedYear,
-                      dropdownColor: Color(0xFF0EAA72),
+                      dropdownColor: primary_color,
                       icon: Icon(Icons.arrow_drop_down, color: Colors.white),
                       underline: SizedBox(),
                       onChanged: (String? newValue) {
@@ -134,7 +135,7 @@ class _StocksState extends State<Stocks> {
                   child: Text(
                     'Uniform',
                     style: GoogleFonts.inter(
-                      fontSize: 17,
+                      fontSize: 13,
                       color: Colors.black,
                       fontWeight: FontWeight.w600
                     ),
