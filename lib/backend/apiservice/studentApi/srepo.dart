@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
@@ -30,9 +29,5 @@ abstract class Studentrepo {
   Future<List<StudentBagBook>> showAllStudentBagBookData(int stubag_id);
   Future<List<StudentBagItem>> showAllStudentBagItemData(int stubag_id);
 
-  Future<List<StudentProfile>> showAllStudentProfileData();
-  Future<StudentProfile> showStudentProfileData(String studentId);
-  Future<void> createStudent(String firstName, String lastName, String course, String department, int year, bool status);
-  Future<void> deleteStudent(int id);
-  Future<void> updateStudent(String firstName, String lastName, String course, String department, int year, bool status, int id);
+
 }

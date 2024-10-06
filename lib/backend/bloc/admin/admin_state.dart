@@ -64,3 +64,31 @@ class BookStatusChanged extends AdminActionState{
 
 class ItemStatusChanged extends AdminActionState{
 }
+
+class studentLoading extends AdminActionState {}
+
+class studentLoaded extends AdminActionState {
+  final List<StudentProfile> students;
+  studentLoaded(this.students);
+}
+
+class studentError extends AdminActionState {
+  final String error;
+  studentError(this.error);
+}
+
+class studentDelete extends AdminActionState {
+  final int id;
+
+  studentDelete(this.id);
+}
+
+class specificStudentLoaded extends AdminActionState {
+  final StudentProfile student;
+
+  specificStudentLoaded(this.student);
+}
+
+class studentUpdated extends AdminActionState {}
+
+class studentCreated extends AdminActionState {}
