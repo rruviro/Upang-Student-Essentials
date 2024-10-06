@@ -7,6 +7,7 @@ import 'package:use/backend/apiservice/adminApi/arepo.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
 part 'admin_event.dart';
 part 'admin_state.dart';
@@ -88,6 +89,58 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
           print('Error: $e to change Item status.');
         }
       });
+
+      on<createStudent>((event, emit) async{
+      try {
+        await _adminrepo.createStudent(event.firstName, event.lastName, event.course, event.department, event.year, event.enrolled);
+        add(getStudent());
+      } catch (e) {
+        print(e);
+        emit(studentError('Failed to add student'));
+      }
+    });
+
+    on<deleteStudent>((event, emit) async{
+      try {
+        await _adminrepo.deleteStudent(event.id);
+        add(getStudent());
+      } catch (e) {
+        emit(studentError('Error deleting student: ${e.toString()}'));
+      }
+    });
+
+    on<updateStudent>((event, emit) async{
+      try {
+        await _adminrepo.updateStudent(event.firstName, event.lastName, event.course, event.department, event.year, event.enrolled, event.id);
+        add(getStudent());
+      } catch (e) {
+        emit(studentError(e.toString()));
+      }
+    });
+
+    on<getStudent>((event, emit) async{
+      print("getStudent triggered");
+      emit(studentLoading());
+      try {
+        print("try");
+        final students = await _adminrepo.showAllStudentProfileData();
+        emit(studentLoaded(students));
+        print(students);
+      } catch (e) {
+        print(e);
+        emit(studentError(e.toString()));
+      }
+    });
+
+    on<showStudent>((event, emit) async{
+      emit(studentLoading());
+      try {
+        final student = await _adminrepo.showStudentProfileData(event.id);
+        emit(specificStudentLoaded(student));
+      } catch (e) {
+        emit(studentError(e.toString()));
+      }
+    });
   }
 
   FutureOr<void> course_page(

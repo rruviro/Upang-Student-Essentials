@@ -205,50 +205,7 @@ class StudentExtendedBloc
 
     //STUDENT MANAGEMENT
 
-    on<createStudent>((event, emit) async{
-      emit(studentLoading());
-      try {
-        await _studentrepo.createStudent(event.firstName, event.lastName, event.course, event.department, event.year, event.enrolled);
-        add(getStudent());
-      } catch (e) {
-        emit(studentError('Failed to add student'));
-      }
-    });
-
-    on<deleteStudent>((event, emit) async{
-      try {
-        await _studentrepo.deleteStudent(event.id);
-      } catch (e) {
-        emit(studentError('Error deleting student: ${e.toString()}'));
-      }
-    });
-
-    on<updateStudent>((event, emit) async{
-      try {
-        await _studentrepo.updateStudent(event.firstName, event.lastName, event.course, event.department, event.year, event.enrolled, event.id);
-      } catch (e) {
-        emit(studentError(e.toString()));
-      }
-    });
-
-    on<getStudent>((event, emit) async{
-      try {
-        final students = await _studentrepo.showAllStudentProfileData();
-        emit(studentLoaded(students));
-      } catch (e) {
-        emit(studentError(e.toString()));
-      }
-    });
-
-    on<showStudent>((event, emit) async{
-      emit(studentLoading());
-      try {
-        final student = await _studentrepo.showStudentProfileData(event.id);
-        emit(specificStudentLoaded(student));
-      } catch (e) {
-        emit(studentError(e.toString()));
-      }
-    });
+    
 
     on<AddStudentBagBook>((event, emit) async {
       try {

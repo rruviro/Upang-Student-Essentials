@@ -7,6 +7,7 @@ import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/frontend/authentication/AdminLogin.dart';
 import 'package:use/frontend/admin/notification.dart';
 import 'package:use/frontend/admin/profile/transaction.dart';
@@ -26,10 +27,12 @@ class _ProfileScreenState extends State<Profile> {
   bool isBook = false;
   StudentBagItem? itemCode;
   StudentBagBook? bookCode;
-  final TextEditingController codeController = TextEditingController();
-
+  TextEditingController codeController = TextEditingController();
+  List<StudentProfile> student = [];
   @override
   void initState() {
+    print("showStudentProfileData");
+    context.read<AdminExtendedBloc>().add(getStudent());
     super.initState();
   }
 
@@ -80,10 +83,10 @@ class _ProfileScreenState extends State<Profile> {
               child: Text("Proceed"),
               onPressed: () {
                 if(isBook){
-                  context.read<AdminExtendedBloc>().add(changeBookStatus(id, "complete"));
+                  context.read<AdminExtendedBloc>().add(changeBookStatus(id, "Complete"));
                 }
                 else{
-                  context.read<AdminExtendedBloc>().add(changeItemStatus(id, "complete"));
+                  context.read<AdminExtendedBloc>().add(changeItemStatus(id, "Complete"));
                 }
                 
                 Navigator.of(context).pop();
@@ -97,9 +100,7 @@ class _ProfileScreenState extends State<Profile> {
 
     @override
     Widget build(BuildContext context) {
-      return BlocProvider<AdminExtendedBloc>(
-        create: (context) => AdminExtendedBloc(AdminRepositoryImpl()),
-        child: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
+        return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
           listener: (context, state) {
             if (state is itemCodeDataLoaded) {
               setState(() {
@@ -114,19 +115,28 @@ class _ProfileScreenState extends State<Profile> {
               setState(() {
                 bookCode = state.studentBagBook; 
               });
-              if (bookCode != null) {
+            } else if (state is studentLoaded) {
+              setState(() {
+                student = state.students;
+              });
+            }
+            if (bookCode != null) {
                 _showItemDetailsDialog(context, true, bookCode);
               } else {
                 print("bookCode is null");
               }
-            }
           },
         builder: (context, state) {
           if (state is AdminLoadingState) {
+            print(state);
             return Center(child: CircularProgressIndicator());
           }
-
-          return Scaffold(
+          else if (state is studentLoading){
+            print(state);
+            return Center(child: CircularProgressIndicator());
+          }
+          else if (state is studentLoaded) {
+            return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
               title: Container(
@@ -451,6 +461,7 @@ class _ProfileScreenState extends State<Profile> {
                                         // Wrap TextFormField with Flexible to allow it to resize dynamically
                                         Flexible(
                                           child: TextFormField(
+                                            controller: codeController,
                                             decoration: InputDecoration(
                                               hintText: 'ENTER THE CODE',
                                               hintStyle: TextStyle(
@@ -510,7 +521,9 @@ class _ProfileScreenState extends State<Profile> {
                                         onPressed: () {
                                           if (isBook) {
                                             context.read<AdminExtendedBloc>().add(showCodeBookData(codeController.text));
+                                            print(codeController.text);
                                           } else {
+                                            print(codeController.text);
                                             context.read<AdminExtendedBloc>().add(showCodeItemData(codeController.text));
                                           }
                                         },
@@ -596,7 +609,7 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             SizedBox(height: 10),
                             ItemList(
-                              students : details
+                              students : student
                             )
                           ],
                         ),
@@ -606,14 +619,21 @@ class _ProfileScreenState extends State<Profile> {
                 ],
               ),
           );
+          } else if(state is studentError){
+            print(state);
+            return Center(child: Text(state.error));
+          }
+          else{
+            print(state);
+            return Center(child: Text(state.toString()));
+          }
         },
-      ),
-    );
+      );
   }
 }
 
 class ItemList extends StatelessWidget {
-  final List<Students> students;
+  final List<StudentProfile> students;
   const ItemList({Key? key, required this.students}) : super (key: key);
   @override
   Widget build(BuildContext context) {
@@ -628,7 +648,7 @@ class ItemList extends StatelessWidget {
 }
 
 class ItemCard extends StatelessWidget {
-  final Students visual;
+  final StudentProfile visual;
   const ItemCard({Key? key, required this.visual}) : super (key: key);
   @override
   Widget build(BuildContext context) {
@@ -665,7 +685,7 @@ class ItemCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${visual.lastname}, ${visual.firstname}",
+                          "${visual.lastName}, ${visual.firstName}",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -684,7 +704,7 @@ class ItemCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${visual.studentID} | Year: ${visual.year} |",
+                              "${visual.stuId} | Year: ${visual.year} |",
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 11,
@@ -693,13 +713,11 @@ class ItemCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              visual.enrolled ? 'Enrolled' : 'Not Enrolled',
+                              "Status: ${visual.status}",
                               style: TextStyle(
-                                color: visual.enrolled
-                                    ? primary_color
-                                    : Colors.red,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400,
+                                color: visual.status == 'ACTIVE'
+                                  ? primary_color
+                                    : Colors.red
                               ),
                             ),
                           ],
@@ -730,7 +748,7 @@ class ItemCard extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _showUpdate(context);
+                            _showUpdate(context, visual.firstName, visual.lastName, visual.course, visual.department, visual.year, visual.status, visual.id);
                           },
                           child: Container(
                             width: 30,
@@ -749,7 +767,7 @@ class ItemCard extends StatelessWidget {
                         const SizedBox(height: 10),
                         GestureDetector(
                           onTap: () {
-                            _showDeleteDialog(context);
+                            _showDeleteDialog(context,visual.id );
                           },
                           child: Container(
                             width: 30,
@@ -782,7 +800,8 @@ void _showCreateDialog(BuildContext context) {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _courseController = TextEditingController();
-  String _selectedYear = 'First Year';
+    final TextEditingController _departmentController = TextEditingController();
+  int _selectedYear = 1;
   bool _isEnrolled = true;
 
   showDialog(
@@ -828,7 +847,7 @@ void _showCreateDialog(BuildContext context) {
           ),
         ),
         content: Container(
-          height: 300,
+          height: 400,
           width: double.infinity,
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
@@ -904,15 +923,36 @@ void _showCreateDialog(BuildContext context) {
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
                   ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                    controller: _departmentController,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: primary_color),
+                      ),
+                      hintText: 'Department',
+                      hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+
                   SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
+                  DropdownButtonFormField<int>(
                     value: _selectedYear,
                     items: [
-                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 1, child: Text('First Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 2, child: Text('Second Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 3, child: Text('Third Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 4, child: Text('Fourth Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 5, child: Text('Fifth Year', style: TextStyle(fontSize: 13))),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -955,7 +995,29 @@ void _showCreateDialog(BuildContext context) {
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: (){},
+                    onPressed: () {
+                      context.read<AdminExtendedBloc>().add(
+                        createStudent(
+                          _firstNameController.text,
+                          _lastNameController.text,
+                          _courseController.text,
+                          _selectedYear,
+                          _isEnrolled ? "ACTIVE" : "INACTIVE",
+                          _departmentController.text,
+                        ),
+                      );
+
+                      // Show the Snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Student created successfully!"),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+
+                      // Navigate back after showing the Snackbar
+                      Navigator.pop(context);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary_color,
                       minimumSize: Size(double.infinity, 50),
@@ -985,12 +1047,13 @@ void _showCreateDialog(BuildContext context) {
 
 }
   
-void _showUpdate(BuildContext context) {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _courseController = TextEditingController();
-  String _selectedYear = 'First Year';
-  bool _isEnrolled = true;
+void _showUpdate(BuildContext context, String firstname, String lastname, String course, String department, int year, String enrolled, int id) {
+final TextEditingController _firstNameController = TextEditingController(text: firstname);
+  final TextEditingController _lastNameController = TextEditingController(text: lastname);
+  final TextEditingController _courseController = TextEditingController(text: course);
+  final TextEditingController _departmentController = TextEditingController(text: department);
+  int _selectedYear = year;
+  bool _isEnrolled = enrolled == 'ACTIVE' ? true : false;
 
   showDialog(
     context: context,
@@ -1035,7 +1098,7 @@ void _showUpdate(BuildContext context) {
           ),
         ),
         content: Container(
-          height: 300,
+          height: 400,
           width: double.infinity,
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
@@ -1093,6 +1156,26 @@ void _showUpdate(BuildContext context) {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                    controller: _departmentController,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: primary_color),
+                      ),
+                      hintText: 'Department',
+                      hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.done,
+                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
                     controller: _courseController,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(
@@ -1112,14 +1195,14 @@ void _showUpdate(BuildContext context) {
                     style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(height: 20),
-                  DropdownButtonFormField<String>(
+                  DropdownButtonFormField<int>(
                     value: _selectedYear,
                     items: [
-                      DropdownMenuItem(value: 'First Year', child: Text('First Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Second Year', child: Text('Second Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Third Year', child: Text('Third Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fourth Year', child: Text('Fourth Year', style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(value: 'Fifth Year', child: Text('Fifth Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 1, child: Text('First Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 2, child: Text('Second Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 3, child: Text('Third Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 4, child: Text('Fourth Year', style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 5, child: Text('Fifth Year', style: TextStyle(fontSize: 13))),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -1162,7 +1245,20 @@ void _showUpdate(BuildContext context) {
                   ),
                   SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: (){},
+                    onPressed: () {
+                      context.read<AdminExtendedBloc>().add(
+                        updateStudent(
+                          _firstNameController.text,
+                          _lastNameController.text,
+                          _courseController.text,
+                          _selectedYear,
+                          _isEnrolled ? "ACTIVE" : "INACTIVE",
+                          id,
+                          _departmentController.text,
+                        ),
+                      );
+                      Navigator.pop(context);
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary_color,
                       minimumSize: Size(double.infinity, 50),
@@ -1172,7 +1268,7 @@ void _showUpdate(BuildContext context) {
                     ),
                     child: Center(
                       child: Text(
-                        'Create',
+                        'Update',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 10,
@@ -1192,8 +1288,8 @@ void _showUpdate(BuildContext context) {
 
 }
 
-void _showDeleteDialog (BuildContext context) {
-
+void _showDeleteDialog (BuildContext context, int id) {
+  
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -1214,7 +1310,7 @@ void _showDeleteDialog (BuildContext context) {
               ),
             ),
             Text(
-              'Do you insist deleting Louise\'s details',
+              'Do you insist deleting this Student?',
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 11,
@@ -1226,6 +1322,8 @@ void _showDeleteDialog (BuildContext context) {
         actions: [
           GestureDetector(
             onTap: (){
+              context.read<AdminExtendedBloc>().add(deleteStudent(id));
+              Navigator.pop(context);
             },
             child: Container(
               height: 30,

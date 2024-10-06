@@ -46,3 +46,42 @@ class changeBookStatus extends AdminExtendedEvent{
 
   changeBookStatus(this.id, this.status);
 }
+
+class getStudent extends AdminExtendedEvent {}
+
+class showStudent extends AdminExtendedEvent {
+  final String id;
+
+  showStudent(this.id);
+}
+
+class deleteStudent extends AdminExtendedEvent {
+  final int id;
+
+  deleteStudent(this.id);
+}
+
+class updateStudent extends AdminExtendedEvent {
+  final int id;
+  final String firstName;
+  final String lastName;
+  final String department;
+  final String course;
+  final int year;
+  final String enrolled;
+
+  updateStudent(this.firstName, this.lastName, this.course, this.year,
+      this.enrolled, this.id, this.department);
+}
+
+class createStudent extends AdminExtendedEvent {
+  final String firstName;
+  final String lastName;
+  final String department;
+  final String course;
+  final int year;
+  final String enrolled;
+
+  createStudent(
+      this.firstName, this.lastName, this.course, this.year, this.enrolled, this.department);
+}

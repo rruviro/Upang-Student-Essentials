@@ -105,44 +105,7 @@ class showAnnouncementData extends StudentExtendedEvent {
   showAnnouncementData(this.dept);
 }
 
-class getStudent extends StudentExtendedEvent {}
 
-class showStudent extends StudentExtendedEvent {
-  final String id;
-
-  showStudent(this.id);
-}
-
-class deleteStudent extends StudentExtendedEvent {
-  final int id;
-
-  deleteStudent(this.id);
-}
-
-class updateStudent extends StudentExtendedEvent {
-  final int id;
-  final String firstName;
-  final String lastName;
-  final String department;
-  final String course;
-  final int year;
-  final bool enrolled;
-
-  updateStudent(this.firstName, this.lastName, this.course, this.year,
-      this.enrolled, this.id, this.department);
-}
-
-class createStudent extends StudentExtendedEvent {
-  final String firstName;
-  final String lastName;
-  final String department;
-  final String course;
-  final int year;
-  final bool enrolled;
-
-  createStudent(
-      this.firstName, this.lastName, this.course, this.year, this.enrolled, this.department);
-}
 
 class AddStudentBagBook extends StudentExtendedEvent {
   final int id;
