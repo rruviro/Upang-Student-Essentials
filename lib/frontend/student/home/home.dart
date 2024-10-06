@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
         } else if (state is CoursePageState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => courses()));
         } else if (state is UniformPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
         }
       },
       builder: (context, state) {
