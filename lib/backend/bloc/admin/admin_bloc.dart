@@ -38,18 +38,17 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     on<ManagePageEvent>(manage_page);
 
     on<showCodeBookData>((event, emit) async {
-        emit(itemCodeDataLoading());
         try {
           final bookData = await _adminrepo.showCodeBook(event.code);
           emit(bookCodeDataLoaded(bookData));
           print(bookData);
         } catch (e) {
           emit(bookCodeDataError(e.toString()));
+          add(getStudent());
         }
       });
 
       on<showCodeItemData>((event, emit) async {
-        emit(itemCodeDataLoading());
         try {
           
           final itemData = await _adminrepo.showCodeItem(event.code);
@@ -68,7 +67,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
           print(itemData.type);
         } catch (e) {
           emit(itemCodeDataError(e.toString()));
-          print("$e");
+          add(getStudent());
         }
       });
 
@@ -78,6 +77,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
           emit(BookStatusChanged());
         } catch (e) {
           print('Error: $e to change Book status.');
+          add(getStudent());
         }
       });
 
@@ -87,6 +87,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
           emit(ItemStatusChanged());
         } catch (e) {
           print('Error: $e to change Item status.');
+          add(getStudent());
         }
       });
 
@@ -97,6 +98,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       } catch (e) {
         print(e);
         emit(studentError('Failed to add student'));
+        add(getStudent());
       }
     });
 
@@ -106,6 +108,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         add(getStudent());
       } catch (e) {
         emit(studentError('Error deleting student: ${e.toString()}'));
+        add(getStudent());
       }
     });
 
@@ -115,6 +118,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         add(getStudent());
       } catch (e) {
         emit(studentError(e.toString()));
+        add(getStudent());
       }
     });
 

@@ -90,60 +90,6 @@ class _TransactionState extends State<Transaction> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
-                  SizedBox(
-                    height: 25,
-                    width: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black26
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  InkWell(
-                    key: __Reserved,
-                    onTap: () => _selectedItem(2),
-                    child: Text(
-                      'Reserved',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        color: _currentSelection == 2
-                          ? Colors.black
-                          : Colors.grey,
-                        fontWeight: _currentSelection == 2
-                          ? FontWeight.w600
-                          : FontWeight.w400
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  SizedBox(
-                    height: 25,
-                    width: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black26
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  InkWell(
-                    key: Complete,
-                    onTap: () => _selectedItem(3),
-                    child: Text(
-                      'Complete',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        color: _currentSelection == 3
-                          ? Colors.black
-                          : Colors.grey,
-                        fontWeight: _currentSelection == 3
-                          ? FontWeight.w600
-                          : FontWeight.w400
-                      ),
-                    ),
-                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -169,12 +115,36 @@ class _TransactionState extends State<Transaction> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Uniform',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 20),
                 ItemList(
                   categoryList: products
                       .where(
                         (element) => element.category == _currentSelection
                       ).toList()
-                )
+                ),
+                Text(
+                  'Books',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 20),
+                ItemList(
+                  categoryList: products
+                      .where(
+                        (element) => element.category == _currentSelection
+                      ).toList()
+                ),
               ],
             ),
           ),

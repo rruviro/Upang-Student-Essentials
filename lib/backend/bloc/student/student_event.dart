@@ -87,6 +87,22 @@ class changeBookStatus extends StudentExtendedEvent {
   changeBookStatus(this.id, this.status);
 }
 
+class reserveorclaimItem extends StudentExtendedEvent {
+  final int id;
+  final String status;
+  final int stocks;
+
+  reserveorclaimItem(this.id, this.status, this.stocks);
+}
+
+class reserveorclaimBook extends StudentExtendedEvent {
+  final int id;
+  final String status;
+  final int stocks;
+
+  reserveorclaimBook(this.id, this.status, this.stocks);
+}
+
 class changeReservedItemStatus extends StudentExtendedEvent {
   final int count;
 

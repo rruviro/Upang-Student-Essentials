@@ -320,12 +320,12 @@ Widget build(BuildContext context) {
                       else{
                         if(checkedBookIds.length > 0){
                           for(var i in checkedBookIds){
-                            context.read<StudentExtendedBloc>().add(changeBookStatus(i,'Request'));
+                            context.read<StudentExtendedBloc>().add(reserveorclaimBook(i,'Request',0));
                           }
                         }
                         if(checkedItemIds.length > 0){
                           for(var i in checkedItemIds){
-                            context.read<StudentExtendedBloc>().add(changeItemStatus(i,'Request'));
+                            context.read<StudentExtendedBloc>().add(reserveorclaimItem(i,'Request',0));
                           }
                         }
                         checkedBookIds.clear();

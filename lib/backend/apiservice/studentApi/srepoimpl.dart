@@ -264,4 +264,23 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
         throw Exception("Failed to add student item data: ${response.body}");
       }
     }
+    
+    @override
+    Future<void> reserveorclaimBook(int id, String status, int stocks) async {
+      final response =
+          await http.put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status/$stocks'));
+      if (response == 200) {
+      } else {
+        throw Exception('Failed');
+      }
+    }
+    @override
+    Future<void> reserveorclaimItem(int id, String status, int stocks) async {
+    final response =
+        await http.put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status/$stocks'));
+    if (response == 200) {
+    } else {
+      throw Exception('Failed');
+    }
+  }
 }

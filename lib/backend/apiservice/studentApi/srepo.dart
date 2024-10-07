@@ -22,6 +22,8 @@ abstract class Studentrepo {
   Future<void> deleteStudentItemData(int id);
   Future<void> changeStudentItemStatus(int id, String status);
   Future<void> changeStudentBookStatus(int id, String status);
+  Future<void> reserveorclaimItem(int id, String status, int stocks);
+  Future<void> reserveorclaimBook(int id, String status, int stocks);
   Future<void> reservedItemFirst(int count);
   Future<void> reservedBookFirst(int count);
 

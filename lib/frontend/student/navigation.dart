@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
+import 'package:use/frontend/authentication/StudentLogin.dart';
 import 'package:use/frontend/student/announcement/announcement.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/frontend/student/home/home.dart';
@@ -41,6 +43,7 @@ class HomeScreen extends StatefulWidget {
   final String studentID;
 
   const HomeScreen({required this.studentID, Key? key}) : super(key: key);
+  
   @override
   State<HomeScreen> createState() => _Homedestinationtate();
 }
@@ -89,19 +92,49 @@ class _Homedestinationtate extends State<HomeScreen> {
       activeIcon: Icon(Icons.person),
       unselectedColor: tertiary_color,
       selectedColor: primary_color,
-    )
+    ),
   ];
+
+  void _showAccountLockedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Account Locked'),
+          content: Text('ACCOUNT IS LOCKED. PLEASE ENROLL.'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.of(context).pop(); 
+                Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => StudnetLogin()),
+              );
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    print("HASDKJHASDS");
     return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
       listener: (context, state) {
         if (state is SpecificStudentLoadSuccessState) {
           setState(() {
             studentProfile = state.studentProfile;
             isProfileLoaded = true;
+            if (studentProfile.status != "ACTIVE") {
+              _showAccountLockedDialog();
+              
+            }
           });
-          //context.read<StudentExtendedBloc>().add(studentBagItem(studentProfile.id,"Complete"));
         }
       },
       builder: (context, state) {
