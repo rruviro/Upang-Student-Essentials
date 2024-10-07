@@ -19,10 +19,11 @@ import 'package:use/frontend/student/widgets/profile/uniform.dart';
 import '../../colors/colors.dart';
 import '../widgets/profile/book.dart';
 
-final StudentExtendedBloc studBloc = StudentExtendedBloc(StudentRepositoryImpl());
+final StudentExtendedBloc studBloc =
+    StudentExtendedBloc(StudentRepositoryImpl());
 
 class Profile extends StatefulWidget {
-   Profile({super.key, required this.studentProfile});
+  Profile({super.key, required this.studentProfile});
   final StudentProfile studentProfile;
 
   @override
@@ -37,7 +38,7 @@ class _ProfileScreenState extends State<Profile> {
   List<StudentBagItem> items = [];
   List<StudentBagBook> books = [];
   NotificationService? _notificationService;
-  bool _showLoading = true; 
+  bool _showLoading = true;
 
   @override
   void initState() {
@@ -93,14 +94,24 @@ class _ProfileScreenState extends State<Profile> {
             onPressed: () async {
               final result = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => notif(studentProfile: widget.studentProfile)),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        notif(studentProfile: widget.studentProfile)),
               );
               if (result == true) {
-                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
-                context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagItem(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagBook(widget.studentProfile.id, "Complete"));
               } else {
-                context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
-                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagBook(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagItem(widget.studentProfile.id, "Complete"));
               }
             },
           ),
@@ -109,19 +120,30 @@ class _ProfileScreenState extends State<Profile> {
             onPressed: () async {
               final result = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status)),
+                MaterialPageRoute(
+                    builder: (context) => Bag(
+                        studentProfile: widget.studentProfile,
+                        Status: widget.studentProfile.status)),
               );
               if (result == true) {
-                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
-                context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagItem(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagBook(widget.studentProfile.id, "Complete"));
               } else {
-                context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
-                context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagItem(widget.studentProfile.id, "Complete"));
+                context
+                    .read<StudentExtendedBloc>()
+                    .add(studentBagBook(widget.studentProfile.id, "Complete"));
               }
             },
           ),
           IconButton(
-            icon:  Icon(Icons.logout, color: primary_color),
+            icon: Icon(Icons.logout, color: primary_color),
             onPressed: () {
               showDialog(
                 context: context,
@@ -151,10 +173,12 @@ class _ProfileScreenState extends State<Profile> {
                       GestureDetector(
                         onTap: () async {
                           _notificationService?.stopPolling();
-                          final SharedPreferences logout = await SharedPreferences.getInstance();
+                          final SharedPreferences logout =
+                              await SharedPreferences.getInstance();
                           logout.clear();
                           Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => StudnetLogin()),
+                            MaterialPageRoute(
+                                builder: (context) => StudnetLogin()),
                           );
                         },
                         child: Container(
@@ -213,8 +237,8 @@ class _ProfileScreenState extends State<Profile> {
       body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
         builder: (context, state) {
           if (_showLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
+            return Center(child: CircularProgressIndicator());
+          }
           if (state is StudentBagCombinedLoadSuccessState) {
             items = state.studentBagItems;
             books = state.studentBagBooks;
@@ -245,9 +269,8 @@ class _ProfileScreenState extends State<Profile> {
                                   height: 54,
                                   width: 54,
                                   decoration: BoxDecoration(
-                                    color: primary_color,
-                                    borderRadius: BorderRadius.circular(2)
-                                  ),
+                                      color: primary_color,
+                                      borderRadius: BorderRadius.circular(2)),
                                 ),
                                 VerticalDivider(width: 10),
                                 Column(
@@ -262,7 +285,7 @@ class _ProfileScreenState extends State<Profile> {
                                       ),
                                     ),
                                     Text(
-                                      "Course: Bachelor of information and technology",
+                                      "Course: ${widget.studentProfile.course}",
                                       style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 11,
@@ -270,10 +293,11 @@ class _ProfileScreenState extends State<Profile> {
                                       ),
                                     ),
                                     Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${widget.studentProfile.stuId} | Year: Third Year |",
+                                          "${widget.studentProfile.stuId} | Year: ${widget.studentProfile.year} |",
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 11,
@@ -282,7 +306,7 @@ class _ProfileScreenState extends State<Profile> {
                                         ),
                                         const SizedBox(width: 5),
                                         Text(
-                                          'Enrolled',
+                                          '${widget.studentProfile.status}',
                                           style: TextStyle(
                                             color: primary_color,
                                             fontSize: 11,
@@ -297,18 +321,18 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             SizedBox(height: 20),
                             Container(
-                              alignment: Alignment.center,
-                              child: FractionallySizedBox(
-                                widthFactor: 1.2,
-                                child: SizedBox(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: Container(
-                                    decoration: BoxDecoration(color: secondary_color),
+                                alignment: Alignment.center,
+                                child: FractionallySizedBox(
+                                  widthFactor: 1.2,
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: double.infinity,
+                                    child: Container(
+                                      decoration:
+                                          BoxDecoration(color: secondary_color),
+                                    ),
                                   ),
-                                ),
-                              )
-                            ),
+                                )),
                             SizedBox(height: 20),
                             Container(
                               height: 20,
@@ -320,31 +344,27 @@ class _ProfileScreenState extends State<Profile> {
                                     child: Text(
                                       'Transaction',
                                       style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600
-                                      ),
+                                          fontSize: 13,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   Positioned(
                                     right: 0,
                                     child: InkWell(
-                                      onTap:(){
-                                      },
+                                      onTap: () {},
                                       child: Container(
-                                        height: 20,
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'View Transaction >',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color: tertiary_color,
-                                              fontWeight: FontWeight.w400
+                                          height: 20,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'View Transaction >',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: tertiary_color,
+                                                  fontWeight: FontWeight.w400),
                                             ),
-                                          ),
-                                        )
-                                      ),
+                                          )),
                                     ),
                                   )
                                 ],
@@ -368,24 +388,47 @@ class _ProfileScreenState extends State<Profile> {
                               child: Container(
                                 width: double.infinity,
                                 height: 80,
-                                padding:  EdgeInsets.only(top: 5),
+                                padding: EdgeInsets.only(top: 5),
                                 child: Center(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       InkWell(
                                         onTap: () async {
                                           final result = await Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => Transaction(page: 1, studentProfile: widget.studentProfile, status: 'Request')),
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Transaction(
+                                                        page: 1,
+                                                        studentProfile: widget
+                                                            .studentProfile,
+                                                        status: 'Request')),
                                           );
                                           if (result == true) {
-                                            context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
-                                            context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
                                           } else {
-                                            context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
-                                            context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
                                           }
                                         },
                                         child: Column(
@@ -413,14 +456,36 @@ class _ProfileScreenState extends State<Profile> {
                                         onTap: () async {
                                           final result = await Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => Transaction(page: 2, studentProfile: widget.studentProfile, status: 'Reserved')),
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Transaction(
+                                                        page: 2,
+                                                        studentProfile: widget
+                                                            .studentProfile,
+                                                        status: 'Reserved')),
                                           );
                                           if (result == true) {
-                                            context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
-                                            context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
                                           } else {
-                                            context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
-                                            context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
                                           }
                                         },
                                         child: Column(
@@ -448,14 +513,36 @@ class _ProfileScreenState extends State<Profile> {
                                         onTap: () async {
                                           final result = await Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => Transaction(page: 3, studentProfile: widget.studentProfile, status: 'Claim')),
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Transaction(
+                                                        page: 3,
+                                                        studentProfile: widget
+                                                            .studentProfile,
+                                                        status: 'Claim')),
                                           );
                                           if (result == true) {
-                                            context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
-                                            context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
                                           } else {
-                                            context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, "Complete"));
-                                            context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget.studentProfile.id,
+                                                    "Complete"));
                                           }
                                         },
                                         child: Column(
@@ -485,26 +572,25 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             SizedBox(height: 30),
                             Container(
-                              alignment: Alignment.center,
-                              child: FractionallySizedBox(
-                                widthFactor: 1.2,
-                                child: SizedBox(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: Container(
-                                    decoration: BoxDecoration(color: secondary_color),
+                                alignment: Alignment.center,
+                                child: FractionallySizedBox(
+                                  widthFactor: 1.2,
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: double.infinity,
+                                    child: Container(
+                                      decoration:
+                                          BoxDecoration(color: secondary_color),
+                                    ),
                                   ),
-                                ),
-                              )
-                            ),
+                                )),
                             SizedBox(height: 20),
                             Text(
                               'History',
                               style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600
-                              ),
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
                             ),
                             SizedBox(height: 15),
                             Row(
@@ -515,14 +601,13 @@ class _ProfileScreenState extends State<Profile> {
                                   child: Text(
                                     'Complete',
                                     style: TextStyle(
-                                      fontSize: 10,
-                                      color: _currentSelection == 1
-                                        ? primary_color
-                                        : tertiary_color,
-                                      fontWeight: _currentSelection == 1
-                                        ? FontWeight.w500
-                                        : FontWeight.w400
-                                    ),
+                                        fontSize: 10,
+                                        color: _currentSelection == 1
+                                            ? primary_color
+                                            : tertiary_color,
+                                        fontWeight: _currentSelection == 1
+                                            ? FontWeight.w500
+                                            : FontWeight.w400),
                                   ),
                                 ),
                                 SizedBox(width: 15),
@@ -532,14 +617,13 @@ class _ProfileScreenState extends State<Profile> {
                                   child: Text(
                                     'Cancelled',
                                     style: TextStyle(
-                                      fontSize: 10,
-                                      color: _currentSelection == 2
-                                        ? primary_color
-                                        : tertiary_color,
-                                      fontWeight: _currentSelection == 2
-                                        ? FontWeight.w500
-                                        : FontWeight.w400
-                                    ),
+                                        fontSize: 10,
+                                        color: _currentSelection == 2
+                                            ? primary_color
+                                            : tertiary_color,
+                                        fontWeight: _currentSelection == 2
+                                            ? FontWeight.w500
+                                            : FontWeight.w400),
                                   ),
                                 ),
                               ],
@@ -549,7 +633,8 @@ class _ProfileScreenState extends State<Profile> {
                               height: 1,
                               width: double.infinity,
                               child: Container(
-                                decoration: BoxDecoration(color: Colors.black26),
+                                decoration:
+                                    BoxDecoration(color: Colors.black26),
                               ),
                             ),
                             SizedBox(height: 15),
@@ -563,35 +648,35 @@ class _ProfileScreenState extends State<Profile> {
                                     child: Text(
                                       'Books',
                                       style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600
-                                      ),
+                                          fontSize: 13,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   Positioned(
                                     right: -5,
                                     child: InkWell(
-                                      onTap:(){
+                                      onTap: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => Books()),
+                                          MaterialPageRoute(
+                                              builder: (context) => Books(
+                                                  studentProfile:
+                                                      widget.studentProfile)),
                                         );
                                       },
                                       child: Container(
-                                        height: 20,
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'View All Books >',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color: tertiary_color,
-                                              fontWeight: FontWeight.w400
+                                          height: 20,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'View All Books >',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: tertiary_color,
+                                                  fontWeight: FontWeight.w400),
                                             ),
-                                          ),
-                                        )
-                                      ),
+                                          )),
                                     ),
                                   )
                                 ],
@@ -599,17 +684,20 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             SizedBox(height: 20),
                             Container(
-                              alignment: Alignment.center,
-                              margin: EdgeInsets.only(left: 40),
-                              child: FractionallySizedBox(
-                                widthFactor: 1.2,
-                                child: book_list(
-                                  status: books.where((book) =>
-                                    book.status == (_currentSelection == 1 ? "Complete" : "Cancelled")
-                                  ).toList(),
-                                ),
-                              )
-                            ),
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(left: 40),
+                                child: FractionallySizedBox(
+                                  widthFactor: 1.2,
+                                  child: book_list(
+                                    status: books
+                                        .where((book) =>
+                                            book.status ==
+                                            (_currentSelection == 1
+                                                ? "Complete"
+                                                : "Cancelled"))
+                                        .toList(),
+                                  ),
+                                )),
                             SizedBox(height: 20),
                             Container(
                               height: 20,
@@ -621,35 +709,35 @@ class _ProfileScreenState extends State<Profile> {
                                     child: Text(
                                       'Uniform',
                                       style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600
-                                      ),
+                                          fontSize: 13,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ),
                                   Positioned(
                                     right: -5,
                                     child: InkWell(
-                                      onTap:(){
+                                      onTap: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => uniforms()),
+                                          MaterialPageRoute(
+                                              builder: (context) => uniforms(
+                                                  studentProfile:
+                                                      widget.studentProfile)),
                                         );
                                       },
                                       child: Container(
-                                        height: 20,
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'View All Uniform >',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color: tertiary_color,
-                                              fontWeight: FontWeight.w400
+                                          height: 20,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'View All Uniform >',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: tertiary_color,
+                                                  fontWeight: FontWeight.w400),
                                             ),
-                                          ),
-                                        )
-                                      ),
+                                          )),
                                     ),
                                   )
                                 ],
@@ -657,9 +745,13 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                             SizedBox(height: 20),
                             uniform_list(
-                              status: items.where((item) =>
-                                item.status == (_currentSelection == 1 ? "Complete" : "Cancelled")
-                              ).toList(),
+                              status: items
+                                  .where((item) =>
+                                      item.status ==
+                                      (_currentSelection == 1
+                                          ? "Complete"
+                                          : "Cancelled"))
+                                  .toList(),
                             ),
                           ],
                         ),

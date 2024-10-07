@@ -12,7 +12,7 @@ import 'dart:convert';
 
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
 
-  class StudentRepositoryImpl extends Studentrepo {
+class StudentRepositoryImpl extends Studentrepo {
   static const String baseUrl = 'http://127.0.0.1:8000/api';
   // static const String baseUrl = 'http://10.0.2.2:8000/api';
   //static const String baseUrl = 'http://localhost:8000/api';
@@ -168,9 +168,10 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
   }
 
   @override
-  Future<List<StudentBagBook>> showAllStudentBagBookData(int stubag_id) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/bookcollections/${stubag_id}'));
+  Future<List<StudentBagBook>> showAllStudentBagBookData(
+      int stubag_id, String status) async {
+    final response = await http
+        .get(Uri.parse('$baseUrl/showallbooks/${stubag_id}/${status}'));
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
       List<dynamic> itemsJson = responseBody['bookCollections'];
@@ -181,9 +182,10 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
   }
 
   @override
-  Future<List<StudentBagItem>> showAllStudentBagItemData(int stubag_id) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/studentbagitems/${stubag_id}'));
+  Future<List<StudentBagItem>> showAllStudentBagItemData(
+      int stubag_id, String status) async {
+    final response = await http
+        .get(Uri.parse('$baseUrl/showallitems/${stubag_id}/${status}'));
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
       List<dynamic> itemsJson = responseBody['items'];
@@ -213,9 +215,9 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
     }
   }
 
-  
   @override
-  Future<void> addStudentBookData(int id, String department, String bookName, String subjectCode, String subjectDesc, String status) async {
+  Future<void> addStudentBookData(int id, String department, String bookName,
+      String subjectCode, String subjectDesc, String status) async {
     final response = await http.put(
       Uri.parse('$baseUrl/bookcollections'),
       headers: <String, String>{
@@ -227,7 +229,7 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
         'SubjectCode': subjectCode,
         'SubjectDesc': subjectDesc,
         'Status': status,
-        'stubag_id': id, 
+        'stubag_id': id,
       }),
     );
 
@@ -238,46 +240,55 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
       throw Exception("Failed to add student book data: ${response.body}");
     }
   }
-  
-  @override
-  Future<void> addStudentItemData(int id, String department, String course, String gender, String type, String body, String size, String status) async {
-    final response = await http.put(
-        Uri.parse('$baseUrl/studentbagitems'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'Department': department,
-          'Course': course,
-          'Gender': gender,
-          'Type': type,
-          'Body': body,
-          'Size': size,
-          'Status': status,
-          'stubag_id': id,
-        }),
-      );
 
-      if (response.statusCode == 200) {
-        print("Student item data successfully added.");
-      } else {
-        throw Exception("Failed to add student item data: ${response.body}");
-      }
+  @override
+  Future<void> addStudentItemData(
+      int id,
+      String department,
+      String course,
+      String gender,
+      String type,
+      String body,
+      String size,
+      String status) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/studentbagitems'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'Department': department,
+        'Course': course,
+        'Gender': gender,
+        'Type': type,
+        'Body': body,
+        'Size': size,
+        'Status': status,
+        'stubag_id': id,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Student item data successfully added.");
+    } else {
+      throw Exception("Failed to add student item data: ${response.body}");
     }
-    
-    @override
-    Future<void> reserveorclaimBook(int id, String status, int stocks) async {
-      final response =
-          await http.put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status/$stocks'));
-      if (response == 200) {
-      } else {
-        throw Exception('Failed');
-      }
+  }
+
+  @override
+  Future<void> reserveorclaimBook(int id, String status, int stocks) async {
+    final response = await http
+        .put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status/$stocks'));
+    if (response == 200) {
+    } else {
+      throw Exception('Failed');
     }
-    @override
-    Future<void> reserveorclaimItem(int id, String status, int stocks) async {
-    final response =
-        await http.put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status/$stocks'));
+  }
+
+  @override
+  Future<void> reserveorclaimItem(int id, String status, int stocks) async {
+    final response = await http
+        .put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status/$stocks'));
     if (response == 200) {
     } else {
       throw Exception('Failed');

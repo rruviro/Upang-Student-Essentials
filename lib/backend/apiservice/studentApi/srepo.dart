@@ -1,4 +1,3 @@
-
 import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
@@ -16,8 +15,10 @@ abstract class Studentrepo {
   Future<List<StudentBagItem>> showStudentBagItemData(
       int stubag_id, String status);
 
-  Future<void> addStudentBookData(int id,String department, String bookName, String subjectCode, String subjectDesc, String status);
-  Future<void> addStudentItemData(int id,String department, String course,String gender,String type,String body,String size,String status);
+  Future<void> addStudentBookData(int id, String department, String bookName,
+      String subjectCode, String subjectDesc, String status);
+  Future<void> addStudentItemData(int id, String department, String course,
+      String gender, String type, String body, String size, String status);
   Future<void> deleteStudentBookData(int id);
   Future<void> deleteStudentItemData(int id);
   Future<void> changeStudentItemStatus(int id, String status);
@@ -28,8 +29,8 @@ abstract class Studentrepo {
   Future<void> reservedBookFirst(int count);
 
   Future<List<announcement>> showAnnouncementData(String dept);
-  Future<List<StudentBagBook>> showAllStudentBagBookData(int stubag_id);
-  Future<List<StudentBagItem>> showAllStudentBagItemData(int stubag_id);
-
-
+  Future<List<StudentBagBook>> showAllStudentBagBookData(
+      int stubag_id, String status);
+  Future<List<StudentBagItem>> showAllStudentBagItemData(
+      int stubag_id, String status);
 }

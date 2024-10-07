@@ -71,7 +71,8 @@ class StudentExtendedBloc
 
     on<reserveorclaimBook>((event, emit) async {
       try {
-        await _studentrepo.reserveorclaimBook(event.id, event.status, event.stocks);
+        await _studentrepo.reserveorclaimBook(
+            event.id, event.status, event.stocks);
         emit(BookStatusChanged());
       } catch (e) {
         print('Error: $e to change Book status.');
@@ -80,7 +81,8 @@ class StudentExtendedBloc
 
     on<reserveorclaimItem>((event, emit) async {
       try {
-        await _studentrepo.reserveorclaimItem(event.id, event.status, event.stocks);
+        await _studentrepo.reserveorclaimItem(
+            event.id, event.status, event.stocks);
         emit(ItemStatusChanged());
       } catch (e) {
         print('Error: $e to change Item status.');
@@ -126,9 +128,9 @@ class StudentExtendedBloc
     on<allstudentBagBook>((event, emit) async {
       emit(StudentBagBookLoadingState());
       try {
-        final itemData =
-            await _studentrepo.showAllStudentBagItemData(event.stubag_id);
-        emit(StudentBagItemLoadSuccessState(itemData));
+        final BookData = await _studentrepo.showAllStudentBagBookData(
+            event.stubag_id, event.status);
+        emit(StudentBagBookLoadSuccessState(BookData));
       } catch (e) {
         emit(StudentBagItemErrorState('An error occurred: ${e.toString()}'));
       }
@@ -137,13 +139,14 @@ class StudentExtendedBloc
     on<allstudentBagItem>((event, emit) async {
       emit(StudentBagItemLoadingState());
       try {
-        final BookData =
-            await _studentrepo.showAllStudentBagBookData(event.stubag_id);
-        emit(StudentBagBookLoadSuccessState(BookData));
+        final itemData = await _studentrepo.showAllStudentBagItemData(
+            event.stubag_id, event.status);
+
+        emit(StudentBagItemLoadSuccessState(itemData));
       } catch (e) {
         emit(StudentBagBookErrorState('An error occurred: ${e.toString()}'));
       }
-    });   
+    });
 
     List<StudentBagItem>? studentBagItems;
     List<StudentBagBook>? studentBagBooks;
@@ -223,11 +226,10 @@ class StudentExtendedBloc
 
     //STUDENT MANAGEMENT
 
-    
-
     on<AddStudentBagBook>((event, emit) async {
       try {
-        await _studentrepo.addStudentBookData(event.id, event.department, event.bookName, event.subjectCode, event.subjectDesc, event.status);
+        await _studentrepo.addStudentBookData(event.id, event.department,
+            event.bookName, event.subjectCode, event.subjectDesc, event.status);
       } catch (e) {
         print('$e');
         emit(bookError('An error occurred: ${e.toString()}'));
@@ -236,15 +238,21 @@ class StudentExtendedBloc
 
     on<AddStudentBagItem>((event, emit) async {
       try {
-        await _studentrepo.addStudentItemData(event.id, event.department, event.course, event.gender, event.type, event.body, event.size, event.status);
+        await _studentrepo.addStudentItemData(
+            event.id,
+            event.department,
+            event.course,
+            event.gender,
+            event.type,
+            event.body,
+            event.size,
+            event.status);
       } catch (e) {
         print('$e');
         emit(itemError('An error occurred: ${e.toString()}'));
       }
     });
   }
-
-  
 
   FutureOr<void> course_page(
       CoursePageEvent event, Emitter<StudentExtendedState> emit) {

@@ -45,14 +45,15 @@ class studentBagBook extends StudentExtendedEvent {
 
 class allstudentBagItem extends StudentExtendedEvent {
   final int stubag_id;
-
-  allstudentBagItem(this.stubag_id);
+  final String status;
+  allstudentBagItem(this.stubag_id, this.status);
 }
 
 class allstudentBagBook extends StudentExtendedEvent {
   final int stubag_id;
+  final String status;
 
-  allstudentBagBook(this.stubag_id);
+  allstudentBagBook(this.stubag_id, this.status);
 }
 
 class studentNotificationMail extends StudentExtendedEvent {
@@ -121,19 +122,16 @@ class showAnnouncementData extends StudentExtendedEvent {
   showAnnouncementData(this.dept);
 }
 
-
-
 class AddStudentBagBook extends StudentExtendedEvent {
   final int id;
   final String department;
   final String bookName;
   final String subjectCode;
-  final String subjectDesc; 
+  final String subjectDesc;
   final String status;
 
-  AddStudentBagBook(this.id, this.department, this.bookName, this.subjectCode, this.subjectDesc, this.status
-
-  );
+  AddStudentBagBook(this.id, this.department, this.bookName, this.subjectCode,
+      this.subjectDesc, this.status);
 }
 
 class AddStudentBagItem extends StudentExtendedEvent {
@@ -153,8 +151,7 @@ class AddStudentBagItem extends StudentExtendedEvent {
     this.type,
     this.body,
     this.size,
-    this.status, this.id,
+    this.status,
+    this.id,
   );
 }
-
-
