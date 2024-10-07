@@ -69,6 +69,24 @@ class StudentExtendedBloc
       }
     });
 
+    on<reserveorclaimBook>((event, emit) async {
+      try {
+        await _studentrepo.reserveorclaimBook(event.id, event.status, event.stocks);
+        emit(BookStatusChanged());
+      } catch (e) {
+        print('Error: $e to change Book status.');
+      }
+    });
+
+    on<reserveorclaimItem>((event, emit) async {
+      try {
+        await _studentrepo.reserveorclaimItem(event.id, event.status, event.stocks);
+        emit(ItemStatusChanged());
+      } catch (e) {
+        print('Error: $e to change Item status.');
+      }
+    });
+
     on<changeReservedBookStatus>((event, emit) async {
       try {
         await _studentrepo.reservedBookFirst(event.count);
