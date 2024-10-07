@@ -117,14 +117,43 @@ class _ProfileScreenState extends State<Profile> {
               } else {
                 print("itemCode is null");
               }
-            } else if (state is bookCodeDataLoaded) {
+            } 
+            else if (state is itemCodeDataError || state is bookCodeDataError) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Error'),
+                    content: Text('No code found.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+            else if (state is bookCodeDataLoaded) {
               setState(() {
                 bookCode = state.studentBagBook; 
               });
+
             } else if (state is studentLoaded) {
               setState(() {
                 student = state.students;
               });
+            }
+            else if (state is studentError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('An error occurred!'),
+                  duration: Duration(seconds: 3),
+                ),
+              );
             }
             if (bookCode != null) {
                 _showItemDetailsDialog(context, true, bookCode);
@@ -362,16 +391,20 @@ class _ProfileScreenState extends State<Profile> {
                                                 borderSide: BorderSide(color: Colors.white),
                                               ),
                                               enabledBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(color: Colors.white), // Color when unfocused
-                                              )
+                                                borderSide: BorderSide(color: Colors.white),
+                                              ),
                                             ),
-                                            keyboardType: TextInputType.text,
+                                            keyboardType: TextInputType.number,
                                             textInputAction: TextInputAction.done,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w400,
                                             ),
+                                            inputFormatters: [
+                                              LengthLimitingTextInputFormatter(5), 
+                                              FilteringTextInputFormatter.digitsOnly,
+                                            ],
                                           ),
                                         ),
                                         SizedBox(width: 10),
@@ -504,13 +537,10 @@ class _ProfileScreenState extends State<Profile> {
                 ],
               ),
           );
-          } else if(state is studentError){
-            print(state);
-            return Center(child: Text(state.error));
           }
           else{
             print(state);
-            return Center(child: Text(state.toString()));
+            return Center(child: CircularProgressIndicator(),);
           }
         },
       );
@@ -685,9 +715,17 @@ void _showCreateDialog(BuildContext context) {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _courseController = TextEditingController();
-    final TextEditingController _departmentController = TextEditingController();
+  final TextEditingController _departmentController = TextEditingController();
   int _selectedYear = 1;
   bool _isEnrolled = true;
+
+  // RegEx pattern to disallow numbers in string fields
+  final RegExp onlyLetters = RegExp(r'^[a-zA-Z\s]*$');
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text; 
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
 
   showDialog(
     context: context,
@@ -756,7 +794,8 @@ void _showCreateDialog(BuildContext context) {
                             hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                           ),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(15),
+                            LengthLimitingTextInputFormatter(20),
+                            FilteringTextInputFormatter.allow(onlyLetters),
                           ],
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
@@ -779,11 +818,13 @@ void _showCreateDialog(BuildContext context) {
                             hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                           ),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(15),
+                            LengthLimitingTextInputFormatter(20),
+                            FilteringTextInputFormatter.allow(onlyLetters),
                           ],
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                          validator: (value) => value == null || value.isEmpty ? 'Last name is required' : null,
                         ),
                       ),
                     ],
@@ -802,11 +843,13 @@ void _showCreateDialog(BuildContext context) {
                       hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(40),
+                      LengthLimitingTextInputFormatter(4),
+                      FilteringTextInputFormatter.allow(onlyLetters),
                     ],
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                    validator: (value) => value == null || value.isEmpty ? 'Course is required' : null,
                   ),
                   SizedBox(height: 10),
                   TextFormField(
@@ -822,11 +865,13 @@ void _showCreateDialog(BuildContext context) {
                       hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(40),
+                      LengthLimitingTextInputFormatter(4),
+                      FilteringTextInputFormatter.allow(onlyLetters),
                     ],
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                    validator: (value) => value == null || value.isEmpty ? 'Department is required' : null,
                   ),
 
                   SizedBox(height: 20),
@@ -881,27 +926,36 @@ void _showCreateDialog(BuildContext context) {
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<AdminExtendedBloc>().add(
-                        createStudent(
-                          _firstNameController.text,
-                          _lastNameController.text,
-                          _courseController.text,
-                          _selectedYear,
-                          _isEnrolled ? "ACTIVE" : "INACTIVE",
-                          _departmentController.text,
-                        ),
-                      );
+                      if (_firstNameController.text.isEmpty ||
+                          _lastNameController.text.isEmpty ||
+                          _courseController.text.isEmpty ||
+                          _departmentController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("All fields must be filled correctly!"),
+                          ),
+                        );
+                      } else {
+                        context.read<AdminExtendedBloc>().add(
+                          createStudent(
+                            capitalizeFirstLetter(_firstNameController.text),
+                            capitalizeFirstLetter(_lastNameController.text),
+                            _courseController.text.toUpperCase(),
+                            _selectedYear,
+                            _isEnrolled ? "ACTIVE" : "INACTIVE",
+                            _departmentController.text.toUpperCase(),
+                          ),
+                        );
 
-                      // Show the Snackbar
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Student created successfully!"),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Student created successfully!"),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
 
-                      // Navigate back after showing the Snackbar
-                      Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary_color,
@@ -929,16 +983,22 @@ void _showCreateDialog(BuildContext context) {
       );
     },
   );
-
 }
   
 void _showUpdate(BuildContext context, String firstname, String lastname, String course, String department, int year, String enrolled, int id) {
-final TextEditingController _firstNameController = TextEditingController(text: firstname);
+  final TextEditingController _firstNameController = TextEditingController(text: firstname);
   final TextEditingController _lastNameController = TextEditingController(text: lastname);
   final TextEditingController _courseController = TextEditingController(text: course);
   final TextEditingController _departmentController = TextEditingController(text: department);
   int _selectedYear = year;
-  bool _isEnrolled = enrolled == 'ACTIVE' ? true : false;
+  bool _isEnrolled = enrolled == 'ACTIVE';
+
+  // RegEx pattern to disallow numbers in string fields
+  final RegExp onlyLetters = RegExp(r'^[a-zA-Z\s]*$');
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text; 
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
 
   showDialog(
     context: context,
@@ -1007,7 +1067,8 @@ final TextEditingController _firstNameController = TextEditingController(text: f
                             hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                           ),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(15),
+                            LengthLimitingTextInputFormatter(20),
+                            FilteringTextInputFormatter.allow(onlyLetters),
                           ],
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
@@ -1030,11 +1091,13 @@ final TextEditingController _firstNameController = TextEditingController(text: f
                             hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                           ),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(15),
+                            LengthLimitingTextInputFormatter(20),
+                            FilteringTextInputFormatter.allow(onlyLetters),
                           ],
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                          validator: (value) => value == null || value.isEmpty ? 'Last name is required' : null,
                         ),
                       ),
                     ],
@@ -1053,11 +1116,13 @@ final TextEditingController _firstNameController = TextEditingController(text: f
                       hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(40),
+                      LengthLimitingTextInputFormatter(4), // Set limit to 4 characters
+                      FilteringTextInputFormatter.allow(onlyLetters),
                     ],
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                    validator: (value) => value == null || value.isEmpty ? 'Department is required' : null,
                   ),
                   SizedBox(height: 10),
                   TextFormField(
@@ -1073,11 +1138,13 @@ final TextEditingController _firstNameController = TextEditingController(text: f
                       hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     inputFormatters: [
-                      LengthLimitingTextInputFormatter(40),
+                      LengthLimitingTextInputFormatter(4), // Set limit to 4 characters
+                      FilteringTextInputFormatter.allow(onlyLetters),
                     ],
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w500),
+                    validator: (value) => value == null || value.isEmpty ? 'Course is required' : null,
                   ),
                   SizedBox(height: 20),
                   DropdownButtonFormField<int>(
@@ -1131,18 +1198,29 @@ final TextEditingController _firstNameController = TextEditingController(text: f
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<AdminExtendedBloc>().add(
-                        updateStudent(
-                          _firstNameController.text,
-                          _lastNameController.text,
-                          _courseController.text,
-                          _selectedYear,
-                          _isEnrolled ? "ACTIVE" : "INACTIVE",
-                          id,
-                          _departmentController.text,
-                        ),
-                      );
-                      Navigator.pop(context);
+                      if (_firstNameController.text.isEmpty ||
+                          _lastNameController.text.isEmpty ||
+                          _courseController.text.isEmpty ||
+                          _departmentController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("All fields must be filled correctly!"),
+                          ),
+                        );
+                      } else {
+                        context.read<AdminExtendedBloc>().add(
+                          updateStudent(
+                            capitalizeFirstLetter(_firstNameController.text),
+                            capitalizeFirstLetter(_lastNameController.text),
+                            _courseController.text.toUpperCase(),
+                            _selectedYear,
+                            _isEnrolled ? "ACTIVE" : "INACTIVE",
+                            id,
+                            _departmentController.text.toUpperCase(),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary_color,
@@ -1170,8 +1248,8 @@ final TextEditingController _firstNameController = TextEditingController(text: f
       );
     },
   );
-
 }
+
 
 void _showDeleteDialog (BuildContext context, int id) {
   
