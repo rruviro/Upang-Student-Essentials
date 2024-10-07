@@ -31,6 +31,9 @@ class BagState extends State<Bag> {
   bool isAllBooksChecked = false; 
   bool isAllItemsChecked = false;
 
+  Map<int, StudentBagBook> bookMap = {};  
+  Map<int, StudentBagItem> itemMap = {};  
+
   @override
   void initState() {
     super.initState();
@@ -154,6 +157,8 @@ Widget build(BuildContext context) {
             print(state);
           }
           if (state is StudentBagCombinedLoadSuccessState) {
+            bookMap = {for (var book in state.studentBagBooks) book.id: book};
+            itemMap = {for (var item in state.studentBagItems) item.id: item};
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,14 +323,50 @@ Widget build(BuildContext context) {
                         });
                       }
                       else{
-                        if(checkedBookIds.length > 0){
-                          for(var i in checkedBookIds){
-                            context.read<StudentExtendedBloc>().add(reserveorclaimBook(i,'Request',0));
+                        int stocks = 0;
+                        if (checkedBookIds.isNotEmpty) {
+                          for (var bookId in checkedBookIds) {
+                            var book = bookMap[bookId];  // Get the corresponding book object
+                            context.read<StudentExtendedBloc>().add(reserveorclaimBook(bookId, 'Request', stocks));
+                            
+                            if (stocks == 0) {
+                              context.read<StudentExtendedBloc>().add(
+                                createNotification(
+                                  widget.studentProfile.id, 
+                                  'The Book "${book?.code ?? 'Unknown'}" you\'ve requested is now RESERVED.',
+                                ),
+                              );
+                            } else {
+                              context.read<StudentExtendedBloc>().add(
+                                createNotification(
+                                  widget.studentProfile.id, 
+                                  'The Book "${book?.code ?? 'Unknown'}" you\'ve requested is now ready to be CLAIMED.',
+                                ),
+                              );
+                            }
                           }
                         }
-                        if(checkedItemIds.length > 0){
-                          for(var i in checkedItemIds){
-                            context.read<StudentExtendedBloc>().add(reserveorclaimItem(i,'Request',0));
+
+                        if (checkedItemIds.isNotEmpty) {
+                          for (var itemId in checkedItemIds) {
+                            var item = itemMap[itemId];  // Get the corresponding item object
+                            context.read<StudentExtendedBloc>().add(reserveorclaimItem(itemId, 'Request', stocks));
+                            
+                            if (stocks == 0) {
+                              context.read<StudentExtendedBloc>().add(
+                                createNotification(
+                                  widget.studentProfile.id, 
+                                  'The Item "${item?.code ?? 'Unknown'}" you\'ve requested is now RESERVED.',
+                                ),
+                              );
+                            } else {
+                              context.read<StudentExtendedBloc>().add(
+                                createNotification(
+                                  widget.studentProfile.id, 
+                                  'The Item "${item?.code ?? 'Unknown'}" you\'ve requested is now ready to be CLAIMED.',
+                                ),
+                              );
+                            }
                           }
                         }
                         checkedBookIds.clear();

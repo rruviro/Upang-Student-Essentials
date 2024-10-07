@@ -155,3 +155,10 @@ class AddStudentBagItem extends StudentExtendedEvent {
     this.id,
   );
 }
+
+class createNotification extends StudentExtendedEvent {
+  final int id;
+  final String message;
+
+  createNotification(this.id, this.message);
+}

@@ -252,6 +252,16 @@ class StudentExtendedBloc
         emit(itemError('An error occurred: ${e.toString()}'));
       }
     });
+
+    on<createNotification>((event, emit) async {
+      try {
+        await _studentrepo.createNotificationData(
+            event.id,
+            event.message);
+      } catch (e) {
+        print(e);
+      }
+    });
   }
 
   FutureOr<void> course_page(

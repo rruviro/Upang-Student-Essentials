@@ -21,7 +21,8 @@ class NotificationService {
     print('Starting polling');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lastNotificationId = prefs.getInt('last_notification_id') ?? 0;
-    final String baseUrl = 'http://10.0.2.2:8000/api/mails';
+    // final String baseUrl = 'http://10.0.2.2:8000/api/mails';
+    final String baseUrl = 'http://127.0.0.1:8000/api/mails';
     
       timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
       final response = await http.get(Uri.parse('$baseUrl/$studentId'));
@@ -41,7 +42,7 @@ class NotificationService {
                   notificationLayout: NotificationLayout.Default,
                 ),
               );
-              await http.put(Uri.parse('http://10.0.2.2:8000/api/notificationdone/${notification['id']}'));
+              await http.put(Uri.parse('http://127.0.0.1:8000/api/notificationdone/${notification['id']}'));
             lastNotificationId = notification['id'];
             await prefs.setInt('last_notification_id', lastNotificationId);
             redirect(notification['redirectTo']);

@@ -294,4 +294,27 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception('Failed');
     }
   }
+  
+  @override
+  Future<void> createNotificationData(int id, String message) async {
+    final response = await http
+        .post(Uri.parse('$baseUrl/mails'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'description': message,
+        'time': 0,
+        'redirectTo': "None",
+        'notificationId': id,
+      }),
+    );
+    
+    if (response == 200) {
+      print("hello");
+    } else {
+      print("bye");
+      throw Exception("${response.statusCode}");
+    }
+  }
 }
