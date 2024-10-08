@@ -77,12 +77,14 @@ class _coursesState extends State<courses> {
               actions: [
               ],
             ),
-            body: ListView(
-              children: [
-                const SizedBox(height: 20),
-                CourseWidget(courses: state.courses, departmentName: widget.departmentName), // Displaying courses
-              ],
-            ),
+            body: Container(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
+              child: ListView(
+                children: [
+                  CourseWidget(courses: state.courses, departmentName: widget.departmentName), // Displaying courses
+                ]
+              ),
+            )
           );
         } else if (state is CoursesErrorState) {
           return Center(child: Text(state.error));
@@ -144,9 +146,10 @@ class ItemCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 2),
                   Text(
                     course.courseName,
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -154,7 +157,7 @@ class ItemCard extends StatelessWidget {
                   ),
                   Text(
                     course.courseDescription,
-                    style: GoogleFonts.inter(
+                    style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
                       color: Colors.white,

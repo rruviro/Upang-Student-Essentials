@@ -263,7 +263,7 @@ class ItemCard extends StatelessWidget {
                     bottomLeft: Radius.circular(5),
                     topRight: Radius.circular(5),
                   ),
-                  color: primary_color
+                  color: Color.fromARGB(227, 255, 255, 255)
               ),
               child: InkWell(
                 onTap: () {
@@ -277,15 +277,15 @@ class ItemCard extends StatelessWidget {
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                             fontSize: 10.5,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500
+                            color: primary_color,
+                            fontWeight: FontWeight.w400
                         ),
                       ),
                     ),
                     SizedBox(width: 8),
                     Icon(
                       Icons.dashboard_customize_outlined,
-                      color: Colors.white,
+                      color: primary_color,
                       size: 15,
                     ),
                   ],

@@ -139,7 +139,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          home_widget(departments: state.departments), // Display departments here
+                          home_widget(departments: state.departments), 
                         ],
                       ),
                     ),
@@ -177,57 +177,50 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20.0),
-      height: 80,
-      decoration: BoxDecoration(
-        color: primary_color,
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 2,
-            offset: Offset(1, 1),
-          ),
-        ],
-      ),
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned(
-            right: -20,
-            top: -35,
-            child: Container(
-              child: Image.asset(
-                visual.photo,
-                width: 220,
-                height: 220,
-              ),
+    return InkWell(
+      onTap:(){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => courses(
+              departmentID: visual.id ?? 0,
+              departmentName: visual.name,
             ),
           ),
-          Positioned(
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => courses(
-                      departmentID: visual.id ?? 0,
-                      departmentName: visual.name,
-                    ),
-                  ),
-                );
-              },
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20.0),
+        height: 80,
+        decoration: BoxDecoration(
+          color: primary_color,
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 2,
+              offset: Offset(1, 1),
+            ),
+          ],
+        ),
+        width: double.infinity,
+        child: Stack(
+          children: [
+            Positioned(
+              right: -20,
+              top: -35,
+              child: Container(
+                child: Image.asset(
+                  visual.photo,
+                  width: 220,
+                  height: 220,
+                ),
+              ),
+            ),
+            Positioned(
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                    colors: [
-                      primary_color,
-                      Color.fromARGB(43, 14, 170, 113),
-                    ],
-                    stops: [0.50, 0.70],
-                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,8 +240,8 @@ class ItemCard extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

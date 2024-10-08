@@ -86,12 +86,10 @@ class _TransactionState extends State<Transaction> {
             offset: Offset(-15.0, 0.0),
             child: Text(
               'Transaction',
-              style: GoogleFonts.inter(
-                textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -110,7 +108,7 @@ class _TransactionState extends State<Transaction> {
                         onTap: () => _selectedItem(1),
                         child: Text(
                           'Request',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 10,
                             color: _currentSelection == 1
                               ? Color.fromARGB(255, 0, 0, 0)
@@ -120,14 +118,22 @@ class _TransactionState extends State<Transaction> {
                         ),
                       ),
                       SizedBox(width: 20),
-                      VerticalDivider(color: Colors.black26),
+                      SizedBox(
+                        height: 25,
+                        width: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black26
+                          ),
+                        ),
+                      ),
                       SizedBox(width: 20),
                       InkWell(
                         key: _reservedKey,
                         onTap: () => _selectedItem(2),
                         child: Text(
                           'Reserved',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 10,
                             color: _currentSelection == 2
                               ? Color.fromARGB(255, 0, 0, 0)
@@ -137,14 +143,22 @@ class _TransactionState extends State<Transaction> {
                         ),
                       ),
                       SizedBox(width: 20),
-                      VerticalDivider(color: Colors.black26),
+                      SizedBox(
+                        height: 25,
+                        width: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black26
+                          ),
+                        ),
+                      ),
                       SizedBox(width: 20),
                       InkWell(
                         key: _claimKey,
                         onTap: () => _selectedItem(3),
                         child: Text(
                           'Claim',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 10,
                             color: _currentSelection == 3
                               ? Color.fromARGB(255, 0, 0, 0)
@@ -156,7 +170,13 @@ class _TransactionState extends State<Transaction> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  Divider(color: Colors.black26),
+                  SizedBox(
+                    height: 1, 
+                    width: double.infinity,
+                    child: Container(
+                      color: Colors.black26
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -177,8 +197,8 @@ class _TransactionState extends State<Transaction> {
               children: [
                 Text(
                   'Uniform',
-                  style: GoogleFonts.inter(
-                    fontSize: 17,
+                  style: TextStyle(
+                    fontSize: 13,
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
@@ -201,8 +221,8 @@ class _TransactionState extends State<Transaction> {
                 SizedBox(height: 20),
                 Text(
                   'Books',
-                  style: GoogleFonts.inter(
-                    fontSize: 17,
+                  style: TextStyle(
+                    fontSize: 13,
                     color: Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
@@ -289,21 +309,17 @@ class ItemCard extends StatelessWidget {
                       children: [
                         Text(
                           'Department :',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 13,
-                              color: Colors.white,
-                            ),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
                           ),
                         ),
                         SizedBox(width: 5),
                         Text(
                           item.department,
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 13,
-                              color: Colors.white,
-                            ),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -312,21 +328,17 @@ class ItemCard extends StatelessWidget {
                       children: [
                         Text(
                           'Code :',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white54,
-                            ),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white54,
                           ),
                         ),
                         SizedBox(width: 5),
                         Text(
                           item.code ?? 'N/A',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white54,
-                            ),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white54,
                           ),
                         ),
                       ],
@@ -334,32 +346,26 @@ class ItemCard extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       item.status,
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white70,
-                        ),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white70,
                       ),
                     ),
                     Row(
                       children: [
                         Text(
                           'Claimed :',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white54,
-                            ),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white54,
                           ),
                         ),
                         SizedBox(width: 5),
                         Text(
                           item.dateReceived?.toLocal().toIso8601String() ?? 'N/A',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white54,
-                            ),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white54,
                           ),
                         ),
                       ],
@@ -396,7 +402,7 @@ class ItemCard extends StatelessWidget {
                         ),
                         title: Text(
                           'Details',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         content: SingleChildScrollView(
@@ -405,49 +411,49 @@ class ItemCard extends StatelessWidget {
                             children: [
                               Text(
                                 'Department: ${item.department}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Code: ${item.code ?? 'N/A'}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Type: ${item.type}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Body: ${item.body}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Size: ${item.size}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Status: ${item.status}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Date Received: ${item.dateReceived?.toLocal().toIso8601String() ?? 'N/A'}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
@@ -548,21 +554,17 @@ class BookCard extends StatelessWidget {
                         children: [
                           Text(
                             'Book :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white,
                             ),
                           ),
                           SizedBox(width: 5),
                           Text(
                             book.bookName,
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
+                            style: TextStyle(
+                              fontSize: 13,
+                color: Colors.white,
                             ),
                           ),
                         ],
@@ -571,21 +573,17 @@ class BookCard extends StatelessWidget {
                         children: [
                           Text(
                             'Code :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white54,
                             ),
                           ),
                           SizedBox(width: 5),
                           Text(
                             book.code,
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white54,
                             ),
                           ),
                         ],
@@ -593,32 +591,26 @@ class BookCard extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         book.status,
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white70,
-                          ),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white70,
                         ),
                       ),
                       Row(
                         children: [
                           Text(
                             'Claimed :',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white54,
                             ),
                           ),
                           SizedBox(width: 5),
                           Text(
                             book.dateReceived?.toLocal().toIso8601String() ?? 'N/A',
-                            style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white54,
-                              ),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white54,
                             ),
                           ),
                         ],
@@ -656,7 +648,7 @@ class BookCard extends StatelessWidget {
                         ),
                         title: Text(
                           'Details',
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         content: SingleChildScrollView(
@@ -665,35 +657,35 @@ class BookCard extends StatelessWidget {
                             children: [
                               Text(
                                 'Book : ${book.bookName}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Subject Code : ${book.subjectCode}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Subject Desc : ${book.subjectDesc}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Status: ${book.status}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),
                               ),
                               Text(
                                 'Date Received: ${book.dateReceived?.toLocal().toIso8601String() ?? 'N/A'}',
-                                style: GoogleFonts.inter(
+                                style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black87,
                                     fontWeight: FontWeight.w400),

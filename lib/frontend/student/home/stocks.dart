@@ -91,27 +91,19 @@ class _StocksState extends State<Stocks> {
           SizedBox(width: 15),
         ],
       ),
-
-
-
-
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Column(
+      body: Container(
+        margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: ListView(
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Stocks Section
-                Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'Uniform',
-                    style: GoogleFonts.inter(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                    ),
+                Text(
+                  'Uniform',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: 15), // ITO YUNG STOCK  WAIT LANG MUNA BONINATO
@@ -134,61 +126,54 @@ class _StocksState extends State<Stocks> {
                 // ),
 
                 // END OF STOCK SECTION
+                Text(
+                  'Books',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  height: 400,
+                  decoration: BoxDecoration(
+                    color: primary_color,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade400,
+                        blurRadius: 5,
+                        offset: Offset(1, 5),
+                      ),
+                    ],
+                  ),
 
-
+                  // BOOK LIST SECTION
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView(
+                      children: [
+                        BookList(books: [],)
+                      ],
+                    ),
+                  ),
+                  // END OF BOOK LIST
+                ),
                 Padding(
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Books',
-                          style: GoogleFonts.inter(
-                            fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        width: double.infinity,
-                        height: 400,
-                        decoration: BoxDecoration(
-                          color: primary_color,
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade400,
-                              blurRadius: 5,
-                              offset: Offset(1, 5),
-                            ),
-                          ],
-                        ),
-
-                        // BOOK LIST SECTION
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: ListView(
-                            children: [
-                              BookList(books: [],)
-                            ],
-                          ),
-                        ),
-                        // END OF BOOK LIST
-
-
-                      ),
                       SizedBox(height: 20),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 }

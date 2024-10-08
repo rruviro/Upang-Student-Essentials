@@ -47,20 +47,23 @@ class Courses extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocBuilder<AdminExtendedBloc, AdminExtendedState>(
-        builder: (context, state) {
-          if (state is CoursesLoadingState) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is CoursesLoadedState) {
-            return ListView(
-              children: state.courses.map((course) => ItemCard(course: course)).toList(),
-            );
-          } else if (state is CoursesErrorState) {
-            return Center(child: Text('Error: ${state.error}'));
-          }
-          return Container();
-        },
-      ),
+      body: Container(
+        margin: EdgeInsets.all(20),
+        child: BlocBuilder<AdminExtendedBloc, AdminExtendedState>(
+          builder: (context, state) {
+            if (state is CoursesLoadingState) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is CoursesLoadedState) {
+              return ListView(
+                children: state.courses.map((course) => ItemCard(course: course)).toList(),
+              );
+            } else if (state is CoursesErrorState) {
+              return Center(child: Text('Error: ${state.error}'));
+            }
+            return Container();
+          },
+        ),
+      )
     );
   }
 }
@@ -99,6 +102,7 @@ class ItemCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 2),
                   Text(
                     course.courseName,
                     style: GoogleFonts.inter(
