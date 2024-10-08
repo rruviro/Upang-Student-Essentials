@@ -261,6 +261,9 @@ class _ProfileScreenState extends State<Profile> {
                     actions: [
                       GestureDetector(
                         onTap: (){
+                          print(widget.studentProfile.id);
+                          print(newPassword);
+                          print(confirmPassword);
                           if (newPassword == confirmPassword && newPassword.isNotEmpty) {
                             context.read<StudentExtendedBloc>().add(changePassword(widget.studentProfile.id, newPassword, confirmPassword));
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -270,6 +273,8 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                             );
                             Navigator.of(context).pop();
+                          }
+                          else{
                             print('Error: Passwords do not match or the new password is empty.');
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

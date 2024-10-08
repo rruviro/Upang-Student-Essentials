@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:use/frontend/colors/colors.dart';
 import '../../../backend/models/admin/Announcement.dart';
 
 class announcement_list extends StatelessWidget {
@@ -48,7 +49,7 @@ class ItemCard extends StatelessWidget {
                 height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     topRight: Radius.circular(5),

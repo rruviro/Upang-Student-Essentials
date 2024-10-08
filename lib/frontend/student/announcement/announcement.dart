@@ -171,7 +171,7 @@ Widget slides(BuildContext context) {
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.symmetric(horizontal: 0),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 14, 170, 113),
+            color: primary_color,
             borderRadius: BorderRadius.circular(5),
           ),
           child: ClipRRect(
