@@ -24,7 +24,7 @@ class NotificationService {
     // final String baseUrl = 'http://10.0.2.2:8000/api/mails';
     final String baseUrl = 'http://127.0.0.1:8000/api/mails';
     
-      timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
+      timer = Timer.periodic(Duration(seconds: 30), (Timer t) async {
       final response = await http.get(Uri.parse('$baseUrl/$studentId'));
 
       if (response.statusCode == 200) {

@@ -19,9 +19,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     //BLOC BY MIRO
     on<StudentLogin>((event, emit) async {
       final SharedPreferences login = await SharedPreferences.getInstance();
-      emit(LoginLoading());
       try {
         await _authrepo.studentLogin(event.StudentId, event.Password);
+        emit(LoginLoading());
         login.setString('StudentId', event.StudentId);
         login.setString('Password', event.Password);
         login.setBool('isLogin', true);

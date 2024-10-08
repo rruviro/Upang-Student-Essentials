@@ -993,7 +993,6 @@ void _showUpdate(BuildContext context, String firstname, String lastname, String
   int _selectedYear = year;
   bool _isEnrolled = enrolled == 'ACTIVE';
 
-  // RegEx pattern to disallow numbers in string fields
   final RegExp onlyLetters = RegExp(r'^[a-zA-Z\s]*$');
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) return text; 
@@ -1208,6 +1207,7 @@ void _showUpdate(BuildContext context, String firstname, String lastname, String
                           ),
                         );
                       } else {
+                        print(_isEnrolled ? "ACTIVE" : "INACTIVE",);
                         context.read<AdminExtendedBloc>().add(
                           updateStudent(
                             capitalizeFirstLetter(_firstNameController.text),

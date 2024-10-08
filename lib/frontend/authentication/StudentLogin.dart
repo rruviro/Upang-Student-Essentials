@@ -39,7 +39,31 @@ class StudnetLogin extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
               );
-            } else {
+            } else if (state is LoginLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(width: 20),
+                          Text("Logging In..."),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+              else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Error")),
               );

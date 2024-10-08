@@ -114,6 +114,9 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
 
     on<updateStudent>((event, emit) async{
       try {
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        print(event.enrolled);
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         await _adminrepo.updateStudent(event.firstName, event.lastName, event.course, event.department, event.year, event.enrolled, event.id);
         add(getStudent());
       } catch (e) {

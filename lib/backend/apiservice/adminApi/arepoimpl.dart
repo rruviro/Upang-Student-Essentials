@@ -132,7 +132,7 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
           'Course': course,
           'Department': department,
           'Year': year,
-          'Status"': status
+          'Status': status
         }),
       );
 
