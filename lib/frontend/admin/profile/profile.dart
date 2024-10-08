@@ -198,12 +198,6 @@ class _ProfileScreenState extends State<Profile> {
               centerTitle: false,
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.notifications, color: primary_color),
-                  onPressed: () {
-                    context.read<AdminExtendedBloc>().add(NotificationPageEvent());
-                  },
-                ),
-                IconButton(
                   icon: Icon(Icons.logout, color: primary_color),
                   onPressed: () {
                     showDialog(

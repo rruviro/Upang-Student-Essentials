@@ -62,15 +62,6 @@ class Home extends StatelessWidget {
                 automaticallyImplyLeading: false,
                 centerTitle: false,
                 actions: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications, 
-                      color: primary_color
-                    ),
-                    onPressed: () {
-                      adminBloc.add(NotificationPageEvent());
-                    },
-                  ),
                   SizedBox(width: 15),
                 ],
                 backgroundColor: Colors.white,

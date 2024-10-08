@@ -1,6 +1,7 @@
 import 'package:use/backend/apiservice/adminApi/arepo.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'dart:convert';
@@ -66,7 +67,7 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'profile': {  // Wrap properties inside the 'profile' object
+        'profile': {  
           'FirstName': firstName,
           'LastName': lastName,
           'Course': course,
@@ -142,5 +143,44 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
         throw UnimplementedError();
       }
     
+  }
+  
+  @override
+  Future<void> createAnnouncement(String department, String message) async {
+
+    print('Department: $department');
+    print('Message: $message');
+      final response = await http.post(
+        Uri.parse('$baseUrl/createannouncements'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'department': department,
+          'body': message,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Announcement created successfully");
+      } else {
+        print('Error: ${response.statusCode}');
+        print('Response body: ${response.body}'); 
+        throw Exception('Failed to create announcement, status code: ${response.statusCode}');
+      }
+  }
+
+  @override
+  Future<List<announcement>> showAnnouncementData() async {
+    final response = await http.get(Uri.parse('$baseUrl/announcements'));
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      List<dynamic> itemsJson = responseBody['announcement'];
+      return itemsJson.map((json) => announcement.fromJson(json)).toList();
+    } else {
+      throw Exception(
+          'Failed to load announcements, status code: ${response.statusCode}');
+    }
   }
 }

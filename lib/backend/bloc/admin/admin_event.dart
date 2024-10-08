@@ -85,3 +85,12 @@ class createStudent extends AdminExtendedEvent {
   createStudent(
       this.firstName, this.lastName, this.course, this.year, this.enrolled, this.department);
 }
+
+class showAnnouncement extends AdminExtendedEvent {}
+
+class createAnnouncement extends AdminExtendedEvent {
+  final String department;
+  final String message;
+
+  createAnnouncement(this.department, this.message);
+}

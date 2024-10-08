@@ -92,3 +92,15 @@ class specificStudentLoaded extends AdminActionState {
 class studentUpdated extends AdminActionState {}
 
 class studentCreated extends AdminActionState {}
+
+class announcementLoadingData extends AdminActionState {}
+
+class announcementLoadSuccessData extends AdminActionState {
+  final List<announcement> Announcement;
+  announcementLoadSuccessData(this.Announcement);
+}
+
+class announcementLoadErrorData extends AdminActionState {
+  final String error;
+  announcementLoadErrorData(this.error);
+}

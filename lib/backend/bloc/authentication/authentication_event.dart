@@ -16,3 +16,4 @@ class StudentLogin extends AuthenticationEvent {
 
   StudentLogin(this.StudentId, this.Password);
 }
+

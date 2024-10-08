@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:use/backend/apiservice/adminApi/arepo.dart';
-import 'package:use/backend/bloc/student/student_bloc.dart';
+import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -146,6 +146,29 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         emit(specificStudentLoaded(student));
       } catch (e) {
         emit(studentError(e.toString()));
+      }
+    });
+
+    on<showAnnouncement>((event, emit) async {
+      emit(announcementLoadingData());
+      try {
+        final announcementData =
+            await _adminrepo.showAnnouncementData();
+        emit(announcementLoadSuccessData(announcementData));
+      } catch (e) {
+        print(e);
+        emit(announcementLoadErrorData('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    on<createAnnouncement>((event, emit) async {
+      try {
+        await _adminrepo.createAnnouncement(event.department, event.message);
+        add(showAnnouncement());
+      } catch (e) {
+        print(e);
+        emit(announcementLoadErrorData('An error occurred: ${e.toString()}'));
+        add(showAnnouncement());
       }
     });
     
