@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/BookStocks.dart';
 import 'package:use/SERVICES/model/student/Stocks.dart';
+import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/frontend/colors/colors.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/widgets/home/stocks.dart';
 
-class Stocks extends StatefulWidget {
-  const Stocks({super.key});
 
+class Stocks extends StatefulWidget {
+  final int courseID;
+  final String courseName;
+  final String Department;
+
+  const Stocks({super.key, required this.courseID, required this.courseName, required this.Department});
   @override
   State<Stocks> createState() => _StocksState();
-  
 }
-
 class _StocksState extends State<Stocks> {
+
+  @override
+  void initState() {
+    super.initState();
+    print("Department passed to Stocks: ${widget.Department}"); // Debug print
+
+    studBloc.add(ShowStocksEvent(Department: widget.Department));
+    studBloc.add(ShowBooksEvent(Department: widget.Department));
+  }
+
   List<bool> _bottomSheetSelectedBooks = List.generate(5, (index) => false);
   List<bool> _containerSelectedBooks = List.generate(5, (index) => false);
-  String _selectedYear = "First Year";
+  // String _selectedYear = "First Year"; // TINANGGAL KO YUNG YEARS SA APPBAR
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +57,7 @@ class _StocksState extends State<Stocks> {
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 Text(
-                  'Course : ',
+                  'Course : ${widget.courseName} ',
                   style: TextStyle(color: Colors.white, fontSize: 10),
                 ),
               ],
@@ -56,51 +70,6 @@ class _StocksState extends State<Stocks> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Year',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-                SizedBox(height: 4),
-                Container(
-                  width: 30,
-                  height: 1,
-                  color: Colors.white,
-                ),
-                SizedBox(height: 4),
-                Padding(
-                  padding: EdgeInsets.only(left: 40),
-                  child: SizedBox(
-                    width: 100,
-                    height: 20,
-                    child: DropdownButton<String>(
-                      value: _selectedYear,
-                      dropdownColor: primary_color,
-                      icon: Icon(Icons.arrow_drop_down, color: Colors.white),
-                      underline: SizedBox(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedYear = newValue!;
-                        });
-                      },
-                      items: <String>[
-                        'First Year',
-                        'Second Year',
-                        'Third Year',
-                        'Fourth Year'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(color: Colors.white, fontSize: 13),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
           SizedBox(
@@ -108,7 +77,7 @@ class _StocksState extends State<Stocks> {
             width: 1,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white
+                  color: Colors.white
               ),
             ),
           ),
@@ -122,216 +91,111 @@ class _StocksState extends State<Stocks> {
           SizedBox(width: 15),
         ],
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Column(
+      body: Container(
+        margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: ListView(
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    'Uniform',
-                    style: GoogleFonts.inter(
-                      fontSize: 13,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600
-                    ),
+                Text(
+                  'Uniform',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 15),
-                Container(
-                  height: 270,
-                  width: double.infinity,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      Container(
-                        child: stocks_widget (
-                          list : products
-                        ),
-                      ),
-                    ]
+                SizedBox(height: 15), // ITO YUNG STOCK  WAIT LANG MUNA BONINATO
+
+                // STOCK SECTION
+
+                // Container(
+                //   height: 270,
+                //   width: double.infinity,
+                //   child: ListView(
+                //       scrollDirection: Axis.horizontal,
+                //       children: [
+                //         Container(
+                //           child: stocks_widget (
+                //               list : products
+                //           ),
+                //         ),
+                //       ]
+                //   ),
+                // ),
+
+                // END OF STOCK SECTION
+                Text(
+                  'Books',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
                   ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  height: 400,
+                  decoration: BoxDecoration(
+                    color: primary_color,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade400,
+                        blurRadius: 5,
+                        offset: Offset(1, 5),
+                      ),
+                    ],
+                  ),
+
+                  // BOOK LIST SECTION
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView(
+                      children: [
+                        BookList(books: [],)
+                      ],
+                    ),
+                  ),
+                  // END OF BOOK LIST
                 ),
                 Padding(
                   padding: EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Books',
-                          style: GoogleFonts.inter(
-                            fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600
-                          ),
-                        ),
-                      ),
                       SizedBox(height: 20),
-                      Container(
-                        width: double.infinity,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: primary_color,
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade400,
-                              blurRadius: 5,
-                              offset: Offset(1, 5),
-                            ),
-                          ],
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  height: MediaQuery.of(context).size.height * 0.5,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.all(16),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 10),
-                                      Center(
-                                        child: Container(
-                                          height: 5,
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                            color: primary_color,
-                                            borderRadius: BorderRadius.circular(5)
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 20),
-                                      Expanded(
-                                        child: ListView(
-                                          children: [
-                                            AllBookList(
-                                              list: BookProducts
-                                            )  
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.apps,
-                                        color: Colors.white,
-                                        size: 40,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 17.5),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'All Books',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 15,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            Text(
-                                              'As bundle',
-                                              style: GoogleFonts.inter(
-                                                fontSize: 10,
-                                                color: Colors.white.withOpacity(0.7),
-                                                fontWeight: FontWeight.w400
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        width: double.infinity,
-                        height: 400,
-                        decoration: BoxDecoration(
-                          color: primary_color,
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade400,
-                              blurRadius: 5,
-                              offset: Offset(1, 5),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: ListView(
-                            children: [
-                              BookList(bookProducts: BookProducts)
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                    ]
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 }
 
 class BookList extends StatelessWidget {
-  final List<BookStocks> bookProducts;
-  const BookList({Key? key, required this.bookProducts}) : super(key: key);
+  final List<Book> books;
+  const BookList({Key? key, required this.books}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: bookProducts
-      .map((e) => BookCard(
+      children: books
+          .map((e) => BookCard(
         visual: e,
         isSelected: false,
         onChanged: (bool? value) {},
       ))
-      .toList(),
+          .toList(),
     );
   }
 }
 class BookCard extends StatefulWidget {
-  final BookStocks visual;
+  final Book visual;
   final bool isSelected;
   final ValueChanged<bool?>? onChanged;
   const BookCard({
@@ -356,14 +220,14 @@ class _BookCardState extends State<BookCard> {
       children: [
         ListTile(
           title: Text(
-            widget.visual.subjectCode,
+            widget.visual.BookName,
             style: TextStyle(
               fontSize: 13,
               color: Colors.white,
             ),
           ),
           subtitle: Text(
-            widget.visual.bookName,
+            widget.visual.SubjectDesc,
             style: TextStyle(
               fontSize: 10,
               color: Colors.white.withOpacity(0.7),
@@ -393,56 +257,56 @@ class _BookCardState extends State<BookCard> {
   }
 }
 
-class AllBookList extends StatelessWidget {
-  final List<BookStocks> list;
-  const AllBookList({Key? key, required this.list}) : super (key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: list
-        .map((e) => AllBooksCard(
-            visual: e,
-          ))
-        .toList(),
-    );
-  }
-}
-class AllBooksCard extends StatelessWidget {
-  final BookStocks visual;
-  const AllBooksCard({Key? key, required this.visual}) : super (key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            visual.subjectCode,
-            style: TextStyle(
-              fontSize: 16,
-              color: primary_color,
-            ),
-          ),
-          subtitle: Text(
-            visual.bookName,
-            style: TextStyle(
-              fontSize: 11,
-              color: primary_color.withOpacity(0.7),
-            ),
-          ),
-          iconColor: primary_color,
-          leading: Icon(
-            Icons.book,
-            size: 32,
-          ),
-        ),
-        Divider(
-          color: primary_color.withOpacity(0.7),
-          thickness: 1,
-        ),
-      ],
-    );
-  }
-}
+// class AllBookList extends StatelessWidget {
+//   final List<BookStocks> list;
+//   const AllBookList({Key? key, required this.list}) : super (key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: list
+//           .map((e) => AllBooksCard(
+//         visual: e,
+//       ))
+//           .toList(),
+//     );
+//   }
+// }
+// class AllBooksCard extends StatelessWidget {
+//   final BookStocks visual;
+//   const AllBooksCard({Key? key, required this.visual}) : super (key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         ListTile(
+//           title: Text(
+//             visual.subjectCode,
+//             style: TextStyle(
+//               fontSize: 16,
+//               color: primary_color,
+//             ),
+//           ),
+//           subtitle: Text(
+//             visual.bookName,
+//             style: TextStyle(
+//               fontSize: 11,
+//               color: primary_color.withOpacity(0.7),
+//             ),
+//           ),
+//           iconColor: primary_color,
+//           leading: Icon(
+//             Icons.book,
+//             size: 32,
+//           ),
+//         ),
+//         Divider(
+//           color: primary_color.withOpacity(0.7),
+//           thickness: 1,
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class CustomCircularCheckbox extends StatelessWidget {
   final bool value;
@@ -467,13 +331,12 @@ class CustomCircularCheckbox extends StatelessWidget {
         ),
         child: value
             ? Icon(
-                Icons.check,
-                color: Colors.black,
-                size: 16,
-              )
+          Icons.check,
+          color: Colors.black,
+          size: 16,
+        )
             : null,
       ),
     );
   }
 }
-

@@ -217,66 +217,59 @@ class _ProfileScreenState extends State<Profile> {
                             ),
                           ),
                           content: Text(
-                            'Are you sure you wanna logout',
+                            'Are you sure you wanna logout?',
                             style: TextStyle(
-                              color: Colors.grey,
+                              color: Colors.black,
                               fontSize: 10,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           actions: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminLogin()));
-                                    },
-                                    child: Container(
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(2),
-                                        color: Color.fromARGB(255, 14, 170, 113),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'Continue',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
+                            GestureDetector(
+                              onTap: () async {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => AdminLogin()));
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 112,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2),
+                                  color: primary_color,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Yes',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Container(
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(2),
-                                        color: Color.fromARGB(192, 14, 170, 113),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'Close',
-                                          style: TextStyle(
-                                            color: Color.fromARGB(190, 255, 255, 255),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 112,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(2),
+                                  color: primary_color
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'No',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
                           ],
                         );
@@ -312,6 +305,80 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 20),
+                            Container(
+                              alignment: Alignment.center,
+                              child: FractionallySizedBox(
+                                widthFactor: 1.2,
+                                child: SizedBox(
+                                  height: 20,
+                                  width: double.infinity,
+                                  child: Container(
+                                    decoration: BoxDecoration(color: secondary_color),
+                                  ),
+                                ),
+                              )
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Transaction',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Container(
+                              width: double.infinity,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: primary_color,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 5,
+                                    offset: Offset(1, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Container(
+                                height: 80,
+                                width: double.infinity,
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(id: 1)));
+                                      },
+                                      child: Column(
+                                        children: [
+                                          SizedBox(height: 13),
+                                          Icon(
+                                            Icons.approval,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                          SizedBox(height: 10),
+                                          Text(
+                                            'Approval',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 30),
                             Container(
                               alignment: Alignment.center,
                               child: FractionallySizedBox(
@@ -626,7 +693,9 @@ class ItemCard extends StatelessWidget {
                               style: TextStyle(
                                 color: visual.status == 'ACTIVE'
                                   ? primary_color
-                                    : Colors.red
+                                  : Colors.red,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ],

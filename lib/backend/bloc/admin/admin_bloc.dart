@@ -5,6 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:use/backend/apiservice/adminApi/arepo.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
+import 'package:use/backend/models/admin/Book.dart';
+import 'package:use/backend/models/admin/Course.dart';
+import 'package:use/backend/models/admin/Department.dart';
+import 'package:use/backend/models/admin/Stock.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -148,7 +153,6 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         emit(studentError(e.toString()));
       }
     });
-
     on<showAnnouncement>((event, emit) async {
       emit(announcementLoadingData());
       try {
@@ -169,6 +173,55 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         print(e);
         emit(announcementLoadErrorData('An error occurred: ${e.toString()}'));
         add(showAnnouncement());
+      }
+    });
+
+        // LANCE
+    // FOR DEPARTMENTS
+    on<ShowDepartmentsEvent>((event, emit) async {
+      emit(DepartmentsLoadingState());
+      try {
+        final departmentData = await _adminrepo.showDepartments();
+        emit(DepartmentsLoadedState(departmentData));
+      } catch (e) {
+        print(e);
+        emit(DepartmentsErrorState('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    // FOR COURSES
+    on<ShowCoursesEvent>((event, emit) async{
+      emit(CoursesLoadingState());
+      try {
+        final courseData = await _adminrepo.showCourses(event.departmentID);
+        emit(CoursesLoadedState(courses: courseData)); // Change here to pass fetched courses
+      } catch (e) {
+        print(e);
+        emit(CoursesErrorState('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    // FOR BOOKS
+    on<ShowBooksEvent>((event,emit) async{
+      emit(BooksLoadingState());
+      try {
+        final bookData = await _adminrepo.showBooks(event.courseID);
+        emit(BooksLoadedState(books: bookData));
+      } catch (e) {
+        print(e);
+        emit(BooksErrorState('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    // FOR STOCK
+    on<ShowStockEvent>((event,emit) async{
+      emit(StockLoadingState());
+      try {
+        final stockData = await _adminrepo.showStock(event.courseID);
+        emit(StockLoadedState(stocks: stockData));
+      } catch (e) {
+        print(e);
+        emit(StockErrorState('An error occurred: ${e.toString()}'));
       }
     });
     

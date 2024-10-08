@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/student/Notification.dart';
 
 class notif extends StatefulWidget {
-  const notif({super.key});
+  const notif({super.key, required int studentProfile});
 
   @override
   State<notif> createState() => _notifState();

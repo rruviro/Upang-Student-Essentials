@@ -1,4 +1,8 @@
 import 'package:use/backend/models/admin/Announcement.dart';
+import 'package:use/backend/models/admin/Book.dart';
+import 'package:use/backend/models/admin/Course.dart';
+import 'package:use/backend/models/admin/Department.dart';
+import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/Student.dart';
@@ -35,4 +39,17 @@ abstract class Studentrepo {
       int stubag_id, String status);
   Future<void> createNotificationData(int id, String message);
   Future<void> changePasswords(int id, String password, String cpassword);
+
+  // BY LANCE
+  // DEPARTMENTS
+  Future<List<department>> showDepartments();
+
+  // COURSES
+  Future<List<Course>> showCourses(int departmentID);
+
+  // BOOKS
+  Future<List<Stock>> showStocks(String Department);
+
+  // STOCK
+  Future<List<Book>> showBooks(String Department);
 }

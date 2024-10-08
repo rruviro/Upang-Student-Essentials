@@ -14,8 +14,6 @@ class Transaction extends StatefulWidget {
 class _TransactionState extends State<Transaction> {
   late int _currentSelection;
   GlobalKey _Request = GlobalKey();
-  GlobalKey __Reserved = GlobalKey();
-  GlobalKey Complete = GlobalKey();
 
   @override
   void initState() {
@@ -30,12 +28,6 @@ class _TransactionState extends State<Transaction> {
       switch (id) {
         case 1:
           selectedGlobalKey = _Request;
-          break;
-        case 2:
-          selectedGlobalKey = __Reserved;
-          break;
-        case 3:
-          selectedGlobalKey = Complete;
           break;
         default: 
       }
@@ -87,6 +79,16 @@ class _TransactionState extends State<Transaction> {
                         fontWeight: _currentSelection == 1
                           ? FontWeight.w600
                           : FontWeight.w400
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  SizedBox(
+                    height: 25,
+                    width: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black26
                       ),
                     ),
                   ),
@@ -177,10 +179,6 @@ class ItemCard extends StatelessWidget {
     switch (visual.status) {
       case 'Request':
         return _buildRequest(context);
-      case 'Reserved':
-        return _buildReserved(context);
-      case 'Complete':
-        return _buildComplete(context);
       default:
         return _buildDefaultCard(context);
     }
@@ -191,22 +189,6 @@ class ItemCard extends StatelessWidget {
       context: context,
       color: primary_color,
       status: 'Request',
-    );
-  }
-
-  Widget _buildReserved(BuildContext context) {
-    return _default(
-      context: context,
-      color: primary_color,
-      status: 'Reserved',
-    );
-  }
-
-  Widget _buildComplete(BuildContext context) {
-    return _default(
-      context: context,
-      color: primary_color,
-      status: 'Complete',
     );
   }
 
@@ -612,5 +594,4 @@ class ItemCard extends StatelessWidget {
       ],
     );
   }
-
 }

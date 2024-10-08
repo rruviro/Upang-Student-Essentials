@@ -170,3 +170,27 @@ class changePassword extends StudentExtendedEvent {
 
   changePassword(this.id,this.password, this.cpassword,);
 }
+
+// BY LANCE
+// DEPARTMENTS
+class ShowDepartmentsEvent extends StudentExtendedEvent{
+  ShowDepartmentsEvent();
+}
+
+// COURSES
+class ShowCoursesEvent extends StudentExtendedEvent{
+  final int departmentID;
+  ShowCoursesEvent({required this.departmentID});
+}
+
+// BOOKS
+class ShowBooksEvent extends StudentExtendedEvent{
+  final String Department;
+  ShowBooksEvent({required this.Department});
+}
+
+// STOCK
+class ShowStocksEvent extends StudentExtendedEvent{
+  final String Department;
+  ShowStocksEvent({required this.Department});
+}
