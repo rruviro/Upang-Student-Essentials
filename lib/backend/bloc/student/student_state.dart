@@ -174,6 +174,54 @@ class bookError extends StudentExtendedState {
   bookError(this.error);
 }
 
+// BY LANCE
+// DEPARTMENTS
+class DepartmentsLoadingState extends StudentActionState{
+}
+class DepartmentsLoadedState extends StudentExtendedState{
+  final List<department> departments;
+  DepartmentsLoadedState(this.departments);
+}
+class DepartmentsErrorState extends StudentActionState{
+  final String error;
+  DepartmentsErrorState(this.error);
+}
+
+// COURSES
+class CoursesLoadingState extends StudentActionState{
+}
+class CoursesLoadedState extends StudentExtendedState{
+  final List<Course> courses;
+  CoursesLoadedState({required this.courses});
+}
+class CoursesErrorState extends StudentActionState{
+  final String error;
+  CoursesErrorState(this.error);
+}
+
+
+// BOOKS
+class BooksLoadingState extends StudentActionState{}
+class BooksLoadedState extends StudentExtendedState{
+  final List<Book> books;
+  BooksLoadedState({required this.books});
+}
+class BooksErrorState extends StudentActionState{
+  final String error;
+  BooksErrorState(this.error);
+}
+
+// STOCKS
+class StocksLoadingState extends StudentActionState{}
+class StocksLoadedState extends StudentExtendedState{
+  final List<Stock> stocks;
+  StocksLoadedState({required this.stocks});
+}
+class StocksErrorState extends StudentActionState{
+  final String error;
+  StocksErrorState(this.error);
+}
+
 
 
 

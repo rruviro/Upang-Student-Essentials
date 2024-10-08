@@ -92,3 +92,52 @@ class specificStudentLoaded extends AdminActionState {
 class studentUpdated extends AdminActionState {}
 
 class studentCreated extends AdminActionState {}
+
+// LANCE
+// States ng DEPARTMENTS
+class DepartmentsLoadingState extends AdminActionState {
+}
+class DepartmentsLoadedState extends AdminActionState {
+  final List<department> departments;
+  DepartmentsLoadedState(this.departments);
+}
+class DepartmentsErrorState extends AdminActionState {
+  final String error;
+  DepartmentsErrorState(this.error);
+}
+
+// States ng COURSES
+class CoursesLoadingState extends AdminActionState{
+}
+class CoursesLoadedState extends AdminActionState{
+  final List<Course> courses;
+  CoursesLoadedState({required this.courses});
+}
+class CoursesErrorState extends AdminActionState{
+  final String error;
+  CoursesErrorState(this.error);
+}
+
+// States ng BOOKS
+class BooksLoadingState extends AdminActionState{
+}
+class BooksLoadedState extends AdminActionState{
+  final List<Book> books;
+  BooksLoadedState({required this.books});
+}
+class BooksErrorState extends AdminActionState{
+  final String error;
+  BooksErrorState(this.error);
+}
+
+// States ng STOCK
+class StockLoadingState extends AdminActionState{
+}
+class StockLoadedState extends AdminActionState{
+  final List<Stock> stocks;
+  StockLoadedState({required this.stocks});
+}
+class StockErrorState extends AdminActionState{
+  final String error;
+  StockErrorState(this.error);
+}

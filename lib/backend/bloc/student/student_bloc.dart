@@ -4,6 +4,10 @@ import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:use/backend/apiservice/studentApi/srepo.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
+import 'package:use/backend/models/admin/Book.dart';
+import 'package:use/backend/models/admin/Course.dart';
+import 'package:use/backend/models/admin/Department.dart';
+import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentBag.dart';
@@ -270,6 +274,56 @@ class StudentExtendedBloc
         print("done");
       } catch (e) {
         print("Shit na malagkit");
+      }
+    });
+
+    // LANCE
+    // FOR DEPARTMENTS
+    on<ShowDepartmentsEvent>((event, emit) async {
+      emit(DepartmentsLoadingState());
+      try {
+        final departmentData = await _studentrepo.showDepartments();
+        emit(DepartmentsLoadedState(departmentData));
+      } catch (e) {
+        print(e);
+        emit(DepartmentsErrorState('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    // FOR COURSES
+    on<ShowCoursesEvent>((event, emit) async {
+      emit(CoursesLoadingState());
+      try {
+        final courseData = await _studentrepo.showCourses(event.departmentID);
+        emit(CoursesLoadedState(courses: courseData));
+      } catch (e) {
+        print(e);
+        emit(CoursesErrorState('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    // FOR BOOKS
+    on<ShowBooksEvent>((event, emit) async {
+      emit(BooksLoadingState());
+      try {
+        final bookData = await _studentrepo.showBooks(event.Department);
+        emit(BooksLoadedState(books: bookData));
+      } catch (e) {
+        print(e);
+        emit(BooksErrorState('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    // FOR STOCK
+    on<ShowStocksEvent>((event, emit) async {
+      emit(StocksLoadingState());
+      try {
+        final stockData = await _studentrepo.showStocks(event.Department);
+        emit(StocksLoadedState(
+            stocks: stockData)); // Change here to pass fetched courses
+      } catch (e) {
+        print(e);
+        emit(StocksErrorState('An error occurred: ${e.toString()}'));
       }
     });
   }

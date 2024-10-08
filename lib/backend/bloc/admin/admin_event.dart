@@ -85,3 +85,30 @@ class createStudent extends AdminExtendedEvent {
   createStudent(
       this.firstName, this.lastName, this.course, this.year, this.enrolled, this.department);
 }
+
+
+// LANCE
+// For Departments
+class ShowDepartmentsEvent extends AdminExtendedEvent {
+  // final String departments;
+
+  ShowDepartmentsEvent();
+}
+
+// For Courses
+class ShowCoursesEvent extends AdminExtendedEvent{
+  final int departmentID;
+  ShowCoursesEvent({required this.departmentID});
+}
+
+// For Books
+class ShowBooksEvent extends AdminExtendedEvent{
+  final int courseID;
+  ShowBooksEvent({required this.courseID});
+}
+
+// For Stock
+class ShowStockEvent extends AdminExtendedEvent{
+  final int courseID;
+  ShowStockEvent({required this.courseID});
+}

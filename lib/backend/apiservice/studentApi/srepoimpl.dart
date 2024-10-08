@@ -2,6 +2,10 @@ import 'package:use/backend/apiservice/studentApi/srepo.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:use/backend/models/admin/Announcement.dart';
+import 'package:use/backend/models/admin/Book.dart';
+import 'package:use/backend/models/admin/Course.dart';
+import 'package:use/backend/models/admin/Department.dart';
+import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -340,6 +344,54 @@ class StudentRepositoryImpl extends Studentrepo {
     }
     catch(e){
       
+    }
+  }
+
+  // BY LANCE
+  // DEPARTMENTS
+  Future<List<department>> showDepartments() async {
+    final response = await http.get(Uri.parse('$baseUrl/departments'));
+    if (response.statusCode == 200) {
+      final List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => department.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to load departments');
+    }
+  }
+
+  // COURSES
+  @override
+  Future<List<Course>> showCourses(int departmentID) async {
+    final response = await http.get(Uri.parse('$baseUrl/courses/$departmentID'));
+    if (response.statusCode == 200){
+      final List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Course.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to load courses');
+    }
+  }
+
+  // BOOKS
+  @override
+  Future<List<Book>> showBooks(String Department) async{
+    final response = await http.get(Uri.parse('$baseUrl/item-books/$Department'));
+    if (response.statusCode == 200){
+      final List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Book.fromJson(data)).toList();
+    } else{
+      throw Exception('Failed to load books');
+    }
+  }
+
+  // STOCK
+  @override
+  Future<List<Stock>> showStocks(String Department) async{
+    final response = await http.get(Uri.parse('$baseUrl/stocks/$Department'));
+    if (response.statusCode == 200){
+      final List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Stock.fromJson(data)).toList();
+    } else{
+      throw Exception('Failed to load stock');
     }
   }
 }
