@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:use/backend/apiservice/studentApi/srepo.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
@@ -260,6 +261,15 @@ class StudentExtendedBloc
             event.message);
       } catch (e) {
         print(e);
+      }
+    });
+
+    on<changePassword>((event, emit) async{
+      try {
+        await _studentrepo.changePasswords(event.id, event.password, event.cpassword);
+        print("done");
+      } catch (e) {
+        print("Shit na malagkit");
       }
     });
   }

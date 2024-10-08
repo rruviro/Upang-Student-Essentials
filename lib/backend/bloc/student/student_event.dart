@@ -162,3 +162,11 @@ class createNotification extends StudentExtendedEvent {
 
   createNotification(this.id, this.message);
 }
+
+class changePassword extends StudentExtendedEvent {
+  final int id;
+  final String password;
+  final String cpassword;
+
+  changePassword(this.id,this.password, this.cpassword,);
+}

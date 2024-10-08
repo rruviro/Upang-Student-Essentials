@@ -148,6 +148,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         emit(studentError(e.toString()));
       }
     });
+    
   }
 
   FutureOr<void> course_page(

@@ -116,32 +116,79 @@ class _ProfileScreenState extends State<Profile> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.backpack, color: primary_color),
+            icon: Icon(Icons.lock, color: primary_color),
             onPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Bag(
-                        studentProfile: widget.studentProfile,
-                        Status: widget.studentProfile.status)),
+              showDialog(
+                context: context,
+                builder: (context) {
+                  String newPassword = '';
+                  String confirmPassword = '';
+
+                  return AlertDialog(
+                    title: Text('Change Password'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'New Password',
+                          counterText: '', 
+                        ),
+                        maxLength: 50, 
+                        onChanged: (value) {
+                          newPassword = value;
+                        },
+                      ),
+                      TextField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Confirm New Password',
+                          counterText: '', 
+                        ),
+                        maxLength: 50,
+                        onChanged: (value) {
+                          confirmPassword = value;
+                        },
+                      ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                      onPressed: () {
+                        if (newPassword == confirmPassword && newPassword.isNotEmpty) {
+                          context.read<StudentExtendedBloc>().add(changePassword(widget.studentProfile.id, newPassword, confirmPassword));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Password has been changed successfully'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          Navigator.of(context).pop();
+                          print('Error: Passwords do not match or the new password is empty.');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Passwords do not match or the new password is empty.'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                        child: Text('Confirm'),
+                      ),
+                    ],
+                  );
+                },
               );
-              if (result == true) {
-                context
-                    .read<StudentExtendedBloc>()
-                    .add(studentBagItem(widget.studentProfile.id, "Complete"));
-                context
-                    .read<StudentExtendedBloc>()
-                    .add(studentBagBook(widget.studentProfile.id, "Complete"));
-              } else {
-                context
-                    .read<StudentExtendedBloc>()
-                    .add(studentBagItem(widget.studentProfile.id, "Complete"));
-                context
-                    .read<StudentExtendedBloc>()
-                    .add(studentBagBook(widget.studentProfile.id, "Complete"));
-              }
             },
           ),
+
           IconButton(
             icon: Icon(Icons.logout, color: primary_color),
             onPressed: () {

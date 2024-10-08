@@ -317,4 +317,29 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception("${response.statusCode}");
     }
   }
+  
+  @override
+  Future<void> changePasswords(int id, String password, String cpassword) async {
+    try {
+      final response = await http.put(
+      Uri.parse('$baseUrl/students/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'password': password,
+        'confirm_password': cpassword,
+      }),
+    );
+
+      if (response.statusCode == 200) {
+        print(response.body);
+      } else {
+        throw Exception("Failed to Change Password: ${response.body}");
+      }
+    }
+    catch(e){
+      
+    }
+  }
 }

@@ -34,4 +34,5 @@ abstract class Studentrepo {
   Future<List<StudentBagItem>> showAllStudentBagItemData(
       int stubag_id, String status);
   Future<void> createNotificationData(int id, String message);
+  Future<void> changePasswords(int id, String password, String cpassword);
 }
