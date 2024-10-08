@@ -318,66 +318,6 @@ class _ProfileScreenState extends State<Profile> {
                                 ),
                               )
                             ),
-                            SizedBox(height: 20),
-                            Text(
-                              'Transaction',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            Container(
-                              width: double.infinity,
-                              height: 90,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: primary_color,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.shade400,
-                                    blurRadius: 5,
-                                    offset: Offset(1, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Container(
-                                height: 80,
-                                width: double.infinity,
-                                padding: const EdgeInsets.only(top: 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => Transaction(id: 1)));
-                                      },
-                                      child: Column(
-                                        children: [
-                                          SizedBox(height: 13),
-                                          Icon(
-                                            Icons.approval,
-                                            color: Colors.white,
-                                            size: 30,
-                                          ),
-                                          SizedBox(height: 10),
-                                          Text(
-                                            'Approval',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
                             SizedBox(height: 30),
                             Container(
                               alignment: Alignment.center,

@@ -131,7 +131,10 @@ class Home extends StatelessWidget {
             body: Center(child: Text('Error: ${state.error}')),
           );
         }
-        return Container();
+        else{
+          return Center(child: CircularProgressIndicator());
+        }
+        
       },
     );
   }
