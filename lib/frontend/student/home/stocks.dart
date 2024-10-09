@@ -135,7 +135,7 @@ class _StocksState extends State<Stocks> {
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   },
                 ),
                 title: Transform.translate(
