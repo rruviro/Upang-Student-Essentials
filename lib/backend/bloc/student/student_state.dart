@@ -201,21 +201,22 @@ class CoursesErrorState extends StudentActionState{
 
 
 // BOOKS
-class BooksLoadingState extends StudentActionState{}
-class BooksLoadedState extends StudentExtendedState{
-  final List<Book> books;
-  BooksLoadedState({required this.books});
-}
-class BooksErrorState extends StudentActionState{
-  final String error;
-  BooksErrorState(this.error);
-}
+// class BooksLoadingState extends StudentActionState{}
+// class BooksLoadedState extends StudentExtendedState{
+//   final List<Book> books;
+//   BooksLoadedState({required this.books});
+// }
+// class BooksErrorState extends StudentActionState{
+//   final String error;
+//   BooksErrorState(this.error);
+// }
 
 // STOCKS
 class StocksLoadingState extends StudentActionState{}
 class StocksLoadedState extends StudentExtendedState{
   final List<Stock> stocks;
-  StocksLoadedState({required this.stocks});
+  final List<Book> books;
+  StocksLoadedState({required this.stocks, required this.books});
 }
 class StocksErrorState extends StudentActionState{
   final String error;

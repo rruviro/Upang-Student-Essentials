@@ -81,7 +81,7 @@ class _coursesState extends State<courses> {
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
               child: ListView(
                 children: [
-                  CourseWidget(courses: state.courses, departmentName: widget.departmentName), // Displaying courses
+                  CourseWidget(courses: state.courses, departmentName: widget.departmentName),
                 ]
               ),
             )
@@ -120,9 +120,8 @@ class ItemCard extends StatelessWidget {
     return Card(
       elevation: 2,
       child: InkWell(
-        onTap: () {
-          print("Navigating to Stocks with courseID: ${course.id}, courseName: ${course.courseName}, Department: $departmentName"); // Debugging po
-          Navigator.push(
+        onTap: () async {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => Stocks(
@@ -132,6 +131,23 @@ class ItemCard extends StatelessWidget {
               ),
             ),
           );
+
+          if (result != null) {
+            // Do something with the returned data
+            print("Returned data: $result");
+            // For example, you can show a SnackBar with the returned data
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Received: $result')));
+          }
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => Stocks(
+          //       courseID: course.id,
+          //       courseName: course.courseName,
+          //       Department: departmentName,
+          //     ),
+          //   ),
+          // );
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),

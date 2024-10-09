@@ -1,36 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:use/SERVICES/model/admin/Course.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Stocks.dart';
 import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/frontend/student/home/home.dart';
+import 'package:use/frontend/student/home/uniform.dart';
 
 import '../../../colors/colors.dart';
 
+
 class stocks_widget  extends StatelessWidget {
-  final List<Stock> list;
-  const stocks_widget ({Key? key, required this.list}) : super (key: key);
+  final List<Stock> stocks;
+
+  const stocks_widget ({Key? key, required this.stocks}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: list
-          .map((e) => ItemCard(
-        visual: e,
-      ))
-          .toList(),
+      children: stocks.map((stock) => ItemCard(stock: stock,)).toList(),
     );
   }
 }
 class ItemCard extends StatelessWidget {
-  final Stock visual;
-  const ItemCard({Key? key, required this.visual}) : super (key: key);
+  final Stock stock;
+  const ItemCard({Key? key, required this.stock}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: InkWell(
           onTap: (){
-            studBloc.add(UniformPageEvent());
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UniformStudent())
+            );
           },
           child: Container(
             height: 250,
@@ -53,7 +57,7 @@ class ItemCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.asset(
-                      visual.stockPhoto,
+                      stock.stockPhoto,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -73,19 +77,12 @@ class ItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          visual.stockName,
+                          stock.stockName,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        // Text(
-                        //   'Stocks : ' + visual.stock,
-                        //   style: TextStyle(
-                        //     fontSize: 12,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

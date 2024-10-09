@@ -303,29 +303,34 @@ class StudentExtendedBloc
     });
 
     // FOR BOOKS
-    on<ShowBooksEvent>((event, emit) async {
-      emit(BooksLoadingState());
-      try {
-        final bookData = await _studentrepo.showBooks(event.Department);
-        emit(BooksLoadedState(books: bookData));
-      } catch (e) {
-        print(e);
-        emit(BooksErrorState('An error occurred: ${e.toString()}'));
-      }
-    });
+    // on<ShowBooksEvent>((event, emit) async {
+    //   emit(BooksLoadingState());
+    //   try {
+    //     final bookData = await _studentrepo.showBooks(event.Department);
+    //     emit(BooksLoadedState(books: bookData));
+    //   } catch (e) {
+    //     print(e);
+    //     emit(BooksErrorState('An error occurred: ${e.toString()}'));
+    //   }
+    // });
 
     // FOR STOCK
     on<ShowStocksEvent>((event, emit) async {
       emit(StocksLoadingState());
       try {
+        print('Fetching data for department: ${event.Department}');
+
         final stockData = await _studentrepo.showStocks(event.Department);
-        emit(StocksLoadedState(
-            stocks: stockData)); // Change here to pass fetched courses
+        final bookData = await _studentrepo.showBooks(event.Department);
+
+        print('Stocks and books fetched successfully');
+        emit(StocksLoadedState(stocks: stockData, books: bookData));
       } catch (e) {
-        print(e);
+        print('Error fetching stocks or books: $e');
         emit(StocksErrorState('An error occurred: ${e.toString()}'));
       }
     });
+
   }
 
   FutureOr<void> course_page(

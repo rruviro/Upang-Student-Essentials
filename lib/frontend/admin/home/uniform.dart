@@ -12,22 +12,10 @@ class UniformAdmin extends StatefulWidget {
 }
 
 class _UniformAdminState extends State<UniformAdmin> {
-  int selectedMaleIndexTop = -1;
-  int selectedFemaleIndexTop = -1;
-
-  bool isChecked1 = false;
-  bool isChecked2 = false;
-
-  String selectedSize = "M";
-  bool isDropdownVisible = false;
-  List<String> sizes = ["XS", "S", "M", "L", "XL", "XXL"];
-
-  final List<String> days = ["Mon", "Tue", "Wed"];
-  final List<String> days2 = ["Thu", "Fri", "Sat"];
-  int? selectedDayIndexA;
-  int? selectedDayIndexB;
-
-  int? selectedShift;
+  String? selectedSize;
+  String? selectedSchedule;
+  List<String> sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+  List<String> schedules = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   List<Map<String, String>> measures = [
     {"size": "XS", "chest": "17.5", "hips": "25.5"},
@@ -38,9 +26,13 @@ class _UniformAdminState extends State<UniformAdmin> {
     {"size": "XXL", "chest": "22.5", "hips": "30.5"},
   ];
 
+  List<File> _images = [];
+  List<bool> _selectedImages = [];
+  bool _isDeleteMode = false;
+
   void addSize() {
     setState(() {
-      measures.add({"size:": "New Size", "Chest": "hips"});
+      measures.add({"size": "New Size", "chest": "", "hips": ""});
     });
   }
 
@@ -49,163 +41,6 @@ class _UniformAdminState extends State<UniformAdmin> {
       measures.removeAt(index);
     });
   }
-
- void showSizeDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        backgroundColor: Colors.grey[100],
-        title: const Center(
-          child: Text(
-            "Manage Sizes",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        content: Container(
-          height: 350,
-          width: 500,
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columnSpacing: 20,
-                    columns: const [
-                      DataColumn(label: Text("SIZE", textAlign: TextAlign.center)),
-                      DataColumn(label: Text("CHEST", textAlign: TextAlign.center)),
-                      DataColumn(label: Text("HIPS", textAlign: TextAlign.center)),
-                      DataColumn(label: Text("ACTIONS", textAlign: TextAlign.center)),
-                    ],
-                    rows: measures.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      Map<String, String> sizeData = entry.value;
-
-                      return DataRow(cells: [
-                        DataCell(Center(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Size',
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            controller: TextEditingController(text: sizeData["size"]),
-                            onChanged: (value) {
-                              setState(() {
-                                measures[index]["size"] = value;
-                              });
-                            },
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Chest',
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            controller: TextEditingController(text: sizeData["chest"]),
-                            onChanged: (value) {
-                              setState(() {
-                                measures[index]["chest"] = value;
-                              });
-                            },
-                          ),
-                        )),
-                        DataCell(Center(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Hips',
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            controller: TextEditingController(text: sizeData["hips"]),
-                            onChanged: (value) {
-                              setState(() {
-                                measures[index]["hips"] = value;
-                              });
-                            },
-                          ),
-                        )),
-                        DataCell(
-                          IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              deleteSize(index);
-                            },
-                          ),
-                        ),
-                      ]);
-                    }).toList(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton.icon(
-                  icon: Icon(Icons.add),
-                  label: Text("Add Size"),
-                  onPressed: () {
-                    addSize();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                    backgroundColor: Color(0xFF0EAA72), // Gradient button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text("Close"),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
-                    backgroundColor: Colors.grey[600], // Grey close button
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    },
-  );
-}
-
-
-
-  List<File> _images = [];
-  List<bool> _selectedImages =[];
-  bool _isDeleteMode = false;
 
   void _toggleDeleteMode() {
     setState(() {
@@ -231,31 +66,187 @@ class _UniformAdminState extends State<UniformAdmin> {
   }
 
   void _pickImage() async {
-      final ImagePicker _picker = ImagePicker();
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-      if (pickedFile != null) {
-          setState(() {
-              _images.add(File(pickedFile.path));
-              _selectedImages.add(false);
-          });
-      } else {
-          print('No image selected.');
-      }
+    if (pickedFile != null) {
+      setState(() {
+        _images.add(File(pickedFile.path));
+        _selectedImages.add(false);
+      });
+    } else {
+      print('No image selected.');
+    }
   }
 
   void _deleteSelectedImages() {
-      setState(() {
-          if (_images.isEmpty || _selectedImages.isEmpty) return;
+    setState(() {
+      if (_images.isEmpty || _selectedImages.isEmpty) return;
 
-          for (int i = _images.length - 1; i >= 0; i--) {
-              if (_selectedImages[i]) {
-                  _images.removeAt(i);
-                  _selectedImages.removeAt(i);
-              }
-          }
-          // Do not reset _selectedImages here
-      });
+      for (int i = _images.length - 1; i >= 0; i--) {
+        if (_selectedImages[i]) {
+          _images.removeAt(i);
+          _selectedImages.removeAt(i);
+        }
+      }
+    });
+  }
+
+  void showSizeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          backgroundColor: Colors.grey[100],
+          title: const Text(
+            "Manage Sizes",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          content: Container(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: DataTable(
+                      columnSpacing: 10,
+                      dataRowHeight: 40,
+                      columns: const [
+                        DataColumn(label: Center(child: Text("SIZE", style: TextStyle(fontSize: 12)))),
+                        DataColumn(label: Center(child: Text("CHEST", style: TextStyle(fontSize: 12)))),
+                        DataColumn(label: Center(child: Text("HIPS", style: TextStyle(fontSize: 12)))),
+                        DataColumn(label: Center(child: Text("", style: TextStyle(fontSize: 12)))),
+                      ],
+                      rows: measures.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        Map<String, String> sizeData = entry.value;
+
+                        return DataRow(cells: [
+                          DataCell(
+                            SizedBox(
+                              width: 50,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                initialValue: sizeData["size"],
+                                onChanged: (value) {
+                                  setState(() {
+                                    measures[index]["size"] = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            SizedBox(
+                              width: 50,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                initialValue: sizeData["chest"],
+                                onChanged: (value) {
+                                  setState(() {
+                                    measures[index]["chest"] = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            SizedBox(
+                              width: 50,
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                initialValue: sizeData["hips"],
+                                onChanged: (value) {
+                                  setState(() {
+                                    measures[index]["hips"] = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          DataCell(
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red, size: 18),
+                              onPressed: () {
+                                deleteSize(index);
+                              },
+                            ),
+                          ),
+                        ]);
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton.icon(
+                  icon: Icon(Icons.add, color: Colors.white, size: 16),
+                  label: Text("Add Size", style: TextStyle(color: Colors.white, fontSize: 12)),
+                  onPressed: () {
+                    addSize();
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: primary_color,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Close", style: TextStyle(color: Colors.white, fontSize: 12)),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.grey[600],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showDeleteConfirmation() {
@@ -296,7 +287,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                 Navigator.of(context).pop();
               },
             ),
-                        TextButton(
+            TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.redAccent,
                 shape: RoundedRectangleBorder(
@@ -416,30 +407,29 @@ class _UniformAdminState extends State<UniformAdmin> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "${_images.length + 2} Images",
-                          style: TextStyle(fontSize: 13),
-                        ),
-                        if (_images.isNotEmpty)
-                          IconButton(
-                            icon: Icon(
-                              _isDeleteMode ? Icons.check : Icons.delete,
-                              color: _isDeleteMode ? Colors.green : Colors.red,
-                            ),
-                            onPressed: () {
-                              if (_isDeleteMode) {
-                                _showDeleteConfirmation();
-                              } else {
-                                _toggleDeleteMode();
-                              }
-                            },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${_images.length + 2} Images",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      if (_images.isNotEmpty)
+                        IconButton(
+                          icon: Icon(
+                            _isDeleteMode ? Icons.check : Icons.delete,
+                            color: _isDeleteMode ? Colors.green : Colors.red,
                           ),
-                      ],
-                    ),
-
+                          onPressed: () {
+                            if (_isDeleteMode) {
+                              _showDeleteConfirmation();
+                            } else {
+                              _toggleDeleteMode();
+                            }
+                          },
+                        ),
+                    ],
+                  ),
                   SizedBox(height: 8),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -488,6 +478,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                                   decoration: BoxDecoration(
                                     color: Color(0xFFD9D9D9),
                                   ),
+
                                   padding: EdgeInsets.all(6),
                                   child: Image.file(
                                     image,
@@ -527,7 +518,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                             child: Icon(
                               Icons.add,
                               size: 20,
-                              color: Color(0xFF2AB9E6),
+                              color: primary_color,
                             ),
                           ),
                         ),
@@ -551,7 +542,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                              Text(
+                            Text(
                               "Size Chart",
                               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             ),
@@ -563,16 +554,14 @@ class _UniformAdminState extends State<UniformAdmin> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.add, color: Colors.black),
+                        icon: Icon(Icons.add, color: primary_color),
                         onPressed: () {
                           showSizeDialog(context);
                         },
                       )
                     ],
                   ),
-
                   const SizedBox(height: 20),
-
                   Container(
                     height: 330,
                     width: 460,
@@ -580,322 +569,29 @@ class _UniformAdminState extends State<UniformAdmin> {
                     child: Container(
                       child: DataTable(
                         columns: [
-                          DataColumn(label: Text("SIZE", textAlign: TextAlign.center)),
-                          DataColumn(label: Text("CHEST", textAlign: TextAlign.center)),
-                          DataColumn(label: Text("HIPS", textAlign: TextAlign.center)),
+                          DataColumn(label: Center(child: Text("SIZE"))),
+                          DataColumn(label: Center(child: Text("CHEST"))),
+                          DataColumn(label: Center(child: Text("HIPS"))),
                         ],
-                        rows: [
-                          DataRow(cells: [
-                            DataCell(Center(child: Text("XS"))),
-                            DataCell(Center(child: Text("17.5"))),
-                            DataCell(Center(child: Text("25.5"))),
-                          ]),
-                          DataRow(cells: [
-                            DataCell(Center(child: Text("S"))),
-                            DataCell(Center(child: Text("18.5"))),
-                            DataCell(Center(child: Text("26.5"))),
-                          ]),
-                          DataRow(cells: [
-                            DataCell(Center(child: Text("M"))),
-                            DataCell(Center(child: Text("19.5"))),
-                            DataCell(Center(child: Text("27.5"))),
-                          ]),
-                          DataRow(cells: [
-                            DataCell(Center(child: Text("L"))),
-                            DataCell(Center(child: Text("20.5"))),
-                            DataCell(Center(child: Text("28.5"))),
-                          ]),
-                          DataRow(cells: [
-                            DataCell(Center(child: Text("XL"))),
-                            DataCell(Center(child: Text("21.5"))),
-                            DataCell(Center(child: Text("29.5"))),
-                          ]),
-                          DataRow(cells: [
-                            DataCell(Center(child: Text("XXL"))),
-                            DataCell(Center(child: Text("22.5"))),
-                            DataCell(Center(child: Text("30.5"))),
-                          ]),
-                        ],
+                        rows: measures.map((measure) {
+                          return DataRow(cells: [
+                            DataCell(Center(child: Text(measure["size"] ?? ""))),
+                            DataCell(Center(child: Text(measure["chest"] ?? ""))),
+                            DataCell(Center(child: Text(measure["hips"] ?? ""))),
+                          ]);
+                        }).toList(),
                       ),
                     ),
                   ),
-              
                   const SizedBox(height: 30),
-
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  padding: const EdgeInsets.all(20),
-                                  height: MediaQuery.of(context).size.height * 0.8,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.all(30), // image padding only
-                                              child: Image.asset(
-                                                'assets/uniuni.png',
-                                                height: 170,
-                                                width: 100,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: const [
-                                                      Text(
-                                                        'Corporate Top',
-                                                        style: TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Stock: 300',
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  const Text(
-                                                    'The Corporate Top of BSIT',
-                                                    style: TextStyle(
-                                                      fontSize: 8,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 16),
-
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                                          child: Divider(
-                                            color: Colors.grey,
-                                            thickness: 1,
-                                            height: 1,
-                                          ),
-                                        ),
-
-                                        const SizedBox(height: 16),
-
-                                        _buildItemCard(
-                                          'Sizes',
-                                          '',
-                                          const Padding(
-                                            padding: EdgeInsets.only(left: 0.0),
-                                          ),
-                                          selectedMaleIndexTop,
-                                          (index) {
-                                            setState(() {
-                                              selectedMaleIndexTop = selectedMaleIndexTop == index ? -1 : index;
-                                            });
-                                          },
-                                          isDisabled: selectedFemaleIndexTop != -1,
-                                        ),
-                                        
-                                        const SizedBox(height: 30),
-
-                                        Divider(color: Colors.grey),
-
-                                        const SizedBox(height: 30),
-
-                                        const Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            "Claim Schedule",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 30),
-                                        Container(
-                                          height: 70,
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            color: selectedDayIndexA != null ? const Color(0xFF2AB9E6) : const Color(0xFFD9D9D9),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                                child: Text(
-                                                  "Shift A",
-                                                  style: TextStyle(color: Colors.black),
-                                                ),
-                                              ),
-                                              Container(
-                                                height: double.infinity,
-                                                child: VerticalDivider(
-                                                  color: tertiary_color,
-                                                  width: 20,
-                                                  thickness: 1,
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: List.generate(days.length, (index) {
-                                                    final isSelected = selectedDayIndexA == index;
-                                                    final isClickable = selectedDayIndexB == null;
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        if (isClickable) {
-                                                          setState(() {
-                                                            selectedDayIndexA = isSelected ? null : index;
-                                                          });
-                                                        }
-                                                      },
-                                                      child: AbsorbPointer(
-                                                        absorbing: !isClickable,
-                                                        child: Container(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            vertical: 8,
-                                                            horizontal: 12,
-                                                          ),
-                                                          decoration: BoxDecoration(
-                                                            color: isSelected ? Colors.white : Colors.transparent,
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          child: Text(
-                                                            days[index],
-                                                            style: TextStyle(
-                                                              color: isSelected
-                                                                  ? const Color(0xFF2AB9E6)
-                                                                  : Colors.black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Container(
-                                          height: 70,
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            color: selectedDayIndexB != null ? const Color(0xFF2AB9E6) : const Color(0xFFD9D9D9),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                                child: Text("Shift B", style: TextStyle(color: Colors.black)),
-                                              ),
-                                              VerticalDivider(
-                                                color: tertiary_color,
-                                                width: 20,
-                                                thickness: 1,
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: List.generate(days2.length, (index) {
-                                                    final isSelected = selectedDayIndexB == index;
-                                                    final isClickable = selectedDayIndexA == null;
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        if (isClickable) {
-                                                          setState(() {
-                                                            selectedDayIndexB = isSelected ? null : index;
-                                                          });
-                                                        }
-                                                      },
-                                                      child: AbsorbPointer(
-                                                        absorbing: !isClickable,
-                                                        child: Container(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            vertical: 8,
-                                                            horizontal: 12,
-                                                          ),
-                                                          decoration: BoxDecoration(
-                                                            color: isSelected ? Colors.white : Colors.transparent,
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          child: Text(
-                                                            days2[index],
-                                                            style: TextStyle(
-                                                              color: isSelected
-                                                                  ? const Color(0xFF2AB9E6)
-                                                                  : Colors.black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 30),
-                                        Center(
-                                          child: SizedBox(
-                                            height: 50,
-                                            width: double.infinity,
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                // action
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Color(0xFF2AB9E6),
-                                                foregroundColor: Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              icon: const Icon(Icons.backpack, size: 20),
-                                              label: const Text(
-                                                "Add to Backpack",
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
+                          onPressed: () => _showModalBottomSheet(context, "Add to Backpack"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF0EAA72),
+                            foregroundColor: primary_color,
                             side: BorderSide(color: primary_color),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -916,279 +612,12 @@ class _UniformAdminState extends State<UniformAdmin> {
                         ),
                       ),
                       const SizedBox(width: 10),
-
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return Container(
-                                  padding: const EdgeInsets.all(20),
-                                  height: MediaQuery.of(context).size.height * 0.8,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.all(20), // image padding only
-                                              child: Image.asset(
-                                                'assets/uniuni.png',
-                                                height: 170,
-                                                width: 100,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: const [
-                                                      Text(
-                                                        'Corporate Top',
-                                                        style: TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        'Stock: 300',
-                                                        style: TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  const Text(
-                                                    'The Corporate Top of BSIT',
-                                                    style: TextStyle(
-                                                      fontSize: 8,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 16),
-
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                                          child: Divider(
-                                            color: Colors.grey,
-                                            thickness: 1,
-                                            height: 1,
-                                          ),
-                                        ),
-
-                                        const SizedBox(height: 16),
-
-                                        _buildItemCard(
-                                          'Sizes',
-                                          '',
-                                          const Padding(
-                                            padding: EdgeInsets.only(left: 0.0),
-                                          ),
-                                          selectedMaleIndexTop,
-                                          (index) {
-                                            setState(() {
-                                              selectedMaleIndexTop = selectedMaleIndexTop == index ? -1 : index;
-                                            });
-                                          },
-                                          isDisabled: selectedFemaleIndexTop != -1,
-                                        ),
-                                        
-                                        const SizedBox(height: 30),
-
-                                        Divider(color: Colors.grey),
-
-                                        const SizedBox(height: 30),
-
-                                        const Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            "Claim Schedule",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 30),
-                                        Container(
-                                          height: 70,
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            color: selectedDayIndexA != null ? const Color(0xFF2AB9E6) : const Color(0xFFD9D9D9),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                                child: Text(
-                                                  "Shift A",
-                                                  style: TextStyle(color: Colors.black),
-                                                ),
-                                              ),
-                                              Container(
-                                                height: double.infinity,
-                                                child: VerticalDivider(
-                                                  color: tertiary_color,
-                                                  width: 20,
-                                                  thickness: 1,
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: List.generate(days.length, (index) {
-                                                    final isSelected = selectedDayIndexA == index;
-                                                    final isClickable = selectedDayIndexB == null;
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        if (isClickable) {
-                                                          setState(() {
-                                                            selectedDayIndexA = isSelected ? null : index;
-                                                          });
-                                                        }
-                                                      },
-                                                      child: AbsorbPointer(
-                                                        absorbing: !isClickable,
-                                                        child: Container(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            vertical: 8,
-                                                            horizontal: 12,
-                                                          ),
-                                                          decoration: BoxDecoration(
-                                                            color: isSelected ? Colors.white : Colors.transparent,
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          child: Text(
-                                                            days[index],
-                                                            style: TextStyle(
-                                                              color: isSelected
-                                                                  ? const Color(0xFF2AB9E6)
-                                                                  : Colors.black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Container(
-                                          height: 70,
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            color: selectedDayIndexB != null ? const Color(0xFF2AB9E6) : const Color(0xFFD9D9D9),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                                child: Text("Shift B", style: TextStyle(color: Colors.black)),
-                                              ),
-                                              VerticalDivider(
-                                                color: tertiary_color,
-                                                width: 20,
-                                                thickness: 1,
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: List.generate(days2.length, (index) {
-                                                    final isSelected = selectedDayIndexB == index;
-                                                    final isClickable = selectedDayIndexA == null;
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        if (isClickable) {
-                                                          setState(() {
-                                                            selectedDayIndexB = isSelected ? null : index;
-                                                          });
-                                                        }
-                                                      },
-                                                      child: AbsorbPointer(
-                                                        absorbing: !isClickable,
-                                                        child: Container(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            vertical: 8,
-                                                            horizontal: 12,
-                                                          ),
-                                                          decoration: BoxDecoration(
-                                                            color: isSelected ? Colors.white : Colors.transparent,
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          child: Text(
-                                                            days2[index],
-                                                            style: TextStyle(
-                                                              color: isSelected
-                                                                  ? const Color(0xFF2AB9E6)
-                                                                  : Colors.black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 30),
-                                        Center(
-                                          child: SizedBox(
-                                            height: 50,
-                                            width: double.infinity,
-                                            child: ElevatedButton.icon(
-                                              onPressed: () {
-                                                // action
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Color(0xFF2AB9E6),
-                                                foregroundColor: Colors.white,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              icon: const Icon(Icons.request_page, size: 20),
-                                              label: const Text(
-                                                "Request",
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
+                          onPressed: () => _showModalBottomSheet(context, "Request"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor: const Color(0xFF0EAA72),
+                            foregroundColor: primary_color,
                             side: BorderSide(color: primary_color),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -1219,130 +648,46 @@ class _UniformAdminState extends State<UniformAdmin> {
     );
   }
 
-Widget _buildHeader(String title, String stockInfo) {
-  return SizedBox(
-    width: double.infinity,
-    height: 70,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
+  Widget _buildHeader(String title, String stockInfo) {
+    return SizedBox(
+      width: double.infinity,
+      height: 70,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                stockInfo,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                    fontWeight: FontWeight.normal),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              "Ordered",
               style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              stockInfo,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: FontWeight.normal),
             ),
-          ],
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-            "Ordered",
-            style: const TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.normal),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildItemCard(
-  String title,
-  String subtitle,
-  Widget leading,
-  int selectedIndex,
-  Function(int) onSizeSelected, {
-  bool isDisabled = false,
-}) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      border: null,
-    ),
-    child: Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            leading,
-            const SizedBox(height: 4),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: ['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((size) {
-            int index = ['XS', 'S', 'M', 'L', 'XL', 'XXL'].indexOf(size);
-            final isSelected = selectedIndex == index;
-            return GestureDetector(
-              onTap: isDisabled ? null : () {
-                onSizeSelected(index);
-              },
-              child: SizedBox(
-                width: 50,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: isSelected ? const Color(0xFF2AB9E6) : const Color(0xFFD9D9D9),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      size,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : const Color(0xFFB0B0B0), 
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   Widget slides(BuildContext context) {
     List<String> imageUrls = ['assets/bsit.png', 'assets/uniuni.png'];
@@ -1376,6 +721,230 @@ Widget _buildItemCard(
           autoPlayCurve: Curves.fastOutSlowIn,
           enlargeCenterPage: true,
         ),
+      ),
+    );
+  }
+
+  void _showModalBottomSheet(BuildContext context, String action) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(20),
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(30),
+                          child: Image.asset(
+                            'assets/uniuni.png',
+                            height: 170,
+                            width: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: const [
+                                  Text(
+                                    'Corporate Top',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Stock: 300',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              const Text(
+                                'The Corporate Top of BSIT',
+                                style: TextStyle(
+                                  fontSize: 8,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Divider(color: Colors.grey),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Sizes',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: sizes.map((size) {
+                        return GestureDetector(
+                          onTap: () {
+                            setModalState(() {
+                              if (selectedSize == size) {
+                                selectedSize = null;
+                              } else {
+                                selectedSize = size;
+                              }
+                            });
+                          },
+                          child: Container(
+                            width: 50,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: selectedSize == size ? primary_color : const Color(0xFFD9D9D9),
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                size,
+                                style: TextStyle(
+                                  color: selectedSize == size ? Colors.white : const Color(0xFFB0B0B0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 30),
+                    Divider(color: Colors.grey),
+                    const SizedBox(height: 30),
+                    const Text(
+                      "Claim Schedule",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    _buildShiftContainer("Shift A", schedules.sublist(0, 3), setModalState),
+                    const SizedBox(height: 20),
+                    _buildShiftContainer("Shift B", schedules.sublist(3), setModalState),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          if (selectedSize != null && selectedSchedule != null) {
+                            print('$action: Size - $selectedSize, Schedule - $selectedSchedule');
+                            Navigator.pop(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primary_color,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        icon: Icon(action == "Add to Backpack" ? Icons.backpack : Icons.request_page, size: 20),
+                        label: Text(
+                          action,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildShiftContainer(String shiftName, List<String> shiftDays, StateSetter setModalState) {
+    bool isShiftSelected = shiftDays.contains(selectedSchedule);
+    return Container(
+      height: 70,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: isShiftSelected ? primary_color : const Color(0xFFD9D9D9),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 50),
+            child: Text(
+              shiftName,
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          Container(
+            height: double.infinity,
+            child: VerticalDivider(
+              color: Colors.white,
+              width: 20,
+              thickness: 1,
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: shiftDays.map((day) {
+                final isSelected = selectedSchedule == day;
+                return GestureDetector(
+                  onTap: () {
+                    setModalState(() {
+                      if (selectedSchedule == day) {
+                        selectedSchedule = null;
+                      } else {
+                        selectedSchedule = day;
+                      }
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.white : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      day,
+                      style: TextStyle(
+                        color: isSelected ? primary_color : Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }

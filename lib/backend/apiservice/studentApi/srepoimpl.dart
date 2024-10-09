@@ -373,25 +373,28 @@ class StudentRepositoryImpl extends Studentrepo {
 
   // BOOKS
   @override
-  Future<List<Book>> showBooks(String Department) async{
+  Future<List<Book>> showBooks(String Department) async {
     final response = await http.get(Uri.parse('$baseUrl/item-books/$Department'));
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Book.fromJson(data)).toList();
-    } else{
+    } else {
+      print('Failed to load books, status code: ${response.statusCode}');
       throw Exception('Failed to load books');
     }
   }
 
-  // STOCK
+// STOCK
   @override
-  Future<List<Stock>> showStocks(String Department) async{
+  Future<List<Stock>> showStocks(String Department) async {
     final response = await http.get(Uri.parse('$baseUrl/stocks/$Department'));
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Stock.fromJson(data)).toList();
-    } else{
+    } else {
+      print('Failed to load stocks, status code: ${response.statusCode}');
       throw Exception('Failed to load stock');
     }
   }
+
 }

@@ -89,7 +89,7 @@ class _StocksState extends State<Stocks> {
         buildWhen: (previous, current) => current is! AdminActionState,
         listener: (context, state) {
           if (state is UniformPageState) {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => UniformAdmin()));
           } else if (state is UniformManagePageState) {
             // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
           } else if (state is NewDepartmentPageState) {
@@ -616,6 +616,11 @@ class _StocksState extends State<Stocks> {
                                           },
                                         );
                                       },
+
+
+
+
+
                                       child: Stack(
                                         children: [
                                           Padding(
@@ -749,7 +754,11 @@ class _ItemCardState extends State<ItemCard> {
         children: [
           InkWell(
             onTap: (){
-              adminBloc.add(UniformPageEvent());
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UniformAdmin())
+              );
             },
             child: Container(
               height: 250,
