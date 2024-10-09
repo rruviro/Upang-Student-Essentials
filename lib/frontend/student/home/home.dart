@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -32,6 +33,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   NotificationService? _notificationService;
+  
 
   @override
   void initState() {
@@ -40,6 +42,13 @@ class _HomeState extends State<Home> {
     _notificationService?.startPolling(widget.studentProfile.id);
     // Trigger fetching of departments
     studBloc.add(ShowDepartmentsEvent());
+    initializePreferences();
+  }
+
+  Future<void> initializePreferences() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('course', widget.studentProfile.course);
+    print(pref.getString('course'));
   }
 
   @override
@@ -62,6 +71,7 @@ class _HomeState extends State<Home> {
         if (state is DepartmentsLoadingState) {
           return Center(child: CircularProgressIndicator());
         } else if (state is DepartmentsLoadedState) {
+          
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(

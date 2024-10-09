@@ -23,13 +23,13 @@ class courses extends StatefulWidget {
 }
 
 class _coursesState extends State<courses> {
-  String _selectedYear = "First Year";
+  late StudentExtendedBloc _studentBloc;
 
   @override
   void initState() {
     super.initState();
-    // Trigger the ShowCoursesEvent on initialization
-    context.read<StudentExtendedBloc>().add(ShowCoursesEvent(departmentID: widget.departmentID));
+    _studentBloc = context.read<StudentExtendedBloc>();
+    _studentBloc.add(ShowCoursesEvent(departmentID: widget.departmentID));
   }
 
   @override
@@ -39,7 +39,7 @@ class _coursesState extends State<courses> {
       buildWhen: (previous, current) => current is! StudentActionState,
       listener: (context, state) {
         if (state is StockPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks(courseID: 0, courseName: '', Department:'',)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks(courseID: 0, courseName: '', Department: '',)));
         }
       },
       builder: (context, state) {
@@ -74,17 +74,21 @@ class _coursesState extends State<courses> {
                   ),
                 ),
               ),
-              actions: [
-              ],
+              actions: [],
             ),
             body: Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
               child: ListView(
                 children: [
-                  CourseWidget(courses: state.courses, departmentName: widget.departmentName),
-                ]
+                  CourseWidget(
+                    courses: state.courses,
+                    departmentName: widget.departmentName,
+                    id: widget.departmentID,
+                    studentBloc: _studentBloc,
+                  ),
+                ],
               ),
-            )
+            ),
           );
         } else if (state is CoursesErrorState) {
           return Center(child: Text(state.error));
@@ -93,19 +97,33 @@ class _coursesState extends State<courses> {
       },
     );
   }
-
 }
 
 class CourseWidget extends StatelessWidget {
   final List<Course> courses;
   final String departmentName;
+  final int id;
+  final StudentExtendedBloc studentBloc;
 
-  const CourseWidget({Key? key, required this.courses, required this.departmentName,}) : super(key: key);
+  const CourseWidget({
+    Key? key,
+    required this.courses,
+    required this.departmentName,
+    required this.id,
+    required this.studentBloc,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: courses.map((course) => ItemCard(course: course, departmentName: departmentName)).toList(),
+      children: courses
+          .map((course) => ItemCard(
+                course: course,
+                departmentName: departmentName,
+                id: id,
+                studentBloc: studentBloc,
+              ))
+          .toList(),
     );
   }
 }
@@ -113,8 +131,17 @@ class CourseWidget extends StatelessWidget {
 class ItemCard extends StatelessWidget {
   final Course course;
   final String departmentName;
+  final int id;
+  final StudentExtendedBloc studentBloc;
 
-  const ItemCard({Key? key, required this.course, required this.departmentName}) : super(key: key);
+  const ItemCard({
+    Key? key,
+    required this.course,
+    required this.departmentName,
+    required this.id,
+    required this.studentBloc,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -132,22 +159,9 @@ class ItemCard extends StatelessWidget {
             ),
           );
 
-          if (result != null) {
-            // Do something with the returned data
-            print("Returned data: $result");
-            // For example, you can show a SnackBar with the returned data
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Received: $result')));
+          if (result == true) {
+            studentBloc.add(ShowCoursesEvent(departmentID: id));
           }
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => Stocks(
-          //       courseID: course.id,
-          //       courseName: course.courseName,
-          //       Department: departmentName,
-          //     ),
-          //   ),
-          // );
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
