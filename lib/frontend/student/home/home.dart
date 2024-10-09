@@ -48,6 +48,7 @@ class _HomeState extends State<Home> {
   Future<void> initializePreferences() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('course', widget.studentProfile.course);
+    await pref.setInt('stubagid', widget.studentProfile.id);
     print(pref.getString('course'));
   }
 
