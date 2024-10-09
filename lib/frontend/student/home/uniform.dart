@@ -39,23 +39,6 @@ class UniformStudent extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const Text(
-                  'Year',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  width: 30,
-                  height: 1,
-                  color: Colors.white,
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'First Year',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-              ],
             ),
           ),
           const SizedBox(
@@ -103,34 +86,7 @@ class UniformStudent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "2 images",
-                    style: TextStyle(
-                      fontSize: 13,
-                    ),
-                  ),
                   SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Container(
-                        child: Image.asset(
-                          'assets/bsit.png',
-                          height: 60,
-                          width: 30,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(width: 15),
-                      Container(
-                        child: Image.asset(
-                          'assets/uniuni.png',
-                          height: 60,
-                          width: 30,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
@@ -138,7 +94,7 @@ class UniformStudent extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  _buildHeader('Corporate Top', '8.5k Ordered'),
+                  _buildHeader('Corporate Top'),
                   const SizedBox(height: 15),
                   Align(
                       alignment: Alignment.centerLeft,
@@ -235,7 +191,7 @@ class UniformStudent extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(String title, String stockInfo) {
+  Widget _buildHeader(String title) {
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -248,17 +204,6 @@ class UniformStudent extends StatelessWidget {
               style: const TextStyle(
                   color: Colors.black,
                   fontSize: 15,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Positioned(
-            right: 16,
-            top: 10,
-            child: Text(
-              stockInfo,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -374,12 +319,6 @@ class _ModalContentState extends State<_ModalContent> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(30),
-                  child: Image.asset(
-                    'assets/uniuni.png',
-                    height: 170,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(

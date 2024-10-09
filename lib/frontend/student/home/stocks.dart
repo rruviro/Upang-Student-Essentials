@@ -9,7 +9,6 @@ import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/home/uniform.dart';
 import 'package:use/frontend/student/widgets/home/stocks.dart';
 
-
 class Stocks extends StatefulWidget {
   final int courseID;
   final String courseName;
@@ -19,8 +18,8 @@ class Stocks extends StatefulWidget {
   @override
   State<Stocks> createState() => _StocksState();
 }
-class _StocksState extends State<Stocks> {
 
+class _StocksState extends State<Stocks> {
   @override
   void initState() {
     super.initState();
@@ -29,17 +28,103 @@ class _StocksState extends State<Stocks> {
 
   List<bool> _bottomSheetSelectedBooks = List.generate(5, (index) => false);
   List<bool> _containerSelectedBooks = List.generate(5, (index) => false);
-  // String _selectedYear = "First Year"; // TINANGGAL KO YUNG YEARS SA APPBAR
+
+  void _showBookDialog(BuildContext context, Book book) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            book.BookName,
+            style: TextStyle(
+              color: primary_color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                book.SubjectDesc,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+              ),
+              SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        // Add to backpack logic here
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primary_color,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      icon: Icon(Icons.backpack, size: 20),
+                      label: Text(
+                        "Add to Backpack",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        // Request logic here
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: primary_color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(color: primary_color),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      icon: Icon(Icons.request_page, size: 20),
+                      label: Text(
+                        "Request",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
-      listenWhen: (previous, current) => current is StudentActionState,
-      buildWhen: (previous, current) => current is! StudentActionState,
-      listener: (context, state){
-        if (state is UniformPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => UniformStudent()));
-        }
-      },
+        listenWhen: (previous, current) => current is StudentActionState,
+        buildWhen: (previous, current) => current is! StudentActionState,
+        listener: (context, state){
+          if (state is UniformPageState) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => UniformStudent()));
+          }
+        },
         builder: (context, state) {
           if (state is StocksLoadingState) {
             return const Center(child: CircularProgressIndicator());
@@ -154,7 +239,7 @@ class _StocksState extends State<Stocks> {
                             padding: const EdgeInsets.all(16.0),
                             child: ListView(
                               children: [
-                                BookList(books: state.books),
+                                BookList(books: state.books, onTap: _showBookDialog),
                               ],
                             ),
                           ),
@@ -185,49 +270,40 @@ class _StocksState extends State<Stocks> {
 
 class BookList extends StatelessWidget {
   final List<Book> books;
-  const BookList({Key? key, required this.books}) : super(key: key);
+  final Function(BuildContext, Book) onTap;
+  const BookList({Key? key, required this.books, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: books.map((book) => BookCard(visual: book, isSelected: false, onChanged: (bool? value) {},)).toList(),
+      children: books.map((book) => BookCard(visual: book, onTap: () => onTap(context, book))).toList(),
     );
   }
 }
-class BookCard extends StatefulWidget {
+
+class BookCard extends StatelessWidget {
   final Book visual;
-  final bool isSelected;
-  final ValueChanged<bool?>? onChanged;
+  final VoidCallback onTap;
   const BookCard({
     Key? key,
     required this.visual,
-    required this.isSelected,
-    required this.onChanged,
+    required this.onTap,
   }) : super(key: key);
-  @override
-  State<BookCard> createState() => _BookCardState();
-}
-class _BookCardState extends State<BookCard> {
-  bool isChecked = false;
-  @override
-  void initState() {
-    super.initState();
-    isChecked = widget.isSelected;
-  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
           title: Text(
-            widget.visual.BookName,
+            visual.BookName,
             style: TextStyle(
               fontSize: 13,
               color: Colors.white,
             ),
           ),
           subtitle: Text(
-            widget.visual.SubjectDesc,
+            visual.SubjectDesc,
             style: TextStyle(
               fontSize: 10,
               color: Colors.white.withOpacity(0.7),
@@ -238,54 +314,13 @@ class _BookCardState extends State<BookCard> {
             Icons.book,
             size: 32,
           ),
-          trailing: CustomCircularCheckbox(
-            value: isChecked,
-            onChanged: (bool? value) {
-              setState(() {
-                isChecked = value ?? false;
-                widget.onChanged?.call(isChecked);
-              });
-            },
-          ),
+          onTap: onTap,
         ),
         Divider(
           color: Colors.white.withOpacity(0.7),
           thickness: 1,
         ),
       ],
-    );
-  }
-}
-
-class CustomCircularCheckbox extends StatelessWidget {
-  final bool value;
-  final ValueChanged<bool?> onChanged;
-
-  const CustomCircularCheckbox({
-    required this.value,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onChanged(!value),
-      child: Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: value ? Colors.white : Colors.transparent,
-          border: Border.all(color: Colors.white, width: 2),
-        ),
-        child: value
-            ? Icon(
-          Icons.check,
-          color: Colors.black,
-          size: 16,
-        )
-            : null,
-      ),
     );
   }
 }
