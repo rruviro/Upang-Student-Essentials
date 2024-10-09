@@ -222,17 +222,18 @@ class StudentRepositoryImpl extends Studentrepo {
   @override
   Future<void> addStudentBookData(int id, String department, String bookName,
       String subjectCode, String subjectDesc, String status) async {
-    final response = await http.put(
+    final response = await http.post(
       Uri.parse('$baseUrl/bookcollections'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
       },
-      body: jsonEncode({
+      body: jsonEncode(<String, dynamic>{
         'Department': department,
         'BookName': bookName,
         'SubjectCode': subjectCode,
         'SubjectDesc': subjectDesc,
-        'Status': status,
+        'status': status,
         'stubag_id': id,
       }),
     );
@@ -240,8 +241,12 @@ class StudentRepositoryImpl extends Studentrepo {
     if (response.statusCode == 200) {
       // Handle successful update
       print("Student book data successfully added.");
-    } else {
-      throw Exception("Failed to add student book data: ${response.body}");
+    }
+    else if(response.statusCode == 409){
+      print(response.body);
+    }
+    else {
+      throw Exception(response.body);
     }
   }
 

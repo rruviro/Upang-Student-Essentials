@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/backend/models/admin/Stock.dart';
@@ -20,109 +21,164 @@ class Stocks extends StatefulWidget {
 }
 
 class _StocksState extends State<Stocks> {
+  String? _course;
+  int? _id;
+  String? bookCourse;
   @override
   void initState() {
     super.initState();
+    bookCourse = widget.courseName;
     context.read<StudentExtendedBloc>().add(ShowStocksEvent(Department: widget.Department));
+    getCourse();
   }
+
+  Future<void> getCourse() async {
+    final SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    _course = sharedPref.getString('course');
+    _id = sharedPref.getInt('stubagid');
+  }
+
 
   List<bool> _bottomSheetSelectedBooks = List.generate(5, (index) => false);
   List<bool> _containerSelectedBooks = List.generate(5, (index) => false);
 
-  void _showBookDialog(BuildContext context, Book book) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+void _showBookDialog(BuildContext context, Book book,String bookname, String subjectCode, String subjectDesc) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          book.BookName,
+          style: TextStyle(
+            color: primary_color,
+            fontWeight: FontWeight.bold,
           ),
-          title: Text(
-            book.BookName,
-            style: TextStyle(
-              color: primary_color,
-              fontWeight: FontWeight.bold,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              book.SubjectDesc,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
             ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                book.SubjectDesc,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[600],
+            SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _course == widget.courseName ? () {
+                      print(_id!);
+                      print(widget.Department);
+                      print(subjectCode);
+                      print(widget.courseName);
+                      print(subjectDesc);
+                      print("Active");
+                      context.read<StudentExtendedBloc>().add(AddStudentBagBook(_id!,widget.Department, widget.courseName, subjectCode, subjectDesc, "ACTIVE"));
+                      Navigator.of(context).pop();
+                    } : null, 
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primary_color,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    icon: Icon(Icons.backpack, size: 20),
+                    label: Text(
+                      "Add to Backpack",
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Add to backpack logic here
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primary_color,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
+              ],
+            ),
+            SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _course == widget.courseName ? () {
+                      context.read<StudentExtendedBloc>().add(AddStudentBagBook(_id!,widget.Department, widget.courseName, subjectCode, subjectDesc, "Request"));
+                      Navigator.of(context).pop();
+                    } : null,  // Disable button if condition is false
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: primary_color,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(color: primary_color),
                       ),
-                      icon: Icon(Icons.backpack, size: 20),
-                      label: Text(
-                        "Add to Backpack",
-                        style: TextStyle(fontSize: 14),
-                      ),
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    icon: Icon(Icons.request_page, size: 20),
+                    label: Text(
+                      "Request",
+                      style: TextStyle(fontSize: 14),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Request logic here
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: primary_color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(color: primary_color),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      icon: Icon(Icons.request_page, size: 20),
-                      label: Text(
-                        "Request",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
-        listenWhen: (previous, current) => current is StudentActionState,
-        buildWhen: (previous, current) => current is! StudentActionState,
         listener: (context, state){
           if (state is UniformPageState) {
             Navigator.push(context, MaterialPageRoute(builder: (context) => UniformStudent()));
+          }
+          if (state is bookError) {
+            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  title: Text(
+                    "Error",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  content: Text(
+                    state.error,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); 
+                      },
+                      child: Text(
+                        "OK",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
           }
         },
         builder: (context, state) {
@@ -239,7 +295,7 @@ class _StocksState extends State<Stocks> {
                             padding: const EdgeInsets.all(16.0),
                             child: ListView(
                               children: [
-                                BookList(books: state.books, onTap: _showBookDialog),
+                                  BookList(books: state.books, onTap: _showBookDialog),
                               ],
                             ),
                           ),
@@ -270,16 +326,29 @@ class _StocksState extends State<Stocks> {
 
 class BookList extends StatelessWidget {
   final List<Book> books;
-  final Function(BuildContext, Book) onTap;
+  final Function(BuildContext context, Book book, String bookName, String subjectCode, String subjectDesc) onTap;
+
   const BookList({Key? key, required this.books, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: books.map((book) => BookCard(visual: book, onTap: () => onTap(context, book))).toList(),
+      children: books.map((book) {
+        return BookCard(
+          visual: book,
+          onTap: () => onTap(
+            context,
+            book,
+            book.BookName,        // Pass the book name
+            book.SubjectCode,     // Assuming this property exists
+            book.SubjectDesc,     // Pass the subject description
+          ),
+        );
+      }).toList(),
     );
   }
 }
+
 
 class BookCard extends StatelessWidget {
   final Book visual;

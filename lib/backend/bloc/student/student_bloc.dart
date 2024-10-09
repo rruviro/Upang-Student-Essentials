@@ -236,8 +236,8 @@ class StudentExtendedBloc
         await _studentrepo.addStudentBookData(event.id, event.department,
             event.bookName, event.subjectCode, event.subjectDesc, event.status);
       } catch (e) {
-        print('$e');
-        emit(bookError('An error occurred: ${e.toString()}'));
+        emit(bookError(e.toString()));
+        //add(ShowStocksEvent(Department: event.department));
       }
     });
 
@@ -253,7 +253,7 @@ class StudentExtendedBloc
             event.size,
             event.status);
       } catch (e) {
-        print('$e');
+        
         emit(itemError('An error occurred: ${e.toString()}'));
       }
     });
