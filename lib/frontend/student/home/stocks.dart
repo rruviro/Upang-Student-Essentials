@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:use/backend/bloc/admin/admin_bloc.dart';
+
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/backend/models/admin/Stock.dart';
@@ -241,6 +241,9 @@ void _showBookDialog(BuildContext context, Book book) {
             items = state.studentBagBook;
           });
         }
+        else if (state is UniformPageState) {
+          Navigator.push(context,MaterialPageRoute(builder: (context) =>UniformStudent(courseName: widget.courseName)));
+        }
       },
       builder: (context, state) {
         if (state is StocksLoadingState) {
@@ -302,7 +305,7 @@ void _showBookDialog(BuildContext context, Book book) {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        stocks_widget(stocks: state.stocks, courseName: ''),
+                        stocks_widget(stocks: state.stocks, courseName: widget.courseName),
                       ],
                     ),
                   ),
