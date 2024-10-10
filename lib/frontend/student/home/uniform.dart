@@ -308,9 +308,9 @@ class _UniformStudentState extends State<UniformStudent> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return _ModalContent(
-          onSubmit: (selectedUniform) {
+          onSubmit: (selectedUniform, selectedSchedule) {
             // Print all properties of the selected uniform
-            print('Selected Uniform ID: ${selectedUniform.id}');
+            print('Selected Uniform ID: ${widget.profile.id}');
             print('Department: ${selectedUniform.Department}');
             print('Course: ${selectedUniform.Course}');
             print('Gender: ${selectedUniform.Gender}');
@@ -318,6 +318,7 @@ class _UniformStudentState extends State<UniformStudent> {
             print('Body: ${selectedUniform.Body}');
             print('Size: ${selectedUniform.Size}');
             print('Stock: ${selectedUniform.Stock}');
+            context.read<StudentExtendedBloc>().add(AddStudentBagItem(selectedUniform.Department, selectedUniform.Course, selectedUniform.Gender, selectedUniform.Type, selectedUniform.Body, selectedUniform.Size, "ACTIVE", widget.profile.id, selectedSchedule!));
             Navigator.pop(context);
           },
           submitButtonText: 'Add to Backpack',
@@ -334,7 +335,7 @@ class _UniformStudentState extends State<UniformStudent> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return _ModalContent(
-          onSubmit: (selectedUniform) {
+          onSubmit: (selectedUniform, selectedSchedule) {
             // Print all properties of the selected uniform
             print('Selected Uniform ID: ${selectedUniform.id}');
             print('Department: ${selectedUniform.Department}');
@@ -356,7 +357,7 @@ class _UniformStudentState extends State<UniformStudent> {
 }
 
 class _ModalContent extends StatefulWidget {
-  final Function(Uniform) onSubmit; // Change to accept a Uniform object
+  final Function(Uniform, String?) onSubmit; // Change to accept a Uniform object
   final String submitButtonText;
   final IconData submitButtonIcon;
   final List<Uniform> uniforms; // Pass the list of uniforms
@@ -376,7 +377,10 @@ class _ModalContent extends StatefulWidget {
 class _ModalContentState extends State<_ModalContent> {
   String? selectedSize; // Track the selected size
   String? selectedSchedule;
-  List<String> schedules = ['Shift A', 'Shift B'];
+  List<Map<String, String>> schedules = [
+    {'display': 'Shift A: M|T|W', 'value': 'A'},
+    {'display': 'Shift B: TH|F|S', 'value': 'B'}
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -399,7 +403,7 @@ class _ModalContentState extends State<_ModalContent> {
             items: uniqueSizes.map((size) {
               return DropdownMenuItem(
                 value: size,
-                child: Text(size), // Display the size
+                child: Text(size),
               );
             }).toList(),
             onChanged: (value) {
@@ -414,8 +418,8 @@ class _ModalContentState extends State<_ModalContent> {
             hint: Text('Select Schedule'),
             items: schedules.map((schedule) {
               return DropdownMenuItem(
-                value: schedule,
-                child: Text(schedule),
+                value: schedule['value'], // Use the corresponding value
+                child: Text(schedule['display']!), // Display text
               );
             }).toList(),
             onChanged: (value) {
@@ -430,11 +434,11 @@ class _ModalContentState extends State<_ModalContent> {
               if (selectedSize != null && selectedSchedule != null) {
                 // Find the corresponding Uniform by Size
                 Uniform? selectedUniform = widget.uniforms.firstWhere(
-                      (uniform) => uniform.Size == selectedSize,
+                  (uniform) => uniform.Size == selectedSize,
                 );
 
                 if (selectedUniform != null) {
-                  widget.onSubmit(selectedUniform); // Pass the selected Uniform
+                  widget.onSubmit(selectedUniform, selectedSchedule); // Pass the selected Uniform
                 } else {
                   print('No matching uniform found for size: $selectedSize');
                 }

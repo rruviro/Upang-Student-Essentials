@@ -272,7 +272,7 @@ class StudentRepositoryImpl extends Studentrepo {
     String status,
     String shift,
   ) async {
-    final response = await http.put(
+    final response = await http.post(
       Uri.parse('$baseUrl/studentbagitems'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -294,6 +294,8 @@ class StudentRepositoryImpl extends Studentrepo {
     if (response.statusCode == 200) {
       print("Student item data successfully added.");
     } else {
+      print(response.statusCode);
+      print(response.body);
       throw Exception("Failed to add student item data: ${response.body}");
     }
   }
