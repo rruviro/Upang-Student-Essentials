@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
         } else if (state is BackpackPageState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status)));
         } else if (state is CoursePageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => courses(departmentID: 0, departmentName: '',))
+          Navigator.push(context, MaterialPageRoute(builder: (context) => courses(departmentID: 0, departmentName: '', profile: widget.studentProfile,))
           );
         }
       },
@@ -150,7 +150,7 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          home_widget(departments: state.departments), 
+                          home_widget(departments: state.departments, profile: widget.studentProfile,), 
                         ],
                       ),
                     ),
@@ -170,13 +170,14 @@ class _HomeState extends State<Home> {
 
 class home_widget extends StatelessWidget {
   final List<department> departments;
-  const home_widget({Key? key, required this.departments}) : super (key: key);
+  final StudentProfile profile;
+  const home_widget({Key? key, required this.departments, required this.profile}) : super (key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: departments
-          .map((e) => ItemCard(visual: e))
+          .map((e) => ItemCard(visual: e, profile: this.profile,))
           .toList(),
     );
   }
@@ -184,7 +185,8 @@ class home_widget extends StatelessWidget {
 
 class ItemCard extends StatelessWidget {
   final department visual;
-  const ItemCard({Key? key, required this.visual}) : super(key: key);
+  final StudentProfile profile;
+  const ItemCard({Key? key, required this.visual, required this.profile}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +198,7 @@ class ItemCard extends StatelessWidget {
             builder: (context) => courses(
               departmentID: visual.id ?? 0,
               departmentName: visual.name,
+              profile: this.profile,
             ),
           ),
         );

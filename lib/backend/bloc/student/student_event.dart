@@ -129,9 +129,10 @@ class AddStudentBagBook extends StudentExtendedEvent {
   final String subjectCode;
   final String subjectDesc;
   final String status;
+  final String shift;
 
   AddStudentBagBook(this.id, this.department, this.bookName, this.subjectCode,
-      this.subjectDesc, this.status);
+      this.subjectDesc, this.status, this.shift);
 }
 
 class AddStudentBagItem extends StudentExtendedEvent {
@@ -143,6 +144,7 @@ class AddStudentBagItem extends StudentExtendedEvent {
   final String body;
   final String size;
   final String status;
+  final String shift;
 
   AddStudentBagItem(
     this.department,
@@ -153,7 +155,38 @@ class AddStudentBagItem extends StudentExtendedEvent {
     this.size,
     this.status,
     this.id,
+    this.shift,
   );
+}
+
+class AddReserveBagBook extends StudentExtendedEvent {
+  final int id;
+  final String department;
+  final String bookName;
+  final String subjectCode;
+  final String subjectDesc;
+  final String status;
+  final String shift;
+  final int stocks;
+
+  AddReserveBagBook(this.id, this.department, this.bookName, this.subjectCode,
+      this.subjectDesc, this.status, this.shift, this.stocks);
+}
+
+class AddReserveBagItem extends StudentExtendedEvent {
+  final int id;
+  final String department;
+  final String course;
+  final String gender;
+  final String type;
+  final String body;
+  final String size;
+  final String status;
+  final String shift;
+  final int stocks;
+
+  AddReserveBagItem(this.department, this.course, this.gender, this.type,
+      this.body, this.size, this.status, this.id, this.shift, this.stocks);
 }
 
 class createNotification extends StudentExtendedEvent {
@@ -168,17 +201,21 @@ class changePassword extends StudentExtendedEvent {
   final String password;
   final String cpassword;
 
-  changePassword(this.id,this.password, this.cpassword,);
+  changePassword(
+    this.id,
+    this.password,
+    this.cpassword,
+  );
 }
 
 // BY LANCE
 // DEPARTMENTS
-class ShowDepartmentsEvent extends StudentExtendedEvent{
+class ShowDepartmentsEvent extends StudentExtendedEvent {
   ShowDepartmentsEvent();
 }
 
 // COURSES
-class ShowCoursesEvent extends StudentExtendedEvent{
+class ShowCoursesEvent extends StudentExtendedEvent {
   final int departmentID;
   ShowCoursesEvent({required this.departmentID});
 }
@@ -190,7 +227,7 @@ class ShowCoursesEvent extends StudentExtendedEvent{
 // }
 
 // STOCK
-class ShowStocksEvent extends StudentExtendedEvent{
+class ShowStocksEvent extends StudentExtendedEvent {
   final String Department;
   ShowStocksEvent({required this.Department});
 }

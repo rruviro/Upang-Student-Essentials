@@ -43,62 +43,64 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     on<ManagePageEvent>(manage_page);
 
     on<showCodeBookData>((event, emit) async {
-        try {
-          final bookData = await _adminrepo.showCodeBook(event.code);
-          emit(bookCodeDataLoaded(bookData));
-          print(bookData);
-        } catch (e) {
-          emit(bookCodeDataError(e.toString()));
-          add(getStudent());
-        }
-      });
-
-      on<showCodeItemData>((event, emit) async {
-        try {
-          
-          final itemData = await _adminrepo.showCodeItem(event.code);
-          emit(itemCodeDataLoaded(itemData));
-          print(itemData.gender);
-          print(itemData.claimingSchedule);
-          print(itemData.code);
-          print(itemData.course);
-          print(itemData.dateReceived);
-          print(itemData.department);
-          print(itemData.id);
-          print(itemData.reservationNumber);
-          print(itemData.size);
-          print(itemData.status);
-          print(itemData.stubagId);
-          print(itemData.type);
-        } catch (e) {
-          emit(itemCodeDataError(e.toString()));
-          add(getStudent());
-        }
-      });
-
-      on<changeBookStatus>((event,emit) async {
-        try {
-          await _adminrepo.changeStudentBookStatus(event.id,event.status);
-          emit(BookStatusChanged());
-        } catch (e) {
-          print('Error: $e to change Book status.');
-          add(getStudent());
-        }
-      });
-
-      on<changeItemStatus>((event,emit) async {
-        try {
-          await _adminrepo.changeStudentItemStatus(event.id,event.status);
-          emit(ItemStatusChanged());
-        } catch (e) {
-          print('Error: $e to change Item status.');
-          add(getStudent());
-        }
-      });
-
-      on<createStudent>((event, emit) async{
       try {
-        await _adminrepo.createStudent(event.firstName, event.lastName, event.course, event.department, event.year, event.enrolled);
+        final bookData = await _adminrepo.showCodeBook(event.code);
+        emit(bookCodeDataLoaded(bookData));
+        //print(bookData);
+      } catch (e) {
+        emit(bookCodeDataError(e.toString()));
+        add(getStudent());
+      }
+    });
+
+    on<showCodeItemData>((event, emit) async {
+      try {
+        final itemData = await _adminrepo.showCodeItem(event.code);
+        emit(itemCodeDataLoaded(itemData));
+        print(itemData.gender);
+        print(itemData.claimingSchedule);
+        print(itemData.code);
+        print(itemData.course);
+        print(itemData.dateReceived);
+        print(itemData.department);
+        print(itemData.id);
+        print(itemData.reservationNumber);
+        print(itemData.size);
+        print(itemData.status);
+        print(itemData.stubagId);
+        print(itemData.type);
+      } catch (e) {
+        emit(itemCodeDataError(e.toString()));
+        add(getStudent());
+      }
+    });
+
+    on<changeBookStatus>((event, emit) async {
+      try {
+        await _adminrepo.changeStudentBookStatus(event.id, event.status);
+        emit(BookStatusChanged());
+        add(getStudent());
+      } catch (e) {
+        print('Error: $e to change Book status.');
+        //add(getStudent());
+      }
+    });
+
+    on<changeItemStatus>((event, emit) async {
+      try {
+        await _adminrepo.changeStudentItemStatus(event.id, event.status);
+        emit(ItemStatusChanged());
+        add(getStudent());
+      } catch (e) {
+        print('Error: $e to change Item status.');
+        // add(getStudent());
+      }
+    });
+
+    on<createStudent>((event, emit) async {
+      try {
+        await _adminrepo.createStudent(event.firstName, event.lastName,
+            event.course, event.department, event.year, event.enrolled);
         add(getStudent());
       } catch (e) {
         print(e);
@@ -107,7 +109,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       }
     });
 
-    on<deleteStudent>((event, emit) async{
+    on<deleteStudent>((event, emit) async {
       try {
         await _adminrepo.deleteStudent(event.id);
         add(getStudent());
@@ -117,12 +119,19 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       }
     });
 
-    on<updateStudent>((event, emit) async{
+    on<updateStudent>((event, emit) async {
       try {
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         print(event.enrolled);
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        await _adminrepo.updateStudent(event.firstName, event.lastName, event.course, event.department, event.year, event.enrolled, event.id);
+        await _adminrepo.updateStudent(
+            event.firstName,
+            event.lastName,
+            event.course,
+            event.department,
+            event.year,
+            event.enrolled,
+            event.id);
         add(getStudent());
       } catch (e) {
         emit(studentError(e.toString()));
@@ -130,7 +139,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       }
     });
 
-    on<getStudent>((event, emit) async{
+    on<getStudent>((event, emit) async {
       print("getStudent triggered");
       emit(studentLoading());
       try {
@@ -144,7 +153,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       }
     });
 
-    on<showStudent>((event, emit) async{
+    on<showStudent>((event, emit) async {
       emit(studentLoading());
       try {
         final student = await _adminrepo.showStudentProfileData(event.id);
@@ -156,8 +165,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     on<showAnnouncement>((event, emit) async {
       emit(announcementLoadingData());
       try {
-        final announcementData =
-            await _adminrepo.showAnnouncementData();
+        final announcementData = await _adminrepo.showAnnouncementData();
         emit(announcementLoadSuccessData(announcementData));
       } catch (e) {
         print(e);
@@ -176,7 +184,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       }
     });
 
-        // LANCE
+    // LANCE
     // FOR DEPARTMENTS
     on<ShowDepartmentsEvent>((event, emit) async {
       emit(DepartmentsLoadingState());
@@ -190,11 +198,12 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     });
 
     // FOR COURSES
-    on<ShowCoursesEvent>((event, emit) async{
+    on<ShowCoursesEvent>((event, emit) async {
       emit(CoursesLoadingState());
       try {
         final courseData = await _adminrepo.showCourses(event.departmentID);
-        emit(CoursesLoadedState(courses: courseData)); // Change here to pass fetched courses
+        emit(CoursesLoadedState(
+            courses: courseData)); // Change here to pass fetched courses
       } catch (e) {
         print(e);
         emit(CoursesErrorState('An error occurred: ${e.toString()}'));
@@ -202,7 +211,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     });
 
     // FOR BOOKS
-    on<ShowBooksEvent>((event,emit) async{
+    on<ShowBooksEvent>((event, emit) async {
       emit(BooksLoadingState());
       try {
         final bookData = await _adminrepo.showBooks(event.courseID);
@@ -214,7 +223,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     });
 
     // FOR STOCK
-    on<ShowStockEvent>((event,emit) async{
+    on<ShowStockEvent>((event, emit) async {
       emit(StockLoadingState());
       try {
         final stockData = await _adminrepo.showStock(event.courseID);
@@ -224,61 +233,59 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         emit(StockErrorState('An error occurred: ${e.toString()}'));
       }
     });
-    
   }
 
   FutureOr<void> course_page(
-    CoursePageEvent event, Emitter<AdminExtendedState> emit) {
-      print('Course Page');
-      emit(CoursePageState());
+      CoursePageEvent event, Emitter<AdminExtendedState> emit) {
+    print('Course Page');
+    emit(CoursePageState());
   }
 
   FutureOr<void> stock_page(
-    StockPageEvent event, Emitter<AdminExtendedState> emit) {
-      print('Stock Page');
-      emit(StockPageState());
+      StockPageEvent event, Emitter<AdminExtendedState> emit) {
+    print('Stock Page');
+    emit(StockPageState());
   }
 
   FutureOr<void> newUniform_page(
-    NewUniformPageEvent event, Emitter<AdminExtendedState> emit) {
-      print('New Uniform Page');
-      emit(NewUniformPageState());
+      NewUniformPageEvent event, Emitter<AdminExtendedState> emit) {
+    print('New Uniform Page');
+    emit(NewUniformPageState());
   }
 
   FutureOr<void> uniformManage_page(
-    UniformManagePageEvent event, Emitter<AdminExtendedState> emit) {
-      print('Uniform Manage Page');
-      emit(UniformManagePageState());
+      UniformManagePageEvent event, Emitter<AdminExtendedState> emit) {
+    print('Uniform Manage Page');
+    emit(UniformManagePageState());
   }
 
   FutureOr<void> uniform_page(
-    UniformPageEvent event, Emitter<AdminExtendedState> emit) {
-      print('Uniform Page');
-      emit(UniformPageState());
+      UniformPageEvent event, Emitter<AdminExtendedState> emit) {
+    print('Uniform Page');
+    emit(UniformPageState());
   }
 
   FutureOr<void> notification_page(
-    NotificationPageEvent event, Emitter<AdminExtendedState> emit) {
-      print('Notification Page');
-      emit(NotificationPageState());
+      NotificationPageEvent event, Emitter<AdminExtendedState> emit) {
+    print('Notification Page');
+    emit(NotificationPageState());
   }
-  
+
   FutureOr<void> transaction_page(
       TransactionPageEvent event, Emitter<AdminExtendedState> emit) {
-      print('Transaction Page');
-      emit(TransactionPageState());
+    print('Transaction Page');
+    emit(TransactionPageState());
   }
 
   FutureOr<void> newDepartment_page(
       NewDepartmentPageEvent event, Emitter<AdminExtendedState> emit) {
-      print('New Department Page');
-      emit(NewDepartmentPageState());
+    print('New Department Page');
+    emit(NewDepartmentPageState());
   }
 
   FutureOr<void> manage_page(
       ManagePageEvent event, Emitter<AdminExtendedState> emit) {
-      print('Manage Department Page');
-      emit(ManagePageState());
+    print('Manage Department Page');
+    emit(ManagePageState());
   }
-  
 }

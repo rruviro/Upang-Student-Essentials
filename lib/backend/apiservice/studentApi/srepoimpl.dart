@@ -221,45 +221,62 @@ class StudentRepositoryImpl extends Studentrepo {
   }
 
   @override
-  Future<void> addStudentBookData(int id, String department, String bookName,
-      String subjectCode, String subjectDesc, String status) async {
-    final response = await http.put(
-      Uri.parse('$baseUrl/bookcollections'),
+  Future<void> addStudentBookData(
+    int id,
+    String department,
+    String bookName,
+    String subjectCode,
+    String subjectDesc,
+    String status,
+    String shift,
+  ) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/bookcollections/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
       },
-      body: jsonEncode({
+      body: jsonEncode(<String, dynamic>{
         'Department': department,
         'BookName': bookName,
         'SubjectCode': subjectCode,
         'SubjectDesc': subjectDesc,
-        'Status': status,
+        'status': status,
         'stubag_id': id,
+        'shift': shift,
       }),
     );
 
     if (response.statusCode == 200) {
-      // Handle successful update
       print("Student book data successfully added.");
+    } else if (response.statusCode == 409) {
+      final errorMessage =
+          json.decode(response.body)['message'] ?? 'Conflict occurred';
+      print(errorMessage);
+      throw Exception(errorMessage);
     } else {
-      throw Exception("Failed to add student book data: ${response.body}");
+      print(response.body);
+      throw Exception(response.body);
     }
   }
 
   @override
   Future<void> addStudentItemData(
-      int id,
-      String department,
-      String course,
-      String gender,
-      String type,
-      String body,
-      String size,
-      String status) async {
+    int id,
+    String department,
+    String course,
+    String gender,
+    String type,
+    String body,
+    String size,
+    String status,
+    String shift,
+  ) async {
     final response = await http.put(
       Uri.parse('$baseUrl/studentbagitems'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
       },
       body: jsonEncode({
         'Department': department,
@@ -270,12 +287,91 @@ class StudentRepositoryImpl extends Studentrepo {
         'Size': size,
         'Status': status,
         'stubag_id': id,
+        'shift': shift,
       }),
     );
 
     if (response.statusCode == 200) {
       print("Student item data successfully added.");
     } else {
+      throw Exception("Failed to add student item data: ${response.body}");
+    }
+  }
+
+  @override
+  Future<void> addreserveBookData(
+      int id,
+      String department,
+      String bookName,
+      String subjectCode,
+      String subjectDesc,
+      String status,
+      String shift,
+      int stock) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/requestbook/$stock'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'Department': department,
+        'BookName': bookName,
+        'SubjectCode': subjectCode,
+        'SubjectDesc': subjectDesc,
+        'status': status,
+        'stubag_id': id,
+        'shift': shift,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Handle successful update
+      print("Student book data successfully added.");
+    } else if (response.statusCode == 409) {
+      print(response.body);
+    } else {
+      print(response.body);
+      throw Exception(response.body);
+    }
+  }
+
+  @override
+  Future<void> addreserveItemData(
+      int id,
+      String department,
+      String course,
+      String gender,
+      String type,
+      String body,
+      String size,
+      String status,
+      String shift,
+      int stock) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/requestitem/$stock'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        'Department': department,
+        'Course': course,
+        'Gender': gender,
+        'Type': type,
+        'Body': body,
+        'Size': size,
+        'Status': status,
+        'stubag_id': id,
+        'shift': shift,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Student item data successfully added.");
+    } else {
+      print(response.statusCode);
+      print(response.statusCode);
       throw Exception("Failed to add student item data: ${response.body}");
     }
   }
@@ -299,11 +395,11 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception('Failed');
     }
   }
-  
+
   @override
   Future<void> createNotificationData(int id, String message) async {
-    final response = await http
-        .post(Uri.parse('$baseUrl/mails'),
+    final response = await http.post(
+      Uri.parse('$baseUrl/mails'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -314,7 +410,7 @@ class StudentRepositoryImpl extends Studentrepo {
         'notificationId': id,
       }),
     );
-    
+
     if (response == 200) {
       print("hello");
     } else {
@@ -322,30 +418,28 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception("${response.statusCode}");
     }
   }
-  
+
   @override
-  Future<void> changePasswords(int id, String password, String cpassword) async {
+  Future<void> changePasswords(
+      int id, String password, String cpassword) async {
     try {
       final response = await http.put(
-      Uri.parse('$baseUrl/students/$id'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'password': password,
-        'confirm_password': cpassword,
-      }),
-    );
+        Uri.parse('$baseUrl/students/$id'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'password': password,
+          'confirm_password': cpassword,
+        }),
+      );
 
       if (response.statusCode == 200) {
         print(response.body);
       } else {
         throw Exception("Failed to Change Password: ${response.body}");
       }
-    }
-    catch(e){
-      
-    }
+    } catch (e) {}
   }
 
   // BY LANCE
@@ -363,8 +457,9 @@ class StudentRepositoryImpl extends Studentrepo {
   // COURSES
   @override
   Future<List<Course>> showCourses(int departmentID) async {
-    final response = await http.get(Uri.parse('$baseUrl/courses/$departmentID'));
-    if (response.statusCode == 200){
+    final response =
+        await http.get(Uri.parse('$baseUrl/courses/$departmentID'));
+    if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Course.fromJson(data)).toList();
     } else {
@@ -375,7 +470,8 @@ class StudentRepositoryImpl extends Studentrepo {
   // BOOKS
   @override
   Future<List<Book>> showBooks(String Department) async {
-    final response = await http.get(Uri.parse('$baseUrl/item-books/$Department'));
+    final response =
+        await http.get(Uri.parse('$baseUrl/item-books/$Department'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Book.fromJson(data)).toList();
@@ -397,7 +493,6 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception('Failed to load stock');
     }
   }
-
   // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
   @override
   Future<List<Uniform>> showUniforms(String Course) async {
@@ -410,5 +505,6 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception("Failed to load Uniform");
     }
   }
+
 
 }

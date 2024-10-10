@@ -20,10 +20,49 @@ abstract class Studentrepo {
   Future<List<StudentBagItem>> showStudentBagItemData(
       int stubag_id, String status);
 
-  Future<void> addStudentBookData(int id, String department, String bookName,
-      String subjectCode, String subjectDesc, String status);
-  Future<void> addStudentItemData(int id, String department, String course,
-      String gender, String type, String body, String size, String status);
+  Future<void> addStudentBookData(
+    int id,
+    String department,
+    String bookName,
+    String subjectCode,
+    String subjectDesc,
+    String status,
+    String shift,
+  );
+
+  Future<void> addStudentItemData(
+    int id,
+    String department,
+    String course,
+    String gender,
+    String type,
+    String body,
+    String size,
+    String status,
+    String shift,
+  );
+
+  Future<void> addreserveBookData(
+      int id,
+      String department,
+      String bookName,
+      String subjectCode,
+      String subjectDesc,
+      String status,
+      String shift,
+      int stock);
+
+  Future<void> addreserveItemData(
+      int id,
+      String department,
+      String course,
+      String gender,
+      String type,
+      String body,
+      String size,
+      String status,
+      String shift,
+      int stock);
   Future<void> deleteStudentBookData(int id);
   Future<void> deleteStudentItemData(int id);
   Future<void> changeStudentItemStatus(int id, String status);
