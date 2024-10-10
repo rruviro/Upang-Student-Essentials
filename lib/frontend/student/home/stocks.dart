@@ -302,7 +302,7 @@ void _showBookDialog(BuildContext context, Book book) {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        stocks_widget(stocks: state.stocks),
+                        stocks_widget(stocks: state.stocks, courseName: ''),
                       ],
                     ),
                   ),
