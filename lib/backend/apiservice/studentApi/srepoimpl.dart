@@ -6,6 +6,7 @@ import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/admin/Stock.dart';
+import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -394,6 +395,19 @@ class StudentRepositoryImpl extends Studentrepo {
     } else {
       print('Failed to load stocks, status code: ${response.statusCode}');
       throw Exception('Failed to load stock');
+    }
+  }
+
+  // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
+  @override
+  Future<List<Uniform>> showUniforms(String Course) async {
+    final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course'));
+    if (response.statusCode == 200) {
+      final List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Uniform.fromJson(data)).toList();
+    } else {
+      print('Failed to load Uniform, status code: ${response.statusCode}');
+      throw Exception("Failed to load Uniform");
     }
   }
 

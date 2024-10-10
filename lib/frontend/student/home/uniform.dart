@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
+import 'package:use/backend/models/admin/Uniform.dart';
+import 'package:use/frontend/admin/bag.dart';
 import 'package:use/frontend/colors/colors.dart';
 
-class UniformStudent extends StatelessWidget {
-  const UniformStudent({Key? key}) : super(key: key);
+class UniformStudent extends StatefulWidget {
+  final String courseName;
+
+  const UniformStudent({Key? key, required this.courseName}) : super(key: key);
+
+  @override
+  State<UniformStudent> createState() => _UniformStudentState();
+}
+
+class _UniformStudentState extends State<UniformStudent> {
+  List<Uniform> uniforms = [];
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<StudentExtendedBloc>(context)
+        .add(ShowUniformsEvent(Course: widget.courseName));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +42,13 @@ class UniformStudent extends StatelessWidget {
           offset: const Offset(-15.0, 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 'Uniform',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(
-                'Course:',
+                'Course: ${widget.courseName}',
                 style: TextStyle(color: Colors.white, fontSize: 10),
               ),
             ],
@@ -58,134 +79,152 @@ class UniformStudent extends StatelessWidget {
           const SizedBox(width: 15),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: AppBar(
-                automaticallyImplyLeading: false,
-                backgroundColor: Colors.white,
-                toolbarHeight: 300,
-                flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    color: primary_color,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.10),
-                        blurRadius: 5,
-                        offset: Offset(1, 7),
-                      ),
-                    ],
+      body: BlocListener<StudentExtendedBloc, StudentExtendedState>(
+        listener: (context, state) {
+          if (state is UniformsLoadingState) {
+            print("Loading student uniforms");
+          } else if (state is UniformsLoadedState) {
+            setState(() {
+              uniforms = state.uniforms;
+            });
+            print('Student uniforms loaded');
+          } else if (state is UniformsErrorState) {
+            print("Error loading student uniforms: ${state.error}");
+          }
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                child: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.white,
+                  toolbarHeight: 300,
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      color: primary_color,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.10),
+                          blurRadius: 5,
+                          offset: Offset(1, 7),
+                        ),
+                      ],
+                    ),
+                    child: _buildSlides(),
                   ),
-                  child: _buildSlides(),
                 ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 8),
-                ],
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  _buildHeader('Corporate Top'),
-                  const SizedBox(height: 15),
-                  Align(
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    _buildHeader('Corporate Top'),
+                    const SizedBox(height: 15),
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Size Charts",
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             "See what size best suits you.",
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
+                            style: TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.normal),
                           ),
                         ],
-                      )
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    height: 250,
-                    width: 460,
-                    color: Color(0xFFD9D9D9),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      height: 250,
+                      width: 460,
+                      color: Color(0xFFD9D9D9),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "image",
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
                       children: [
-                        Text(
-                          "image",
-                        )
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => _showAddToBackpackModal(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.blue,
+                              side: BorderSide(color: primary_color),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              minimumSize: const Size.fromHeight(60),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.add, color: primary_color),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Add to Backpack',
+                                  style: TextStyle(
+                                      color: primary_color, fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => _showRequestModal(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.blue,
+                              side: BorderSide(color: primary_color),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              minimumSize: const Size.fromHeight(60),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.request_page, color: primary_color),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Request',
+                                  style: TextStyle(
+                                      color: primary_color, fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => _showAddToBackpackModal(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.blue,
-                            side: BorderSide(color: primary_color),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            minimumSize: const Size.fromHeight(60),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.add, color: primary_color),
-                              SizedBox(width: 8),
-                              Text(
-                                'Add to Backpack',
-                                style: TextStyle(color: primary_color, fontSize: 10),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => _showRequestModal(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.blue,
-                            side: BorderSide(color: primary_color),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            minimumSize: const Size.fromHeight(60),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.request_page, color: primary_color),
-                              SizedBox(width: 8),
-                              Text(
-                                'Request',
-                                style: TextStyle(color: primary_color, fontSize: 10),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -254,12 +293,21 @@ class UniformStudent extends StatelessWidget {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return _ModalContent(
-          onSubmit: (size, schedule) {
-            print('Add to Backpack: Size - $size, Schedule - $schedule');
+          onSubmit: (selectedUniform) {
+            // Print all properties of the selected uniform
+            print('Selected Uniform ID: ${selectedUniform.id}');
+            print('Department: ${selectedUniform.Department}');
+            print('Course: ${selectedUniform.Course}');
+            print('Gender: ${selectedUniform.Gender}');
+            print('Type: ${selectedUniform.Type}');
+            print('Body: ${selectedUniform.Body}');
+            print('Size: ${selectedUniform.Size}');
+            print('Stock: ${selectedUniform.Stock}');
             Navigator.pop(context);
           },
           submitButtonText: 'Add to Backpack',
           submitButtonIcon: Icons.backpack,
+          uniforms: uniforms, // Pass the entire list of uniforms
         );
       },
     );
@@ -271,12 +319,21 @@ class UniformStudent extends StatelessWidget {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return _ModalContent(
-          onSubmit: (size, schedule) {
-            print('Request: Size - $size, Schedule - $schedule');
+          onSubmit: (selectedUniform) {
+            // Print all properties of the selected uniform
+            print('Selected Uniform ID: ${selectedUniform.id}');
+            print('Department: ${selectedUniform.Department}');
+            print('Course: ${selectedUniform.Course}');
+            print('Gender: ${selectedUniform.Gender}');
+            print('Type: ${selectedUniform.Type}');
+            print('Body: ${selectedUniform.Body}');
+            print('Size: ${selectedUniform.Size}');
+            print('Stock: ${selectedUniform.Stock}');
             Navigator.pop(context);
           },
           submitButtonText: 'Request',
           submitButtonIcon: Icons.request_page,
+          uniforms: uniforms,
         );
       },
     );
@@ -284,15 +341,17 @@ class UniformStudent extends StatelessWidget {
 }
 
 class _ModalContent extends StatefulWidget {
-  final Function(String, String) onSubmit;
+  final Function(Uniform) onSubmit; // Change to accept a Uniform object
   final String submitButtonText;
   final IconData submitButtonIcon;
+  final List<Uniform> uniforms; // Pass the list of uniforms
 
   const _ModalContent({
     Key? key,
     required this.onSubmit,
     required this.submitButtonText,
     required this.submitButtonIcon,
+    required this.uniforms, // Change from sizes to uniforms
   }) : super(key: key);
 
   @override
@@ -300,210 +359,76 @@ class _ModalContent extends StatefulWidget {
 }
 
 class _ModalContentState extends State<_ModalContent> {
-  String? selectedSize;
+  String? selectedSize; // Track the selected size
   String? selectedSchedule;
-  List<String> sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-  List<String> schedules = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  List<String> schedules = ['Shift A', 'Shift B'];
 
   @override
   Widget build(BuildContext context) {
+    // Get unique sizes from the uniforms
+    final uniqueSizes = widget.uniforms.map((u) => u.Size).toSet().toList();
+
     return Container(
       padding: const EdgeInsets.all(20),
-      height: MediaQuery.of(context).size.height * 0.8,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(30),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            'Corporate Top',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Text(
-                            'Stock: 300',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'The Corporate Top of BSIT',
-                        style: TextStyle(
-                          fontSize: 8,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Divider(color: Colors.grey),
-            const SizedBox(height: 16),
-            Text(
-              'Sizes',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: sizes.asMap().entries.map((entry) {
-                int index = entry.key;
-                String size = entry.value;
-                return InkWell(
-                  onTap: () => setState(() {
-                    if (selectedSize == size) {
-                      selectedSize = null;
-                    } else {
-                      selectedSize = size;
-                    }
-                  }),
-                  child: Container(
-                    width: 50,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: selectedSize == size ? primary_color : const Color(0xFFD9D9D9),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 1,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        size,
-                        style: TextStyle(
-                          color: selectedSize == size ? Colors.white : const Color(0xFFB0B0B0),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 30),
-            Divider(color: Colors.grey),
-            const SizedBox(height: 30),
-            Text(
-              'Claim Schedule',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            _buildShiftContainer("Shift A", schedules.sublist(0, 3)),
-            const SizedBox(height: 20),
-            _buildShiftContainer("Shift B", schedules.sublist(3)),
-            const SizedBox(height: 30),
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  if (selectedSize != null && selectedSchedule != null) {
-                    widget.onSubmit(selectedSize!, selectedSchedule!);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primary_color,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                icon: Icon(widget.submitButtonIcon, size: 20),
-                label: Text(
-                  widget.submitButtonText,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildShiftContainer(String shiftName, List<String> shiftDays) {
-    bool isShiftSelected = shiftDays.contains(selectedSchedule);
-    return Container(
-      height: 70,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: isShiftSelected ? primary_color : const Color(0xFFD9D9D9),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 50),
-            child: Text(
-              shiftName,
-              style: TextStyle(color: Colors.black),
-            ),
+          Text(
+            'Select Size and Schedule',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          Container(
-            height: double.infinity,
-            child: VerticalDivider(
-              color: Colors.white,
-              width: 20,
-              thickness: 1,
-            ),
+          const SizedBox(height: 20),
+          DropdownButtonFormField<String>(
+            value: selectedSize,
+            hint: Text('Select Size'),
+            items: uniqueSizes.map((size) {
+              return DropdownMenuItem(
+                value: size,
+                child: Text(size), // Display the size
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedSize = value; // Set the selected size
+              });
+            },
           ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: shiftDays.map((day) {
-                final isSelected = selectedSchedule == day;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (selectedSchedule == day) {
-                        selectedSchedule = null;
-                      } else {
-                        selectedSchedule = day;
-                      }
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Colors.white : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      day,
-                      style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black,
-                      ),
-                    ),
-                  ),
+          const SizedBox(height: 20),
+          DropdownButtonFormField<String>(
+            value: selectedSchedule,
+            hint: Text('Select Schedule'),
+            items: schedules.map((schedule) {
+              return DropdownMenuItem(
+                value: schedule,
+                child: Text(schedule),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedSchedule = value; // Set the selected schedule
+              });
+            },
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton.icon(
+            onPressed: () {
+              if (selectedSize != null && selectedSchedule != null) {
+                // Find the corresponding Uniform by Size
+                Uniform? selectedUniform = widget.uniforms.firstWhere(
+                      (uniform) => uniform.Size == selectedSize,
                 );
-              }).toList(),
-            ),
+
+                if (selectedUniform != null) {
+                  widget.onSubmit(selectedUniform); // Pass the selected Uniform
+                } else {
+                  print('No matching uniform found for size: $selectedSize');
+                }
+              } else {
+                print('Please select a size and schedule.');
+              }
+            },
+            icon: Icon(widget.submitButtonIcon),
+            label: Text(widget.submitButtonText),
           ),
         ],
       ),

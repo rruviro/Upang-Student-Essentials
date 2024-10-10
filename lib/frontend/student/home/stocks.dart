@@ -122,7 +122,7 @@ class _StocksState extends State<Stocks> {
         buildWhen: (previous, current) => current is! StudentActionState,
         listener: (context, state){
           if (state is UniformPageState) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UniformStudent()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => UniformStudent(courseName: widget.courseName)));
           }
         },
         builder: (context, state) {
@@ -207,7 +207,7 @@ class _StocksState extends State<Stocks> {
                             scrollDirection: Axis.horizontal,
                             children: [
                               Container(
-                                child: stocks_widget(stocks: state.stocks,),
+                                child: stocks_widget(stocks: state.stocks, courseName: widget.courseName),
                               ),
                             ],
                           ),

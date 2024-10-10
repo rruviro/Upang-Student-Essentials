@@ -223,6 +223,17 @@ class StocksErrorState extends StudentActionState{
   StocksErrorState(this.error);
 }
 
+// UNIFORM
+class UniformsLoadingState extends StudentActionState{}
+class UniformsLoadedState extends StudentExtendedState{
+  final List<Uniform> uniforms;
+  UniformsLoadedState({required this.uniforms});
+}
+class UniformsErrorState extends StudentActionState{
+  final String error;
+  UniformsErrorState(this.error);
+}
+
 
 
 

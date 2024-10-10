@@ -194,3 +194,9 @@ class ShowStocksEvent extends StudentExtendedEvent{
   final String Department;
   ShowStocksEvent({required this.Department});
 }
+
+// UNIFORM
+class ShowUniformsEvent extends StudentExtendedEvent{
+  final String Course;
+  ShowUniformsEvent({required this.Course});
+}

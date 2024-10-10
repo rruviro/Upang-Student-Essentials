@@ -3,6 +3,7 @@ import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/admin/Stock.dart';
+import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/Student.dart';
@@ -53,4 +54,6 @@ abstract class Studentrepo {
   // STOCK
   Future<List<Book>> showBooks(String Department);
 
+  // UNIFORM
+  Future<List<Uniform>> showUniforms(String Course);
 }

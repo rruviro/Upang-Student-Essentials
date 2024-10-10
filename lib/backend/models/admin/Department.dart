@@ -14,6 +14,10 @@ class department {
     required this.photo,
   });
 
+  // String get photoUrl {
+  //   return 'http://127.0.0.1:8000/api/departments/public/uploads/department/$photo';
+  // }
+
   factory department.fromJson(Map<String, dynamic> json) {
     return department(
       id: json['id'],

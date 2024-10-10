@@ -8,12 +8,14 @@ import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/admin/Stock.dart';
+import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentBag.dart';
 import 'package:use/backend/models/student/StudentData/StudentNotifcation.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
+import 'package:use/frontend/student/profile/uniforms.dart';
 
 part 'student_event.dart';
 part 'student_state.dart';
@@ -319,15 +321,24 @@ class StudentExtendedBloc
       emit(StocksLoadingState());
       try {
         print('Fetching data for department: ${event.Department}');
-
         final stockData = await _studentrepo.showStocks(event.Department);
         final bookData = await _studentrepo.showBooks(event.Department);
-
         print('Stocks and books fetched successfully');
         emit(StocksLoadedState(stocks: stockData, books: bookData));
       } catch (e) {
         print('Error fetching stocks or books: $e');
         emit(StocksErrorState('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    // FOR UNIFORM
+    on<ShowUniformsEvent>((event, emit) async {
+      emit(UniformsLoadingState());
+      try {
+        final uniformData = await _studentrepo.showUniforms(event.Course);
+        emit(UniformsLoadedState(uniforms: uniformData));
+      } catch (e) {
+        emit(UniformsErrorState('An error occurred: ${e.toString()}'));
       }
     });
 
