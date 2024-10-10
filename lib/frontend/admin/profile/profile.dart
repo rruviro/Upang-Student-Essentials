@@ -27,11 +27,13 @@ class Profile extends StatefulWidget {
 
 class _ProfileScreenState extends State<Profile> {
   bool isBook = false;
+  bool isDialogOpen = false; // New flag to track if a dialog is open
   StudentBagItem? itemCode;
   StudentBagBook? bookCode;
   TextEditingController codeController = TextEditingController();
   List<StudentProfile> student = [];
   bool _showLoading = true;
+
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 300), () {
@@ -50,64 +52,90 @@ class _ProfileScreenState extends State<Profile> {
     super.dispose();
   }
 
-  void _showItemDetailsDialog(BuildContext context, bool isBook, dynamic item) {
-    final int id = item.id;
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(isBook ? "Book Details" : "Item Details"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: isBook
-                  ? [
-                      Text("Book Name: ${item.bookName}"),
-                      Text("Subject Code: ${item.subjectCode}"),
-                      Text("Subject Description: ${item.subjectDesc}"),
-                      Text("Status: ${item.status}"),
-                      Text("Claiming Schedule: ${item.claimingSchedule}"),
-                      Text("Reservation Number: ${item.reservationNumber}"),
-                    ]
-                  : [
-                      Text("Course: ${item.course}"),
-                      Text("Gender: ${item.gender}"),
-                      Text("Type: ${item.type}"),
-                      Text("Body: ${item.body}"),
-                      Text("Size: ${item.size}"),
-                      Text("Status: ${item.status}"),
-                      Text("Claiming Schedule: ${item.claimingSchedule}"),
-                      Text("Reservation Number: ${item.reservationNumber}"),
-                    ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Proceed"),
-              onPressed: () {
-                if (isBook) {
-                  context
-                      .read<AdminExtendedBloc>()
-                      .add(changeBookStatus(id, "Complete"));
-                } else {
-                  context
-                      .read<AdminExtendedBloc>()
-                      .add(changeItemStatus(id, "Complete"));
-                }
+ void _showItemDetailsDialog(BuildContext context, bool isBook, dynamic item) {
+  if (isDialogOpen) return;
 
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  final int id = item.id;
+  isDialogOpen = true;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(isBook ? "Book Details" : "Item Details"),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: isBook
+                ? [
+                    Text("Book Name: ${item.bookName}"),
+                    Text("Subject Code: ${item.subjectCode}"),
+                    Text("Subject Description: ${item.subjectDesc}"),
+                    Text("Status: ${item.status}"),
+                    Text("Claiming Schedule: ${item.claimingSchedule}"),
+                    Text("Reservation Number: ${item.reservationNumber}"),
+                  ]
+                : [
+                    Text("Course: ${item.course}"),
+                    Text("Gender: ${item.gender}"),
+                    Text("Type: ${item.type}"),
+                    Text("Body: ${item.body}"),
+                    Text("Size: ${item.size}"),
+                    Text("Status: ${item.status}"),
+                    Text("Claiming Schedule: ${item.claimingSchedule}"),
+                    Text("Reservation Number: ${item.reservationNumber}"),
+                  ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              isDialogOpen = false;
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text("Proceed"),
+            onPressed: () {
+              if (isBook) {
+                context.read<AdminExtendedBloc>().add(changeBookStatus(id, "Complete"));
+              } else {
+                context.read<AdminExtendedBloc>().add(changeItemStatus(id, "Complete"));
+              }
+              // Clear variables and close the dialog
+              itemCode = null;
+              bookCode = null;
+              codeController.clear();
+              isDialogOpen = false;
+              Navigator.of(context).pop();
+
+              // Show the success dialog
+              _showSuccessDialog(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showSuccessDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Success"),
+        content: Text("Successfully Claimed!"),
+      );
+    },
+  );
+
+  // Close the success dialog after 2 seconds
+  Future.delayed(Duration(seconds: 2), () {
+    Navigator.of(context).pop();
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +145,7 @@ class _ProfileScreenState extends State<Profile> {
           setState(() {
             itemCode = state.studentBagItem;
           });
-          if (itemCode != null) {
+          if (itemCode != null && !isDialogOpen) {
             _showItemDetailsDialog(context, false, itemCode);
           } else {
             print("itemCode is null");
@@ -156,7 +184,7 @@ class _ProfileScreenState extends State<Profile> {
             ),
           );
         }
-        if (bookCode != null) {
+        if (bookCode != null && !isDialogOpen) {
           _showItemDetailsDialog(context, true, bookCode);
         } else {
           print("bookCode is null");
@@ -711,14 +739,23 @@ class ItemCard extends StatelessWidget {
 void _showCreateDialog(BuildContext context) {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _courseController = TextEditingController();
-  final TextEditingController _departmentController = TextEditingController();
   int _selectedYear = 1;
   bool _isEnrolled = true;
 
-  // RegEx pattern to disallow numbers in string fields
-  final RegExp onlyLetters = RegExp(r'^[a-zA-Z\s]*$');
+  // Department and courses data
+  Map<String, List<String>> departmentCourses = {
+    'CITE': ['BSIT'],
+    'CEA': ['BSCE', 'BSCPE', 'BSECE'],
+    'CAHS': ['BSN', 'BSMLS', 'BSPHARMA', 'BSPSYCH'],
+    'CMA': ['BSA', 'BST', 'BSHM'],
+    'CELA': ['BSED', 'BSPOLSCI'],
+    'CCJE': ['BSCRIM'],
+  };
 
+  String? selectedDepartment;
+  String? selectedCourse;
+  final RegExp onlyLetters = RegExp(r'^[a-zA-Z\s]*$');
+  // Helper function to capitalize text
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) return text;
     return text[0].toUpperCase() + text.substring(1).toLowerCase();
@@ -775,7 +812,6 @@ void _showCreateDialog(BuildContext context) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: TextFormField(
@@ -785,25 +821,25 @@ void _showCreateDialog(BuildContext context) {
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: primary_color),
+                              borderSide: BorderSide(color: Colors.blue),
                             ),
                             hintText: 'First Name',
                             hintStyle: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w500),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(20),
-                            FilteringTextInputFormatter.allow(onlyLetters),
-                          ],
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'First name is required'
-                              : null,
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(20), // Limit to 20 characters
+                            FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')), // Allow only letters and spaces
+                          ],
                         ),
                       ),
                       SizedBox(width: 10),
@@ -815,109 +851,94 @@ void _showCreateDialog(BuildContext context) {
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: primary_color),
+                              borderSide: BorderSide(color: Colors.blue),
                             ),
                             hintText: 'Last Name',
                             hintStyle: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w500),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(20),
-                            FilteringTextInputFormatter.allow(onlyLetters),
-                          ],
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500),
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'Last name is required'
-                              : null,
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(20), // Limit to 20 characters
+                            FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')), // Allow only letters and spaces
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: _courseController,
+
+                  SizedBox(height: 30),
+                  // Department Dropdown
+                  DropdownButtonFormField<String>(
+                    value: selectedDepartment,
+                    hint: Text('Select Department'),
+                    items: departmentCourses.keys.map((String department) {
+                      return DropdownMenuItem<String>(
+                        value: department,
+                        child: Text(department),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedDepartment = value;
+                        selectedCourse = null; // Reset course when department changes
+                      });
+                    },
                     decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: primary_color),
-                      ),
-                      hintText: 'Course',
-                      hintStyle:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                      prefixIcon: Icon(Icons.school_outlined, color: Colors.blue),
+                      labelText: 'Department',
+                      labelStyle: TextStyle(fontSize: 15),
                     ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(4),
-                      FilteringTextInputFormatter.allow(onlyLetters),
-                    ],
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Course is required'
-                        : null,
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: _departmentController,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: primary_color),
-                      ),
-                      hintText: 'Department',
-                      hintStyle:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-                    ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(4),
-                      FilteringTextInputFormatter.allow(onlyLetters),
-                    ],
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Department is required'
-                        : null,
                   ),
                   SizedBox(height: 20),
+                  // Course Dropdown
+                  DropdownButtonFormField<String>(
+                    value: selectedCourse,
+                    hint: Text('Select Course'),
+                    items: selectedDepartment == null
+                        ? []
+                        : departmentCourses[selectedDepartment!]!
+                            .map((String course) {
+                            return DropdownMenuItem<String>(
+                              value: course,
+                              child: Text(course),
+                            );
+                          }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCourse = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText: 'Course',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Icon(Icons.book_outlined, color: Colors.blue),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Year Dropdown
                   DropdownButtonFormField<int>(
                     value: _selectedYear,
                     items: [
-                      DropdownMenuItem(
-                          value: 1,
-                          child: Text('First Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 2,
-                          child: Text('Second Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 3,
-                          child: Text('Third Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 4,
-                          child: Text('Fourth Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 5,
-                          child: Text('Fifth Year',
-                              style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 1, child: Text('First Year')),
+                      DropdownMenuItem(value: 2, child: Text('Second Year')),
+                      DropdownMenuItem(value: 3, child: Text('Third Year')),
+                      DropdownMenuItem(value: 4, child: Text('Fourth Year')),
+                      DropdownMenuItem(value: 5, child: Text('Fifth Year')),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -926,18 +947,15 @@ void _showCreateDialog(BuildContext context) {
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       labelText: 'Year',
                       labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: Icon(Icons.calendar_month_outlined,
-                          color: primary_color),
+                      prefixIcon: Icon(Icons.calendar_today, color: Colors.blue,),
                     ),
-                    validator: (value) =>
-                        value == null ? 'Year is required' : null,
                   ),
                   SizedBox(height: 10),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(top: 10),
@@ -945,7 +963,7 @@ void _showCreateDialog(BuildContext context) {
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 13)),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Transform.scale(
                         scale: 0.8,
                         child: Switch(
@@ -953,10 +971,9 @@ void _showCreateDialog(BuildContext context) {
                           onChanged: (value) {
                             setState(() {
                               _isEnrolled = value;
-                              print("Switch is now: $_isEnrolled");
                             });
                           },
-                          activeColor: primary_color,
+                          activeColor: Colors.green,
                           inactiveThumbColor: Colors.red,
                           inactiveTrackColor: Colors.grey,
                         ),
@@ -966,15 +983,9 @@ void _showCreateDialog(BuildContext context) {
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      if (_firstNameController.text.isEmpty ||
-                          _lastNameController.text.isEmpty ||
-                          _courseController.text.isEmpty ||
-                          _departmentController.text.isEmpty) {
+                      if (selectedDepartment == null || selectedCourse == null || _firstNameController.text.isEmpty || _lastNameController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:
-                                Text("All fields must be filled correctly!"),
-                          ),
+                          SnackBar(content: Text("Please select Department and Course")),
                         );
                       } else {
                         context.read<AdminExtendedBloc>().add(
@@ -982,25 +993,17 @@ void _showCreateDialog(BuildContext context) {
                                 capitalizeFirstLetter(
                                     _firstNameController.text),
                                 capitalizeFirstLetter(_lastNameController.text),
-                                _courseController.text.toUpperCase(),
+                                selectedCourse.toString(),
                                 _selectedYear,
                                 _isEnrolled ? "ACTIVE" : "INACTIVE",
-                                _departmentController.text.toUpperCase(),
+                                selectedDepartment.toString(),
                               ),
                             );
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Student created successfully!"),
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-
                         Navigator.pop(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primary_color,
+                      backgroundColor: Colors.blue,
                       minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -1011,7 +1014,7 @@ void _showCreateDialog(BuildContext context) {
                         'Create',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 10,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -1027,18 +1030,31 @@ void _showCreateDialog(BuildContext context) {
   );
 }
 
+
 void _showUpdate(BuildContext context, String firstname, String lastname,
     String course, String department, int year, String enrolled, int id) {
   final TextEditingController _firstNameController =
       TextEditingController(text: firstname);
   final TextEditingController _lastNameController =
       TextEditingController(text: lastname);
-  final TextEditingController _courseController =
-      TextEditingController(text: course);
-  final TextEditingController _departmentController =
-      TextEditingController(text: department);
+
   int _selectedYear = year;
   bool _isEnrolled = enrolled == 'ACTIVE';
+
+  // Map to hold the departments and their respective courses
+  Map<String, List<String>> departmentCourses = {
+    'CITE': ['BSIT'],
+    'CEA': ['BSCE', 'BSCPE', 'BSECE'],
+    'CAHS': ['BSN', 'BSMLS', 'BSPHARMA', 'BSPSYCH'],
+    'CMA': ['BSA', 'BST', 'BSHM'],
+    'CELA': ['BSED', 'BSPOLSCI'],
+    'CCJE': ['BSCRIM'],
+  };
+
+  // Initialize the selected department and course variables
+  String _selectedDepartment = department;
+  List<String> _availableCourses = departmentCourses[_selectedDepartment]!;
+  String _selectedCourse = course;
 
   final RegExp onlyLetters = RegExp(r'^[a-zA-Z\s]*$');
   String capitalizeFirstLetter(String text) {
@@ -1096,6 +1112,7 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // First Name and Last Name input fields
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1107,7 +1124,7 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: primary_color),
+                              borderSide: BorderSide(color: Colors.blue),
                             ),
                             hintText: 'First Name',
                             hintStyle: TextStyle(
@@ -1123,9 +1140,6 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                               color: Colors.black,
                               fontSize: 12,
                               fontWeight: FontWeight.w500),
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'First name is required'
-                              : null,
                         ),
                       ),
                       SizedBox(width: 10),
@@ -1137,7 +1151,7 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: primary_color),
+                              borderSide: BorderSide(color: Colors.blue),
                             ),
                             hintText: 'Last Name',
                             hintStyle: TextStyle(
@@ -1153,95 +1167,72 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                               color: Colors.black,
                               fontSize: 12,
                               fontWeight: FontWeight.w500),
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'Last name is required'
-                              : null,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: _departmentController,
+                  SizedBox(height: 30),
+
+                  // Dropdown for selecting Department
+                  DropdownButtonFormField<String>(
+                    value: _selectedDepartment,
+                    items: departmentCourses.keys
+                        .map((dep) => DropdownMenuItem(
+                              value: dep,
+                              child: Text(dep, style: TextStyle(fontSize: 13)),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedDepartment = value!;
+                        _availableCourses = departmentCourses[_selectedDepartment]!;
+                        _selectedCourse = _availableCourses[0]; // Reset course selection
+                      });
+                    },
                     decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: primary_color),
-                      ),
-                      hintText: 'Department',
-                      hintStyle:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                      prefixIcon: Icon(Icons.school_outlined, color: Colors.blue),
+                      labelText: 'Department',
+                      labelStyle: TextStyle(fontSize: 15),
                     ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(
-                          4), // Set limit to 4 characters
-                      FilteringTextInputFormatter.allow(onlyLetters),
-                    ],
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Department is required'
-                        : null,
                   ),
                   SizedBox(height: 10),
-                  TextFormField(
-                    controller: _courseController,
+
+                  // Dropdown for selecting Course
+                  DropdownButtonFormField<String>(
+                    value: _selectedCourse,
+                    items: _availableCourses
+                        .map((course) => DropdownMenuItem(
+                              value: course,
+                              child: Text(course, style: TextStyle(fontSize: 13)),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCourse = value!;
+                      });
+                    },
                     decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: primary_color),
-                      ),
-                      hintText: 'Course',
-                      hintStyle:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                      labelText: 'Course',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Icon(Icons.book_outlined, color: Colors.blue),
                     ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(
-                          4), // Set limit to 4 characters
-                      FilteringTextInputFormatter.allow(onlyLetters),
-                    ],
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500),
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'Course is required'
-                        : null,
                   ),
                   SizedBox(height: 20),
+                  // Year Dropdown
                   DropdownButtonFormField<int>(
                     value: _selectedYear,
                     items: [
-                      DropdownMenuItem(
-                          value: 1,
-                          child: Text('First Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 2,
-                          child: Text('Second Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 3,
-                          child: Text('Third Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 4,
-                          child: Text('Fourth Year',
-                              style: TextStyle(fontSize: 13))),
-                      DropdownMenuItem(
-                          value: 5,
-                          child: Text('Fifth Year',
-                              style: TextStyle(fontSize: 13))),
+                      DropdownMenuItem(value: 1, child: Text('First Year')),
+                      DropdownMenuItem(value: 2, child: Text('Second Year')),
+                      DropdownMenuItem(value: 3, child: Text('Third Year')),
+                      DropdownMenuItem(value: 4, child: Text('Fourth Year')),
+                      DropdownMenuItem(value: 5, child: Text('Fifth Year')),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -1250,77 +1241,69 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       labelText: 'Year',
                       labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: Icon(Icons.calendar_month_outlined,
-                          color: primary_color),
+                      prefixIcon: Icon(Icons.calendar_today, color: Colors.blue,),
                     ),
-                    validator: (value) =>
-                        value == null ? 'Year is required' : null,
                   ),
                   SizedBox(height: 10),
+
+                  // Toggle switch for Enrolled status
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text('Enrolled',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 13)),
+                      Text(
+                        'Enrolled:',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                       ),
-                      const Spacer(),
-                      Transform.scale(
-                        scale: 0.8,
-                        child: Switch(
-                          value: _isEnrolled,
-                          onChanged: (value) {
-                            setState(() {
-                              _isEnrolled = value;
-                              print("Switch is now: $_isEnrolled");
-                            });
-                          },
-                          activeColor: primary_color,
-                          inactiveThumbColor: Colors.red,
-                          inactiveTrackColor: Colors.grey,
-                        ),
+                      Switch(
+                        value: _isEnrolled,
+                        onChanged: (value) {
+                          setState(() {
+                            _isEnrolled = value;
+                          });
+                        },
+                        activeColor: Colors.green,
+                        inactiveThumbColor: Colors.red,
+                        inactiveTrackColor: Colors.grey,
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
+
+                  // Update Button
                   ElevatedButton(
                     onPressed: () {
                       if (_firstNameController.text.isEmpty ||
                           _lastNameController.text.isEmpty ||
-                          _courseController.text.isEmpty ||
-                          _departmentController.text.isEmpty) {
+                          _selectedCourse.isEmpty ||
+                          _selectedDepartment.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content:
-                                Text("All fields must be filled correctly!"),
+                            content: Text("All fields must be filled correctly!"),
                           ),
                         );
                       } else {
-                        print(
-                          _isEnrolled ? "ACTIVE" : "INACTIVE",
-                        );
+                        // Trigger update event
                         context.read<AdminExtendedBloc>().add(
                               updateStudent(
                                 capitalizeFirstLetter(
                                     _firstNameController.text),
                                 capitalizeFirstLetter(_lastNameController.text),
-                                _courseController.text.toUpperCase(),
+                                _selectedCourse.toUpperCase(),
                                 _selectedYear,
                                 _isEnrolled ? "ACTIVE" : "INACTIVE",
                                 id,
-                                _departmentController.text.toUpperCase(),
+                                _selectedDepartment.toUpperCase(),
                               ),
                             );
                         Navigator.pop(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primary_color,
+                      backgroundColor: Colors.blue,
                       minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -1331,7 +1314,7 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                         'Update',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -1346,6 +1329,9 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
     },
   );
 }
+
+
+
 
 void _showDeleteDialog(BuildContext context, int id) {
   showDialog(

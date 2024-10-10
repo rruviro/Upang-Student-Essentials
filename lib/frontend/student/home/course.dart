@@ -5,6 +5,7 @@ import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Course.dart';
 import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Department.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/home/stocks.dart';
@@ -13,10 +14,11 @@ import 'package:use/frontend/student/widgets/home/course.dart';
 import '../../colors/colors.dart';
 
 class courses extends StatefulWidget {
+  final StudentProfile profile;
   final int departmentID;
   final String departmentName;
 
-  const courses({Key? key, required this.departmentID, required this.departmentName}) : super(key: key);
+  const courses({Key? key, required this.departmentID, required this.departmentName, required this.profile}) : super(key: key);
 
   @override
   _coursesState createState() => _coursesState();
@@ -39,7 +41,7 @@ class _coursesState extends State<courses> {
       buildWhen: (previous, current) => current is! StudentActionState,
       listener: (context, state) {
         if (state is StockPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks(courseID: 0, courseName: '', Department: '',)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks(courseID: 0, courseName: '', Department: '',profile: widget.profile)));
         }
       },
       builder: (context, state) {
@@ -84,7 +86,7 @@ class _coursesState extends State<courses> {
                     courses: state.courses,
                     departmentName: widget.departmentName,
                     id: widget.departmentID,
-                    studentBloc: _studentBloc,
+                    studentBloc: _studentBloc, profile: widget.profile,
                   ),
                 ],
               ),
@@ -104,13 +106,14 @@ class CourseWidget extends StatelessWidget {
   final String departmentName;
   final int id;
   final StudentExtendedBloc studentBloc;
+  final StudentProfile profile;
 
   const CourseWidget({
     Key? key,
     required this.courses,
     required this.departmentName,
     required this.id,
-    required this.studentBloc,
+    required this.studentBloc, required this.profile,
   }) : super(key: key);
 
   @override
@@ -121,7 +124,7 @@ class CourseWidget extends StatelessWidget {
                 course: course,
                 departmentName: departmentName,
                 id: id,
-                studentBloc: studentBloc,
+                studentBloc: studentBloc, profile: profile,
               ))
           .toList(),
     );
@@ -132,6 +135,7 @@ class ItemCard extends StatelessWidget {
   final Course course;
   final String departmentName;
   final int id;
+  final StudentProfile profile;
   final StudentExtendedBloc studentBloc;
 
   const ItemCard({
@@ -139,7 +143,7 @@ class ItemCard extends StatelessWidget {
     required this.course,
     required this.departmentName,
     required this.id,
-    required this.studentBloc,
+    required this.studentBloc, required this.profile,
   }) : super(key: key);
 
   @override
@@ -155,6 +159,7 @@ class ItemCard extends StatelessWidget {
                 courseID: course.id,
                 courseName: course.courseName,
                 Department: departmentName,
+                profile: this.profile
               ),
             ),
           );

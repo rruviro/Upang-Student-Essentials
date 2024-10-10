@@ -89,6 +89,218 @@ class _ProfileScreenState extends State<Profile> {
     });
   }
 
+void showChangePasswordDialog(BuildContext context, StudentProfile studentProfile) {
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  int maxLength = 25;
+  bool isPasswordChanged = false;
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            title: Text(
+              'Change Password',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            content: Container(
+              height: 150,
+              width: 250,
+              child: isPasswordChanged
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 70,
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          "Password Changed!",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 40,
+                          width: double.infinity,
+                          child: TextFormField(
+                            controller: newPasswordController,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: primary_color),
+                              ),
+                              hintText: 'New Password',
+                              hintStyle: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              suffix: Text(
+                                '${newPasswordController.text.length}/$maxLength',
+                                style: TextStyle(
+                                  color: primary_color,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              suffixStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(23),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          height: 40,
+                          width: double.infinity,
+                          child: TextFormField(
+                            controller: confirmPasswordController,
+                            decoration: InputDecoration(
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: primary_color),
+                              ),
+                              hintText: 'Confirm New Password',
+                              hintStyle: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              suffix: Text(
+                                '${confirmPasswordController.text.length}/$maxLength',
+                                style: TextStyle(
+                                  color: primary_color,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              suffixStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(23),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+            actions: !isPasswordChanged
+                ? [
+                    GestureDetector(
+                      onTap: () {
+                        final newPassword = newPasswordController.text;
+                        final confirmPassword = confirmPasswordController.text;
+
+                        if (newPassword == confirmPassword && newPassword.isNotEmpty) {
+                          context.read<StudentExtendedBloc>().add(
+                                changePassword(studentProfile.id, newPassword, confirmPassword),
+                              );
+                          setState(() {
+                            isPasswordChanged = true;
+                          });
+                          Future.delayed(Duration(seconds: 2), () {
+                            Navigator.of(context).pop();
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Passwords do not match or the new password is empty.'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 112,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: primary_color,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Confirm',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 112,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: primary_color,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]
+                : [],
+          );
+        },
+      );
+    },
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,197 +353,12 @@ class _ProfileScreenState extends State<Profile> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.lock, color: primary_color),
-            onPressed: () async {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  String newPassword = '';
-                  String confirmPassword = '';
-                  return AlertDialog(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    title: Text(
-                      'Change Password',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    content: Container(
-                      height: 80,
-                      width: 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 40,
-                            width: double.infinity,
-                            child: TextFormField(
-                              controller: ProdBController,
-                              decoration: InputDecoration(
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: primary_color),
-                                ),
-                                hintText: 'New Password',
-                                hintStyle: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                suffix: Text(
-                                  '$_countProd/$maxLength',
-                                  style: TextStyle(
-                                    color: primary_color,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                suffixStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.done,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(23),
-                              ],
-                              onChanged: (value) {
-                                newPassword = value;
-                              },
-                            ),
-                          ),
-                          Container(
-                            height: 40,
-                            width: double.infinity,
-                            child: TextFormField(
-                              controller: ProdBBController,
-                              decoration: InputDecoration(
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: primary_color),
-                                ),
-                                hintText: 'Confirm New Password',
-                                hintStyle: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                suffix: Text(
-                                  '$_countProd/$maxLength',
-                                  style: TextStyle(
-                                    color: primary_color,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                suffixStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.done,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(23),
-                              ],
-                              onChanged: (value) {
-                                confirmPassword = value;
-                              },
-                            ),
-                          ),
-                        ]
-                      ),
-                    ),
-                    actions: [
-                      GestureDetector(
-                        onTap: (){
-                          print(widget.studentProfile.id);
-                          print(newPassword);
-                          print(confirmPassword);
-                          if (newPassword == confirmPassword && newPassword.isNotEmpty) {
-                            context.read<StudentExtendedBloc>().add(changePassword(widget.studentProfile.id, newPassword, confirmPassword));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Password has been changed successfully'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                            Navigator.of(context).pop();
-                          }
-                          else{
-                            print('Error: Passwords do not match or the new password is empty.');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Passwords do not match or the new password is empty.'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 112,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: primary_color
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Confirm',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                            height: 30,
-                            width: 112,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(2),
-                                color: primary_color
-                            ),
-                            child: Center(
-                              child:Text(
-                                'Cancel',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              ),
-                            )
-                        ),
-                      ),
-                    ],
-                  );
-                }
-            );
-            },
-          ),
+          icon: Icon(Icons.lock, color: primary_color),
+          onPressed: () {
+            showChangePasswordDialog(context, widget.studentProfile);
+          },
+        ),
+
           IconButton(
             icon: Icon(Icons.logout, color: primary_color),
             onPressed: () {

@@ -20,55 +20,58 @@ class StudnetLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            if (state is LoginSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Login Succesfully: Welcome!")),
-              );
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider<StudentBottomBloc>.value(
-                    value: studentBloc,
-                    child: SHomeBase(studentId: state.StudentId),
+      resizeToAvoidBottomInset: false,
+      body: BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is LoginLoading) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(width: 20),
+                        Text("Logging In..."),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } else if (state is LoginSuccess) {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Login Successfully: Welcome!")),
+            );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                  value: studentBloc,
+                  child: SHomeBase(studentId: state.StudentId),
                 ),
-              );
-            } else if (state is LoginFailed) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-            } else if (state is LoginLoading) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(width: 20),
-                          Text("Logging In..."),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
+              ),
+            );
+          } else if (state is LoginError) {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
             }
-              else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Error")),
-              );
-            }
-          },
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Incorrect Credentials: Please try again")),
+            );
+          }
+        },
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[

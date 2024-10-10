@@ -20,6 +20,7 @@ class AuthenticationBloc
     //BLOC BY MIRO
     on<StudentLogin>((event, emit) async {
       final SharedPreferences login = await SharedPreferences.getInstance();
+      emit(LoginLoading());
       try {
         await _authrepo.studentLogin(event.StudentId, event.Password);
 
