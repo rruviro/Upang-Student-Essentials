@@ -4,13 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/admin/Uniform.dart';
-import 'package:use/frontend/admin/bag.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
+import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/colors/colors.dart';
+import 'package:use/frontend/student/home/home.dart';
 
 class UniformStudent extends StatefulWidget {
+  final StudentProfile profile;
   final String courseName;
 
-  const UniformStudent({Key? key, required this.courseName}) : super(key: key);
+  const UniformStudent({Key? key, required this.courseName, required this.profile}) : super(key: key);
 
   @override
   State<UniformStudent> createState() => _UniformStudentState();
@@ -35,7 +38,7 @@ class _UniformStudentState extends State<UniformStudent> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context, true);
           },
         ),
         title: Transform.translate(
@@ -72,9 +75,18 @@ class _UniformStudentState extends State<UniformStudent> {
             ),
           ),
           const SizedBox(width: 5),
-          const Icon(
-            Icons.backpack_outlined,
-            color: Colors.white,
+          IconButton(
+            icon: Icon(Icons.backpack_outlined, color: Colors.white),
+            onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BlocProvider<StudentExtendedBloc>.value(
+                  value: studBloc,
+                  child: Bag(studentProfile: widget.profile, Status: "ACTIVE"),
+                ),
+              )
+            );
+          },
           ),
           const SizedBox(width: 15),
         ],
@@ -90,6 +102,9 @@ class _UniformStudentState extends State<UniformStudent> {
             print('Student uniforms loaded');
           } else if (state is UniformsErrorState) {
             print("Error loading student uniforms: ${state.error}");
+          }
+          else{
+            print("Unknown state: $state");
           }
         },
         child: SingleChildScrollView(

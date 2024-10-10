@@ -242,7 +242,7 @@ void _showBookDialog(BuildContext context, Book book) {
           });
         }
         else if (state is UniformPageState) {
-          Navigator.push(context,MaterialPageRoute(builder: (context) =>UniformStudent(courseName: widget.courseName)));
+          Navigator.push(context,MaterialPageRoute(builder: (context) =>UniformStudent(courseName: widget.courseName, profile : widget.profile)));
         }
       },
       builder: (context, state) {
@@ -305,7 +305,7 @@ void _showBookDialog(BuildContext context, Book book) {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        stocks_widget(stocks: state.stocks, courseName: widget.courseName),
+                        stocks_widget(stocks: state.stocks, courseName: widget.courseName, profile: widget.profile,),
                       ],
                     ),
                   ),
@@ -340,6 +340,9 @@ void _showBookDialog(BuildContext context, Book book) {
           print("hatdog");
           return Center(child: Text(state.error));
         } else {
+          print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          print(state);
+          print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
           return const Center(child: CircularProgressIndicator());
         }
       },
