@@ -233,11 +233,18 @@ class StudentExtendedBloc
 
     on<AddStudentBagBook>((event, emit) async {
       try {
-        await _studentrepo.addStudentBookData(event.id, event.department,
-            event.bookName, event.subjectCode, event.subjectDesc, event.status);
+        await _studentrepo.addStudentBookData(
+          event.id,
+          event.department,
+          event.bookName,
+          event.subjectCode,
+          event.subjectDesc,
+          event.status,
+          event.shift,
+        );
       } catch (e) {
-        emit(bookError(e.toString()));
-        //add(ShowStocksEvent(Department: event.department));
+        print("Error adding book: $e");
+        emit(StocksErrorState(e.toString()));
       }
     });
 
@@ -251,26 +258,63 @@ class StudentExtendedBloc
             event.type,
             event.body,
             event.size,
-            event.status);
+            event.status,
+            event.shift);
       } catch (e) {
-        
+        emit(itemError('An error occurred: ${e.toString()}'));
+      }
+    });
+
+    on<AddReserveBagBook>((event, emit) async {
+      try {
+        await _studentrepo.addreserveBookData(
+            event.id,
+            event.department,
+            event.bookName,
+            event.subjectCode,
+            event.subjectDesc,
+            event.status,
+            event.shift,
+            event.stocks);
+        add(ShowStocksEvent(Department: event.department));
+        add(allstudentBagBook(event.id, "All"));
+      } catch (e) {
+        print("ERROR");
+        emit(bookError(e.toString()));
+        add(ShowStocksEvent(Department: event.department));
+      }
+    });
+
+    on<AddReserveBagItem>((event, emit) async {
+      try {
+        await _studentrepo.addreserveItemData(
+            event.id,
+            event.department,
+            event.course,
+            event.gender,
+            event.type,
+            event.body,
+            event.size,
+            event.status,
+            event.shift,
+            event.stocks);
+      } catch (e) {
         emit(itemError('An error occurred: ${e.toString()}'));
       }
     });
 
     on<createNotification>((event, emit) async {
       try {
-        await _studentrepo.createNotificationData(
-            event.id,
-            event.message);
+        await _studentrepo.createNotificationData(event.id, event.message);
       } catch (e) {
         print(e);
       }
     });
 
-    on<changePassword>((event, emit) async{
+    on<changePassword>((event, emit) async {
       try {
-        await _studentrepo.changePasswords(event.id, event.password, event.cpassword);
+        await _studentrepo.changePasswords(
+            event.id, event.password, event.cpassword);
         print("done");
       } catch (e) {
         print("Shit na malagkit");
@@ -330,7 +374,6 @@ class StudentExtendedBloc
         emit(StocksErrorState('An error occurred: ${e.toString()}'));
       }
     });
-
   }
 
   FutureOr<void> course_page(

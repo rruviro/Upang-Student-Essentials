@@ -9,7 +9,8 @@ import 'package:use/backend/apiservice/authApi/aurepo.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authrepo;
   AuthenticationBloc(this._authrepo) : super(AuthenticationInitial()) {
     on<WelcomePageEvent>(welcome_page);
@@ -21,12 +22,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       final SharedPreferences login = await SharedPreferences.getInstance();
       try {
         await _authrepo.studentLogin(event.StudentId, event.Password);
-        emit(LoginLoading());
+
         login.setString('StudentId', event.StudentId);
         login.setString('Password', event.Password);
         login.setBool('isLogin', true);
         emit(LoginSuccess(event.StudentId, event.Password));
-
       } catch (e) {
         emit(LoginError('Error logging in: ${e.toString()}'));
       }

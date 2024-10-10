@@ -85,24 +85,21 @@ class StudentBagBookErrorState extends StudentActionState {
   StudentBagBookErrorState(this.error);
 }
 
-class BookDataDeleted extends StudentActionState{
-}
+class BookDataDeleted extends StudentActionState {}
 
-class ItemDataDeleted extends StudentActionState{
-}
+class ItemDataDeleted extends StudentActionState {}
 
-class BookStatusChanged extends StudentActionState{
-}
+class BookStatusChanged extends StudentActionState {}
 
-class ItemStatusChanged extends StudentActionState{
-}
+class ItemStatusChanged extends StudentActionState {}
 
 //STUDENT BAG AND ITEM
 class StudentBagCombinedLoadSuccessState extends StudentExtendedState {
   final List<StudentBagItem> studentBagItems;
   final List<StudentBagBook> studentBagBooks;
 
-  StudentBagCombinedLoadSuccessState(this.studentBagItems, this.studentBagBooks);
+  StudentBagCombinedLoadSuccessState(
+      this.studentBagItems, this.studentBagBooks);
 }
 
 //STUDENT NOTIFICATION
@@ -169,36 +166,32 @@ class itemError extends StudentExtendedState {
   itemError(this.error);
 }
 
-class bookError extends StudentExtendedState {
-  final String error;
-  bookError(this.error);
-}
-
 // BY LANCE
 // DEPARTMENTS
-class DepartmentsLoadingState extends StudentActionState{
-}
-class DepartmentsLoadedState extends StudentExtendedState{
+class DepartmentsLoadingState extends StudentActionState {}
+
+class DepartmentsLoadedState extends StudentExtendedState {
   final List<department> departments;
   DepartmentsLoadedState(this.departments);
 }
-class DepartmentsErrorState extends StudentActionState{
+
+class DepartmentsErrorState extends StudentActionState {
   final String error;
   DepartmentsErrorState(this.error);
 }
 
 // COURSES
-class CoursesLoadingState extends StudentActionState{
-}
-class CoursesLoadedState extends StudentExtendedState{
+class CoursesLoadingState extends StudentActionState {}
+
+class CoursesLoadedState extends StudentExtendedState {
   final List<Course> courses;
   CoursesLoadedState({required this.courses});
 }
-class CoursesErrorState extends StudentActionState{
+
+class CoursesErrorState extends StudentActionState {
   final String error;
   CoursesErrorState(this.error);
 }
-
 
 // BOOKS
 // class BooksLoadingState extends StudentActionState{}
@@ -212,17 +205,20 @@ class CoursesErrorState extends StudentActionState{
 // }
 
 // STOCKS
-class StocksLoadingState extends StudentActionState{}
-class StocksLoadedState extends StudentExtendedState{
+class StocksLoadingState extends StudentActionState {}
+
+class StocksLoadedState extends StudentExtendedState {
   final List<Stock> stocks;
   final List<Book> books;
   StocksLoadedState({required this.stocks, required this.books});
 }
-class StocksErrorState extends StudentActionState{
+
+class StocksErrorState extends StudentActionState {
   final String error;
   StocksErrorState(this.error);
 }
 
-
-
-
+class bookError extends StudentActionState {
+  final String error;
+  bookError(this.error);
+}
