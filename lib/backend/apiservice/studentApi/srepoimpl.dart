@@ -272,7 +272,7 @@ class StudentRepositoryImpl extends Studentrepo {
     String status,
     String shift,
   ) async {
-    final response = await http.put(
+    final response = await http.post(
       Uri.parse('$baseUrl/studentbagitems'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -294,6 +294,8 @@ class StudentRepositoryImpl extends Studentrepo {
     if (response.statusCode == 200) {
       print("Student item data successfully added.");
     } else {
+      print(response.statusCode);
+      print(response.body);
       throw Exception("Failed to add student item data: ${response.body}");
     }
   }
@@ -348,7 +350,7 @@ class StudentRepositoryImpl extends Studentrepo {
       String status,
       String shift,
       int stock) async {
-    final response = await http.put(
+    final response = await http.post(
       Uri.parse('$baseUrl/requestitem/$stock'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -377,21 +379,27 @@ class StudentRepositoryImpl extends Studentrepo {
   }
 
   @override
-  Future<void> reserveorclaimBook(int id, String status, int stocks) async {
-    final response = await http
-        .put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status/$stocks'));
+  Future<void> reserveorclaimBook(int id, String status) async {
+    final response =
+        await http.put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status'));
     if (response == 200) {
+      print("!!!!!!!!!!!!!!!!!!!!");
     } else {
+      print(response.statusCode);
+      print('$baseUrl/bookreserveclaim/$id/$status');
       throw Exception('Failed');
     }
   }
 
   @override
-  Future<void> reserveorclaimItem(int id, String status, int stocks) async {
-    final response = await http
-        .put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status/$stocks'));
-    if (response == 200) {
+  Future<void> reserveorclaimItem(int id, String status) async {
+    final response =
+        await http.put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status'));
+    if (response.statusCode == 200) {
+      print("!!!!!!!!!!!!!!!!!!!!");
     } else {
+      print(response.statusCode);
+      print('$baseUrl/itemreserveclaim/$id/$status');
       throw Exception('Failed');
     }
   }
@@ -493,6 +501,7 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception('Failed to load stock');
     }
   }
+
   // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
   @override
   Future<List<Uniform>> showUniforms(String Course) async {
@@ -506,5 +515,38 @@ class StudentRepositoryImpl extends Studentrepo {
     }
   }
 
+  @override
+  Future<void> itemreduceStocks(int count, String department, String course,
+      String gender, String type, String body, String size) async {
+    final response = await http.put(Uri.parse(
+        '$baseUrl/uniforms/reducestock/$count/$department/$course/$gender/$type/$body/$size'));
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception('Failed to reduce stock: ${response.statusCode}');
+    }
+  }
 
+  @override
+  Future<void> bookreduceStocks(int count, String department, String bookname,
+      String subcode, String subdesc) async {
+    final response = await http.put(Uri.parse(
+        '$baseUrl/books/reducestock/$count/$department/$bookname/$subcode/$subdesc'));
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception('Failed to reduce stock: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<int?> uniformStock(String department, String course, String gender,
+      String type, String body, String size) async {
+    final response = await http.put(Uri.parse(
+        '$baseUrl/uniforms/stock/$department/$course/$gender/$type/$body/$size'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['stock'];
+    } else {
+      throw Exception('Failed to reduce stock: ${response.statusCode}');
+    }
+  }
 }
