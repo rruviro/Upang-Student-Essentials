@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/admin/Uniform.dart';
-import 'package:use/frontend/admin/bag.dart';
+import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
+import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/colors/colors.dart';
+import 'package:use/frontend/student/home/home.dart';
 
 class UniformStudent extends StatefulWidget {
+  final StudentProfile profile;
   final String courseName;
+  final String department;
 
-  const UniformStudent({Key? key, required this.courseName}) : super(key: key);
+  const UniformStudent(
+      {Key? key,
+      required this.courseName,
+      required this.profile,
+      required this.department})
+      : super(key: key);
 
   @override
   State<UniformStudent> createState() => _UniformStudentState();
@@ -18,12 +29,70 @@ class UniformStudent extends StatefulWidget {
 
 class _UniformStudentState extends State<UniformStudent> {
   List<Uniform> uniforms = [];
+  List<StudentBagItem> items = [];
+  String? _course;
 
   @override
   void initState() {
     super.initState();
+    getUnforms();
     BlocProvider.of<StudentExtendedBloc>(context)
         .add(ShowUniformsEvent(Course: widget.courseName));
+  }
+
+  void getUnforms() async {
+    final SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    _course = sharedPref.getString('course');
+    BlocProvider.of<StudentExtendedBloc>(context)
+        .add(allstudentBagItem(widget.profile.id, "All"));
+  }
+
+  bool isUniformInBag(Uniform uniform) {
+    return items
+        .any((item) => item.type == uniform.Type && item.body == uniform.Body);
+  }
+
+  // Function to add the uniform to the bag and show success dialog
+  void _addUniformToBackpack(Uniform uniform) {
+    setState(() {
+      items.add(StudentBagItem(
+          type: uniform.Type,
+          body: uniform.Body,
+          reservationNumber: 0,
+          id: 0,
+          department: '',
+          course: '',
+          gender: '',
+          size: '',
+          status: '',
+          claimingSchedule: '',
+          stubagId: 0));
+    });
+
+    // Show the dialog with checkmark and message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.check_circle, color: Colors.green, size: 60),
+                SizedBox(height: 15),
+                Text(
+                  "Uniform Added",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -35,7 +104,10 @@ class _UniformStudentState extends State<UniformStudent> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            context
+                .read<StudentExtendedBloc>()
+                .add(ShowStocksEvent(Department: widget.department));
+            Navigator.pop(context, true);
           },
         ),
         title: Transform.translate(
@@ -72,15 +144,31 @@ class _UniformStudentState extends State<UniformStudent> {
             ),
           ),
           const SizedBox(width: 5),
-          const Icon(
-            Icons.backpack_outlined,
-            color: Colors.white,
+          IconButton(
+            icon: Icon(Icons.backpack_outlined, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
+                    value: studBloc,
+                    child:
+                        Bag(studentProfile: widget.profile, Status: "ACTIVE"),
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(width: 15),
         ],
       ),
       body: BlocListener<StudentExtendedBloc, StudentExtendedState>(
         listener: (context, state) {
+          if (state is StudentBagItemLoadSuccessState) {
+            setState(() {
+              items = state.studentBagItem;
+              print(items.length);
+            });
+          }
           if (state is UniformsLoadingState) {
             print("Loading student uniforms");
           } else if (state is UniformsLoadedState) {
@@ -90,6 +178,8 @@ class _UniformStudentState extends State<UniformStudent> {
             print('Student uniforms loaded');
           } else if (state is UniformsErrorState) {
             print("Error loading student uniforms: ${state.error}");
+          } else {
+            print("Unknown state: $state");
           }
         },
         child: SingleChildScrollView(
@@ -156,70 +246,92 @@ class _UniformStudentState extends State<UniformStudent> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "image",
-                          ),
+                          Text("image"),
                         ],
                       ),
                     ),
                     const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () => _showAddToBackpackModal(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.blue,
-                              side: BorderSide(color: primary_color),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                    _course != widget.courseName
+                        ? Text(
+                            'Not Available for your course',
+                            style: TextStyle(color: Colors.red, fontSize: 14),
+                          )
+                        : Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: isUniformInBag(uniforms.first)
+                                          ? null
+                                          : () {
+                                              _showAddToBackpackModal(context);
+                                            },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.blue,
+                                        side: BorderSide(color: primary_color),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        minimumSize: const Size.fromHeight(60),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.add, color: primary_color),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            isUniformInBag(uniforms.first)
+                                                ? 'You already have a uniform'
+                                                : 'Add to Backpack',
+                                            style: TextStyle(
+                                                color: primary_color,
+                                                fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: isUniformInBag(uniforms.first)
+                                          ? null
+                                          : () => _showRequestModal(context),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.blue,
+                                        side: BorderSide(color: primary_color),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        minimumSize: const Size.fromHeight(60),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.request_page,
+                                              color: primary_color),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            isUniformInBag(uniforms.first)
+                                                ? 'You already have a uniform'
+                                                : 'Request',
+                                            style: TextStyle(
+                                                color: primary_color,
+                                                fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              minimumSize: const Size.fromHeight(60),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.add, color: primary_color),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Add to Backpack',
-                                  style: TextStyle(
-                                      color: primary_color, fontSize: 10),
-                                ),
-                              ],
-                            ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () => _showRequestModal(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.blue,
-                              side: BorderSide(color: primary_color),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              minimumSize: const Size.fromHeight(60),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.request_page, color: primary_color),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Request',
-                                  style: TextStyle(
-                                      color: primary_color, fontSize: 10),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -258,30 +370,25 @@ class _UniformStudentState extends State<UniformStudent> {
       child: CarouselSlider(
         items: imageUrls.map((url) {
           return Container(
-            width: 200,
-            margin: EdgeInsets.symmetric(horizontal: 0),
+            margin: EdgeInsets.all(5.0),
             decoration: BoxDecoration(
-              color: primary_color,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.asset(
-                url,
-                fit: BoxFit.fill,
-                width: 200,
-                height: 200,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage(url),
+                fit: BoxFit.cover,
               ),
             ),
           );
         }).toList(),
         options: CarouselOptions(
-          height: 300,
-          autoPlay: true,
-          autoPlayInterval: Duration(seconds: 3),
-          autoPlayAnimationDuration: Duration(milliseconds: 600),
-          autoPlayCurve: Curves.fastOutSlowIn,
+          height: 200.0,
           enlargeCenterPage: true,
+          autoPlay: true,
+          aspectRatio: 16 / 9,
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enableInfiniteScroll: true,
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          viewportFraction: 0.8,
         ),
       ),
     );
@@ -293,9 +400,8 @@ class _UniformStudentState extends State<UniformStudent> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return _ModalContent(
-          onSubmit: (selectedUniform) {
-            // Print all properties of the selected uniform
-            print('Selected Uniform ID: ${selectedUniform.id}');
+          onSubmit: (selectedUniform, selectedSchedule) {
+            print('Selected Uniform ID: ${widget.profile.id}');
             print('Department: ${selectedUniform.Department}');
             print('Course: ${selectedUniform.Course}');
             print('Gender: ${selectedUniform.Gender}');
@@ -303,6 +409,18 @@ class _UniformStudentState extends State<UniformStudent> {
             print('Body: ${selectedUniform.Body}');
             print('Size: ${selectedUniform.Size}');
             print('Stock: ${selectedUniform.Stock}');
+
+            context.read<StudentExtendedBloc>().add(AddStudentBagItem(
+                selectedUniform.Department,
+                selectedUniform.Course,
+                selectedUniform.Gender,
+                selectedUniform.Type,
+                selectedUniform.Body,
+                selectedUniform.Size,
+                "ACTIVE",
+                widget.profile.id,
+                selectedSchedule!));
+            _addUniformToBackpack(uniforms.first);
             Navigator.pop(context);
           },
           submitButtonText: 'Add to Backpack',
@@ -319,9 +437,9 @@ class _UniformStudentState extends State<UniformStudent> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return _ModalContent(
-          onSubmit: (selectedUniform) {
+          onSubmit: (selectedUniform, selectedSchedule) {
             // Print all properties of the selected uniform
-            print('Selected Uniform ID: ${selectedUniform.id}');
+            print('Selected Uniform ID: ${widget.profile.id}');
             print('Department: ${selectedUniform.Department}');
             print('Course: ${selectedUniform.Course}');
             print('Gender: ${selectedUniform.Gender}');
@@ -329,6 +447,30 @@ class _UniformStudentState extends State<UniformStudent> {
             print('Body: ${selectedUniform.Body}');
             print('Size: ${selectedUniform.Size}');
             print('Stock: ${selectedUniform.Stock}');
+            if (selectedUniform.Stock != 0) {
+              print(
+                  "@!@!@!@!@!@!@!@!@!@!@!@!!@!!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!@!");
+              context.read<StudentExtendedBloc>().add(itemreduceStocks(
+                  count: 1,
+                  department: selectedUniform.Department,
+                  course: selectedUniform.Course,
+                  gender: selectedUniform.Gender,
+                  type: selectedUniform.Type,
+                  body: selectedUniform.Body,
+                  size: selectedUniform.Size));
+            }
+            context.read<StudentExtendedBloc>().add(AddReserveBagItem(
+                selectedUniform.Department,
+                selectedUniform.Course,
+                selectedUniform.Gender,
+                selectedUniform.Type,
+                selectedUniform.Body,
+                selectedUniform.Size,
+                "Request",
+                widget.profile.id,
+                selectedSchedule!,
+                selectedUniform.Stock));
+            _addUniformToBackpack(uniforms.first);
             Navigator.pop(context);
           },
           submitButtonText: 'Request',
@@ -341,7 +483,7 @@ class _UniformStudentState extends State<UniformStudent> {
 }
 
 class _ModalContent extends StatefulWidget {
-  final Function(Uniform) onSubmit; // Change to accept a Uniform object
+  final Function(Uniform, String?) onSubmit;
   final String submitButtonText;
   final IconData submitButtonIcon;
   final List<Uniform> uniforms; // Pass the list of uniforms
@@ -361,7 +503,10 @@ class _ModalContent extends StatefulWidget {
 class _ModalContentState extends State<_ModalContent> {
   String? selectedSize; // Track the selected size
   String? selectedSchedule;
-  List<String> schedules = ['Shift A', 'Shift B'];
+  List<Map<String, String>> schedules = [
+    {'display': 'Shift A: M|T|W', 'value': 'A'},
+    {'display': 'Shift B: TH|F|S', 'value': 'B'}
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -384,7 +529,7 @@ class _ModalContentState extends State<_ModalContent> {
             items: uniqueSizes.map((size) {
               return DropdownMenuItem(
                 value: size,
-                child: Text(size), // Display the size
+                child: Text(size),
               );
             }).toList(),
             onChanged: (value) {
@@ -399,8 +544,8 @@ class _ModalContentState extends State<_ModalContent> {
             hint: Text('Select Schedule'),
             items: schedules.map((schedule) {
               return DropdownMenuItem(
-                value: schedule,
-                child: Text(schedule),
+                value: schedule['value'], // Use the corresponding value
+                child: Text(schedule['display']!), // Display text
               );
             }).toList(),
             onChanged: (value) {
@@ -415,11 +560,12 @@ class _ModalContentState extends State<_ModalContent> {
               if (selectedSize != null && selectedSchedule != null) {
                 // Find the corresponding Uniform by Size
                 Uniform? selectedUniform = widget.uniforms.firstWhere(
-                      (uniform) => uniform.Size == selectedSize,
+                  (uniform) => uniform.Size == selectedSize,
                 );
 
                 if (selectedUniform != null) {
-                  widget.onSubmit(selectedUniform); // Pass the selected Uniform
+                  widget.onSubmit(selectedUniform,
+                      selectedSchedule); // Pass the selected Uniform
                 } else {
                   print('No matching uniform found for size: $selectedSize');
                 }

@@ -4,6 +4,7 @@ import 'package:use/SERVICES/model/admin/Course.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Stocks.dart';
 import 'package:use/backend/models/admin/Stock.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/home/uniform.dart';
 
@@ -13,20 +14,23 @@ import '../../../colors/colors.dart';
 class stocks_widget  extends StatelessWidget {
   final List<Stock> stocks;
   final String courseName;
+  final String department;
+  final StudentProfile profile;
 
-  const stocks_widget ({Key? key, required this.stocks, required this.courseName}) : super (key: key);
+  const stocks_widget ({Key? key, required this.stocks, required this.courseName, required this.profile, required this.department}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: stocks.map((stock) => ItemCard(stock: stock, courseName: courseName)).toList(),
+      children: stocks.map((stock) => ItemCard(stock: stock, courseName: courseName, profile: profile, department: this.department,)).toList(),
     );
   }
 }
 class ItemCard extends StatelessWidget {
   final Stock stock;
-  final String courseName;
+  final String courseName;final String department;
+  final StudentProfile profile;
 
-  const ItemCard({Key? key, required this.stock, required this.courseName}) : super (key: key);
+  const ItemCard({Key? key, required this.stock, required this.courseName, required this.profile, required this.department}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,7 +40,7 @@ class ItemCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => UniformStudent(courseName: courseName,))
+                  builder: (context) => UniformStudent(courseName: courseName, profile: this.profile, department: this.department,))
             );
           },
           child: Container(

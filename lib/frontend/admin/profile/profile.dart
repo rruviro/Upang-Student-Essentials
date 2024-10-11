@@ -52,90 +52,95 @@ class _ProfileScreenState extends State<Profile> {
     super.dispose();
   }
 
- void _showItemDetailsDialog(BuildContext context, bool isBook, dynamic item) {
-  if (isDialogOpen) return;
+  void _showItemDetailsDialog(BuildContext context, bool isBook, dynamic item) {
+    if (isDialogOpen) return;
 
-  final int id = item.id;
-  isDialogOpen = true;
+    final int id = item.id;
+    isDialogOpen = true;
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(isBook ? "Book Details" : "Item Details"),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: isBook
-                ? [
-                    Text("Book Name: ${item.bookName}"),
-                    Text("Subject Code: ${item.subjectCode}"),
-                    Text("Subject Description: ${item.subjectDesc}"),
-                    Text("Status: ${item.status}"),
-                    Text("Claiming Schedule: ${item.claimingSchedule}"),
-                    Text("Reservation Number: ${item.reservationNumber}"),
-                  ]
-                : [
-                    Text("Course: ${item.course}"),
-                    Text("Gender: ${item.gender}"),
-                    Text("Type: ${item.type}"),
-                    Text("Body: ${item.body}"),
-                    Text("Size: ${item.size}"),
-                    Text("Status: ${item.status}"),
-                    Text("Claiming Schedule: ${item.claimingSchedule}"),
-                    Text("Reservation Number: ${item.reservationNumber}"),
-                  ],
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(isBook ? "Book Details" : "Item Details"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: isBook
+                  ? [
+                      Text("Book Name: ${item.bookName}"),
+                      Text("Subject Code: ${item.subjectCode}"),
+                      Text("Subject Description: ${item.subjectDesc}"),
+                      Text("Status: ${item.status}"),
+                      Text("Claiming Schedule: ${item.claimingSchedule}"),
+                      Text("Reservation Number: ${item.reservationNumber}"),
+                    ]
+                  : [
+                      Text("Course: ${item.course}"),
+                      Text("Gender: ${item.gender}"),
+                      Text("Type: ${item.type}"),
+                      Text("Body: ${item.body}"),
+                      Text("Size: ${item.size}"),
+                      Text("Status: ${item.status}"),
+                      Text("Claiming Schedule: ${item.claimingSchedule}"),
+                      Text("Reservation Number: ${item.reservationNumber}"),
+                    ],
+            ),
           ),
-        ),
-        actions: [
-          TextButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              isDialogOpen = false;
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: Text("Proceed"),
-            onPressed: () {
-              if (isBook) {
-                context.read<AdminExtendedBloc>().add(changeBookStatus(id, "Complete"));
-              } else {
-                context.read<AdminExtendedBloc>().add(changeItemStatus(id, "Complete"));
-              }
-              // Clear variables and close the dialog
-              itemCode = null;
-              bookCode = null;
-              codeController.clear();
-              isDialogOpen = false;
-              Navigator.of(context).pop();
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                isDialogOpen = false;
+                Navigator.of(context).pop();
+                context.read<AdminExtendedBloc>().add(getStudent());
+              },
+            ),
+            TextButton(
+              child: Text("Proceed"),
+              onPressed: () {
+                if (isBook) {
+                  context
+                      .read<AdminExtendedBloc>()
+                      .add(changeBookStatus(id, "Complete"));
+                } else {
+                  context
+                      .read<AdminExtendedBloc>()
+                      .add(changeItemStatus(id, "Complete"));
+                }
+                // Clear variables and close the dialog
+                itemCode = null;
+                bookCode = null;
+                codeController.clear();
+                isDialogOpen = false;
+                Navigator.of(context).pop();
 
-              // Show the success dialog
-              _showSuccessDialog(context);
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+                // Show the success dialog
+                _showSuccessDialog(context);
+                context.read<AdminExtendedBloc>().add(getStudent());
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-void _showSuccessDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Success"),
-        content: Text("Successfully Claimed!"),
-      );
-    },
-  );
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Success"),
+          content: Text("Successfully Claimed!"),
+        );
+      },
+    );
 
-  // Close the success dialog after 2 seconds
-  Future.delayed(Duration(seconds: 2), () {
-    Navigator.of(context).pop();
-  });
-}
-
+    // Close the success dialog after 2 seconds
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.of(context).pop();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -837,8 +842,10 @@ void _showCreateDialog(BuildContext context) {
                             fontWeight: FontWeight.w500,
                           ),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(20), // Limit to 20 characters
-                            FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')), // Allow only letters and spaces
+                            LengthLimitingTextInputFormatter(
+                                20), // Limit to 20 characters
+                            FilteringTextInputFormatter.allow(RegExp(
+                                r'^[a-zA-Z\s]*$')), // Allow only letters and spaces
                           ],
                         ),
                       ),
@@ -867,8 +874,10 @@ void _showCreateDialog(BuildContext context) {
                             fontWeight: FontWeight.w500,
                           ),
                           inputFormatters: [
-                            LengthLimitingTextInputFormatter(20), // Limit to 20 characters
-                            FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]*$')), // Allow only letters and spaces
+                            LengthLimitingTextInputFormatter(
+                                20), // Limit to 20 characters
+                            FilteringTextInputFormatter.allow(RegExp(
+                                r'^[a-zA-Z\s]*$')), // Allow only letters and spaces
                           ],
                         ),
                       ),
@@ -889,14 +898,16 @@ void _showCreateDialog(BuildContext context) {
                     onChanged: (value) {
                       setState(() {
                         selectedDepartment = value;
-                        selectedCourse = null; // Reset course when department changes
+                        selectedCourse =
+                            null; // Reset course when department changes
                       });
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      prefixIcon: Icon(Icons.school_outlined, color: Colors.blue),
+                      prefixIcon:
+                          Icon(Icons.school_outlined, color: Colors.blue),
                       labelText: 'Department',
                       labelStyle: TextStyle(fontSize: 15),
                     ),
@@ -951,7 +962,10 @@ void _showCreateDialog(BuildContext context) {
                       ),
                       labelText: 'Year',
                       labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: Icon(Icons.calendar_today, color: Colors.blue,),
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -983,9 +997,14 @@ void _showCreateDialog(BuildContext context) {
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      if (selectedDepartment == null || selectedCourse == null || _firstNameController.text.isEmpty || _lastNameController.text.isEmpty) {
+                      if (selectedDepartment == null ||
+                          selectedCourse == null ||
+                          _firstNameController.text.isEmpty ||
+                          _lastNameController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Please select Department and Course")),
+                          SnackBar(
+                              content:
+                                  Text("Please select Department and Course")),
                         );
                       } else {
                         context.read<AdminExtendedBloc>().add(
@@ -1029,7 +1048,6 @@ void _showCreateDialog(BuildContext context) {
     },
   );
 }
-
 
 void _showUpdate(BuildContext context, String firstname, String lastname,
     String course, String department, int year, String enrolled, int id) {
@@ -1185,15 +1203,18 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                     onChanged: (value) {
                       setState(() {
                         _selectedDepartment = value!;
-                        _availableCourses = departmentCourses[_selectedDepartment]!;
-                        _selectedCourse = _availableCourses[0]; // Reset course selection
+                        _availableCourses =
+                            departmentCourses[_selectedDepartment]!;
+                        _selectedCourse =
+                            _availableCourses[0]; // Reset course selection
                       });
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      prefixIcon: Icon(Icons.school_outlined, color: Colors.blue),
+                      prefixIcon:
+                          Icon(Icons.school_outlined, color: Colors.blue),
                       labelText: 'Department',
                       labelStyle: TextStyle(fontSize: 15),
                     ),
@@ -1206,7 +1227,8 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                     items: _availableCourses
                         .map((course) => DropdownMenuItem(
                               value: course,
-                              child: Text(course, style: TextStyle(fontSize: 13)),
+                              child:
+                                  Text(course, style: TextStyle(fontSize: 13)),
                             ))
                         .toList(),
                     onChanged: (value) {
@@ -1245,7 +1267,10 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                       ),
                       labelText: 'Year',
                       labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: Icon(Icons.calendar_today, color: Colors.blue,),
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -1256,7 +1281,8 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                     children: [
                       Text(
                         'Enrolled:',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                       Switch(
                         value: _isEnrolled,
@@ -1282,7 +1308,8 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                           _selectedDepartment.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("All fields must be filled correctly!"),
+                            content:
+                                Text("All fields must be filled correctly!"),
                           ),
                         );
                       } else {
@@ -1329,9 +1356,6 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
     },
   );
 }
-
-
-
 
 void _showDeleteDialog(BuildContext context, int id) {
   showDialog(
