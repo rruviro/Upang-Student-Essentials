@@ -22,10 +22,18 @@ class UniformAdmin extends StatefulWidget {
 }
 
 class _UniformAdminState extends State<UniformAdmin> {
+  bool _showLoading = true;
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AdminExtendedBloc>(context).add(ShowUniformsEvent(Course: widget.courseName, ));
+    Future.delayed(Duration(milliseconds: 400), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+    BlocProvider.of<AdminExtendedBloc>(context).add(ShowUniformsEvent(
+      widget.courseName,
+    ));
   }
 
   @override
@@ -33,6 +41,9 @@ class _UniformAdminState extends State<UniformAdmin> {
     return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
       listener: (context, state) {},
       builder: (context, state) {
+        if (_showLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
         if (state is UniformsLoadingState) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is UniformsLoadedState) {
@@ -44,6 +55,9 @@ class _UniformAdminState extends State<UniformAdmin> {
                 icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
                 onPressed: () {
                   Navigator.pop(context);
+                  context
+                      .read<AdminExtendedBloc>()
+                      .add(ShowStocksEvent(Department: widget.Department));
                 },
               ),
               title: Transform.translate(
@@ -93,7 +107,8 @@ class _UniformAdminState extends State<UniformAdmin> {
                           color: primary_color,
                           boxShadow: [
                             BoxShadow(
-                              color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.10),
+                              color: Color.fromARGB(255, 0, 0, 0)
+                                  .withOpacity(0.10),
                               blurRadius: 5,
                               offset: const Offset(1, 7),
                             ),
@@ -113,7 +128,8 @@ class _UniformAdminState extends State<UniformAdmin> {
                       children: [
                         const Text(
                           'Uniforms',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         // Removed the IconButton here
                       ],
@@ -171,7 +187,6 @@ class _UniformAdminState extends State<UniformAdmin> {
     );
   }
 
-
   Widget uniformsList(List<Uniform> uniforms) {
     return ListView.builder(
       shrinkWrap: true,
@@ -193,6 +208,12 @@ class _UniformAdminState extends State<UniformAdmin> {
                     color: uniform.Stock > 0 ? Colors.green : Colors.red,
                   ),
                 ),
+                Text(
+                  'Reserved: ${uniform.Reserved}',
+                  style: TextStyle(
+                    color: uniform.Reserved > 0 ? Colors.green : Colors.red,
+                  ),
+                ),
 
                 // Update and delete buttons
                 Row(
@@ -202,14 +223,15 @@ class _UniformAdminState extends State<UniformAdmin> {
                       onPressed: () {
                         _showUpdateUniformDialog(context, uniform); // update
                       },
-                      child: const Text('Update'),
+                      child: const Text('Add Stocks'),
                     ),
-                    TextButton(
+                    /*TextButton(
                       onPressed: () {
                         _deleteUniform(uniform.id); // delete
                       },
-                      child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                    ),
+                      child: const Text('Delete',
+                          style: TextStyle(color: Colors.red)),
+                    ),*/
                   ],
                 ),
               ],
@@ -276,8 +298,9 @@ class _UniformAdminState extends State<UniformAdmin> {
   // }
 
   // UPDATE SHOW DIALOG
-  Future<void> _showUpdateUniformDialog(BuildContext context, Uniform uniform) async {
-    TextEditingController stockController = TextEditingController(text: uniform.Stock.toString());
+  Future<void> _showUpdateUniformDialog(
+      BuildContext context, Uniform uniform) async {
+    TextEditingController stockController = TextEditingController();
 
     return showDialog(
       context: context,
@@ -288,30 +311,10 @@ class _UniformAdminState extends State<UniformAdmin> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // TextField(
-                //   controller: TextEditingController(text: uniform.Gender),
-                //   decoration: const InputDecoration(labelText: 'Gender'),
-                //   readOnly: true,
-                // ),
-                // TextField(
-                //   controller: TextEditingController(text: uniform.Type),
-                //   decoration: const InputDecoration(labelText: 'Type'),
-                //   readOnly: true,
-                // ),
-                // TextField(
-                //   controller: TextEditingController(text: uniform.Body),
-                //   decoration: const InputDecoration(labelText: 'Body'),
-                //   readOnly: true,
-                // ),
-                // TextField(
-                //   controller: TextEditingController(text: uniform.Size),
-                //   decoration: const InputDecoration(labelText: 'Size'),
-                //   readOnly: true,
-                // ),
                 TextField(
                   controller: stockController,
                   decoration: const InputDecoration(labelText: 'Stock'),
-                  keyboardType: TextInputType.number, // Ensure numeric input
+                  keyboardType: TextInputType.number,
                 ),
               ],
             ),
@@ -325,17 +328,25 @@ class _UniformAdminState extends State<UniformAdmin> {
             ),
             TextButton(
               onPressed: () {
-                _updateUniform(
-                  uniform.id,
-                  widget.Department,
-                  widget.courseName,
-                  uniform.Gender,
-                  uniform.Type,
-                  uniform.Body,
-                  uniform.Size,
-                  int.parse(stockController.text),
-                );
-                Navigator.of(context).pop();
+                if (stockController.text.isNotEmpty) {
+                  BlocProvider.of<AdminExtendedBloc>(context).add(
+                    itemreservefirst(
+                      int.parse(stockController.text),
+                      widget.courseName,
+                      uniform.Gender,
+                      uniform.Type,
+                      uniform.Body,
+                      uniform.Size,
+                    ),
+                  );
+                  BlocProvider.of<AdminExtendedBloc>(context)
+                      .add(ShowUniformsEvent(
+                    widget.courseName,
+                  ));
+                  Navigator.of(context).pop();
+                } else {
+                  print('Stock input is empty');
+                }
               },
               child: const Text('Update'),
             ),
@@ -345,12 +356,8 @@ class _UniformAdminState extends State<UniformAdmin> {
     );
   }
 
+  void _updateUniform(int id, String department, String course, String gender,
+      String type, String body, String size, int stock) {}
 
-  void _updateUniform(int id, String department, String course, String gender, String type, String body, String size, int stock) {
-
-  }
-
-  void _deleteUniform(int id) {
-
-  }
+  void _deleteUniform(int id) {}
 }

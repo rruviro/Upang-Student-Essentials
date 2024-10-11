@@ -212,7 +212,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     });
 
     // FOR STOCK
-    on<ShowStocksEvent>((event, emit) async{
+    on<ShowStocksEvent>((event, emit) async {
       emit(StocksLoadingState());
       try {
         print('Fetching data for: ${event.Department}');
@@ -227,16 +227,34 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     });
 
     // FOR UNIFORM
-    on<ShowUniformsEvent>((event, emit) async{
+    on<ShowUniformsEvent>((event, emit) async {
       emit(UniformsLoadingState());
       try {
         print('fetching data for uniforms');
         final uniformData = await _adminrepo.showUniforms(event.Course);
         print('uniforms fetched successfully');
         emit(UniformsLoadedState(uniforms: uniformData));
-      } catch (e){
+      } catch (e) {
         print('error fetching stocks or books: $e');
         emit(UniformsErrorState('an error occured: ${e.toString()}'));
+      }
+    });
+
+    on<bookreservefirst>((event, emit) async {
+      try {
+        await _adminrepo.bookreservefirst(event.count, event.bookname);
+      } catch (e) {
+        print('error fetching stocks or books: $e');
+      }
+    });
+
+    on<itemreservefirst>((event, emit) async {
+      try {
+        await _adminrepo.uniformreservefirst(event.count, event.Course,
+            event.Gender, event.Type, event.Body, event.Size);
+        add(ShowUniformsEvent(event.Course));
+      } catch (e) {
+        print('error fetching stocks or books: $e');
       }
     });
 
@@ -250,7 +268,6 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     //     add(showAnnouncement());
     //   }
     // });
-
   }
 
   FutureOr<void> course_page(

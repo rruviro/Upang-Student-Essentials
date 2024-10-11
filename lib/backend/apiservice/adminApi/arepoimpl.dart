@@ -218,11 +218,24 @@ class AdminRepositoryImpl extends Adminrepo {
     }
   }
 
+  // STOCK
+  @override
+  Future<List<Stock>> showStocks(String Department) async {
+    final response = await http.get(Uri.parse('$baseUrl/stocks/$Department'));
+    if (response.statusCode == 200) {
+      final List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Stock.fromJson(data)).toList();
+    } else {
+      print('Failed to load stocks, status code: ${response.statusCode}');
+      throw Exception('Failed to load stock');
+    }
+  }
+
   // BOOKS
   @override
   Future<List<Book>> showBooks(String Department) async {
     final response =
-    await http.get(Uri.parse('$baseUrl/item-books/$Department'));
+        await http.get(Uri.parse('$baseUrl/item-books/$Department'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Book.fromJson(data)).toList();
@@ -232,72 +245,83 @@ class AdminRepositoryImpl extends Adminrepo {
     }
   }
 
-// STOCK
-    @override
-    Future<List<Stock>> showStocks(String Department) async {
-      final response = await http.get(Uri.parse('$baseUrl/stocks/$Department'));
-      if (response.statusCode == 200) {
-        final List jsonResponse = json.decode(response.body);
-        return jsonResponse.map((data) => Stock.fromJson(data)).toList();
-      } else {
-        print('Failed to load stocks, status code: ${response.statusCode}');
-        throw Exception('Failed to load stock');
-      }
+  // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
+  @override
+  Future<List<Uniform>> showUniforms(String Course) async {
+    final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course'));
+    if (response.statusCode == 200) {
+      final List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Uniform.fromJson(data)).toList();
+    } else {
+      print('Failed to load Uniform, status code: ${response.statusCode}');
+      throw Exception("Failed to load Uniform");
     }
-
-    // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
-    @override
-    Future<List<Uniform>> showUniforms(String Course) async {
-      final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course'));
-      if (response.statusCode == 200) {
-        final List jsonResponse = json.decode(response.body);
-        return jsonResponse.map((data) => Uniform.fromJson(data)).toList();
-      } else {
-        print('Failed to load Uniform, status code: ${response.statusCode}');
-        throw Exception("Failed to load Uniform");
-      }
-    }
-
-    // @override
-    // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock) async {
-    //   final response = await http.post(
-    //     Uri.parse('$baseUrl/uniforms'),
-    //     headers: <String, String>{
-    //       'Content-Type': 'application/json; charset=UTF-8',
-    //     },
-    //     body: jsonEncode(<String, dynamic>{
-    //       'Department': Department,
-    //       'Course': Course,
-    //       'Gender': Gender,
-    //       'Type': Type,
-    //       'Body': Body,
-    //       'Size': Size,
-    //       'Stock': Stock,
-    //     }),
-    //   );
-    // }
-
-    @override
-    Future<void> updateUniform(int id, int stock) async {
-      try {
-        final response = await http.put(
-          Uri.parse('$baseUrl/uniforms/$id'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode({
-            'Stock': stock,
-          }),
-        );
-        if (response.statusCode == 200) {
-          print('Uniform updated successfully: ${response.body}');
-        } else {
-          throw Exception("Failed to update uniform: ${response.body}");
-        }
-      } catch (e) {
-        print('Error: $e'); // Handle errors appropriately
-      }
-    }
-
-
   }
+
+  // @override
+  // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock) async {
+  //   final response = await http.post(
+  //     Uri.parse('$baseUrl/uniforms'),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //     body: jsonEncode(<String, dynamic>{
+  //       'Department': Department,
+  //       'Course': Course,
+  //       'Gender': Gender,
+  //       'Type': Type,
+  //       'Body': Body,
+  //       'Size': Size,
+  //       'Stock': Stock,
+  //     }),
+  //   );
+  // }
+
+  @override
+  Future<void> updateUniform(int id, int stock) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/uniforms/$id'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'Stock': stock,
+        }),
+      );
+      if (response.statusCode == 200) {
+        print('Uniform updated successfully: ${response.body}');
+      } else {
+        throw Exception("Failed to update uniform: ${response.body}");
+      }
+    } catch (e) {
+      print('Error: $e'); // Handle errors appropriately
+    }
+  }
+
+  @override
+  Future<void> bookreservefirst(int count, String bookname) async {
+    final response =
+        await http.put(Uri.parse('$baseUrl/reservedbooks/$count/$bookname'));
+    if (response.statusCode == 200) {
+      print("GUMANA ITO ITO ITO ITO ITO ITO ITO ITO");
+    } else {
+      print('${response.statusCode}');
+      throw Exception("Failed to load Uniform");
+    }
+  }
+
+  @override
+  Future<void> uniformreservefirst(int count, String course, String gender,
+      String type, String body, String size) async {
+    final response = await http.put(Uri.parse(
+        '$baseUrl/reserveditems/$count/$course/$gender/$type/$body/$size'));
+    if (response.statusCode == 200) {
+      print("GUMANA ITO ITO ITO ITO ITO ITO ITO ITO");
+    } else {
+      print('${response.statusCode}');
+      print('$baseUrl/reserveditems/$count/$course/$gender/$type/$body/$size');
+      throw Exception("Failed to load Uniform");
+    }
+  }
+}

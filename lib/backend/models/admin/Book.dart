@@ -6,8 +6,8 @@ class Book {
   final String BookName;
   final String SubjectCode;
   final String SubjectDesc;
-  final String Status;
   final int Stock;
+  final int Reserved;
 
   Book({
     required this.id,
@@ -15,8 +15,8 @@ class Book {
     required this.BookName,
     required this.SubjectCode,
     required this.SubjectDesc,
-    required this.Status,
     required this.Stock,
+    required this.Reserved,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -26,10 +26,8 @@ class Book {
       BookName: json['BookName'],
       SubjectCode: json['SubjectCode'],
       SubjectDesc: json['SubjectDesc'],
-      Status: json['Status'],
       Stock: json['Stock'],
-
-
+      Reserved: json['Reserved'],
     );
   }
 }

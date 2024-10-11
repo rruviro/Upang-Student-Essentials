@@ -16,9 +16,11 @@ abstract class Adminrepo {
 
   Future<List<StudentProfile>> showAllStudentProfileData();
   Future<StudentProfile> showStudentProfileData(String studentId);
-  Future<void> createStudent(String firstName, String lastName, String course, String department, int year, String status);
+  Future<void> createStudent(String firstName, String lastName, String course,
+      String department, int year, String status);
   Future<void> deleteStudent(int id);
-  Future<void> updateStudent(String firstName, String lastName, String course, String department, int year, String status, int id);
+  Future<void> updateStudent(String firstName, String lastName, String course,
+      String department, int year, String status, int id);
 
   Future<void> createAnnouncement(String department, String message);
   Future<List<announcement>> showAnnouncementData();
@@ -26,7 +28,6 @@ abstract class Adminrepo {
   // BY LANCE
   // Departments
   Future<List<department>> showDepartments();
-
 
   // Courses
   Future<List<Course>> showCourses(int departmentID);
@@ -41,4 +42,8 @@ abstract class Adminrepo {
   Future<List<Uniform>> showUniforms(String Course);
   // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock);
   // Future<void> updateUniform(int id);
+
+  Future<void> bookreservefirst(int count, String bookname);
+  Future<void> uniformreservefirst(int count, String course, String gender,
+      String type, String body, String size);
 }

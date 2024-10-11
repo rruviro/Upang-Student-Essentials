@@ -7,6 +7,7 @@ class Uniform {
   final String Body;
   final String Size;
   final int Stock;
+  final int Reserved;
 
   Uniform({
     required this.id,
@@ -17,6 +18,7 @@ class Uniform {
     required this.Body,
     required this.Size,
     required this.Stock,
+    required this.Reserved,
   });
 
   factory Uniform.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class Uniform {
       Body: json['Body'],
       Size: json['Size'],
       Stock: json['Stock'],
+      Reserved: json['Reserved'],
     );
   }
 }
