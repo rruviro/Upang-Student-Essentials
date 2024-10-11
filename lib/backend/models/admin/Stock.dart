@@ -41,6 +41,10 @@ class Stock {
     required this.Department,
   });
 
+  String get photoUrl {
+    return 'assets/uniform/$stockPhoto';
+  }
+
   factory Stock.fromJson(Map<String, dynamic> json) {
     return Stock(
       id: json['id'],

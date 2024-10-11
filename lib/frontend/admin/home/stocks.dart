@@ -732,7 +732,7 @@ class _ItemCardState extends State<ItemCard> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Image.asset(
-                        widget.stock.stockPhoto,
+                        widget.stock.photoUrl,
                         fit: BoxFit.cover,
                       ),
                     ),
