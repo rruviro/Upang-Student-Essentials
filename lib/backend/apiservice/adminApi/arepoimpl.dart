@@ -306,6 +306,7 @@ class AdminRepositoryImpl extends Adminrepo {
         await http.put(Uri.parse('$baseUrl/reservedbooks/$count/$bookname'));
     if (response.statusCode == 200) {
       print("GUMANA ITO ITO ITO ITO ITO ITO ITO ITO");
+      print('$baseUrl/reservedbooks/$count/$bookname');
     } else {
       print('${response.statusCode}');
       throw Exception("Failed to load Uniform");
