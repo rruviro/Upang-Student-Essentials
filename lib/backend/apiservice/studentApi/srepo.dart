@@ -95,4 +95,8 @@ abstract class Studentrepo {
 
   // UNIFORM
   Future<List<Uniform>> showUniforms(String Course);
+  Future<void> itemreduceStocks(int count, String department, String course,
+      String gender, String type, String body, String size);
+  Future<void> bookreduceStocks(int count, String department, String bookname,
+      String subcode, String subdesc);
 }

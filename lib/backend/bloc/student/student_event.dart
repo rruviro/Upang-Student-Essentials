@@ -233,7 +233,42 @@ class ShowStocksEvent extends StudentExtendedEvent {
 }
 
 // UNIFORM
-class ShowUniformsEvent extends StudentExtendedEvent{
+class ShowUniformsEvent extends StudentExtendedEvent {
   final String Course;
   ShowUniformsEvent({required this.Course});
+}
+
+class itemreduceStocks extends StudentExtendedEvent {
+  final int count;
+  final String department;
+  final String course;
+  final String gender;
+  final String type;
+  final String body;
+  final String size;
+
+  itemreduceStocks({
+    required this.count,
+    required this.department,
+    required this.course,
+    required this.gender,
+    required this.type,
+    required this.body,
+    required this.size,
+  });
+}
+
+class bookreduceStocks extends StudentExtendedEvent {
+  final int count;
+  final String department;
+  final String bookname;
+  final String subcode;
+  final String subdesc;
+
+  bookreduceStocks(
+      {required this.count,
+      required this.department,
+      required this.bookname,
+      required this.subcode,
+      required this.subdesc});
 }

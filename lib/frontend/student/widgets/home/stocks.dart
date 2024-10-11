@@ -14,22 +14,23 @@ import '../../../colors/colors.dart';
 class stocks_widget  extends StatelessWidget {
   final List<Stock> stocks;
   final String courseName;
+  final String department;
   final StudentProfile profile;
 
-  const stocks_widget ({Key? key, required this.stocks, required this.courseName, required this.profile}) : super (key: key);
+  const stocks_widget ({Key? key, required this.stocks, required this.courseName, required this.profile, required this.department}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: stocks.map((stock) => ItemCard(stock: stock, courseName: courseName, profile: profile,)).toList(),
+      children: stocks.map((stock) => ItemCard(stock: stock, courseName: courseName, profile: profile, department: this.department,)).toList(),
     );
   }
 }
 class ItemCard extends StatelessWidget {
   final Stock stock;
-  final String courseName;
+  final String courseName;final String department;
   final StudentProfile profile;
 
-  const ItemCard({Key? key, required this.stock, required this.courseName, required this.profile}) : super (key: key);
+  const ItemCard({Key? key, required this.stock, required this.courseName, required this.profile, required this.department}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +40,7 @@ class ItemCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => UniformStudent(courseName: courseName, profile: this.profile))
+                  builder: (context) => UniformStudent(courseName: courseName, profile: this.profile, department: this.department,))
             );
           },
           child: Container(

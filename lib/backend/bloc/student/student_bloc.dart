@@ -319,7 +319,6 @@ class StudentExtendedBloc
         await _studentrepo.changePasswords(
             event.id, event.password, event.cpassword);
         print("done");
-        
       } catch (e) {
         print("Shit na malagkit");
       }
@@ -387,6 +386,23 @@ class StudentExtendedBloc
       }
     });
 
+    on<itemreduceStocks>((event, emit) async {
+      try {
+        await _studentrepo.itemreduceStocks(event.count, event.department,
+            event.course, event.gender, event.type, event.body, event.size);
+      } catch (e) {
+        print('Error reducing stocks: $e');
+      }
+    });
+
+    on<bookreduceStocks>((event, emit) async {
+      try {
+        await _studentrepo.bookreduceStocks(event.count, event.department,
+            event.bookname, event.subcode, event.subdesc);
+      } catch (e) {
+        print('Error reducing stocks: $e');
+      }
+    });
   }
 
   FutureOr<void> course_page(
