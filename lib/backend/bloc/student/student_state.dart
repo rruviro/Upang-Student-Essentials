@@ -219,12 +219,14 @@ class StocksErrorState extends StudentActionState {
 }
 
 // UNIFORM
-class UniformsLoadingState extends StudentActionState{}
-class UniformsLoadedState extends StudentExtendedState{
+class UniformsLoadingState extends StudentActionState {}
+
+class UniformsLoadedState extends StudentExtendedState {
   final List<Uniform> uniforms;
   UniformsLoadedState({required this.uniforms});
 }
-class UniformsErrorState extends StudentActionState{
+
+class UniformsErrorState extends StudentActionState {
   final String error;
   UniformsErrorState(this.error);
 }
@@ -232,4 +234,18 @@ class UniformsErrorState extends StudentActionState{
 class bookError extends StudentActionState {
   final String error;
   bookError(this.error);
+}
+
+class ItemStockLoading extends StudentExtendedState {}
+
+class ItemStockLoaded extends StudentExtendedState {
+  final int stock;
+
+  ItemStockLoaded({required this.stock});
+}
+
+class ItemStockError extends StudentExtendedState {
+  final String message;
+
+  ItemStockError(this.message);
 }

@@ -67,7 +67,7 @@ abstract class Studentrepo {
   Future<void> deleteStudentItemData(int id);
   Future<void> changeStudentItemStatus(int id, String status);
   Future<void> changeStudentBookStatus(int id, String status);
-  Future<void> reserveorclaimItem(int id, String status, int stocks);
+  Future<void> reserveorclaimItem(int id, String status);
   Future<void> reserveorclaimBook(int id, String status, int stocks);
   Future<void> reservedItemFirst(int count);
   Future<void> reservedBookFirst(int count);
@@ -95,8 +95,13 @@ abstract class Studentrepo {
 
   // UNIFORM
   Future<List<Uniform>> showUniforms(String Course);
+
   Future<void> itemreduceStocks(int count, String department, String course,
       String gender, String type, String body, String size);
+
   Future<void> bookreduceStocks(int count, String department, String bookname,
       String subcode, String subdesc);
+
+  Future<int?> uniformStock(String department, String course, String gender,
+      String type, String body, String size);
 }

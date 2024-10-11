@@ -89,8 +89,7 @@ class StudentExtendedBloc
 
     on<reserveorclaimItem>((event, emit) async {
       try {
-        await _studentrepo.reserveorclaimItem(
-            event.id, event.status, event.stocks);
+        await _studentrepo.reserveorclaimItem(event.id, event.status);
         emit(ItemStatusChanged());
       } catch (e) {
         print('Error: $e to change Item status.');
@@ -401,6 +400,29 @@ class StudentExtendedBloc
             event.bookname, event.subcode, event.subdesc);
       } catch (e) {
         print('Error reducing stocks: $e');
+      }
+    });
+
+    on<itemStocks>((event, emit) async {
+      emit(ItemStockLoading());
+
+      try {
+        final stock = await _studentrepo.uniformStock(
+          event.department,
+          event.course,
+          event.gender,
+          event.type,
+          event.body,
+          event.size,
+        );
+
+        if (stock != null) {
+          emit(ItemStockLoaded(stock: stock));
+        } else {
+          emit(ItemStockError('Stock not found'));
+        }
+      } catch (e) {
+        emit(ItemStockError(e.toString()));
       }
     });
   }

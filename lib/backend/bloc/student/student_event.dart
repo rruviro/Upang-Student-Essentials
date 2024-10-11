@@ -91,9 +91,8 @@ class changeBookStatus extends StudentExtendedEvent {
 class reserveorclaimItem extends StudentExtendedEvent {
   final int id;
   final String status;
-  final int stocks;
 
-  reserveorclaimItem(this.id, this.status, this.stocks);
+  reserveorclaimItem(this.id, this.status);
 }
 
 class reserveorclaimBook extends StudentExtendedEvent {
@@ -249,6 +248,24 @@ class itemreduceStocks extends StudentExtendedEvent {
 
   itemreduceStocks({
     required this.count,
+    required this.department,
+    required this.course,
+    required this.gender,
+    required this.type,
+    required this.body,
+    required this.size,
+  });
+}
+
+class itemStocks extends StudentExtendedEvent {
+  final String department;
+  final String course;
+  final String gender;
+  final String type;
+  final String body;
+  final String size;
+
+  itemStocks({
     required this.department,
     required this.course,
     required this.gender,

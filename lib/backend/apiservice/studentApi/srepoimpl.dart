@@ -389,11 +389,14 @@ class StudentRepositoryImpl extends Studentrepo {
   }
 
   @override
-  Future<void> reserveorclaimItem(int id, String status, int stocks) async {
-    final response = await http
-        .put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status/$stocks'));
-    if (response == 200) {
+  Future<void> reserveorclaimItem(int id, String status) async {
+    final response =
+        await http.put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status'));
+    if (response.statusCode == 200) {
+      print("!!!!!!!!!!!!!!!!!!!!");
     } else {
+      print(response.statusCode);
+      print('$baseUrl/itemreserveclaim/$id/$status');
       throw Exception('Failed');
     }
   }
@@ -526,6 +529,19 @@ class StudentRepositoryImpl extends Studentrepo {
     final response = await http.put(Uri.parse(
         '$baseUrl/books/reducestock/$count/$department/$bookname/$subcode/$subdesc'));
     if (response.statusCode == 200) {
+    } else {
+      throw Exception('Failed to reduce stock: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<int?> uniformStock(String department, String course, String gender,
+      String type, String body, String size) async {
+    final response = await http.put(Uri.parse(
+        '$baseUrl/uniforms/stock/$department/$course/$gender/$type/$body/$size'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['stock'];
     } else {
       throw Exception('Failed to reduce stock: ${response.statusCode}');
     }
