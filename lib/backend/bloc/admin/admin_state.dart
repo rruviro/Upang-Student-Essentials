@@ -130,26 +130,25 @@ class CoursesErrorState extends AdminActionState{
   CoursesErrorState(this.error);
 }
 
-// States ng BOOKS
-class BooksLoadingState extends AdminActionState{
-}
-class BooksLoadedState extends AdminActionState{
+// STOCKS
+class StocksLoadingState extends AdminActionState{}
+class StocksLoadedState extends AdminExtendedState{
+  final List<Stock> stocks;
   final List<Book> books;
-  BooksLoadedState({required this.books});
+  StocksLoadedState({required this.stocks, required this.books});
 }
-class BooksErrorState extends AdminActionState{
+class StocksErrorState extends AdminActionState{
   final String error;
-  BooksErrorState(this.error);
+  StocksErrorState(this.error);
 }
 
-// States ng STOCK
-class StockLoadingState extends AdminActionState{
+// UNIFORM
+class UniformsLoadingState extends AdminActionState{}
+class UniformsLoadedState extends AdminExtendedState{
+  final List<Uniform> uniforms;
+  UniformsLoadedState({required this.uniforms});
 }
-class StockLoadedState extends AdminActionState{
-  final List<Stock> stocks;
-  StockLoadedState({required this.stocks});
-}
-class StockErrorState extends AdminActionState{
+class UniformsErrorState extends AdminActionState{
   final String error;
-  StockErrorState(this.error);
+  UniformsErrorState(this.error);
 }

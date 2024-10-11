@@ -7,9 +7,12 @@ import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
+import "package:shared_preferences/shared_preferences.dart";
 import "package:use/backend/bloc/admin/admin_bloc.dart";
 import "package:use/SERVICES/model/admin/BookStocks.dart";
 import "package:use/SERVICES/model/admin/Stocks.dart";
+import "package:use/backend/models/admin/Book.dart";
+import "package:use/backend/models/admin/Stock.dart";
 import "package:use/frontend/admin/home/uniform.dart";
 import "package:use/frontend/admin/profile/profile.dart";
 
@@ -18,8 +21,9 @@ import "../../colors/colors.dart";
 class Stocks extends StatefulWidget {
   final int courseID;
   final String courseName;
+  final String Department;
 
-  const Stocks({super.key, required this.courseID, required this.courseName});
+  const Stocks({super.key, required this.courseID, required this.courseName, required this.Department});
   @override
   State<Stocks> createState() => _StocksState();
 }
@@ -52,9 +56,14 @@ class _StocksState extends State<Stocks> {
     }
   }
 
+  Future<void> getCourse() async{
+    final SharedPreferences sharedPref = await SharedPreferences.getInstance();
+  }
+
   @override
   void initState() {
     super.initState();
+    context.read<AdminExtendedBloc>().add(ShowStocksEvent(Department: widget.Department));
     ProdController.addListener(_updateCounter);
     ProdMController.addListener(_updateCounter);
     ProdBController.addListener(_updateCounter);
@@ -84,69 +93,281 @@ class _StocksState extends State<Stocks> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
-        bloc: adminBloc,
-        listenWhen: (previous, current) => current is AdminActionState,
-        buildWhen: (previous, current) => current is! AdminActionState,
         listener: (context, state) {
-          if (state is UniformPageState) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UniformAdmin()));
-          } else if (state is UniformManagePageState) {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
-          } else if (state is NewDepartmentPageState) {
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
-          }
+          // if (state is UniformPageState) {
+          //   Navigator.push(context, MaterialPageRoute(builder: (context) => UniformAdmin(courseName: widget.courseName, Department: widget.Department,)));
+          // } else if (state is UniformManagePageState) {
+          //   // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
+          // } else if (state is NewDepartmentPageState) {
+          //   // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
+          // }
         },
         builder: (context, state) {
-          switch (state.runtimeType) {
-            case AdminLoadingState():
-              return CircularProgressIndicator();
-            default:
-              return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: primary_color,
-                  leading: IconButton(
-                    icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  title: Transform.translate(
-                    offset: Offset(-15.0, 0.0),
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Stocks',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                          Text(
-                            'Course : ${widget.courseName}',
-                            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
+          if (state is StocksLoadingState) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is StocksLoadedState) {
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: primary_color,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                title: Transform.translate(
+                  offset: Offset(-15.0, 0.0),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Stocks',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                        Text(
+                          'Course : ${widget.courseName}',
+                          style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                body: ListView(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
+              ),
+              body: ListView(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 20,
+                          width: double.infinity,
+                          child: Stack(
+                              children: [
+                                Positioned(
+                                  top: 0,
+                                  left: 20,
+                                  child: Text(
+                                    'Uniform',
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                ),
+
+
+
+                                // ITO YUNG SA ADD STOCK | END
+                                Positioned(
+                                  top: 0,
+                                  right: 20,
+                                  child: InkWell(
+                                    onTap:() {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              backgroundColor: Colors.white,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(5.0),
+                                              ),
+                                              title: Container(
+                                                height: 45,
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'New Uniform Product',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 15,
+                                                          fontWeight: FontWeight.w600
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5),
+                                                    Text(
+                                                      'Uniform Details',
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w400
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              content: Container(
+                                                height: 240,
+                                                width: 200,
+                                                child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: (){
+                                                          _openImagePicker();
+                                                        },
+                                                        child: Container(
+                                                          height: 200,
+                                                          width: double.infinity,
+                                                          decoration: BoxDecoration(
+                                                              color: primary_color,
+                                                              borderRadius: BorderRadius.circular(5)
+                                                          ),
+                                                          child: _image != null
+                                                              ? Image.file(
+                                                              _image!,
+                                                              fit: BoxFit.contain
+                                                          )
+                                                              : Icon(
+                                                            Icons.image_search_rounded,color:
+                                                          Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        height: 40,
+                                                        width: double.infinity,
+                                                        child: TextFormField(
+                                                          controller: ProdController,
+                                                          decoration: InputDecoration(
+                                                            border: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: Colors.grey),
+                                                            ),
+                                                            focusedBorder: UnderlineInputBorder(
+                                                              borderSide: BorderSide(color: primary_color),
+                                                            ),
+                                                            hintText: 'Corporate Top',
+                                                            hintStyle: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.w400,
+                                                            ),
+                                                            suffix: Text(
+                                                              '$_countProd/$maxLength',
+                                                              style: TextStyle(
+                                                                color: primary_color,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                            suffixStyle: TextStyle(
+                                                              color: Colors.grey,
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                          keyboardType: TextInputType.text,
+                                                          textInputAction: TextInputAction.done,
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                          inputFormatters: [
+                                                            LengthLimitingTextInputFormatter(23),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ]
+                                                ),
+                                              ),
+                                              actions: [
+                                                GestureDetector(
+                                                  onTap: (){
+                                                  },
+                                                  child: Container(
+                                                    height: 30,
+                                                    width: 112,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(2),
+                                                        color: primary_color
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Deploy',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 13,
+                                                            fontWeight: FontWeight.w600
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: (){
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Container(
+                                                      height: 30,
+                                                      width: 112,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(2),
+                                                          color: primary_color
+                                                      ),
+                                                      child: Center(
+                                                        child:Text(
+                                                          'Cancel',
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.w600
+                                                          ),
+                                                        ),
+                                                      )
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                      );
+                                    },
+                                    child: Icon(
+                                      Icons.add,
+                                      color: primary_color,
+                                    ),
+                                  ),
+                                ),
+                                // ITO YUNG SA ADD STOCK | END
+
+
+
+                              ]
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        // STOCK LIST | START
+                        Container(
+                          height: 270,
+                          width: double.infinity,
+                          child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Container(
+                                  child: ItemList(stocks: state.stocks, courseName: widget.courseName, Department: widget.Department,
+                                  ),
+                                ),
+                              ]
+                          ),
+                        ),
+                        // STOCK LIST | END
+
+
+                        Padding(
+                          padding: EdgeInsets.only(top: 15),
+                          child: Container(
                             height: 20,
                             width: double.infinity,
                             child: Stack(
                                 children: [
                                   Positioned(
-                                    top: 0,
+                                    top: -3,
                                     left: 20,
                                     child: Text(
-                                      'Uniform',
+                                      'Books',
                                       style: TextStyle(
                                           fontSize: 13,
                                           color: Colors.black,
@@ -155,7 +376,7 @@ class _StocksState extends State<Stocks> {
                                     ),
                                   ),
                                   Positioned(
-                                    top: 0,
+                                    top: -5,
                                     right: 20,
                                     child: InkWell(
                                       onTap:() {
@@ -174,7 +395,7 @@ class _StocksState extends State<Stocks> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
-                                                        'New Uniform Product',
+                                                        'New Book Product',
                                                         style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 15,
@@ -183,7 +404,7 @@ class _StocksState extends State<Stocks> {
                                                       ),
                                                       SizedBox(height: 5),
                                                       Text(
-                                                        'Uniform Details',
+                                                        'Book Details',
                                                         style: TextStyle(
                                                             color: Colors.grey,
                                                             fontSize: 13,
@@ -194,38 +415,16 @@ class _StocksState extends State<Stocks> {
                                                   ),
                                                 ),
                                                 content: Container(
-                                                  height: 240,
+                                                  height: 80,
                                                   width: 200,
                                                   child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        InkWell(
-                                                          onTap: (){
-                                                            _openImagePicker();
-                                                          },
-                                                          child: Container(
-                                                            height: 200,
-                                                            width: double.infinity,
-                                                            decoration: BoxDecoration(
-                                                                color: primary_color,
-                                                                borderRadius: BorderRadius.circular(5)
-                                                            ),
-                                                            child: _image != null
-                                                                ? Image.file(
-                                                                _image!,
-                                                                fit: BoxFit.contain
-                                                            )
-                                                                : Icon(
-                                                              Icons.image_search_rounded,color:
-                                                            Colors.white,
-                                                            ),
-                                                          ),
-                                                        ),
                                                         Container(
                                                           height: 40,
                                                           width: double.infinity,
                                                           child: TextFormField(
-                                                            controller: ProdController,
+                                                            controller: ProdBController,
                                                             decoration: InputDecoration(
                                                               border: UnderlineInputBorder(
                                                                 borderSide: BorderSide(color: Colors.grey),
@@ -233,7 +432,48 @@ class _StocksState extends State<Stocks> {
                                                               focusedBorder: UnderlineInputBorder(
                                                                 borderSide: BorderSide(color: primary_color),
                                                               ),
-                                                              hintText: 'Corporate Top',
+                                                              hintText: 'SSP 012',
+                                                              hintStyle: TextStyle(
+                                                                fontSize: 13,
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                              suffix: Text(
+                                                                '$_countProd/$maxLength',
+                                                                style: TextStyle(
+                                                                  color: primary_color,
+                                                                  fontSize: 12,
+                                                                ),
+                                                              ),
+                                                              suffixStyle: TextStyle(
+                                                                color: Colors.grey,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                            keyboardType: TextInputType.text,
+                                                            textInputAction: TextInputAction.done,
+                                                            style: TextStyle(
+                                                              color: Colors.black,
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.w400,
+                                                            ),
+                                                            inputFormatters: [
+                                                              LengthLimitingTextInputFormatter(23),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: double.infinity,
+                                                          child: TextFormField(
+                                                            controller: ProdBBController,
+                                                            decoration: InputDecoration(
+                                                              border: UnderlineInputBorder(
+                                                                borderSide: BorderSide(color: Colors.grey),
+                                                              ),
+                                                              focusedBorder: UnderlineInputBorder(
+                                                                borderSide: BorderSide(color: primary_color),
+                                                              ),
+                                                              hintText: 'Student Success Program',
                                                               hintStyle: TextStyle(
                                                                 fontSize: 13,
                                                                 fontWeight: FontWeight.w400,
@@ -325,406 +565,77 @@ class _StocksState extends State<Stocks> {
                                 ]
                             ),
                           ),
-                          SizedBox(height: 10),
-                          Container(
-                            height: 270,
-                            width: double.infinity,
-                            child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Container(
-                                    child: ItemList(
-                                        list : products
-                                    ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                              children: [
+                                SizedBox(height: 20),
+                                Container(
+                                  width: double.infinity,
+                                  height: 400,
+                                  decoration: BoxDecoration(
+                                    color: primary_color,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.shade400,
+                                        blurRadius: 5,
+                                        offset: Offset(1, 5),
+                                      ),
+                                    ],
                                   ),
-                                ]
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 15),
-                            child: Container(
-                              height: 20,
-                              width: double.infinity,
-                              child: Stack(
-                                  children: [
-                                    Positioned(
-                                      top: -3,
-                                      left: 20,
-                                      child: Text(
-                                        'Books',
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w600
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: -5,
-                                      right: 20,
-                                      child: InkWell(
-                                        onTap:() {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  backgroundColor: Colors.white,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(5.0),
-                                                  ),
-                                                  title: Container(
-                                                    height: 45,
-                                                    width: double.infinity,
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          'New Book Product',
-                                                          style: TextStyle(
-                                                              color: Colors.black,
-                                                              fontSize: 15,
-                                                              fontWeight: FontWeight.w600
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 5),
-                                                        Text(
-                                                          'Book Details',
-                                                          style: TextStyle(
-                                                              color: Colors.grey,
-                                                              fontSize: 13,
-                                                              fontWeight: FontWeight.w400
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  content: Container(
-                                                    height: 80,
-                                                    width: 200,
-                                                    child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Container(
-                                                            height: 40,
-                                                            width: double.infinity,
-                                                            child: TextFormField(
-                                                              controller: ProdBController,
-                                                              decoration: InputDecoration(
-                                                                border: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: Colors.grey),
-                                                                ),
-                                                                focusedBorder: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: primary_color),
-                                                                ),
-                                                                hintText: 'SSP 012',
-                                                                hintStyle: TextStyle(
-                                                                  fontSize: 13,
-                                                                  fontWeight: FontWeight.w400,
-                                                                ),
-                                                                suffix: Text(
-                                                                  '$_countProd/$maxLength',
-                                                                  style: TextStyle(
-                                                                    color: primary_color,
-                                                                    fontSize: 12,
-                                                                  ),
-                                                                ),
-                                                                suffixStyle: TextStyle(
-                                                                  color: Colors.grey,
-                                                                  fontSize: 12,
-                                                                ),
-                                                              ),
-                                                              keyboardType: TextInputType.text,
-                                                              textInputAction: TextInputAction.done,
-                                                              style: TextStyle(
-                                                                color: Colors.black,
-                                                                fontSize: 12,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                              inputFormatters: [
-                                                                LengthLimitingTextInputFormatter(23),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            height: 40,
-                                                            width: double.infinity,
-                                                            child: TextFormField(
-                                                              controller: ProdBBController,
-                                                              decoration: InputDecoration(
-                                                                border: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: Colors.grey),
-                                                                ),
-                                                                focusedBorder: UnderlineInputBorder(
-                                                                  borderSide: BorderSide(color: primary_color),
-                                                                ),
-                                                                hintText: 'Student Success Program',
-                                                                hintStyle: TextStyle(
-                                                                  fontSize: 13,
-                                                                  fontWeight: FontWeight.w400,
-                                                                ),
-                                                                suffix: Text(
-                                                                  '$_countProd/$maxLength',
-                                                                  style: TextStyle(
-                                                                    color: primary_color,
-                                                                    fontSize: 12,
-                                                                  ),
-                                                                ),
-                                                                suffixStyle: TextStyle(
-                                                                  color: Colors.grey,
-                                                                  fontSize: 12,
-                                                                ),
-                                                              ),
-                                                              keyboardType: TextInputType.text,
-                                                              textInputAction: TextInputAction.done,
-                                                              style: TextStyle(
-                                                                color: Colors.black,
-                                                                fontSize: 12,
-                                                                fontWeight: FontWeight.w400,
-                                                              ),
-                                                              inputFormatters: [
-                                                                LengthLimitingTextInputFormatter(23),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ]
-                                                    ),
-                                                  ),
-                                                  actions: [
-                                                    GestureDetector(
-                                                      onTap: (){
-                                                      },
-                                                      child: Container(
-                                                        height: 30,
-                                                        width: 112,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(2),
-                                                            color: primary_color
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            'Deploy',
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 13,
-                                                                fontWeight: FontWeight.w600
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: (){
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Container(
-                                                          height: 30,
-                                                          width: 112,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.circular(2),
-                                                              color: primary_color
-                                                          ),
-                                                          child: Center(
-                                                            child:Text(
-                                                              'Cancel',
-                                                              style: TextStyle(
-                                                                  color: Colors.white,
-                                                                  fontSize: 13,
-                                                                  fontWeight: FontWeight.w600
-                                                              ),
-                                                            ),
-                                                          )
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              }
-                                          );
-                                        },
-                                        child: Icon(
-                                          Icons.add,
-                                          color: primary_color,
-                                        ),
-                                      ),
-                                    ),
-                                  ]
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                                children: [
-                                  SizedBox(height: 20),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                      color: primary_color,
-                                      borderRadius: BorderRadius.circular(5),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.shade400,
-                                          blurRadius: 5,
-                                          offset: Offset(1, 5),
-                                        ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: ListView(
+                                      children: [
+                                        BookList(books: state.books),
                                       ],
                                     ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (BuildContext context) {
-                                            return Container(
-                                              height: MediaQuery.of(context).size.height * 0.5,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight: Radius.circular(20),
-                                                ),
-                                              ),
-                                              padding: EdgeInsets.all(16),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(height: 10),
-                                                  Center(
-                                                    child: Container(
-                                                      height: 5,
-                                                      width: 100,
-                                                      decoration: BoxDecoration(
-                                                          color: primary_color,
-                                                          borderRadius: BorderRadius.circular(5)
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 20),
-                                                  Expanded(
-                                                    child: ListView(
-                                                      children: [
-                                                        AllBookList(
-                                                            list: BookProducts
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-
-
-
-
-
-                                      child: Stack(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 25),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.apps,
-                                                    color: Colors.white,
-                                                    size: 40,
-                                                  ),
-                                                  SizedBox(width: 10),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(top: 17.5),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          'All Books',
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w500
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          'As bundle',
-                                                          style: TextStyle(
-                                                              fontSize: 10,
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w300
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
                                   ),
-                                  SizedBox(height: 20),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 400,
-                                    decoration: BoxDecoration(
-                                      color: primary_color,
-                                      borderRadius: BorderRadius.circular(5),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.shade400,
-                                          blurRadius: 5,
-                                          offset: Offset(1, 5),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: ListView(
-                                        children: [
-                                          BookList(bookProducts: BookProducts)
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                ]
-                            ),
+                                ),
+                                SizedBox(height: 20),
+                              ]
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
+                  ),
+                ],
+              ),
+            );
+          } else if (state is StocksErrorState) {
+            return Center(child: Text(state.error));
+          } else {
+            return Center(child: CircularProgressIndicator());
           }
         }
+      // }
     );
   }
 }
 
 class ItemList extends StatelessWidget {
-  final List<stocks> list;
-  const ItemList({Key? key, required this.list}) : super (key: key);
+  final List<Stock> stocks;
+  final String courseName;
+  final String Department;
+
+  const ItemList({Key? key, required this.stocks, required this.courseName, required this.Department,}) : super (key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: list
-          .map((e) => ItemCard(
-        visual: e,
-      ))
-          .toList(),
+      children: stocks
+          .map((stock) => ItemCard(stock: stock, courseName: courseName, Department: Department,)).toList(),
     );
   }
 }
 
 class ItemCard extends StatefulWidget {
-  final stocks visual;
-  const ItemCard({Key? key, required this.visual}) : super(key: key);
+  final Stock stock;
+  final String courseName;
+  final String Department;
+
+  const ItemCard({Key? key, required this.stock, required this.courseName, required this.Department,}) : super(key: key);
 
   @override
   _ItemCardState createState() => _ItemCardState();
@@ -757,7 +668,7 @@ class _ItemCardState extends State<ItemCard> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => UniformAdmin())
+                      builder: (context) => UniformAdmin(courseName: widget.courseName, Department: widget.Department, ))
               );
             },
             child: Container(
@@ -781,7 +692,7 @@ class _ItemCardState extends State<ItemCard> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Image.asset(
-                        widget.visual.image,
+                        widget.stock.stockPhoto,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -801,19 +712,19 @@ class _ItemCardState extends State<ItemCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.visual.product,
+                            widget.stock.stockName,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(
-                            'Stocks : ' + widget.visual.stock,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          // Text(
+                          //   'Stocks : ' + widget.visual.stock,
+                          //   style: TextStyle(
+                          //     fontSize: 12,
+                          //     fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -1000,9 +911,9 @@ class _ItemCardState extends State<ItemCard> {
                     Text(
                       'Manage',
                       style: TextStyle(
-                        fontSize: 10.5,
-                        color: primary_color,
-                        fontWeight: FontWeight.w500
+                          fontSize: 10.5,
+                          color: primary_color,
+                          fontWeight: FontWeight.w500
                       ),
                     ),
                     SizedBox(width: 8),
@@ -1023,15 +934,16 @@ class _ItemCardState extends State<ItemCard> {
 }
 
 class BookList extends StatelessWidget {
-  final List<BookStocks> bookProducts;
-  const BookList({Key? key, required this.bookProducts}) : super(key: key); ////////////////////////////////////////////////////////////
+  final List<Book> books;
+
+  const BookList({Key? key, required this.books}) : super(key: key); ////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: bookProducts
-          .map((e) => BookCard(
-        courseID: 0,  ///////////////////////////////////////////////////////////
-        visual: e,
+      children: books
+          .map((book) => BookCard(
+        // courseID: 0,  ///////////////////////////////////////////////////////////
+        visual: book,
         isSelected: false,
         onChanged: (bool? value) {},
       ))
@@ -1040,7 +952,7 @@ class BookList extends StatelessWidget {
   }
 }
 class BookCard extends StatefulWidget {
-  final BookStocks visual;
+  final Book visual;
   final bool isSelected;
   final ValueChanged<bool?>? onChanged;
   const BookCard({
@@ -1048,7 +960,7 @@ class BookCard extends StatefulWidget {
     required this.visual,
     required this.isSelected,
     required this.onChanged,
-    required int courseID
+    // required int courseID
   }) : super(key: key);
   @override
   State<BookCard> createState() => _BookCardState();
@@ -1080,14 +992,14 @@ class _BookCardState extends State<BookCard> {
       children: [
         ListTile(
           title: Text(
-            widget.visual.subjectCode,
+            widget.visual.BookName,
             style: TextStyle(
               fontSize: 16,
               color: Colors.white,
             ),
           ),
           subtitle: Text(
-            widget.visual.bookName,
+            widget.visual.SubjectDesc,
             style: TextStyle(
               fontSize: 11,
               color: Colors.white.withOpacity(0.7),
@@ -1142,91 +1054,91 @@ class _BookCardState extends State<BookCard> {
                             height: 80,
                             width: 200,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 40,
-                                  width: double.infinity,
-                                  child: TextFormField(
-                                    controller: ProdBController,
-                                    decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: primary_color),
-                                      ),
-                                      hintText: 'SSP 012',
-                                      hintStyle: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      suffix: Text(
-                                        '$_countProd/$maxLength',
-                                        style: TextStyle(
-                                          color: primary_color,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 40,
+                                    width: double.infinity,
+                                    child: TextFormField(
+                                      controller: ProdBController,
+                                      decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.grey),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: primary_color),
+                                        ),
+                                        hintText: 'SSP 012',
+                                        hintStyle: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        suffix: Text(
+                                          '$_countProd/$maxLength',
+                                          style: TextStyle(
+                                            color: primary_color,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        suffixStyle: TextStyle(
+                                          color: Colors.grey,
                                           fontSize: 12,
                                         ),
                                       ),
-                                      suffixStyle: TextStyle(
-                                        color: Colors.grey,
+                                      keyboardType: TextInputType.text,
+                                      textInputAction: TextInputAction.done,
+                                      style: TextStyle(
+                                        color: Colors.black,
                                         fontSize: 12,
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.text,
-                                    textInputAction: TextInputAction.done,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(23),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: 40,
-                                  width: double.infinity,
-                                  child: TextFormField(
-                                    controller: ProdBBController,
-                                    decoration: InputDecoration(
-                                      border: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.grey),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: primary_color),
-                                      ),
-                                      hintText: 'Student Success Program',
-                                      hintStyle: TextStyle(
-                                        fontSize: 13,
                                         fontWeight: FontWeight.w400,
                                       ),
-                                      suffix: Text(
-                                        '$_countProd/$maxLength',
-                                        style: TextStyle(
-                                          color: primary_color,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(23),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 40,
+                                    width: double.infinity,
+                                    child: TextFormField(
+                                      controller: ProdBBController,
+                                      decoration: InputDecoration(
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.grey),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(color: primary_color),
+                                        ),
+                                        hintText: 'Student Success Program',
+                                        hintStyle: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        suffix: Text(
+                                          '$_countProd/$maxLength',
+                                          style: TextStyle(
+                                            color: primary_color,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        suffixStyle: TextStyle(
+                                          color: Colors.grey,
                                           fontSize: 12,
                                         ),
                                       ),
-                                      suffixStyle: TextStyle(
-                                        color: Colors.grey,
+                                      keyboardType: TextInputType.text,
+                                      textInputAction: TextInputAction.done,
+                                      style: TextStyle(
+                                        color: Colors.black,
                                         fontSize: 12,
+                                        fontWeight: FontWeight.w400,
                                       ),
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(23),
+                                      ],
                                     ),
-                                    keyboardType: TextInputType.text,
-                                    textInputAction: TextInputAction.done,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(23),
-                                    ],
                                   ),
-                                ),
-                              ]
+                                ]
                             ),
                           ),
                           actions: [
@@ -1305,56 +1217,56 @@ class _BookCardState extends State<BookCard> {
   }
 }
 
-class AllBookList extends StatelessWidget {
-  final List<BookStocks> list;
-  const AllBookList({Key? key, required this.list}) : super (key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: list
-          .map((e) => AllBooksCard(
-        visual: e,
-      ))
-          .toList(),
-    );
-  }
-}
-class AllBooksCard extends StatelessWidget {
-  final BookStocks visual;
-  const AllBooksCard({Key? key, required this.visual}) : super (key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            visual.subjectCode,
-            style: TextStyle(
-              fontSize: 16,
-              color: primary_color,
-            ),
-          ),
-          subtitle: Text(
-            visual.bookName,
-            style: TextStyle(
-              fontSize: 11,
-              color: primary_color.withOpacity(0.7),
-            ),
-          ),
-          iconColor: primary_color,
-          leading: Icon(
-            Icons.book,
-            size: 32,
-          ),
-        ),
-        Divider(
-          color: primary_color.withOpacity(0.7),
-          thickness: 1,
-        ),
-      ],
-    );
-  }
-}
+// class AllBookList extends StatelessWidget {
+//   final List<BookStocks> list;
+//   const AllBookList({Key? key, required this.list}) : super (key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: list
+//           .map((e) => AllBooksCard(
+//         visual: e,
+//       ))
+//           .toList(),
+//     );
+//   }
+// }
+// class AllBooksCard extends StatelessWidget {
+//   final BookStocks visual;
+//   const AllBooksCard({Key? key, required this.visual}) : super (key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         ListTile(
+//           title: Text(
+//             visual.subjectCode,
+//             style: TextStyle(
+//               fontSize: 16,
+//               color: primary_color,
+//             ),
+//           ),
+//           subtitle: Text(
+//             visual.bookName,
+//             style: TextStyle(
+//               fontSize: 11,
+//               color: primary_color.withOpacity(0.7),
+//             ),
+//           ),
+//           iconColor: primary_color,
+//           leading: Icon(
+//             Icons.book,
+//             size: 32,
+//           ),
+//         ),
+//         Divider(
+//           color: primary_color.withOpacity(0.7),
+//           thickness: 1,
+//         ),
+//       ],
+//     );
+//   }
+// }
 class CustomCircularCheckbox extends StatelessWidget {
   final bool value;
   final ValueChanged<bool?> onChanged;

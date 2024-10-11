@@ -55,7 +55,7 @@ class Courses extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (state is CoursesLoadedState) {
               return ListView(
-                children: state.courses.map((course) => ItemCard(course: course)).toList(),
+                children: state.courses.map((course) => ItemCard(course: course, departmentName: departmentName)).toList(),
               );
             } else if (state is CoursesErrorState) {
               return Center(child: Text('Error: ${state.error}'));
@@ -70,8 +70,9 @@ class Courses extends StatelessWidget {
 
 class ItemCard extends StatelessWidget {
   final Course course;
+  final String departmentName;
 
-  const ItemCard({Key? key, required this.course}) : super(key: key);
+  const ItemCard({Key? key, required this.course, required this.departmentName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +86,7 @@ class ItemCard extends StatelessWidget {
               builder: (context) => Stocks(
                 courseID: course.id,
                 courseName: course.courseName,
+                Department: departmentName,
               ),
             ),
           );

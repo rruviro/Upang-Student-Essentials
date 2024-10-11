@@ -14,7 +14,7 @@ class Uniform {
     required this.Course,
     required this.Gender,
     required this.Type,
-    required this.Body ,
+    required this.Body,
     required this.Size,
     required this.Stock,
   });

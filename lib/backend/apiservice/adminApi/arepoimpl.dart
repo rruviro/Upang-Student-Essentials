@@ -6,6 +6,7 @@ import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/admin/Stock.dart';
+import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'dart:convert';
@@ -213,27 +214,86 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
     }
   }
 
-  // Books
+  // BOOKS
   @override
-  Future<List<Book>> showBooks(int courseID) async {
-    final response = await http.get(Uri.parse('$baseUrl/books/$courseID'));
-    if (response.statusCode == 200){
+  Future<List<Book>> showBooks(String Department) async {
+    final response =
+    await http.get(Uri.parse('$baseUrl/item-books/$Department'));
+    if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Book.fromJson(data)).toList();
     } else {
+      print('Failed to load books, status code: ${response.statusCode}');
       throw Exception('Failed to load books');
     }
   }
 
-  // Stocks
-  @override
-  Future<List<Stock>> showStock(int courseID) async{
-    final response = await http.get(Uri.parse('$baseUrl/stocks/$courseID'));
-    if (response.statusCode == 200){
-      final List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => Stock.fromJson(data)).toList();
-    } else {
-      throw Exception('Failed to load stock');
+// STOCK
+    @override
+    Future<List<Stock>> showStocks(String Department) async {
+      final response = await http.get(Uri.parse('$baseUrl/stocks/$Department'));
+      if (response.statusCode == 200) {
+        final List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => Stock.fromJson(data)).toList();
+      } else {
+        print('Failed to load stocks, status code: ${response.statusCode}');
+        throw Exception('Failed to load stock');
+      }
     }
+
+    // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
+    @override
+    Future<List<Uniform>> showUniforms(String Course) async {
+      final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course'));
+      if (response.statusCode == 200) {
+        final List jsonResponse = json.decode(response.body);
+        return jsonResponse.map((data) => Uniform.fromJson(data)).toList();
+      } else {
+        print('Failed to load Uniform, status code: ${response.statusCode}');
+        throw Exception("Failed to load Uniform");
+      }
+    }
+
+    // @override
+    // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock) async {
+    //   final response = await http.post(
+    //     Uri.parse('$baseUrl/uniforms'),
+    //     headers: <String, String>{
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //     },
+    //     body: jsonEncode(<String, dynamic>{
+    //       'Department': Department,
+    //       'Course': Course,
+    //       'Gender': Gender,
+    //       'Type': Type,
+    //       'Body': Body,
+    //       'Size': Size,
+    //       'Stock': Stock,
+    //     }),
+    //   );
+    // }
+
+    @override
+    Future<void> updateUniform(int id, int stock) async {
+      try {
+        final response = await http.put(
+          Uri.parse('$baseUrl/uniforms/$id'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({
+            'Stock': stock,
+          }),
+        );
+        if (response.statusCode == 200) {
+          print('Uniform updated successfully: ${response.body}');
+        } else {
+          throw Exception("Failed to update uniform: ${response.body}");
+        }
+      } catch (e) {
+        print('Error: $e'); // Handle errors appropriately
+      }
+    }
+
+
   }
-}

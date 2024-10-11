@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-// CHANGES BY LANCE
 class department {
   final int id;
   final String name;
@@ -14,31 +11,17 @@ class department {
     required this.photo,
   });
 
-  // String get photoUrl {
-  //   return 'http://127.0.0.1:8000/api/departments/public/uploads/department/$photo';
-  // }
+  // Build the correct URL
+  String get photoUrl {
+    return 'http://127.0.0.1:8000/$photo'; // No need to concatenate 'uploads/department/' twice
+  }
 
   factory department.fromJson(Map<String, dynamic> json) {
     return department(
       id: json['id'],
       name: json['name'],
       color: json['color'],
-      photo: json['photo'],
+      photo: json['photo'], // Should be something like 'uploads/department/filename.jpg'
     );
   }
 }
-
-
-
-// List<Departments> initials = [
-//   Departments(
-//     'Health Science',
-//     'assets/vanguards.png',
-//     'BSN',
-//   ),
-//   Departments(
-//     'Cite',
-//     'assets/vanguards.png',
-//     'BSIT',
-//   ),
-// ];

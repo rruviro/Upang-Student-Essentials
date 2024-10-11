@@ -33,12 +33,18 @@ class Stock {
   final String stockName;
   final String stockPhoto;
   final String Department;
+  final String Gender;
+  final String Type;
+  final String Body;
 
   Stock({
     required this.id,
     required this.stockName,
     required this.stockPhoto,
     required this.Department,
+    required this.Gender,
+    required this.Type,
+    required this.Body,
   });
 
   factory Stock.fromJson(Map<String, dynamic> json) {
@@ -47,6 +53,9 @@ class Stock {
       stockName: json['stockName'],
       stockPhoto: json['stockPhoto'],
       Department: json['Department'],
+      Gender: json['Gender'],
+      Type: json['Type'],
+      Body: json['Body'],
     );
   }
 }

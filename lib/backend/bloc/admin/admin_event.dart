@@ -108,14 +108,26 @@ class ShowCoursesEvent extends AdminExtendedEvent{
   ShowCoursesEvent({required this.departmentID});
 }
 
-// For Books
-class ShowBooksEvent extends AdminExtendedEvent{
-  final int courseID;
-  ShowBooksEvent({required this.courseID});
+// FOR STOCK
+class ShowStocksEvent extends AdminExtendedEvent{
+  final String Department;
+  ShowStocksEvent({required this.Department});
 }
 
-// For Stock
-class ShowStockEvent extends AdminExtendedEvent{
-  final int courseID;
-  ShowStockEvent({required this.courseID});
+// FOR UNIFORM
+class ShowUniformsEvent extends AdminExtendedEvent{
+  final String Course;
+  ShowUniformsEvent({required this.Course});
+}
+
+class createUniform extends AdminExtendedEvent {
+  final String Department;
+  final String Course;
+  final String Gender;
+  final String Type;
+  final String Body;
+  final String Size;
+  final int Stock;
+
+  createUniform(this.Department, this.Course, this.Gender, this.Type, this.Body, this.Size, this.Stock);
 }

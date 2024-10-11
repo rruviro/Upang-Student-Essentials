@@ -10,6 +10,7 @@ import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
+import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -210,29 +211,46 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       }
     });
 
-    // FOR BOOKS
-    on<ShowBooksEvent>((event, emit) async {
-      emit(BooksLoadingState());
+    // FOR STOCK
+    on<ShowStocksEvent>((event, emit) async{
+      emit(StocksLoadingState());
       try {
-        final bookData = await _adminrepo.showBooks(event.courseID);
-        emit(BooksLoadedState(books: bookData));
+        print('Fetching data for: ${event.Department}');
+        final stockData = await _adminrepo.showStocks(event.Department);
+        final bookData = await _adminrepo.showBooks(event.Department);
+        print('stock fetched successfully');
+        emit(StocksLoadedState(stocks: stockData, books: bookData));
       } catch (e) {
-        print(e);
-        emit(BooksErrorState('An error occurred: ${e.toString()}'));
+        print('error fetching stocks or books: $e');
+        emit(StocksErrorState('an error occured: ${e.toString()}'));
       }
     });
 
-    // FOR STOCK
-    on<ShowStockEvent>((event, emit) async {
-      emit(StockLoadingState());
+    // FOR UNIFORM
+    on<ShowUniformsEvent>((event, emit) async{
+      emit(UniformsLoadingState());
       try {
-        final stockData = await _adminrepo.showStock(event.courseID);
-        emit(StockLoadedState(stocks: stockData));
-      } catch (e) {
-        print(e);
-        emit(StockErrorState('An error occurred: ${e.toString()}'));
+        print('fetching data for uniforms');
+        final uniformData = await _adminrepo.showUniforms(event.Course);
+        print('uniforms fetched successfully');
+        emit(UniformsLoadedState(uniforms: uniformData));
+      } catch (e){
+        print('error fetching stocks or books: $e');
+        emit(UniformsErrorState('an error occured: ${e.toString()}'));
       }
     });
+
+    // on<createUniform>((event, emit) async {
+    //   try {
+    //     await _adminrepo.createUniform(event.Department,event.Course,event.Gender,event.Type,event.Body,event.Size,event.Stock,);
+    //     add(ShowUniformsEvent(Course: Course));
+    //   } catch (e) {
+    //     print(e);
+    //     emit(announcementLoadErrorData('An error occurred: ${e.toString()}'));
+    //     add(showAnnouncement());
+    //   }
+    // });
+
   }
 
   FutureOr<void> course_page(

@@ -3,6 +3,7 @@ import 'package:use/backend/models/admin/Book.dart';
 import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/admin/Stock.dart';
+import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -26,12 +27,18 @@ abstract class Adminrepo {
   // Departments
   Future<List<department>> showDepartments();
 
+
   // Courses
   Future<List<Course>> showCourses(int departmentID);
 
-  // Books
-  Future<List<Book>> showBooks(int courseID);
+  // BOOKS
+  Future<List<Stock>> showStocks(String Department);
 
-  // Stock (uniform)
-  Future<List<Stock>> showStock(int courseID);
+  // STOCK
+  Future<List<Book>> showBooks(String Department);
+
+  // UNIFORM
+  Future<List<Uniform>> showUniforms(String Course);
+  // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock);
+  // Future<void> updateUniform(int id);
 }
