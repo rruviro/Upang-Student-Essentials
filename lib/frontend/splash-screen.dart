@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
+import 'package:use/frontend/admin/navigation.dart';
+import 'package:use/frontend/student/home/home.dart';
+import 'package:use/frontend/student/navigation.dart';
+import 'package:use/frontend/authentication/StudentLogin.dart';
 import 'package:use/frontend/welcome.dart';
 
 void main() {
@@ -49,14 +55,29 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       ),
     );
 
-    _controller.forward().then((_) {
-      Future.delayed(Duration(milliseconds: 500), () {
-        if (mounted) {
-          _controller.reverse().then((_) {
-            _navigateToWelcomeScreen();
-          });
-        }
-      });
+    _controller.forward().then((_)async {
+      final SharedPreferences login = await SharedPreferences.getInstance();
+      String studentId = login.getString('StudentId') ?? '';
+      String password = login.getString('Password') ?? '';
+      bool islogin = login.getBool('isLogin') ?? false;
+      if (islogin == true) {
+        Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                    value: studentBloc,
+                    child: SHomeBase(studentId: studentId)
+                ),
+              )
+        );
+      } else {
+        Future.delayed(Duration(milliseconds: 500), () {
+          if (mounted) {
+            _controller.reverse().then((_) {
+              _navigateToWelcomeScreen();
+            });
+          }
+        });
+      }
     });
 
     Future.delayed(Duration(milliseconds: 500), () {

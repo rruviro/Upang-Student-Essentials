@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Course.dart';
 import 'package:use/frontend/student/home/home.dart';
+
+import '../../../colors/colors.dart';
 
 class course_widget extends StatelessWidget {
   final List<course> status;
@@ -40,7 +42,7 @@ class ItemCard extends StatelessWidget {
               width: double.infinity,
               height: 70,
               decoration: BoxDecoration(
-                color: Color(0xFF0EAA72),
+                color: primary_color,
                 borderRadius: BorderRadius.circular(5),
                 boxShadow: [
                   BoxShadow(
@@ -60,7 +62,7 @@ class ItemCard extends StatelessWidget {
                       children: [
                         Text(
                           'BSN',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                               fontSize: 15,
                               color: Colors.white,
                               fontWeight: FontWeight.w600
@@ -68,7 +70,7 @@ class ItemCard extends StatelessWidget {
                         ),
                         Text(
                           'Bachelor of Science in Nursing',
-                          style: TextStyle(
+                          style: GoogleFonts.inter(
                               fontSize: 10,
                               color: Colors.white,
                               fontWeight: FontWeight.w400

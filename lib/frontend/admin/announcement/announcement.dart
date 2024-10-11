@@ -1,12 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
-import 'package:use/SERVICES/model/student/Announcement.dart';
+import 'package:lottie/lottie.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/frontend/admin/home/home.dart';
-import 'package:use/frontend/admin/notification.dart';
-import 'package:use/frontend/admin/widgets/announcement/announcement.dart';
+import 'package:use/frontend/student/announcement/announcement.dart';
+
+import '../../colors/colors.dart';
 
 class Announcement extends StatefulWidget {
   const Announcement({super.key});
@@ -16,63 +19,151 @@ class Announcement extends StatefulWidget {
 }
 
 class _AnnouncementState extends State<Announcement> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _departmentcontroller = TextEditingController();
+  final TextEditingController _messagecontroller = TextEditingController();
+  String? _selectedDepartment;
+  List<announcement> announcements = [];
+
+  bool _showLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+    context.read<AdminExtendedBloc>().add(showAnnouncement());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.notifications, 
-              color: Colors.white
-            ),
-            onPressed: () {
-              adminBloc.add(NotificationPageEvent());
-            },
-          ),
-          SizedBox(width: 15),
-        ],
-        elevation: 0,
-      ),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30),
-              slides(context),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white
+     backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                title: Container(
+                  width: double.infinity, 
+                  height: 35, 
+                  child: Row(
+                    children: [
+                      Image.asset('assets/logo.png'),
+                      SizedBox(width: 10),
+                      Text(
+                        'Upang Student Essentials',
+                        style: GoogleFonts.inter(
+                          textStyle: TextStyle(
+                            fontSize: 11,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600
+                          )
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                padding: EdgeInsets.all(20.0),
-                child: Column(
+              ),
+      body: BlocBuilder<AdminExtendedBloc, AdminExtendedState>(
+        builder: (context, state) {
+          if (_showLoading) {
+            return Center(child: Lottie.asset(
+              'assets/indicators/testing.json',
+              height: 300,
+              width: 380,
+              fit: BoxFit.fill
+            ));
+          }
+          if (state is announcementLoadSuccessData) {
+            announcements = state.Announcement;
+            return ListView(
+              children: <Widget>[
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 30),
-                    Text(
-                      'Announcement',
-                      style: GoogleFonts.inter(
-                        fontSize: 17,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600
+                    slides(context),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 5),
+                          Text(
+                            'Announcement',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          ItemList(
+                            status: announcements,
+                          )
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10),
-                    ItemList (
-                      status : details
-                    )
                   ],
                 ),
+              ],
+            );
+          }
+          if (state is announcementLoadErrorData) {
+            return Center(child: Container(
+                height: 200,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Icon(
+                        Icons.signal_cellular_connected_no_internet_4_bar_rounded,
+                        color: primary_color,
+                        size: 130,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Center(
+                      child: Text(
+                        'Low Signal',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500
+                        ),
+                      )
+                    ),
+                    SizedBox(height: 5),
+                    Center(
+                      child: Text(
+                        'You\'r having trouble with your connection\ncheck your connection.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: tertiary_color,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300
+                        ),
+                      )
+                    )
+                  ],
+                )
               ),
-            ],
-          ),
-        ],
+            );
+          } else {
+            return Center(child: Lottie.asset(
+              'assets/indicators/testing.json',
+              height: 300,
+              width: 380,
+              fit: BoxFit.fill
+            ));
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -92,41 +183,64 @@ class _AnnouncementState extends State<Announcement> {
                 ),
                 content: Container(
                   width: double.infinity,
-                  height: 100,
+                  height: 120,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextFormField(
-                        controller: _controller,
+                      DropdownButtonFormField<String>(
+                        value: _selectedDepartment,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedDepartment = newValue!;
+                          });
+                        },
+                        items: [
+                          'CITE',
+                          'CAHS',
+                          'CEA',
+                          'CMA',
+                          'CELA',
+                          'CCJE',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                         decoration: InputDecoration(
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            borderSide: BorderSide(color: primary_color),
                           ),
-                          hintText: 'Department',
+                          hintText: 'Select Department',
                           hintStyle: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
+                      SizedBox(height: 10),
                       TextFormField(
-                        controller: _controller,
+                        controller: _messagecontroller,
                         decoration: InputDecoration(
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            borderSide: BorderSide(color: primary_color),
                           ),
                           hintText: 'Message',
                           hintStyle: TextStyle(
@@ -142,108 +256,101 @@ class _AnnouncementState extends State<Announcement> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                    ]
+                    ],
                   ),
                 ),
                 actions: [
-                  GestureDetector(
-                    onTap: (){
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 112,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        color: Color.fromARGB(255, 14, 170, 113)
-                      ),
-                      child: Center( 
-                        child: Text(
-                          'Publish',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600 
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            if (_selectedDepartment != null && _messagecontroller.text.isNotEmpty) {
+                              context.read<AdminExtendedBloc>().add(
+                                createAnnouncement(
+                                  _selectedDepartment!,
+                                  _messagecontroller.text,
+                                ),
+                              );
+
+                              setState(() {
+                                _selectedDepartment = null;
+                                _messagecontroller.clear();
+                              });
+                              Navigator.pop(context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Please fill in all fields.'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 112,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: primary_color,
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Confirm',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 112,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        color: Color.fromARGB(192, 14, 170, 113)
-                      ),
-                      child: Center(
-                        child:Text(
-                          'Cancel',
-                          style: GoogleFonts.inter(
-                            color: const Color.fromARGB(190, 255, 255, 255),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600 
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 112,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: primary_color,
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                    ),
+                        )
+                      ),
+                    ],
                   ),
-                ],
+                ]
               );
             },
           );
         },
         child: Icon(
           Icons.add,
-          color: Colors.white
+          color: Colors.white,
         ),
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        backgroundColor: primary_color,
       ),
     );
   }
 }
 
-Widget slides(BuildContext context) {
-  List<String> imageUrls = [
-    'assets/announcement_image/e6cad8e6-4afa-4f35-a78e-2defea59f7e7.png',
-    'assets/announcement_image/e9c4b145-4d7b-4787-bd61-7b38c4b3ba44.png',
-    'assets/announcement_image/0d88f45a-60dc-4518-9641-6f318056db74.png',
-  ];
-  return Container(
-    child: CarouselSlider(
-      items: imageUrls.map((url) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.symmetric(horizontal: 0),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 14, 170, 113),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Image.asset(
-              url,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
-          ),
-        );
-      }).toList(),
-      options: CarouselOptions(
-        height: 140,
-        autoPlay: false, 
-        autoPlayInterval: Duration(seconds: 3), 
-        autoPlayAnimationDuration: Duration(milliseconds: 600),
-        autoPlayCurve: Curves.fastOutSlowIn, 
-        enlargeCenterPage: true,
-      ),
-    ),
-  );
-}
 
 class ItemList extends StatelessWidget {
   final List<announcement> status;
@@ -278,9 +385,9 @@ class ItemCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.shade400,
-                blurRadius: 5,
-                offset: Offset(1, 5),
+                color: Colors.grey,
+                blurRadius: 2,
+                offset: Offset(1, 1),
               ),
             ],
           ),
@@ -291,7 +398,7 @@ class ItemCard extends StatelessWidget {
                 height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     topRight: Radius.circular(5),
@@ -305,7 +412,7 @@ class ItemCard extends StatelessWidget {
                   vertical: 10.0
                 ),
                 child: Text(
-                  details.description,
+                  details.body,
                   style: GoogleFonts.inter(
                     color: Colors.black,
                     fontSize: 10
@@ -337,7 +444,7 @@ class ItemCard extends StatelessWidget {
           child: Container(
             child: Center(
               child: Text(
-                details.published,
+                details.date,
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 10

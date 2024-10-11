@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:use/frontend/admin/home/home.dart';
+
+import '../../../colors/colors.dart';
+
 class manage extends StatefulWidget {
   const manage({super.key});
   @override
@@ -120,7 +123,7 @@ class _manageState extends State<manage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        backgroundColor: primary_color,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
@@ -176,7 +179,7 @@ class _manageState extends State<manage> {
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                                borderSide: BorderSide(color: primary_color),
                               ),
                               hintText: 'Health Science',
                               hintStyle: TextStyle(
@@ -186,7 +189,7 @@ class _manageState extends State<manage> {
                               suffix: Text(
                                 '$_countDepartment/23', 
                                 style: TextStyle(
-                                  color: Color.fromARGB(255, 14, 170, 113),
+                                  color: primary_color,
                                   fontSize: 12,
                                 ),
                               ),
@@ -235,7 +238,7 @@ class _manageState extends State<manage> {
                                 right: 0,
                                 child: IconButton(
                                   iconSize: 15,
-                                  icon: Icon(Icons.add, color: Color.fromARGB(255, 14, 170, 113)),
+                                  icon: Icon(Icons.add, color: primary_color),
                                   onPressed: _addRow
                                 ),
                               ),
@@ -244,7 +247,7 @@ class _manageState extends State<manage> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 14, 170, 113),
+                            color: primary_color,
                             borderRadius: BorderRadius.circular(5),
                             boxShadow: [
                               BoxShadow(
@@ -273,6 +276,13 @@ class _manageState extends State<manage> {
                                       child: TextFormField(
                                         controller: _rows[index]['coursesController'],
                                         decoration: InputDecoration(
+                                          hintText: 'BSIT',
+                                          hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          hoverColor: Colors.white,
                                           border: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
@@ -280,10 +290,8 @@ class _manageState extends State<manage> {
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
                                           enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white),
+                                            borderSide: BorderSide(color: Colors.white), // Color when unfocused
                                           ),
-                                          hintText: 'BSIT',
-                                          hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                                           suffix: Text(
                                             '${_rows[index]['countCourse']}/10',
                                             style: TextStyle(
@@ -331,6 +339,13 @@ class _manageState extends State<manage> {
                                       child: TextFormField(
                                         controller: _rows[index]['bachelorController'],
                                         decoration: InputDecoration(
+                                          hintText: 'Bachelor of information in technology',
+                                          hintStyle: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                          hoverColor: Colors.white,
                                           border: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
@@ -340,8 +355,6 @@ class _manageState extends State<manage> {
                                           enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(color: Colors.white),
                                           ),
-                                          hintText: 'Bachelor of information in technology',
-                                          hintStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                                           suffix: Text(
                                             '${_rows[index]['countBachelor']}/25',
                                             style: TextStyle(
@@ -375,7 +388,7 @@ class _manageState extends State<manage> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 5),
                                       child: IconButton(
-                                        icon: Icon(Icons.delete, color: Colors.red),
+                                        icon: Icon(Icons.delete, color: Colors.white),
                                         onPressed: () => _deleteItem(index),
                                       ),
                                     ),
@@ -396,7 +409,7 @@ class _manageState extends State<manage> {
                             width: double.infinity,
                             height: 120,
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 14, 170, 113),
+                              color: primary_color,
                               borderRadius: BorderRadius.circular(5),
                               boxShadow: [
                                 BoxShadow(
@@ -475,7 +488,7 @@ class _manageState extends State<manage> {
                         child: ElevatedButton(
                           onPressed: (){},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 14, 170, 113), 
+                            backgroundColor: primary_color, 
                             minimumSize: Size(double.infinity, 60), 
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10), 

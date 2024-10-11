@@ -2,34 +2,35 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/admin/Transaction.dart';
+import '../../colors/colors.dart';
+
 class Transaction extends StatefulWidget {
-  const Transaction({super.key});
+  final int id;
+  const Transaction({super.key, required this.id});
   @override
   State<Transaction> createState() => _TransactionState();
 }
 
 class _TransactionState extends State<Transaction> {
-  int _currentSelection = 1;
+  late int _currentSelection;
   GlobalKey _Request = GlobalKey();
-  GlobalKey __Reserved = GlobalKey();
-  GlobalKey Complete = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSelection = widget.id;
+  }
+
   _selectedItem(int id) {
-    _currentSelection = id;
-    GlobalKey selectedGlobalKey;
-    switch (id) {
-      case 1:
-        selectedGlobalKey = _Request;
-        break;
-      case 2:
-        selectedGlobalKey = __Reserved;
-        break;
-      case 3:
-        selectedGlobalKey = Complete;
-        break;
-      default: 
-    }
     setState(() {
-      
+      _currentSelection = id;
+      GlobalKey selectedGlobalKey;
+      switch (id) {
+        case 1:
+          selectedGlobalKey = _Request;
+          break;
+        default: 
+      }
     });
   }
   @override
@@ -91,50 +92,6 @@ class _TransactionState extends State<Transaction> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
-                  InkWell(
-                    key: __Reserved,
-                    onTap: () => _selectedItem(2),
-                    child: Text(
-                      'Reserved',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        color: _currentSelection == 2
-                          ? Colors.black
-                          : Colors.grey,
-                        fontWeight: _currentSelection == 2
-                          ? FontWeight.w600
-                          : FontWeight.w400
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  SizedBox(
-                    height: 25,
-                    width: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black26
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  InkWell(
-                    key: Complete,
-                    onTap: () => _selectedItem(3),
-                    child: Text(
-                      'Complete',
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        color: _currentSelection == 3
-                          ? Colors.black
-                          : Colors.grey,
-                        fontWeight: _currentSelection == 3
-                          ? FontWeight.w600
-                          : FontWeight.w400
-                      ),
-                    ),
-                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -160,12 +117,36 @@ class _TransactionState extends State<Transaction> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Uniform',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 20),
                 ItemList(
                   categoryList: products
                       .where(
                         (element) => element.category == _currentSelection
                       ).toList()
-                )
+                ),
+                Text(
+                  'Books',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 20),
+                ItemList(
+                  categoryList: products
+                      .where(
+                        (element) => element.category == _currentSelection
+                      ).toList()
+                ),
               ],
             ),
           ),
@@ -198,10 +179,6 @@ class ItemCard extends StatelessWidget {
     switch (visual.status) {
       case 'Request':
         return _buildRequest(context);
-      case 'Reserved':
-        return _buildReserved(context);
-      case 'Complete':
-        return _buildComplete(context);
       default:
         return _buildDefaultCard(context);
     }
@@ -210,31 +187,15 @@ class ItemCard extends StatelessWidget {
   Widget _buildRequest(BuildContext context) {
     return _buildBaseCard(
       context: context,
-      color: Color.fromARGB(255, 11, 166, 222),
+      color: primary_color,
       status: 'Request',
-    );
-  }
-
-  Widget _buildReserved(BuildContext context) {
-    return _default(
-      context: context,
-      color: Color.fromARGB(255, 11, 166, 222),
-      status: 'Reserved',
-    );
-  }
-
-  Widget _buildComplete(BuildContext context) {
-    return _default(
-      context: context,
-      color: Color.fromARGB(255, 11, 166, 222),
-      status: 'Complete',
     );
   }
 
   Widget _buildDefaultCard(BuildContext context) {
     return _buildBaseCard(
       context: context,
-      color: Colors.grey,
+      color: primary_color,
       status: 'Unknown',
     );
   }
@@ -372,7 +333,7 @@ class ItemCard extends StatelessWidget {
                                   style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(255, 11, 166, 222),
+                                    color: Color.fromARGB(255, 14, 170, 113),
                                   ),
                                 ),
                               ),
@@ -394,7 +355,7 @@ class ItemCard extends StatelessWidget {
                                   style: GoogleFonts.inter(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(255, 11, 166, 222),
+                                    color: Color.fromARGB(255, 14, 170, 113),
                                   ),
                                 ),
                               ),
@@ -633,5 +594,4 @@ class ItemCard extends StatelessWidget {
       ],
     );
   }
-
 }
