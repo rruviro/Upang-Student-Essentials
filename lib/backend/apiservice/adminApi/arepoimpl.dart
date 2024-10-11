@@ -236,6 +236,7 @@ class AdminRepositoryImpl extends Adminrepo {
   Future<List<Book>> showBooks(String Department) async {
     final response =
         await http.get(Uri.parse('$baseUrl/item-books/$Department'));
+    await http.get(Uri.parse('$baseUrl/item-books/$Department'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Book.fromJson(data)).toList();
