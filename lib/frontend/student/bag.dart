@@ -342,9 +342,9 @@ class BagState extends State<Bag> {
                               for (var bookId in checkedBookIds) {
                                 var book = bookMap[
                                     bookId]; // Get the corresponding book object
-                                context.read<StudentExtendedBloc>().add(
-                                    reserveorclaimBook(
-                                        bookId, 'Request', stocks));
+                                context
+                                    .read<StudentExtendedBloc>()
+                                    .add(reserveorclaimBook(bookId, 'Request'));
 
                                 if (stocks == 0) {
                                   context.read<StudentExtendedBloc>().add(

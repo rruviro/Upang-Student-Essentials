@@ -369,7 +369,7 @@ class StudentRepositoryImpl extends Studentrepo {
       }),
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       print("Student item data successfully added.");
     } else {
       print(response.statusCode);
@@ -379,11 +379,14 @@ class StudentRepositoryImpl extends Studentrepo {
   }
 
   @override
-  Future<void> reserveorclaimBook(int id, String status, int stocks) async {
-    final response = await http
-        .put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status/$stocks'));
+  Future<void> reserveorclaimBook(int id, String status) async {
+    final response =
+        await http.put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status'));
     if (response == 200) {
+      print("!!!!!!!!!!!!!!!!!!!!");
     } else {
+      print(response.statusCode);
+      print('$baseUrl/bookreserveclaim/$id/$status');
       throw Exception('Failed');
     }
   }

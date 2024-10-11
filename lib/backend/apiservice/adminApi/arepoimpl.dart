@@ -12,66 +12,70 @@ import 'dart:convert';
 
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
-  class AdminRepositoryImpl extends Adminrepo{
+class AdminRepositoryImpl extends Adminrepo {
   static const String baseUrl = 'http://127.0.0.1:8000/api';
 
   @override
   Future<StudentBagBook> showCodeBook(String code) async {
     final response = await http.get(Uri.parse('$baseUrl/bookpickup/$code'));
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       print("gumana");
       final responseBody = json.decode(response.body)['bookCollections'];
       return StudentBagBook.fromJson(responseBody);
-      
-    }
-    else{
+    } else {
       print("hindi");
       print(response.statusCode);
       throw Exception(response.statusCode);
     }
   }
-  
+
   @override
   Future<StudentBagItem> showCodeItem(String code) async {
     final response = await http.get(Uri.parse('$baseUrl/itempickup/$code'));
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       print("gumana");
       final responseBody = json.decode(response.body)['items'];
       return StudentBagItem.fromJson(responseBody);
-    }
-    else{print("hidni");
+    } else {
+      print("hidni");
       throw Exception(response.statusCode);
     }
   }
+
   @override
   Future<void> changeStudentBookStatus(int id, String status) async {
-    final response = await http.put(Uri.parse('$baseUrl/bookcollections/$id/$status'));
-    if (response.statusCode == 200){
-    }
-    else{
+    final response =
+        await http.put(Uri.parse('$baseUrl/bookcollections/$id/$status'));
+    if (response.statusCode == 200) {
+    } else {
       throw Exception('Failed');
     }
   }
-  
+
   @override
   Future<void> changeStudentItemStatus(int id, String status) async {
-    final response = await http.put(Uri.parse('$baseUrl/studentbagitems/$id/$status'));
-    if (response.statusCode == 200){
-    }
-    else{
+    final response =
+        await http.put(Uri.parse('$baseUrl/studentbagitems/$id/$status'));
+    if (response.statusCode == 200) {
+      print(
+          "~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    } else {
+      print(response.statusCode);
+      print(response.body);
       throw Exception();
     }
   }
 
   @override
-  Future<void> createStudent(String firstName, String lastName, String course, String department, int year, String status) async {
+  Future<void> createStudent(String firstName, String lastName, String course,
+      String department, int year, String status) async {
     final response = await http.post(
       Uri.parse('$baseUrl/students'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'profile': {  
+        'profile': {
           'FirstName': firstName,
           'LastName': lastName,
           'Course': course,
@@ -89,7 +93,6 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
       throw Exception('Failed to create student');
     }
   }
-
 
   @override
   Future<void> deleteStudent(int id) async {
@@ -110,7 +113,6 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
     } else {
       throw response.statusCode;
     }
-    
   }
 
   @override
@@ -118,61 +120,62 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
     final response = await http.get(Uri.parse('$baseUrl/profiles/$studentId'));
     if (response.statusCode == 200) {
       Map<String, dynamic> studentJson = json.decode(response.body)['profile'];
-        StudentProfile student = StudentProfile.fromJson(studentJson);
-        return student;
+      StudentProfile student = StudentProfile.fromJson(studentJson);
+      return student;
     } else {
       throw UnimplementedError();
     }
   }
 
   @override
-  Future<void> updateStudent(String firstName, String lastName, String course, String department, int year, String status, int id ) async {
-          final response = await http.put(Uri.parse('$baseUrl/updateprofile/$id'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'FirstName': firstName,
-          'LastName': lastName,
-          'Course': course,
-          'Department': department,
-          'Year': year,
-          'Status': status
-        }),
-      );
+  Future<void> updateStudent(String firstName, String lastName, String course,
+      String department, int year, String status, int id) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/updateprofile/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'FirstName': firstName,
+        'LastName': lastName,
+        'Course': course,
+        'Department': department,
+        'Year': year,
+        'Status': status
+      }),
+    );
 
-      if (response.statusCode == 200) {
-        // Handle successful update
-      } else {
-        throw UnimplementedError();
-      }
-    
+    if (response.statusCode == 200) {
+      // Handle successful update
+    } else {
+      throw UnimplementedError();
+    }
   }
 
   @override
   Future<void> createAnnouncement(String department, String message) async {
-
     print('Department: $department');
     print('Message: $message');
-      final response = await http.post(
-        Uri.parse('$baseUrl/createannouncements'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'department': department,
-          'body': message,
-        }),
-      );
+    final response = await http.post(
+      Uri.parse('$baseUrl/createannouncements'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'department': department,
+        'body': message,
+      }),
+    );
 
-      if (response.statusCode == 200) {
-        print("Announcement created successfully");
-      } else {
-        print('Error: ${response.statusCode}');
-        print('Response body: ${response.body}'); 
-        throw Exception('Failed to create announcement, status code: ${response.statusCode}');
-      }
+    if (response.statusCode == 200) {
+      print("Announcement created successfully");
+    } else {
+      print('Error: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception(
+          'Failed to create announcement, status code: ${response.statusCode}');
+    }
   }
 
   @override
@@ -204,8 +207,9 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
   // Courses
   @override
   Future<List<Course>> showCourses(int departmentID) async {
-    final response = await http.get(Uri.parse('$baseUrl/courses/$departmentID'));
-    if (response.statusCode == 200){
+    final response =
+        await http.get(Uri.parse('$baseUrl/courses/$departmentID'));
+    if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Course.fromJson(data)).toList();
     } else {
@@ -217,7 +221,7 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
   @override
   Future<List<Book>> showBooks(int courseID) async {
     final response = await http.get(Uri.parse('$baseUrl/books/$courseID'));
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Book.fromJson(data)).toList();
     } else {
@@ -227,9 +231,9 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
   // Stocks
   @override
-  Future<List<Stock>> showStock(int courseID) async{
+  Future<List<Stock>> showStock(int courseID) async {
     final response = await http.get(Uri.parse('$baseUrl/stocks/$courseID'));
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Stock.fromJson(data)).toList();
     } else {

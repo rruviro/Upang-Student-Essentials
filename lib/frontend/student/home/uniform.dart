@@ -439,7 +439,7 @@ class _UniformStudentState extends State<UniformStudent> {
         return _ModalContent(
           onSubmit: (selectedUniform, selectedSchedule) {
             // Print all properties of the selected uniform
-            print('Selected Uniform ID: ${selectedUniform.id}');
+            print('Selected Uniform ID: ${widget.profile.id}');
             print('Department: ${selectedUniform.Department}');
             print('Course: ${selectedUniform.Course}');
             print('Gender: ${selectedUniform.Gender}');

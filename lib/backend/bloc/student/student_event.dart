@@ -98,9 +98,11 @@ class reserveorclaimItem extends StudentExtendedEvent {
 class reserveorclaimBook extends StudentExtendedEvent {
   final int id;
   final String status;
-  final int stocks;
 
-  reserveorclaimBook(this.id, this.status, this.stocks);
+  reserveorclaimBook(
+    this.id,
+    this.status,
+  );
 }
 
 class changeReservedItemStatus extends StudentExtendedEvent {
