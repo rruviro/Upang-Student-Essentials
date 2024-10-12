@@ -31,6 +31,18 @@ class AuthenticationImplementation extends AuthenticationRepository {
       throw Exception('Invalid credentials');
     }
   }
+
+  // Future<void> studentAdmin(String adminID, String password) async {
+  //   final response = await http.post(Uri.parse('$baseUrl/admin/login')
+  //   headers:{
+  //     'Content-Type': 'application/json',
+  //       },
+  //     body: jsonEncode({
+  //       'adminID': adminID,
+  //       'password': password,
+  //     })
+  //   )
+  // }
 }
 
 class Aurepo {

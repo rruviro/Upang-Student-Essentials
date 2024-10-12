@@ -13,7 +13,7 @@ class department {
 
   // Build the correct URL
   String get photoUrl {
-    return 'http://127.0.0.1:8000/$photo'; // No need to concatenate 'uploads/department/' twice
+    return 'https://floating-cliffs-62090-6c6c2af6e00a.herokuapp.com/uploads/department/$photo';
   }
 
   factory department.fromJson(Map<String, dynamic> json) {
