@@ -18,7 +18,7 @@ import 'dart:convert';
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
 
 class StudentRepositoryImpl extends Studentrepo {
-  static const String baseUrl = 'http://127.0.0.1:8000/api';
+  static const String baseUrl = 'https://floating-cliffs-62090-6c6c2af6e00a.herokuapp.com/api';
   // static const String baseUrl = 'http://10.0.2.2:8000/api';
   //static const String baseUrl = 'http://localhost:8000/api';
 
