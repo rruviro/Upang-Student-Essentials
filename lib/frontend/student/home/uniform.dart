@@ -15,12 +15,14 @@ class UniformStudent extends StatefulWidget {
   final StudentProfile profile;
   final String courseName;
   final String department;
+  final String type;
 
   const UniformStudent(
       {Key? key,
       required this.courseName,
       required this.profile,
-      required this.department})
+      required this.department,
+      required this.type})
       : super(key: key);
 
   @override
@@ -49,14 +51,14 @@ class _UniformStudentState extends State<UniformStudent> {
 
   bool isUniformInBag(Uniform uniform) {
     return items
-        .any((item) => item.type == uniform.Type && item.body == uniform.Body);
+        .any((item) => item.type == widget.type && item.body == uniform.Body);
   }
 
   // Function to add the uniform to the bag and show success dialog
   void _addUniformToBackpack(Uniform uniform) {
     setState(() {
       items.add(StudentBagItem(
-          type: uniform.Type,
+          type: widget.type,
           body: uniform.Body,
           reservationNumber: 0,
           id: 0,
@@ -218,7 +220,7 @@ class _UniformStudentState extends State<UniformStudent> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    _buildHeader('Corporate Top'),
+                    _buildHeader('${widget.type} Top'),
                     const SizedBox(height: 15),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -265,7 +267,8 @@ class _UniformStudentState extends State<UniformStudent> {
                                       onPressed: isUniformInBag(uniforms.first)
                                           ? null
                                           : () {
-                                              _showAddToBackpackModal(context);
+                                              _showAddToBackpackModal(
+                                                  context, widget.type);
                                             },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,
@@ -299,7 +302,8 @@ class _UniformStudentState extends State<UniformStudent> {
                                     child: ElevatedButton(
                                       onPressed: isUniformInBag(uniforms.first)
                                           ? null
-                                          : () => _showRequestModal(context),
+                                          : () => _showRequestModal(
+                                              context, widget.type),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,
                                         foregroundColor: Colors.blue,
@@ -394,7 +398,7 @@ class _UniformStudentState extends State<UniformStudent> {
     );
   }
 
-  void _showAddToBackpackModal(BuildContext context) {
+  void _showAddToBackpackModal(BuildContext context, String type) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -405,7 +409,7 @@ class _UniformStudentState extends State<UniformStudent> {
             print('Department: ${selectedUniform.Department}');
             print('Course: ${selectedUniform.Course}');
             print('Gender: ${selectedUniform.Gender}');
-            print('Type: ${selectedUniform.Type}');
+            print('Type: ${type}');
             print('Body: ${selectedUniform.Body}');
             print('Size: ${selectedUniform.Size}');
             print('Stock: ${selectedUniform.Stock}');
@@ -414,7 +418,7 @@ class _UniformStudentState extends State<UniformStudent> {
                 selectedUniform.Department,
                 selectedUniform.Course,
                 selectedUniform.Gender,
-                selectedUniform.Type,
+                type,
                 selectedUniform.Body,
                 selectedUniform.Size,
                 "ACTIVE",
@@ -431,7 +435,7 @@ class _UniformStudentState extends State<UniformStudent> {
     );
   }
 
-  void _showRequestModal(BuildContext context) {
+  void _showRequestModal(BuildContext context, String type) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -443,7 +447,7 @@ class _UniformStudentState extends State<UniformStudent> {
             print('Department: ${selectedUniform.Department}');
             print('Course: ${selectedUniform.Course}');
             print('Gender: ${selectedUniform.Gender}');
-            print('Type: ${selectedUniform.Type}');
+            print('Type: ${type}');
             print('Body: ${selectedUniform.Body}');
             print('Size: ${selectedUniform.Size}');
             print('Stock: ${selectedUniform.Stock}');
@@ -455,7 +459,7 @@ class _UniformStudentState extends State<UniformStudent> {
                   department: selectedUniform.Department,
                   course: selectedUniform.Course,
                   gender: selectedUniform.Gender,
-                  type: selectedUniform.Type,
+                  type: type,
                   body: selectedUniform.Body,
                   size: selectedUniform.Size));
             }
@@ -463,7 +467,7 @@ class _UniformStudentState extends State<UniformStudent> {
                 selectedUniform.Department,
                 selectedUniform.Course,
                 selectedUniform.Gender,
-                selectedUniform.Type,
+                type,
                 selectedUniform.Body,
                 selectedUniform.Size,
                 "Request",

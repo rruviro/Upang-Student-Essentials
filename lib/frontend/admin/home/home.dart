@@ -29,14 +29,23 @@ class Home extends StatelessWidget {
       buildWhen: (previous, current) => current is! AdminActionState,
       listener: (context, state) {
         if (state is NotificationPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => notif(studentProfile: 0)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => notif(studentProfile: 0)));
         } else if (state is CoursePageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Courses(departmentID: 0, departmentName: '',)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Courses(
+                        departmentID: 0,
+                        departmentName: '',
+                      )));
         } else if (state is ManagePageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => manage()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => manage()));
         }
       },
-
       builder: (context, state) {
         if (state is DepartmentsLoadingState) {
           return Center(child: CircularProgressIndicator());
@@ -57,72 +66,74 @@ class Home extends StatelessWidget {
                           textStyle: TextStyle(
                               fontSize: 11,
                               color: Colors.black,
-                              fontWeight: FontWeight.w600
-                          )
-                        ),
-                      ),
-                    ],
-                  ),
+                              fontWeight: FontWeight.w600)),
+                    ),
+                  ],
                 ),
-                automaticallyImplyLeading: false,
-                centerTitle: false,
-                actions: <Widget>[
-                  SizedBox(width: 15),
-                ],
-                backgroundColor: Colors.white,
-                elevation: 0,
               ),
-              body: Stack(
-                children:[
-                  ListView(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Departments',
-                                  style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
-                                ),
-                                Text(
-                                  'Choose your perspective department for -',
-                                  style: TextStyle(color: tertiary_color, fontSize: 10, fontWeight: FontWeight.w400),
-                                ),
-                                SizedBox(height: 20), 
-                                ItemList (
-                                  departments : state.departments,
-                                )
-                              ],
-                            ),
+              automaticallyImplyLeading: false,
+              centerTitle: false,
+              actions: <Widget>[
+                SizedBox(width: 15),
+              ],
+              backgroundColor: Colors.white,
+              elevation: 0,
+            ),
+            body: Stack(
+              children: [
+                ListView(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(color: Colors.white),
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Departments',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                'Choose your perspective department for -',
+                                style: TextStyle(
+                                    color: tertiary_color,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(height: 20),
+                              ItemList(
+                                departments: state.departments,
+                              )
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: 5,
-                    right: 23,
-                    child: InkWell(
-                      onTap:() {
-                        adminBloc.add(NewDepartmentPageEvent());
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: primary_color,
-                      ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 5,
+                  right: 23,
+                  child: InkWell(
+                    onTap: () {
+                      adminBloc.add(NewDepartmentPageEvent());
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: primary_color,
                     ),
                   ),
-                ],
-              ),
-            );
+                ),
+              ],
+            ),
+          );
         } else if (state is DepartmentsErrorState) {
           return Scaffold(
             appBar: AppBar(
@@ -130,11 +141,9 @@ class Home extends StatelessWidget {
             ),
             body: Center(child: Text('Error: ${state.error}')),
           );
-        }
-        else{
+        } else {
           return Center(child: CircularProgressIndicator());
         }
-        
       },
     );
   }
@@ -149,8 +158,8 @@ class ItemList extends StatelessWidget {
     return Column(
       children: departments
           .map((e) => ItemCard(
-        visual: e,
-      ))
+                visual: e,
+              ))
           .toList(),
     );
   }
@@ -173,7 +182,7 @@ class ItemCard extends StatelessWidget {
       margin: const EdgeInsets.only(
         bottom: 20.0,
       ),
-      height: 80,
+      height: 120, // Increased the height to accommodate the new layout
       decoration: BoxDecoration(
         color: primary_color,
         borderRadius: BorderRadius.circular(5),
@@ -227,10 +236,7 @@ class ItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: 25.0,
-                          left: 30.0
-                      ),
+                      padding: EdgeInsets.only(top: 25.0, left: 30.0),
                       child: Text(
                         visual.name,
                         style: TextStyle(
@@ -241,9 +247,7 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          left: 30.0
-                      ),
+                      padding: EdgeInsets.only(left: 30.0),
                       child: Container(),
                     ),
                   ],
@@ -256,36 +260,76 @@ class ItemCard extends StatelessWidget {
             right: 0,
             child: Container(
               width: 85,
-              height: 25,
+              height: 100, // Increased the height to fit the column
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    topRight: Radius.circular(5),
-                  ),
-                  color: Color.fromARGB(227, 255, 255, 255)
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                ),
+                color: Color.fromARGB(227, 255, 255, 255),
               ),
               child: InkWell(
                 onTap: () {
                   adminBloc.add(ManagePageEvent());
                 },
-                child: Row(
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Align text to the start
                   children: [
-                    SizedBox(width: 10),
+                    /*Row(
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          'Manage',
+                          style: GoogleFonts.inter(
+                            textStyle: TextStyle(
+                                fontSize: 10.5,
+                                color: primary_color,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Icon(
+                          Icons.dashboard_customize_outlined,
+                          color: primary_color,
+                          size: 15,
+                        ),
+                      ],
+                    ),*/
+                    SizedBox(
+                        height:
+                            8), // Add some space between the Row and the Column
                     Text(
-                      'Manage',
+                      'Reserved: ${visual.reserved}',
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
-                            fontSize: 10.5,
-                            color: primary_color,
-                            fontWeight: FontWeight.w400
+                          fontSize: 10.5,
+                          color: primary_color,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
-                    Icon(
-                      Icons.dashboard_customize_outlined,
-                      color: primary_color,
-                      size: 15,
+                    SizedBox(height: 4), // Add space between texts
+                    Text(
+                      'Claim: ${visual.claim}',
+                      style: GoogleFonts.inter(
+                        textStyle: TextStyle(
+                          fontSize: 10.5,
+                          color: primary_color,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 4), // Add space between texts
+                    Text(
+                      'Complete: ${visual.completed}',
+                      style: GoogleFonts.inter(
+                        textStyle: TextStyle(
+                          fontSize: 10.5,
+                          color: primary_color,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                   ],
                 ),

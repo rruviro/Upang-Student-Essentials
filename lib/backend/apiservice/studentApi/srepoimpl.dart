@@ -18,9 +18,8 @@ import 'dart:convert';
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
 
 class StudentRepositoryImpl extends Studentrepo {
-  static const String baseUrl =
-      'https://floating-cliffs-62090-6c6c2af6e00a.herokuapp.com/api';
-  // static const String baseUrl = 'http://10.0.2.2:8000/api';
+  //static const String baseUrl = 'https://floating-cliffs-62090-6c6c2af6e00a.herokuapp.com/api';
+  static const String baseUrl = 'http://127.0.0.1:8000/api';
   //static const String baseUrl = 'http://localhost:8000/api';
 
   @override
@@ -385,6 +384,7 @@ class StudentRepositoryImpl extends Studentrepo {
         await http.put(Uri.parse('$baseUrl/bookreserveclaim/$id/$status'));
     if (response == 200) {
       print("!!!!!!!!!!!!!!!!!!!!");
+      print('$baseUrl/itemreserveclaim/$id/$status');
     } else {
       print(response.statusCode);
       print('$baseUrl/bookreserveclaim/$id/$status');
@@ -398,6 +398,7 @@ class StudentRepositoryImpl extends Studentrepo {
         await http.put(Uri.parse('$baseUrl/itemreserveclaim/$id/$status'));
     if (response.statusCode == 200) {
       print("!!!!!!!!!!!!!!!!!!!!");
+      print('$baseUrl/itemreserveclaim/$id/$status');
     } else {
       print(response.statusCode);
       print('$baseUrl/itemreserveclaim/$id/$status');

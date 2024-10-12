@@ -30,6 +30,10 @@ class NewDepartmentPageEvent extends AdminExtendedEvent {}
 
 class ManagePageEvent extends AdminExtendedEvent {}
 
+class studentBagItem extends AdminExtendedEvent {}
+
+class studentBagBook extends AdminExtendedEvent {}
+
 class showCodeBookData extends AdminExtendedEvent {
   final String code;
 

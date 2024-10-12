@@ -259,15 +259,7 @@ class _StocksState extends State<Stocks> {
           setState(() {
             items = state.studentBagBook;
           });
-        } else if (state is UniformPageState) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => UniformStudent(
-                      courseName: widget.courseName,
-                      profile: widget.profile,
-                      department: widget.Department)));
-        }
+        } else if (state is UniformPageState) {}
       },
       builder: (context, state) {
         if (state is StocksLoadingState) {

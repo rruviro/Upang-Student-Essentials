@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
-import 'package:use/frontend/admin/home/home.dart';
 import 'package:use/frontend/student/announcement/announcement.dart';
 
 import '../../colors/colors.dart';
@@ -18,7 +16,6 @@ class Announcement extends StatefulWidget {
 }
 
 class _AnnouncementState extends State<Announcement> {
-  final TextEditingController _departmentcontroller = TextEditingController();
   final TextEditingController _messagecontroller = TextEditingController();
   String? _selectedDepartment;
   List<announcement> announcements = [];
@@ -39,30 +36,28 @@ class _AnnouncementState extends State<Announcement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     backgroundColor: Colors.white,
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                title: Container(
-                  width: double.infinity, 
-                  height: 35, 
-                  child: Row(
-                    children: [
-                      Image.asset('assets/logo.png'),
-                      SizedBox(width: 10),
-                      Text(
-                        'Upang Student Essentials',
-                        style: GoogleFonts.inter(
-                          textStyle: TextStyle(
-                            fontSize: 11,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600
-                          )
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Container(
+          width: double.infinity,
+          height: 35,
+          child: Row(
+            children: [
+              Image.asset('assets/logo.png'),
+              SizedBox(width: 10),
+              Text(
+                'Upang Student Essentials',
+                style: GoogleFonts.inter(
+                    textStyle: TextStyle(
+                        fontSize: 11,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600)),
               ),
+            ],
+          ),
+        ),
+      ),
       body: BlocBuilder<AdminExtendedBloc, AdminExtendedState>(
         builder: (context, state) {
           if (_showLoading) {
@@ -213,13 +208,14 @@ class _AnnouncementState extends State<Announcement> {
                 actions: [
                   GestureDetector(
                     onTap: () {
-                      if (_selectedDepartment != null && _messagecontroller.text.isNotEmpty) {
+                      if (_selectedDepartment != null &&
+                          _messagecontroller.text.isNotEmpty) {
                         context.read<AdminExtendedBloc>().add(
-                          createAnnouncement(
-                            _selectedDepartment!,
-                            _messagecontroller.text,
-                          ),
-                        );
+                              createAnnouncement(
+                                _selectedDepartment!,
+                                _messagecontroller.text,
+                              ),
+                            );
 
                         setState(() {
                           _selectedDepartment = null;
@@ -242,7 +238,7 @@ class _AnnouncementState extends State<Announcement> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: primary_color, 
+                          color: primary_color,
                         ),
                       ),
                     ),
@@ -262,25 +258,24 @@ class _AnnouncementState extends State<Announcement> {
   }
 }
 
-
 class ItemList extends StatelessWidget {
   final List<announcement> status;
-  const ItemList({Key? key, required this.status}) : super (key: key);
+  const ItemList({Key? key, required this.status}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: status
-        .map((e) => ItemCard(
-            details: e,
-          ))
-        .toList(),
+          .map((e) => ItemCard(
+                details: e,
+              ))
+          .toList(),
     );
   }
 }
 
 class ItemCard extends StatelessWidget {
   final announcement details;
-  const ItemCard({Key? key, required this.details}) : super (key: key);
+  const ItemCard({Key? key, required this.details}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -319,15 +314,10 @@ class ItemCard extends StatelessWidget {
               SizedBox(height: 10),
               Container(
                 margin: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 10.0
-                ),
+                    horizontal: 10.0, vertical: 10.0),
                 child: Text(
                   details.body,
-                  style: GoogleFonts.inter(
-                    color: Colors.black,
-                    fontSize: 10
-                  ),
+                  style: GoogleFonts.inter(color: Colors.black, fontSize: 10),
                 ),
               ),
               SizedBox(height: 10),
@@ -341,10 +331,7 @@ class ItemCard extends StatelessWidget {
             child: Center(
               child: Text(
                 details.department,
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 10
-                ),
+                style: GoogleFonts.inter(color: Colors.white, fontSize: 10),
               ),
             ),
           ),
@@ -356,10 +343,7 @@ class ItemCard extends StatelessWidget {
             child: Center(
               child: Text(
                 details.date,
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 10
-                ),
+                style: GoogleFonts.inter(color: Colors.white, fontSize: 10),
               ),
             ),
           ),

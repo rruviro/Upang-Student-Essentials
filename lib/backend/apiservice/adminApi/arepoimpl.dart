@@ -14,8 +14,8 @@ import 'dart:convert';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
 class AdminRepositoryImpl extends Adminrepo {
-  static const String baseUrl =
-      'https://floating-cliffs-62090-6c6c2af6e00a.herokuapp.com/api';
+  //static const String baseUrl = 'https://floating-cliffs-62090-6c6c2af6e00a.herokuapp.com/api';
+  static const String baseUrl = 'http://127.0.0.1:8000/api';
 
   @override
   Future<StudentBagBook> showCodeBook(String code) async {
@@ -325,6 +325,30 @@ class AdminRepositoryImpl extends Adminrepo {
       print('${response.statusCode}');
       print('$baseUrl/reserveditems/$count/$course/$gender/$type/$body/$size');
       throw Exception("Failed to load Uniform");
+    }
+  }
+
+  @override
+  Future<List<StudentBagBook>> showStudentBagBookData() async {
+    final response = await http.get(Uri.parse('$baseUrl/completebook'));
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      List<dynamic> itemsJson = responseBody['bookCollections'];
+      return itemsJson.map((json) => StudentBagBook.fromJson(json)).toList();
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  @override
+  Future<List<StudentBagItem>> showStudentBagItemData() async {
+    final response = await http.get(Uri.parse('$baseUrl/completeitem'));
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      List<dynamic> itemsJson = responseBody['items'];
+      return itemsJson.map((json) => StudentBagItem.fromJson(json)).toList();
+    } else {
+      throw Exception('Empty');
     }
   }
 }

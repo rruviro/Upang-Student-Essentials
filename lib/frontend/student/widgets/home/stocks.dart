@@ -10,38 +10,61 @@ import 'package:use/frontend/student/home/uniform.dart';
 
 import '../../../colors/colors.dart';
 
-
-class stocks_widget  extends StatelessWidget {
+class stocks_widget extends StatelessWidget {
   final List<Stock> stocks;
   final String courseName;
   final String department;
   final StudentProfile profile;
 
-  const stocks_widget ({Key? key, required this.stocks, required this.courseName, required this.profile, required this.department}) : super (key: key);
+  const stocks_widget(
+      {Key? key,
+      required this.stocks,
+      required this.courseName,
+      required this.profile,
+      required this.department})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: stocks.map((stock) => ItemCard(stock: stock, courseName: courseName, profile: profile, department: this.department,)).toList(),
+      children: stocks
+          .map((stock) => ItemCard(
+                stock: stock,
+                courseName: courseName,
+                profile: profile,
+                department: this.department,
+              ))
+          .toList(),
     );
   }
 }
+
 class ItemCard extends StatelessWidget {
   final Stock stock;
-  final String courseName;final String department;
+  final String courseName;
+  final String department;
   final StudentProfile profile;
 
-  const ItemCard({Key? key, required this.stock, required this.courseName, required this.profile, required this.department}) : super (key: key);
+  const ItemCard(
+      {Key? key,
+      required this.stock,
+      required this.courseName,
+      required this.profile,
+      required this.department})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: InkWell(
-          onTap: (){
+          onTap: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => UniformStudent(courseName: courseName, profile: this.profile, department: this.department,))
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => UniformStudent(
+                        courseName: courseName,
+                        profile: this.profile,
+                        department: this.department,
+                        type: this.stock.stockName)));
           },
           child: Container(
             height: 250,
@@ -78,8 +101,7 @@ class ItemCard extends StatelessWidget {
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(5),
                           bottomRight: Radius.circular(5),
-                        )
-                    ),
+                        )),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -97,7 +119,6 @@ class ItemCard extends StatelessWidget {
               ],
             ),
           ),
-        )
-    );
+        ));
   }
 }

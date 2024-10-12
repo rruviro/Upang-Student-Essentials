@@ -11,8 +11,6 @@
 //   ),
 // ];
 
-import 'dart:convert';
-
 // CHANGES BY LANCE
 class Course {
   final int id;
@@ -36,4 +34,3 @@ class Course {
     );
   }
 }
-

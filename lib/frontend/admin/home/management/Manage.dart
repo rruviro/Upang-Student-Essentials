@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:use/frontend/admin/home/home.dart';
 
 import '../../../colors/colors.dart';
 
@@ -16,7 +15,6 @@ class manage extends StatefulWidget {
 }
 
 class _manageState extends State<manage> {
-  
   final TextEditingController DepartmentName = TextEditingController();
   final TextEditingController Courses = TextEditingController();
   final TextEditingController Bachelor = TextEditingController();
@@ -25,16 +23,13 @@ class _manageState extends State<manage> {
   List<Map<String, dynamic>> _rows = [];
 
   int _countDepartment = 0;
-  int _countCourse = 0;
-  int _countBachelor = 0;
 
   File? _image;
   File? get image => _image;
 
   final _picker = ImagePicker();
   Future<void> _openImagePicker() async {
-    final pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
         _image = File(pickedImage.path);
@@ -73,7 +68,8 @@ class _manageState extends State<manage> {
     bool canAdd = true;
 
     for (var row in _rows) {
-      if (row['coursesController'].text.isEmpty || row['bachelorController'].text.isEmpty) {
+      if (row['coursesController'].text.isEmpty ||
+          row['bachelorController'].text.isEmpty) {
         canAdd = false;
         break;
       }
@@ -83,7 +79,7 @@ class _manageState extends State<manage> {
       setState(() {
         TextEditingController coursesController = TextEditingController();
         TextEditingController bachelorController = TextEditingController();
-        
+
         // Insert the new row at the beginning (index 0) for descending order
         _rows.insert(0, {
           'coursesController': coursesController,
@@ -93,20 +89,21 @@ class _manageState extends State<manage> {
         });
       });
     } else {
-      print('Please fill in the current course field before adding another row.');
+      print(
+          'Please fill in the current course field before adding another row.');
     }
   }
 
   Color _currentColor = Colors.blue;
   final List<Color> availableColors = [
-    Color.fromARGB(255, 255, 0, 0),   // Red
-    Color.fromARGB(255, 0, 255, 0),   // Green
-    Color.fromARGB(255, 0, 0, 255),   // Blue
-    Color.fromARGB(255, 255, 255, 0),  // Yellow
-    Color.fromARGB(255, 255, 165, 0),  // Orange
-    Color.fromARGB(255, 128, 0, 128),  // Purple
+    Color.fromARGB(255, 255, 0, 0), // Red
+    Color.fromARGB(255, 0, 255, 0), // Green
+    Color.fromARGB(255, 0, 0, 255), // Blue
+    Color.fromARGB(255, 255, 255, 0), // Yellow
+    Color.fromARGB(255, 255, 165, 0), // Orange
+    Color.fromARGB(255, 128, 0, 128), // Purple
     Color.fromARGB(255, 255, 192, 203), // Pink
-    Color.fromARGB(255, 0, 0, 0),       // Black
+    Color.fromARGB(255, 0, 0, 0), // Black
     Color.fromARGB(255, 128, 128, 128), // Gray
   ];
   int? _selectedIndex;
@@ -131,24 +128,26 @@ class _manageState extends State<manage> {
           },
         ),
         title: Transform.translate(
-          offset: Offset(-15.0, 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Manage',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              Text(
-                'manage health and science details ',
-                style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
-              ),
-            ],
-          )
-        ),
+            offset: Offset(-15.0, 0.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Manage',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                Text(
+                  'manage health and science details ',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
+            )),
       ),
       body: Stack(
-        children:[
+        children: [
           ListView(
             children: [
               Container(
@@ -164,10 +163,9 @@ class _manageState extends State<manage> {
                         Text(
                           'Department Name',
                           style: GoogleFonts.inter(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500
-                          ),
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
                         ),
                         Container(
                           width: 200,
@@ -187,7 +185,7 @@ class _manageState extends State<manage> {
                                 fontWeight: FontWeight.w400,
                               ),
                               suffix: Text(
-                                '$_countDepartment/23', 
+                                '$_countDepartment/23',
                                 style: TextStyle(
                                   color: primary_color,
                                   fontSize: 12,
@@ -227,36 +225,33 @@ class _manageState extends State<manage> {
                                 child: Text(
                                   'Course(s)',
                                   style: GoogleFonts.inter(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500
-                                  ),
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
                               Positioned(
                                 top: -5,
                                 right: 0,
                                 child: IconButton(
-                                  iconSize: 15,
-                                  icon: Icon(Icons.add, color: primary_color),
-                                  onPressed: _addRow
-                                ),
+                                    iconSize: 15,
+                                    icon: Icon(Icons.add, color: primary_color),
+                                    onPressed: _addRow),
                               ),
                             ],
                           ),
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: primary_color,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                blurRadius: 3,
-                                offset: Offset(1, 1),
-                              ),
-                            ]
-                          ),
+                              color: primary_color,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 3,
+                                  offset: Offset(1, 1),
+                                ),
+                              ]),
                           width: double.infinity,
                           height: 250,
                           child: ListView.builder(
@@ -264,17 +259,14 @@ class _manageState extends State<manage> {
                             itemBuilder: (context, index) {
                               return Container(
                                 margin: EdgeInsets.only(
-                                  top: 10,
-                                  bottom: 10,
-                                  right: 20,
-                                  left: 20
-                                ),
+                                    top: 10, bottom: 10, right: 20, left: 20),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
                                       child: TextFormField(
-                                        controller: _rows[index]['coursesController'],
+                                        controller: _rows[index]
+                                            ['coursesController'],
                                         decoration: InputDecoration(
                                           hintText: 'BSIT',
                                           hintStyle: TextStyle(
@@ -284,13 +276,17 @@ class _manageState extends State<manage> {
                                           ),
                                           hoverColor: Colors.white,
                                           border: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white),
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
                                           ),
                                           focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white),
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
                                           ),
                                           enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white), // Color when unfocused
+                                            borderSide: BorderSide(
+                                                color: Colors
+                                                    .white), // Color when unfocused
                                           ),
                                           suffix: Text(
                                             '${_rows[index]['countCourse']}/10',
@@ -316,7 +312,8 @@ class _manageState extends State<manage> {
                                         ],
                                         onChanged: (text) {
                                           setState(() {
-                                            _rows[index]['countCourse'] = text.length;
+                                            _rows[index]['countCourse'] =
+                                                text.length;
                                           });
                                         },
                                       ),
@@ -337,9 +334,11 @@ class _manageState extends State<manage> {
                                     SizedBox(width: 15),
                                     Expanded(
                                       child: TextFormField(
-                                        controller: _rows[index]['bachelorController'],
+                                        controller: _rows[index]
+                                            ['bachelorController'],
                                         decoration: InputDecoration(
-                                          hintText: 'Bachelor of information in technology',
+                                          hintText:
+                                              'Bachelor of information in technology',
                                           hintStyle: TextStyle(
                                             fontSize: 13,
                                             color: Colors.white,
@@ -347,13 +346,16 @@ class _manageState extends State<manage> {
                                           ),
                                           hoverColor: Colors.white,
                                           border: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white),
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
                                           ),
                                           focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white),
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
                                           ),
                                           enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(color: Colors.white),
+                                            borderSide:
+                                                BorderSide(color: Colors.white),
                                           ),
                                           suffix: Text(
                                             '${_rows[index]['countBachelor']}/25',
@@ -379,7 +381,8 @@ class _manageState extends State<manage> {
                                         ],
                                         onChanged: (text) {
                                           setState(() {
-                                            _rows[index]['countBachelor'] = text.length;
+                                            _rows[index]['countBachelor'] =
+                                                text.length;
                                           });
                                         },
                                       ),
@@ -388,7 +391,8 @@ class _manageState extends State<manage> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 5),
                                       child: IconButton(
-                                        icon: Icon(Icons.delete, color: Colors.white),
+                                        icon: Icon(Icons.delete,
+                                            color: Colors.white),
                                         onPressed: () => _deleteItem(index),
                                       ),
                                     ),
@@ -409,24 +413,20 @@ class _manageState extends State<manage> {
                             width: double.infinity,
                             height: 120,
                             decoration: BoxDecoration(
-                              color: primary_color,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  blurRadius: 3,
-                                  offset: Offset(1, 1),
-                                ),
-                              ]
-                            ),
+                                color: primary_color,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    blurRadius: 3,
+                                    offset: Offset(1, 1),
+                                  ),
+                                ]),
                             child: _image != null
-                                ? Image.file(
-                                    _image!, 
-                                    fit: BoxFit.cover
-                                  )
+                                ? Image.file(_image!, fit: BoxFit.cover)
                                 : Icon(
-                                    Icons.image_search_rounded,color: 
-                                    Colors.white,
+                                    Icons.image_search_rounded,
+                                    color: Colors.white,
                                   ),
                           ),
                         ),
@@ -442,30 +442,39 @@ class _manageState extends State<manage> {
                         SizedBox(height: 15),
                         Container(
                           width: 200,
-                          height: 50, // Adjusted height to give GridView enough space
+                          height:
+                              50, // Adjusted height to give GridView enough space
                           child: GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 7, // Number of columns for the grid
-                              childAspectRatio: 1, // Aspect ratio to keep squares
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount:
+                                  7, // Number of columns for the grid
+                              childAspectRatio:
+                                  1, // Aspect ratio to keep squares
                             ),
                             itemCount: availableColors.length - 2,
                             itemBuilder: (context, index) {
-                              final color = availableColors[index + 2]; // Adjust index for remaining colors
-                              final isSelected = _selectedIndex == index; // Check if the color is selected
+                              final color = availableColors[index +
+                                  2]; // Adjust index for remaining colors
+                              final isSelected = _selectedIndex ==
+                                  index; // Check if the color is selected
                               return GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    _selectedIndex = index; // Update selected index
+                                    _selectedIndex =
+                                        index; // Update selected index
                                   });
                                   _selectColor(color);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: color,
-                                    shape: BoxShape.circle, // Make the container circular
+                                    shape: BoxShape
+                                        .circle, // Make the container circular
                                     border: isSelected
                                         ? Border.all(
-                                            color: const Color.fromARGB(255, 187, 187, 187), // Stroke color
+                                            color: const Color.fromARGB(255,
+                                                187, 187, 187), // Stroke color
                                             width: 2.0, // Stroke width
                                           )
                                         : null,
@@ -486,25 +495,23 @@ class _manageState extends State<manage> {
                       ),
                       child: Center(
                         child: ElevatedButton(
-                          onPressed: (){},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primary_color, 
-                            minimumSize: Size(double.infinity, 60), 
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10), 
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Update',
-                              style: GoogleFonts.inter(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primary_color,
+                              minimumSize: Size(double.infinity, 60),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                          )
-                        ),
+                            child: Center(
+                              child: Text(
+                                'Update',
+                                style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            )),
                       ),
                     ),
                   ],
@@ -523,8 +530,7 @@ Widget _Circle(int index, Color color) {
   bool isSelected = _selectedIndex == index;
 
   return InkWell(
-    onTap: () {
-    },
+    onTap: () {},
     child: Container(
       margin: EdgeInsets.only(right: 15.0),
       width: 15.0,
@@ -533,7 +539,9 @@ Widget _Circle(int index, Color color) {
         color: color,
         shape: BoxShape.circle,
         border: isSelected
-            ? Border.all(color: Color.fromARGB(116, 255, 255, 255), width: 2.0) // Stroke when selected
+            ? Border.all(
+                color: Color.fromARGB(116, 255, 255, 255),
+                width: 2.0) // Stroke when selected
             : null, // No border when not selected
       ),
     ),

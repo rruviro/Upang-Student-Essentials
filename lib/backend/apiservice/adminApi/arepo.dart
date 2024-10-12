@@ -13,6 +13,8 @@ abstract class Adminrepo {
   Future<StudentBagItem> showCodeItem(String code);
   Future<void> changeStudentItemStatus(int id, String status);
   Future<void> changeStudentBookStatus(int id, String status);
+  Future<List<StudentBagBook>> showStudentBagBookData();
+  Future<List<StudentBagItem>> showStudentBagItemData();
 
   Future<List<StudentProfile>> showAllStudentProfileData();
   Future<StudentProfile> showStudentProfileData(String studentId);

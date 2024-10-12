@@ -258,6 +258,58 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       }
     });
 
+    List<StudentBagItem>? studentBagItems;
+    List<StudentBagBook>? studentBagBooks;
+    bool itemsLoaded = false;
+    bool booksLoaded = false;
+
+    on<studentBagItem>((event, emit) async {
+      studentBagItems = [];
+      itemsLoaded = false;
+
+      try {
+        final itemData = await _adminrepo.showStudentBagItemData();
+        studentBagItems = itemData;
+        itemsLoaded = true;
+
+        if (itemsLoaded && booksLoaded) {
+          emit(StudentBagCombinedLoadSuccessState(
+            studentBagItems ?? [],
+            studentBagBooks ?? [],
+          ));
+          print("item work");
+        }
+      } catch (e) {
+        emit(StudentBagBookErrorState('An error occurred: ${e.toString()}'));
+        itemsLoaded = false;
+      }
+    });
+
+    on<studentBagBook>((event, emit) async {
+      studentBagBooks = [];
+      booksLoaded = false;
+      print("book work");
+      try {
+        print("book work2");
+        final bookData = await _adminrepo.showStudentBagBookData();
+        studentBagBooks = bookData;
+        booksLoaded = true;
+
+        if (itemsLoaded && booksLoaded) {
+          print("book work3");
+          emit(StudentBagCombinedLoadSuccessState(
+            studentBagItems ?? [],
+            studentBagBooks ?? [],
+          ));
+          print("book work");
+        }
+      } catch (e) {
+        print(e);
+        emit(StudentBagBookErrorState('An error occurred: ${e.toString()}'));
+        booksLoaded = false;
+      }
+    });
+
     // on<createUniform>((event, emit) async {
     //   try {
     //     await _adminrepo.createUniform(event.Department,event.Course,event.Gender,event.Type,event.Body,event.Size,event.Stock,);
