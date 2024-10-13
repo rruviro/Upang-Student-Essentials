@@ -45,8 +45,12 @@ class _UniformStudentState extends State<UniformStudent> {
   void initState() {
     super.initState();
     getUnforms();
-    BlocProvider.of<StudentExtendedBloc>(context)
-        .add(ShowUniformsEvent(widget.courseName, widget.Gender, widget.UniformType, widget.Body,));
+    BlocProvider.of<StudentExtendedBloc>(context).add(ShowUniformsEvent(
+      widget.courseName,
+      widget.Gender,
+      widget.UniformType,
+      widget.Body,
+    ));
   }
 
   void getUnforms() async {
@@ -227,7 +231,7 @@ class _UniformStudentState extends State<UniformStudent> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    _buildHeader('${widget.type} Top'),
+                    _buildHeader('${widget.type} ${widget.Body}'),
                     const SizedBox(height: 15),
                     Align(
                       alignment: Alignment.centerLeft,

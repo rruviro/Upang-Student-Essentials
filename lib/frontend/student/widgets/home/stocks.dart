@@ -61,13 +61,14 @@ class ItemCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => UniformStudent(
-                        courseName: courseName,
-                        profile: this.profile,
-                        department: this.department,
-                        type: this.stock.stockName,
-                        Gender: stock.Gender,
-                        UniformType: stock.Type,
-                        Body: stock.Body,)));
+                          courseName: courseName,
+                          profile: this.profile,
+                          department: this.department,
+                          type: this.stock.stockName,
+                          Gender: stock.Gender,
+                          UniformType: stock.Type,
+                          Body: stock.Body,
+                        )));
           },
           child: Container(
             height: 250,
@@ -109,7 +110,7 @@ class ItemCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          stock.stockName,
+                          "${stock.stockName} ${stock.Body}",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,

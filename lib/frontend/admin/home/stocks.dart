@@ -753,7 +753,7 @@ class _ItemCardState extends State<ItemCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.stock.stockName,
+                            "${widget.stock.stockName} ${widget.stock.Body}",
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
