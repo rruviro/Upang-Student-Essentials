@@ -236,6 +236,7 @@ class StudentExtendedBloc
       try {
         await _studentrepo.addStudentBookData(
           event.id,
+          // event.course, //DAGDAG NI LANCE
           event.department,
           event.bookName,
           event.subjectCode,
@@ -270,6 +271,7 @@ class StudentExtendedBloc
       try {
         await _studentrepo.addreserveBookData(
             event.id,
+            // event.course, //DAG DAG NI LANCE
             event.department,
             event.bookName,
             event.subjectCode,
@@ -277,12 +279,12 @@ class StudentExtendedBloc
             event.status,
             event.shift,
             event.stocks);
-        add(ShowStocksEvent(Department: event.department));
+        add(ShowStocksEvent(Course: event.course)); //EDITED NI LANCE
         add(allstudentBagBook(event.id, "All"));
       } catch (e) {
         print("ERROR");
         emit(bookError(e.toString()));
-        add(ShowStocksEvent(Department: event.department));
+        add(ShowStocksEvent(Course: event.course)); // EDITED NI LANCE
       }
     });
 
@@ -363,9 +365,9 @@ class StudentExtendedBloc
     on<ShowStocksEvent>((event, emit) async {
       emit(StocksLoadingState());
       try {
-        print('Fetching data for department: ${event.Department}');
-        final stockData = await _studentrepo.showStocks(event.Department);
-        final bookData = await _studentrepo.showBooks(event.Department);
+        print('Fetching data for department: ${event.Course}'); // PINALITAN KO YUNG COURSES, DEPARTMENT DATI
+        final stockData = await _studentrepo.showStocks(event.Course);
+        final bookData = await _studentrepo.showBooks(event.Course);
         print('Stocks and books fetched successfully');
         emit(StocksLoadedState(stocks: stockData, books: bookData));
       } catch (e) {
@@ -377,7 +379,7 @@ class StudentExtendedBloc
     on<ShowUniformsEvent>((event, emit) async {
       emit(UniformsLoadingState());
       try {
-        final uniformData = await _studentrepo.showUniforms(event.Course);
+        final uniformData = await _studentrepo.showUniforms(event.Course, event.Gender, event.Type, event.Body);
         emit(UniformsLoadedState(uniforms: uniformData));
       } catch (e) {
         emit(UniformsErrorState('An error occurred: ${e.toString()}'));

@@ -22,6 +22,7 @@ abstract class Studentrepo {
 
   Future<void> addStudentBookData(
     int id,
+    // String course, //DAGDAG NI LANCE
     String department,
     String bookName,
     String subjectCode,
@@ -44,6 +45,7 @@ abstract class Studentrepo {
 
   Future<void> addreserveBookData(
       int id,
+      // String course, //DAGDAG NI LANCE
       String department,
       String bookName,
       String subjectCode,
@@ -87,14 +89,14 @@ abstract class Studentrepo {
   // COURSES
   Future<List<Course>> showCourses(int departmentID);
 
-  // BOOKS
-  Future<List<Stock>> showStocks(String Department);
+  // STOCKS
+  Future<List<Stock>> showStocks(String Course); // change from dep to course
 
-  // STOCK
-  Future<List<Book>> showBooks(String Department);
+  //BOOKS
+  Future<List<Book>> showBooks(String Course); // dep tocourse
 
   // UNIFORM
-  Future<List<Uniform>> showUniforms(String Course);
+  Future<List<Uniform>> showUniforms(String Course, String Gender, String Type, String Body);
 
   Future<void> itemreduceStocks(int count, String department, String course,
       String gender, String type, String body, String size);

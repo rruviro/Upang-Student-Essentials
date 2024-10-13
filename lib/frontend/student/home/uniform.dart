@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
+import 'package:use/backend/models/admin/Course.dart';
 import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -16,13 +17,19 @@ class UniformStudent extends StatefulWidget {
   final String courseName;
   final String department;
   final String type;
+  final String Gender;
+  final String UniformType;
+  final String Body;
 
   const UniformStudent(
       {Key? key,
       required this.courseName,
       required this.profile,
       required this.department,
-      required this.type})
+      required this.type,
+      required this.Gender,
+      required this.UniformType,
+      required this.Body})
       : super(key: key);
 
   @override
@@ -39,7 +46,7 @@ class _UniformStudentState extends State<UniformStudent> {
     super.initState();
     getUnforms();
     BlocProvider.of<StudentExtendedBloc>(context)
-        .add(ShowUniformsEvent(Course: widget.courseName));
+        .add(ShowUniformsEvent(widget.courseName, widget.Gender, widget.UniformType, widget.Body,));
   }
 
   void getUnforms() async {
@@ -108,7 +115,7 @@ class _UniformStudentState extends State<UniformStudent> {
           onPressed: () {
             context
                 .read<StudentExtendedBloc>()
-                .add(ShowStocksEvent(Department: widget.department));
+                .add(ShowStocksEvent(Course: widget.courseName));
             Navigator.pop(context, true);
           },
         ),
@@ -118,7 +125,7 @@ class _UniformStudentState extends State<UniformStudent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Uniform',
+                'Uniform,',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(

@@ -32,13 +32,19 @@ class Stock {
   final int id;
   final String stockName;
   final String stockPhoto;
-  final String Department;
+  final String Course;
+  final String Gender;
+  final String Type;
+  final String Body;
 
   Stock({
     required this.id,
     required this.stockName,
     required this.stockPhoto,
-    required this.Department,
+    required this.Course,
+    required this.Gender,
+    required this.Type,
+    required this.Body,
   });
 
   String get photoUrl {
@@ -50,7 +56,10 @@ class Stock {
       id: json['id'],
       stockName: json['stockName'],
       stockPhoto: json['stockPhoto'],
-      Department: json['Department'],
+      Course: json['Course'],
+      Gender: json['Gender'],
+      Type: json['Type'],
+      Body: json['Body'],
     );
   }
 }

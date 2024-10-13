@@ -45,7 +45,7 @@ class _StocksState extends State<Stocks> {
     getCourse();
     context
         .read<StudentExtendedBloc>()
-        .add(ShowStocksEvent(Department: widget.Department));
+        .add(ShowStocksEvent(Course: widget.courseName)); // EDITED NI LANCE
   }
 
   Future<void> getCourse() async {
@@ -130,6 +130,7 @@ class _StocksState extends State<Stocks> {
                                   context.read<StudentExtendedBloc>().add(
                                         AddStudentBagBook(
                                           _id!,
+                                          widget.courseName, // DAGDAG NI LANCE
                                           widget.Department,
                                           book.BookName,
                                           book.SubjectCode,
@@ -196,6 +197,7 @@ class _StocksState extends State<Stocks> {
                                   context.read<StudentExtendedBloc>().add(
                                         AddReserveBagBook(
                                           _id!,
+                                          widget.courseName, //DAGDAG NI LANCE
                                           widget.Department,
                                           book.BookName,
                                           book.SubjectCode,

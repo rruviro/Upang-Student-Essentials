@@ -64,7 +64,10 @@ class ItemCard extends StatelessWidget {
                         courseName: courseName,
                         profile: this.profile,
                         department: this.department,
-                        type: this.stock.stockName)));
+                        type: this.stock.stockName,
+                        Gender: stock.Gender,
+                        UniformType: stock.Type,
+                        Body: stock.Body,)));
           },
           child: Container(
             height: 250,

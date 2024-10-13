@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/models/admin/Uniform.dart';
 import 'package:use/frontend/colors/colors.dart';
 
 class UniformAdmin extends StatefulWidget {
   final String courseName;
   final String Department;
+  final Stock stock;
 
   const UniformAdmin({
     super.key,
     required this.courseName,
     required this.Department,
+    required this.stock,
   });
 
   @override
@@ -32,7 +35,7 @@ class _UniformAdminState extends State<UniformAdmin> {
       });
     });
     BlocProvider.of<AdminExtendedBloc>(context).add(ShowUniformsEvent(
-      widget.courseName,
+      widget.courseName, widget.stock.Gender, widget.stock.Type, widget.stock.Body
     ));
   }
 
@@ -57,7 +60,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                   Navigator.pop(context);
                   context
                       .read<AdminExtendedBloc>()
-                      .add(ShowStocksEvent(Department: widget.Department));
+                      .add(ShowStocksEvent(Course: widget.courseName));
                 },
               ),
               title: Transform.translate(
@@ -70,7 +73,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                       style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     Text(
-                      'Course: ${widget.courseName}',
+                      'Course: ${widget.courseName} ${widget.stock.stockName}',
                       style: const TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   ],
@@ -126,8 +129,8 @@ class _UniformAdminState extends State<UniformAdmin> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'Uniforms',
+                         Text(
+                          '${widget.stock.stockName}',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -342,6 +345,9 @@ class _UniformAdminState extends State<UniformAdmin> {
                   BlocProvider.of<AdminExtendedBloc>(context)
                       .add(ShowUniformsEvent(
                     widget.courseName,
+                    widget.stock.Gender,
+                    widget.stock.Type,
+                    widget.stock.Body,
                   ));
                   Navigator.of(context).pop();
                 } else {

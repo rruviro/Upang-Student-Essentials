@@ -221,8 +221,8 @@ class AdminRepositoryImpl extends Adminrepo {
 
   // STOCK
   @override
-  Future<List<Stock>> showStocks(String Department) async {
-    final response = await http.get(Uri.parse('$baseUrl/stocks/$Department'));
+  Future<List<Stock>> showStocks(String Course) async {
+    final response = await http.get(Uri.parse('$baseUrl/stocks/$Course'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Stock.fromJson(data)).toList();
@@ -249,8 +249,8 @@ class AdminRepositoryImpl extends Adminrepo {
 
   // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
   @override
-  Future<List<Uniform>> showUniforms(String Course) async {
-    final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course'));
+  Future<List<Uniform>> showUniforms(String Course, String Gender, String Type, String Body) async {
+    final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course/$Gender/$Type/$Body'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Uniform.fromJson(data)).toList();

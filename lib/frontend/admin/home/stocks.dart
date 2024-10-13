@@ -70,7 +70,7 @@ class _StocksState extends State<Stocks> {
     super.initState();
     context
         .read<AdminExtendedBloc>()
-        .add(ShowStocksEvent(Department: widget.Department));
+        .add(ShowStocksEvent(Course: widget.courseName));
     ProdController.addListener(_updateCounter);
     ProdMController.addListener(_updateCounter);
     ProdBController.addListener(_updateCounter);
@@ -709,6 +709,7 @@ class _ItemCardState extends State<ItemCard> {
                       builder: (context) => UniformAdmin(
                             courseName: widget.courseName,
                             Department: widget.Department,
+                            stock: widget.stock,
                           )));
             },
             child: Container(
@@ -1218,7 +1219,7 @@ Future<void> _showUpdateUniformDialog(BuildContext context, Book books) async {
                   ),
                 );
                 BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
-                  Department: books.Department,
+                  Course: books.Course,
                 ));
                 Navigator.of(context).pop();
               } else {

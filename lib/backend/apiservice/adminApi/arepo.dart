@@ -35,13 +35,13 @@ abstract class Adminrepo {
   Future<List<Course>> showCourses(int departmentID);
 
   // BOOKS
-  Future<List<Stock>> showStocks(String Department);
+  Future<List<Stock>> showStocks(String Course);
 
   // STOCK
   Future<List<Book>> showBooks(String Department);
 
   // UNIFORM
-  Future<List<Uniform>> showUniforms(String Course);
+  Future<List<Uniform>> showUniforms(String Course, String Gender, String Type, String Body);
   // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock);
   // Future<void> updateUniform(int id);
 

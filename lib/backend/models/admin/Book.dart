@@ -1,5 +1,6 @@
 class Book {
   final int id;
+  final String Course;
   final String Department;
   final String BookName;
   final String SubjectCode;
@@ -9,6 +10,7 @@ class Book {
 
   Book({
     required this.id,
+    required this.Course,
     required this.Department,
     required this.BookName,
     required this.SubjectCode,
@@ -20,6 +22,7 @@ class Book {
   factory Book.fromJson(Map<String, dynamic> json) {
     return Book(
       id: json['id'],
+      Course: json['Course'],
       Department: json['Department'],
       BookName: json['BookName'],
       SubjectCode: json['SubjectCode'],

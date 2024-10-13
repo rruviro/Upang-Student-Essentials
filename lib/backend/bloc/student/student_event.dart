@@ -125,6 +125,7 @@ class showAnnouncementData extends StudentExtendedEvent {
 
 class AddStudentBagBook extends StudentExtendedEvent {
   final int id;
+  final String course; // DAGDAG NI LANCE
   final String department;
   final String bookName;
   final String subjectCode;
@@ -132,7 +133,7 @@ class AddStudentBagBook extends StudentExtendedEvent {
   final String status;
   final String shift;
 
-  AddStudentBagBook(this.id, this.department, this.bookName, this.subjectCode,
+  AddStudentBagBook(this.id, this.course, this.department, this.bookName, this.subjectCode, //DAGDAG NI LANCE
       this.subjectDesc, this.status, this.shift);
 }
 
@@ -162,6 +163,7 @@ class AddStudentBagItem extends StudentExtendedEvent {
 
 class AddReserveBagBook extends StudentExtendedEvent {
   final int id;
+  final String course; // DAGDAG NI LANCE
   final String department;
   final String bookName;
   final String subjectCode;
@@ -170,7 +172,7 @@ class AddReserveBagBook extends StudentExtendedEvent {
   final String shift;
   final int stocks;
 
-  AddReserveBagBook(this.id, this.department, this.bookName, this.subjectCode,
+  AddReserveBagBook(this.id, this.course, this.department, this.bookName, this.subjectCode, // DAGDAG NI LANCE SA COURSE
       this.subjectDesc, this.status, this.shift, this.stocks);
 }
 
@@ -229,14 +231,18 @@ class ShowCoursesEvent extends StudentExtendedEvent {
 
 // STOCK
 class ShowStocksEvent extends StudentExtendedEvent {
-  final String Department;
-  ShowStocksEvent({required this.Department});
+  final String Course;                     //                                              |
+  ShowStocksEvent({required this.Course}); // INEDIT NI LANCE FROM DEPARTMENT TO COURSE    |
 }
 
 // UNIFORM
 class ShowUniformsEvent extends StudentExtendedEvent {
   final String Course;
-  ShowUniformsEvent({required this.Course});
+  final String Gender;
+  final String Type;
+  final String Body;
+
+  ShowUniformsEvent( this.Course,  this.Gender,  this.Type,  this.Body);
 }
 
 class itemreduceStocks extends StudentExtendedEvent {
