@@ -562,6 +562,18 @@ class ItemList extends StatelessWidget {
                         deleteItemData(e.id),
                       );
                   await refresh;
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      Future.delayed(Duration(seconds: 2), () {
+                        Navigator.of(context).pop();
+                      });
+                      return AlertDialog(
+                        title: Text("Success"),
+                        content: Text("Uniform Deleted Successfully."),
+                      );
+                    },
+                  );
                 },
                 onCheckboxChanged: onCheckboxChanged,
                 isChecked: checkedItemIds.contains(e.id),
@@ -771,6 +783,18 @@ class BookList extends StatelessWidget {
               onpressed: () async {
                 context.read<StudentExtendedBloc>().add(deleteBookData(e.id));
                 await refresh();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    Future.delayed(Duration(seconds: 2), () {
+                      Navigator.of(context).pop();
+                    });
+                    return AlertDialog(
+                      title: Text("Success"),
+                      content: Text("Book Deleted Successfully."),
+                    );
+                  },
+                );
               },
               onCheckboxChanged: onCheckboxChanged,
               isChecked: checkedBookIds.contains(e.id)))
