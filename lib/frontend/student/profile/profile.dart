@@ -32,7 +32,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<Profile> {
-
   final TextEditingController ProdBController = TextEditingController();
   final TextEditingController ProdBBController = TextEditingController();
   final int maxLength = 25;
@@ -89,217 +88,223 @@ class _ProfileScreenState extends State<Profile> {
     });
   }
 
-void showChangePasswordDialog(BuildContext context, StudentProfile studentProfile) {
-  final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  int maxLength = 25;
-  bool isPasswordChanged = false;
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            title: Text(
-              'Change Password',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+  void showChangePasswordDialog(
+      BuildContext context, StudentProfile studentProfile) {
+    final TextEditingController newPasswordController = TextEditingController();
+    final TextEditingController confirmPasswordController =
+        TextEditingController();
+    int maxLength = 25;
+    bool isPasswordChanged = false;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
               ),
-            ),
-            content: Container(
-              height: 150,
-              width: 250,
-              child: isPasswordChanged
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 70,
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          "Password Changed!",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+              title: Text(
+                'Change Password',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              content: Container(
+                height: 150,
+                width: 250,
+                child: isPasswordChanged
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.check_circle,
                             color: Colors.green,
+                            size: 70,
                           ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 40,
-                          width: double.infinity,
-                          child: TextFormField(
-                            controller: newPasswordController,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primary_color),
-                              ),
-                              hintText: 'New Password',
-                              hintStyle: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              suffix: Text(
-                                '${newPasswordController.text.length}/$maxLength',
-                                style: TextStyle(
-                                  color: primary_color,
+                          SizedBox(height: 20),
+                          Text(
+                            "Password Changed!",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 40,
+                            width: double.infinity,
+                            child: TextFormField(
+                              controller: newPasswordController,
+                              decoration: InputDecoration(
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: primary_color),
+                                ),
+                                hintText: 'New Password',
+                                hintStyle: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                suffix: Text(
+                                  '${newPasswordController.text.length}/$maxLength',
+                                  style: TextStyle(
+                                    color: primary_color,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                suffixStyle: TextStyle(
+                                  color: Colors.grey,
                                   fontSize: 12,
                                 ),
                               ),
-                              suffixStyle: TextStyle(
-                                color: Colors.grey,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.done,
+                              style: TextStyle(
+                                color: Colors.black,
                                 fontSize: 12,
-                              ),
-                            ),
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(23),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          height: 40,
-                          width: double.infinity,
-                          child: TextFormField(
-                            controller: confirmPasswordController,
-                            decoration: InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: primary_color),
-                              ),
-                              hintText: 'Confirm New Password',
-                              hintStyle: TextStyle(
-                                fontSize: 13,
                                 fontWeight: FontWeight.w400,
                               ),
-                              suffix: Text(
-                                '${confirmPasswordController.text.length}/$maxLength',
-                                style: TextStyle(
-                                  color: primary_color,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(23),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            height: 40,
+                            width: double.infinity,
+                            child: TextFormField(
+                              controller: confirmPasswordController,
+                              decoration: InputDecoration(
+                                border: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: primary_color),
+                                ),
+                                hintText: 'Confirm New Password',
+                                hintStyle: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                suffix: Text(
+                                  '${confirmPasswordController.text.length}/$maxLength',
+                                  style: TextStyle(
+                                    color: primary_color,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                suffixStyle: TextStyle(
+                                  color: Colors.grey,
                                   fontSize: 12,
                                 ),
                               ),
-                              suffixStyle: TextStyle(
-                                color: Colors.grey,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.done,
+                              style: TextStyle(
+                                color: Colors.black,
                                 fontSize: 12,
+                                fontWeight: FontWeight.w400,
                               ),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(23),
+                              ],
                             ),
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.done,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(23),
-                            ],
                           ),
-                        ),
-                      ],
-                    ),
-            ),
-            actions: !isPasswordChanged
-                ? [
-                    GestureDetector(
-                      onTap: () {
-                        final newPassword = newPasswordController.text;
-                        final confirmPassword = confirmPasswordController.text;
+                        ],
+                      ),
+              ),
+              actions: !isPasswordChanged
+                  ? [
+                      GestureDetector(
+                        onTap: () {
+                          final newPassword = newPasswordController.text;
+                          final confirmPassword =
+                              confirmPasswordController.text;
 
-                        if (newPassword == confirmPassword && newPassword.isNotEmpty) {
-                          context.read<StudentExtendedBloc>().add(
-                                changePassword(studentProfile.id, newPassword, confirmPassword),
-                              );
-                          setState(() {
-                            isPasswordChanged = true;
-                          });
-                          Future.delayed(Duration(seconds: 2), () {
-                            Navigator.of(context).pop();
-                          });
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Passwords do not match or the new password is empty.'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 112,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          color: primary_color,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Confirm',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
+                          if (newPassword == confirmPassword &&
+                              newPassword.isNotEmpty) {
+                            context.read<StudentExtendedBloc>().add(
+                                  changePassword(studentProfile.id, newPassword,
+                                      confirmPassword),
+                                );
+                            setState(() {
+                              isPasswordChanged = true;
+                            });
+                            Future.delayed(Duration(seconds: 2), () {
+                              Navigator.of(context).pop();
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Passwords do not match or the new password is empty.'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 112,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: primary_color,
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 112,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          color: primary_color,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 112,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: primary_color,
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ]
-                : [],
-          );
-        },
-      );
-    },
-  );
-}
+                    ]
+                  : [],
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -353,12 +358,11 @@ void showChangePasswordDialog(BuildContext context, StudentProfile studentProfil
             },
           ),
           IconButton(
-          icon: Icon(Icons.lock, color: primary_color),
-          onPressed: () {
-            showChangePasswordDialog(context, widget.studentProfile);
-          },
-        ),
-
+            icon: Icon(Icons.lock, color: primary_color),
+            onPressed: () {
+              showChangePasswordDialog(context, widget.studentProfile);
+            },
+          ),
           IconButton(
             icon: Icon(Icons.logout, color: primary_color),
             onPressed: () {
@@ -425,9 +429,8 @@ void showChangePasswordDialog(BuildContext context, StudentProfile studentProfil
                           height: 30,
                           width: 112,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2),
-                            color: primary_color
-                          ),
+                              borderRadius: BorderRadius.circular(2),
+                              color: primary_color),
                           child: Center(
                             child: Text(
                               'No',
@@ -846,15 +849,6 @@ void showChangePasswordDialog(BuildContext context, StudentProfile studentProfil
                               ],
                             ),
                             SizedBox(height: 15),
-                            SizedBox(
-                              height: 1,
-                              width: double.infinity,
-                              child: Container(
-                                decoration:
-                                    BoxDecoration(color: Colors.black26),
-                              ),
-                            ),
-                            SizedBox(height: 15),
                             Container(
                               height: 20,
                               width: double.infinity,
@@ -883,38 +877,46 @@ void showChangePasswordDialog(BuildContext context, StudentProfile studentProfil
                                         );
                                       },
                                       child: Container(
-                                          height: 20,
-                                          width: 100,
-                                          child: Center(
-                                            child: Text(
-                                              'View All Books >',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: tertiary_color,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          )),
+                                        height: 20,
+                                        width: 100,
+                                        child: Center(
+                                          child: Text(
+                                            'View All Books >',
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: tertiary_color,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   )
                                 ],
                               ),
                             ),
                             SizedBox(height: 20),
-                            Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.only(left: 40),
-                                child: FractionallySizedBox(
-                                  widthFactor: 1.2,
-                                  child: book_list(
-                                    status: books
-                                        .where((book) =>
-                                            book.status ==
-                                            (_currentSelection == 1
-                                                ? "Complete"
-                                                : "Cancelled"))
-                                        .toList(),
+                            books.isEmpty
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    child: Icon(Icons.book,
+                                        size: 50, color: Colors.grey),
+                                  )
+                                : Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(left: 40),
+                                    child: FractionallySizedBox(
+                                      widthFactor: 1.2,
+                                      child: book_list(
+                                        status: books
+                                            .where((book) =>
+                                                book.status ==
+                                                (_currentSelection == 1
+                                                    ? "Complete"
+                                                    : "Cancelled"))
+                                            .toList(),
+                                      ),
+                                    ),
                                   ),
-                                )),
                             SizedBox(height: 20),
                             Container(
                               height: 20,
@@ -944,32 +946,39 @@ void showChangePasswordDialog(BuildContext context, StudentProfile studentProfil
                                         );
                                       },
                                       child: Container(
-                                          height: 20,
-                                          width: 100,
-                                          child: Center(
-                                            child: Text(
-                                              'View All Uniform >',
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: tertiary_color,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          )),
+                                        height: 20,
+                                        width: 100,
+                                        child: Center(
+                                          child: Text(
+                                            'View All Uniform >',
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: tertiary_color,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   )
                                 ],
                               ),
                             ),
                             SizedBox(height: 20),
-                            uniform_list(
-                              status: items
-                                  .where((item) =>
-                                      item.status ==
-                                      (_currentSelection == 1
-                                          ? "Complete"
-                                          : "Cancelled"))
-                                  .toList(),
-                            ),
+                            items.isEmpty
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    child: Icon(Icons.shopping_bag,
+                                        size: 50, color: Colors.grey),
+                                  )
+                                : uniform_list(
+                                    status: items
+                                        .where((item) =>
+                                            item.status ==
+                                            (_currentSelection == 1
+                                                ? "Complete"
+                                                : "Cancelled"))
+                                        .toList(),
+                                  ),
                           ],
                         ),
                       ),

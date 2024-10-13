@@ -17,13 +17,15 @@ class _notifState extends State<notif> {
   final GlobalKey _Inbox = GlobalKey();
 
   List<StudentNotifcationMail> mails = [];
-  
+
   @override
   void initState() {
     super.initState();
-    context.read<StudentExtendedBloc>().add(studentNotificationMail(widget.studentProfile.id));
+    context
+        .read<StudentExtendedBloc>()
+        .add(studentNotificationMail(widget.studentProfile.id));
   }
-  
+
   Future<bool> _onPop() async {
     Navigator.pop(context, false);
     return false;
@@ -33,65 +35,66 @@ class _notifState extends State<notif> {
   Widget build(BuildContext context) {
     print(123123);
     return WillPopScope(
-      onWillPop: _onPop,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+        onWillPop: _onPop,
+        child: Scaffold(
           backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new, color: const Color.fromARGB(255, 0, 0, 0)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Transform.translate(
-            offset: Offset(-15.0, 0.0),
-            child: Text(
-              'Notification',
-              style: GoogleFonts.inter(
-                textStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios_new,
+                  color: const Color.fromARGB(255, 0, 0, 0)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Transform.translate(
+              offset: Offset(-15.0, 0.0),
+              child: Text(
+                'Notification',
+                style: GoogleFonts.inter(
+                  textStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
-          bottom: AppBar(
-            toolbarHeight: 35,
-            backgroundColor: Colors.white,
-            automaticallyImplyLeading: false,
-            title: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    InkWell(
-                      key: _Inbox,
-                      child: Text(
-                        'Inbox',
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          color: _currentSelection == 1
-                              ? Color.fromARGB(255, 0, 0, 0)
-                              : Colors.grey,
-                          fontWeight: FontWeight.w600,
+            bottom: AppBar(
+              toolbarHeight: 35,
+              backgroundColor: Colors.white,
+              automaticallyImplyLeading: false,
+              title: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      InkWell(
+                        key: _Inbox,
+                        child: Text(
+                          'Inbox',
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            color: _currentSelection == 1
+                                ? Color.fromARGB(255, 0, 0, 0)
+                                : Colors.grey,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  height: 1,
-                  width: double.infinity,
-                  child: Container(color: Colors.black26),
-                ),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    height: 1,
+                    width: double.infinity,
+                    child: Container(color: Colors.black26),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
-          builder: (context, state) {
+          body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+              builder: (context, state) {
             if (state is StudentNotificationMailLoadSuccessState) {
               mails = state.studentNotifcationMail;
             } else if (state is StudentNotificationMailLoadingState) {
@@ -109,18 +112,22 @@ class _notifState extends State<notif> {
                       width: double.infinity,
                       decoration: BoxDecoration(color: Colors.white),
                       padding: EdgeInsets.all(10.0),
-                      child: ItemList(
-                        status: mails.toList(),
-                      ),
+                      child: mails.isEmpty
+                          ? Container(
+                              alignment: Alignment.center,
+                              child: Icon(Icons.shopping_bag,
+                                  size: 50, color: Colors.grey),
+                            )
+                          : ItemList(
+                              status: mails.toList(),
+                            ),
                     ),
                   ],
                 ),
               ],
             );
-          
-        }
-      ),
-    ));
+          }),
+        ));
   }
 }
 

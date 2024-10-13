@@ -58,71 +58,112 @@ class _ProfileScreenState extends State<Profile> {
     final int id = item.id;
     isDialogOpen = true;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(isBook ? "Book Details" : "Item Details"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: isBook
-                  ? [
-                      Text("Book Name: ${item.bookName}"),
-                      Text("Subject Code: ${item.subjectCode}"),
-                      Text("Subject Description: ${item.subjectDesc}"),
-                      Text("Status: ${item.status}"),
-                      Text("Claiming Schedule: ${item.claimingSchedule}"),
-                      Text("Reservation Number: ${item.reservationNumber}"),
-                    ]
-                  : [
-                      Text("Course: ${item.course}"),
-                      Text("Gender: ${item.gender}"),
-                      Text("Type: ${item.type}"),
-                      Text("Body: ${item.body}"),
-                      Text("Size: ${item.size}"),
-                      Text("Status: ${item.status}"),
-                      Text("Claiming Schedule: ${item.claimingSchedule}"),
-                      Text("Reservation Number: ${item.reservationNumber}"),
-                    ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                isDialogOpen = false;
-                Navigator.of(context).pop();
-                context.read<AdminExtendedBloc>().add(getStudent());
-              },
-            ),
-            TextButton(
-              child: Text("Proceed"),
-              onPressed: () {
-                if (isBook) {
-                  context
-                      .read<AdminExtendedBloc>()
-                      .add(changeBookStatus(id, "Complete"));
-                } else {
-                  context
-                      .read<AdminExtendedBloc>()
-                      .add(changeItemStatus(id, "Complete"));
-                }
-                // Clear variables and close the dialog
-                itemCode = null;
-                bookCode = null;
-                codeController.clear();
-                isDialogOpen = false;
-                Navigator.of(context).pop();
+    DateTime now = DateTime.now();
 
-                // Show the success dialog
-                _showSuccessDialog(context);
-                context.read<AdminExtendedBloc>().add(getStudent());
-              },
+    String getDayOfWeek(int weekday) {
+      switch (weekday) {
+        case 1:
+        case 2:
+        case 3:
+          return 'A';
+        case 4:
+        case 5:
+        case 6:
+          return 'B';
+        case 7:
+          return 'Sunday';
+        default:
+          return 'Unknown';
+      }
+    }
+
+    String today = getDayOfWeek(now.weekday);
+
+    if (item.shift != today) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(context).pop();
+          });
+          return AlertDialog(
+            title: Text("Unavailable for Claiming"),
+            content: Text(
+                "The item is not available for claiming today. Please check the scheduled day."),
+          );
+        },
+      );
+
+      itemCode = null;
+      bookCode = null;
+      codeController.clear();
+      isDialogOpen = false;
+      context.read<AdminExtendedBloc>().add(getStudent());
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(isBook ? "Book Details" : "Item Details"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: isBook
+                    ? [
+                        Text("Book Name: ${item.bookName}"),
+                        Text("Subject Code: ${item.subjectCode}"),
+                        Text("Subject Description: ${item.subjectDesc}"),
+                        Text("Status: ${item.status}"),
+                        Text("Claiming Schedule: ${item.claimingSchedule}"),
+                        Text("Reservation Number: ${item.reservationNumber}"),
+                      ]
+                    : [
+                        Text("Course: ${item.course}"),
+                        Text("Gender: ${item.gender}"),
+                        Text("Type: ${item.type}"),
+                        Text("Body: ${item.body}"),
+                        Text("Size: ${item.size}"),
+                        Text("Status: ${item.status}"),
+                        Text("Claiming Schedule: ${item.claimingSchedule}"),
+                        Text("Reservation Number: ${item.reservationNumber}"),
+                      ],
+              ),
             ),
-          ],
-        );
-      },
-    );
+            actions: [
+              TextButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  isDialogOpen = false;
+                  Navigator.of(context).pop();
+                  context.read<AdminExtendedBloc>().add(getStudent());
+                },
+              ),
+              TextButton(
+                child: Text("Proceed"),
+                onPressed: () {
+                  if (isBook) {
+                    context
+                        .read<AdminExtendedBloc>()
+                        .add(changeBookStatus(id, "Complete"));
+                  } else {
+                    context
+                        .read<AdminExtendedBloc>()
+                        .add(changeItemStatus(id, "Complete"));
+                  }
+
+                  itemCode = null;
+                  bookCode = null;
+                  codeController.clear();
+                  isDialogOpen = false;
+                  Navigator.of(context).pop();
+                  _showSuccessDialog(context);
+                  context.read<AdminExtendedBloc>().add(getStudent());
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   void _showSuccessDialog(BuildContext context) {
