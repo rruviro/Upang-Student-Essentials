@@ -38,9 +38,9 @@ class Home extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => Courses(
-                        departmentID: 0,
-                        departmentName: '',
-                      )));
+                    departmentID: 0,
+                    departmentName: '',
+                  )));
         } else if (state is ManagePageState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => manage()));
@@ -118,19 +118,19 @@ class Home extends StatelessWidget {
                     ),
                   ],
                 ),
-                Positioned(
-                  top: 5,
-                  right: 23,
-                  child: InkWell(
-                    onTap: () {
-                      adminBloc.add(NewDepartmentPageEvent());
-                    },
-                    child: Icon(
-                      Icons.add,
-                      color: primary_color,
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 5,
+                //   right: 23,
+                //   child: InkWell(
+                //     onTap: () {
+                //       adminBloc.add(NewDepartmentPageEvent());
+                //     },
+                //     child: Icon(
+                //       Icons.add,
+                //       color: primary_color,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );
@@ -158,8 +158,8 @@ class ItemList extends StatelessWidget {
     return Column(
       children: departments
           .map((e) => ItemCard(
-                visual: e,
-              ))
+        visual: e,
+      ))
           .toList(),
     );
   }
@@ -179,13 +179,12 @@ class ItemCard extends StatelessWidget {
     final itemsPerRow = (availableWidth / (itemWidth + spacing)).floor();
 
     return Container(
-      margin: const EdgeInsets.only(
-        bottom: 20.0,
-      ),
-      height: 120, // Increased the height to accommodate the new layout
+      margin: const EdgeInsets.only(bottom: 20.0),
+      height: 100,
       decoration: BoxDecoration(
-        color: primary_color,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: primary_color, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.grey,
@@ -197,6 +196,7 @@ class ItemCard extends StatelessWidget {
       width: double.infinity,
       child: Stack(
         children: [
+          // Department image
           Positioned(
             right: -20,
             top: -35,
@@ -208,7 +208,8 @@ class ItemCard extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+          // Department name and background
+          Positioned.fill(
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -226,114 +227,67 @@ class ItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   gradient: LinearGradient(
                     colors: [
-                      primary_color,
-                      Color.fromARGB(43, 14, 170, 113),
+                      Colors.white,
+                      Color.fromRGBO(11, 133, 214, 113)
                     ],
                     stops: [0.50, 0.70],
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 25.0, left: 30.0),
-                      child: Text(
-                        visual.name,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 25.0, left: 30.0),
+                  child: Text(
+                    visual.name,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 30.0),
-                      child: Container(),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
+          // Information Row (Reserved, Claim, Complete)
           Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              width: 85,
-              height: 100, // Increased the height to fit the column
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
+            bottom: 30,  // Positioning the Row at the bottom of the container
+            left: 30,  // Adjust this value to align better if necessary
+            right: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Reserved: ${visual.reserved}  | ',
+                  style: GoogleFonts.inter(
+                    textStyle: TextStyle(
+                      fontSize: 10.5,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                 ),
-                color: Color.fromARGB(227, 255, 255, 255),
-              ),
-              child: InkWell(
-                onTap: () {
-                  adminBloc.add(ManagePageEvent());
-                },
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // Align text to the start
-                  children: [
-                    /*Row(
-                      children: [
-                        SizedBox(width: 10),
-                        Text(
-                          'Manage',
-                          style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                                fontSize: 10.5,
-                                color: primary_color,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Icon(
-                          Icons.dashboard_customize_outlined,
-                          color: primary_color,
-                          size: 15,
-                        ),
-                      ],
-                    ),*/
-                    SizedBox(
-                        height:
-                            8), // Add some space between the Row and the Column
-                    Text(
-                      'Reserved: ${visual.reserved}',
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle(
-                          fontSize: 10.5,
-                          color: primary_color,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                SizedBox(width: 3),
+                Text(
+                  'Claim: ${visual.claim}  | ',
+                  style: GoogleFonts.inter(
+                    textStyle: TextStyle(
+                      fontSize: 10.5,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
                     ),
-                    SizedBox(height: 4), // Add space between texts
-                    Text(
-                      'Claim: ${visual.claim}',
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle(
-                          fontSize: 10.5,
-                          color: primary_color,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 4), // Add space between texts
-                    Text(
-                      'Complete: ${visual.completed}',
-                      style: GoogleFonts.inter(
-                        textStyle: TextStyle(
-                          fontSize: 10.5,
-                          color: primary_color,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                SizedBox(width: 3),
+                Text(
+                  'Complete: ${visual.completed}',
+                  style: GoogleFonts.inter(
+                    textStyle: TextStyle(
+                      fontSize: 10.5,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

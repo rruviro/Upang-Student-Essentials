@@ -109,6 +109,7 @@ class _UniformStudentState extends State<UniformStudent> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -165,7 +166,7 @@ class _UniformStudentState extends State<UniformStudent> {
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
                     child:
-                        Bag(studentProfile: widget.profile, Status: "ACTIVE"),
+                    Bag(studentProfile: widget.profile, Status: "ACTIVE"),
                   ),
                 ),
               );
@@ -175,7 +176,7 @@ class _UniformStudentState extends State<UniformStudent> {
         ],
       ),
       body: BlocListener<StudentExtendedBloc, StudentExtendedState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is StudentBagItemLoadSuccessState) {
             setState(() {
               items = state.studentBagItem;
@@ -184,6 +185,10 @@ class _UniformStudentState extends State<UniformStudent> {
           }
           if (state is UniformsLoadingState) {
             print("Loading student uniforms");
+
+            // Introduce a 2-second delay
+            await Future.delayed(Duration(seconds: 3));
+
           } else if (state is UniformsLoadedState) {
             setState(() {
               uniforms = state.uniforms;
@@ -266,87 +271,87 @@ class _UniformStudentState extends State<UniformStudent> {
                     const SizedBox(height: 30),
                     _course != widget.courseName
                         ? Text(
-                            'Not Available for your course',
-                            style: TextStyle(color: Colors.red, fontSize: 14),
-                          )
+                      'Not Available for your course',
+                      style: TextStyle(color: Colors.red, fontSize: 14),
+                    )
                         : Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: isUniformInBag(uniforms.first)
-                                          ? null
-                                          : () {
-                                              _showAddToBackpackModal(
-                                                  context, widget.type);
-                                            },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: Colors.blue,
-                                        side: BorderSide(color: primary_color),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        minimumSize: const Size.fromHeight(60),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.add, color: primary_color),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            isUniformInBag(uniforms.first)
-                                                ? 'You already have a uniform'
-                                                : 'Add to Backpack',
-                                            style: TextStyle(
-                                                color: primary_color,
-                                                fontSize: 10),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: isUniformInBag(uniforms.first)
+                                    ? null
+                                    : () {
+                                  _showAddToBackpackModal(
+                                      context, widget.type);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.blue,
+                                  side: BorderSide(color: primary_color),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(8),
                                   ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: isUniformInBag(uniforms.first)
-                                          ? null
-                                          : () => _showRequestModal(
-                                              context, widget.type),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: Colors.blue,
-                                        side: BorderSide(color: primary_color),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        minimumSize: const Size.fromHeight(60),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.request_page,
-                                              color: primary_color),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            isUniformInBag(uniforms.first)
-                                                ? 'You already have a uniform'
-                                                : 'Request',
-                                            style: TextStyle(
-                                                color: primary_color,
-                                                fontSize: 10),
-                                          ),
-                                        ],
-                                      ),
+                                  minimumSize: const Size.fromHeight(60),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.add, color: primary_color),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      isUniformInBag(uniforms.first)
+                                          ? 'You already have a uniform'
+                                          : 'Add to Backpack',
+                                      style: TextStyle(
+                                          color: primary_color,
+                                          fontSize: 10),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: isUniformInBag(uniforms.first)
+                                    ? null
+                                    : () => _showRequestModal(
+                                    context, widget.type),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.blue,
+                                  side: BorderSide(color: primary_color),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(8),
+                                  ),
+                                  minimumSize: const Size.fromHeight(60),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.request_page,
+                                        color: primary_color),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      isUniformInBag(uniforms.first)
+                                          ? 'You already have a uniform'
+                                          : 'Request',
+                                      style: TextStyle(
+                                          color: primary_color,
+                                          fontSize: 10),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -356,6 +361,7 @@ class _UniformStudentState extends State<UniformStudent> {
       ),
     );
   }
+
 
   Widget _buildHeader(String title) {
     return SizedBox(
@@ -519,79 +525,221 @@ class _ModalContentState extends State<_ModalContent> {
   String? selectedSize; // Track the selected size
   String? selectedSchedule;
   List<Map<String, String>> schedules = [
-    {'display': 'Shift A: M|T|W', 'value': 'A'},
-    {'display': 'Shift B: TH|F|S', 'value': 'B'}
+    {'display': 'Shift A: Monday | Tuesday | Wednesday', 'value': 'A'},
+    {'display': 'Shift B: Thursday | Friday | Saturday', 'value': 'B'}
   ];
+
 
   @override
   Widget build(BuildContext context) {
-    // Get unique sizes from the uniforms
     final uniqueSizes = widget.uniforms.map((u) => u.Size).toSet().toList();
 
     return Container(
       padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Select Size and Schedule',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          DropdownButtonFormField<String>(
-            value: selectedSize,
-            hint: Text('Select Size'),
-            items: uniqueSizes.map((size) {
-              return DropdownMenuItem(
-                value: size,
-                child: Text(size),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedSize = value; // Set the selected size
-              });
-            },
-          ),
-          const SizedBox(height: 20),
-          DropdownButtonFormField<String>(
-            value: selectedSchedule,
-            hint: Text('Select Schedule'),
-            items: schedules.map((schedule) {
-              return DropdownMenuItem(
-                value: schedule['value'], // Use the corresponding value
-                child: Text(schedule['display']!), // Display text
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedSchedule = value; // Set the selected schedule
-              });
-            },
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: () {
-              if (selectedSize != null && selectedSchedule != null) {
-                // Find the corresponding Uniform by Size
-                Uniform? selectedUniform = widget.uniforms.firstWhere(
-                  (uniform) => uniform.Size == selectedSize,
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     Container(
+            //       padding: const EdgeInsets.all(30),
+            //       child: Image.asset(
+            //         'assets/uniuni.png',
+            //         height: 170,
+            //         width: 100,
+            //         fit: BoxFit.cover,
+            //       ),
+            //     ),
+            //     const SizedBox(width: 16),
+            //     Expanded(
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           Row(
+            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //             children: const [
+            //               Text(
+            //                 'Corporate Top',
+            //                 style: TextStyle(
+            //                   fontSize: 13,
+            //                   fontWeight: FontWeight.bold,
+            //                   color: Colors.black,
+            //                 ),
+            //               ),
+            //               Text(
+            //                 'Stock: 300',
+            //                 style: TextStyle(
+            //                   fontSize: 10,
+            //                   color: Colors.black,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //           const SizedBox(height: 4),
+            //           const Text(
+            //             'The Corporate Top of BSIT',
+            //             style: TextStyle(
+            //               fontSize: 8,
+            //               color: Colors.grey,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            const SizedBox(height: 16),
+            Divider(color: Colors.grey),
+            const SizedBox(height: 16),
+            Text(
+              'Sizes',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: uniqueSizes.map((size) {
+                return InkWell(
+                  onTap: () => setState(() {
+                    if (selectedSize == size) {
+                      selectedSize = null;
+                    } else {
+                      selectedSize = size;
+                    }
+                  }),
+                  child: Container(
+                    width: 50,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: selectedSize == size
+                          ? primary_color
+                          : const Color(0xFFD9D9D9),
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        size,
+                        style: TextStyle(
+                          color: selectedSize == size
+                              ? Colors.white
+                              : const Color(0xFFB0B0B0),
+                        ),
+                      ),
+                    ),
+                  ),
                 );
+              }).toList(),
+            ),
+            const SizedBox(height: 30),
+            Divider(color: Colors.grey),
+            const SizedBox(height: 30),
+            Text(
+              'Claim Schedule',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: selectedSchedule,
+              hint: Text(
+                'Select Schedule',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              items: schedules.map((schedule) {
+                return DropdownMenuItem(
+                    value: schedule['value'],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Text(
+                        schedule['display']!,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    )
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedSchedule = value;
+                });
+              },
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xFFD9D9D9),
+                contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: primary_color,
+                    width: 2.0,
+                  ),
+                ),
+              ),
+              dropdownColor: Colors.white,
+              icon: Icon(
+                Icons.arrow_drop_down,
+                color: Colors.black,
+                size: 24,
+              ),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+              ),
+              itemHeight: 50,
+              menuMaxHeight: 200,
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  if (selectedSize != null && selectedSchedule != null) {
+                    Uniform? selectedUniform = widget.uniforms.firstWhere(
+                          (uniform) => uniform.Size == selectedSize,
+                    );
 
-                if (selectedUniform != null) {
-                  widget.onSubmit(selectedUniform,
-                      selectedSchedule); // Pass the selected Uniform
-                } else {
-                  print('No matching uniform found for size: $selectedSize');
-                }
-              } else {
-                print('Please select a size and schedule.');
-              }
-            },
-            icon: Icon(widget.submitButtonIcon),
-            label: Text(widget.submitButtonText),
-          ),
-        ],
+                    if (selectedUniform != null) {
+                      widget.onSubmit(
+                          selectedUniform, selectedSchedule);
+                    }
+                  } else {
+                    print('Please select a size and schedule.');
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primary_color,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                icon: Icon(widget.submitButtonIcon, size: 20),
+                label: Text(
+                  widget.submitButtonText,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

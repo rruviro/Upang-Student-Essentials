@@ -52,4 +52,35 @@ class LoginLoading extends AuthenticationState {
 
 }
 
+// LANCE
+class AdminStudentLogingIn extends AuthenticationState {
+  final String adminID;
+  final String password;
+
+  AdminStudentLogingIn(this.adminID, this.password);
+}
+
+class AdminLoginSuccess extends AuthenticationState {
+  final String adminID;
+  final String password;
+
+  AdminLoginSuccess(this.adminID, this.password);
+}
+
+class AdminLoginFailed extends AuthenticationState {
+  final String message;
+
+  AdminLoginFailed(this.message);
+}
+
+class AdminLoginError extends AuthenticationState {
+  final String message;
+
+  AdminLoginError(this.message);
+}
+
+class AdminLoginLoading extends AuthenticationState {
+
+}
+
 

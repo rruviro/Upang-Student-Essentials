@@ -32,6 +32,22 @@ class AuthenticationBloc
         emit(LoginError('Error logging in: ${e.toString()}'));
       }
     });
+
+    // BY LANCE
+    on<AdminLoginLogin>((event, emit) async {
+      final SharedPreferences login = await SharedPreferences.getInstance();
+      emit(AdminLoginLoading());
+      try {
+        await _authrepo.adminLogin(event.adminID, event.password);
+
+        login.setString('adminID', event.adminID);
+        login.setString('adminID', event.password);
+        login.setBool('isLogin', true);
+        emit(AdminLoginSuccess(event.adminID, event.password));
+      } catch (e){
+        emit(AdminLoginError('Error logging in: ${e.toString()}'));
+      }
+    });
   }
 
   FutureOr<void> welcome_page(

@@ -52,7 +52,7 @@ class ItemCard extends StatelessWidget {
                   ),
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: Image.network("assets/uniform.jpg"), // Placeholder for actual image
+                child: Image.network("assets/check.png"), // Placeholder for actual image
               ),
               SizedBox(width: 10),
               Stack(

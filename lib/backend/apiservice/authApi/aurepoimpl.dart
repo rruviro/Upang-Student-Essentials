@@ -31,17 +31,26 @@ class AuthenticationImplementation extends AuthenticationRepository {
     }
   }
 
-  // Future<void> studentAdmin(String adminID, String password) async {
-  //   final response = await http.post(Uri.parse('$baseUrl/admin/login')
-  //   headers:{
-  //     'Content-Type': 'application/json',
-  //       },
-  //     body: jsonEncode({
-  //       'adminID': adminID,
-  //       'password': password,
-  //     })
-  //   )
-  // }
+  Future<void> adminLogin(String adminID, String password) async {
+    final response = await http.post(Uri.parse('$baseUrl/admin/login'),
+    headers:{
+      'Content-Type': 'application/json',
+        },
+      body: jsonEncode({
+        'adminID': adminID,
+        'password': password,
+      }),
+    );
+
+    if(response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      Aurepo.accessToken = data['access_token'];
+      Aurepo.refreshToken = data['refresh_token'];
+      return data;
+    } else{
+      throw Exception('Invalid credentials');
+    }
+  }
 }
 
 class Aurepo {

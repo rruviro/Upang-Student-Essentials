@@ -17,3 +17,11 @@ class StudentLogin extends AuthenticationEvent {
   StudentLogin(this.StudentId, this.Password);
 }
 
+// BY LANCE
+class AdminLoginLogin extends AuthenticationEvent {
+  final String adminID;
+  final String password;
+
+  AdminLoginLogin(this.adminID, this.password);
+}
+
