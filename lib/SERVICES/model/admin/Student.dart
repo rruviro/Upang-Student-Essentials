@@ -1,44 +1,17 @@
 class Students {
+  final String studentName;
   final String studentID;
-  final String firstname;
-  final String lastname;
-  final String course;
-  final String year;
-  final bool enrolled;
-  const Students(this.firstname, this.lastname, this.studentID, this.course, this.year, this.enrolled);
+  const Students(this.studentName, this.studentID);
 }
 
 List<Students> details = [
   Students(
-    'Jaspher',
-    'Tania',
-    '01-1111-0392812',
-    'Bachelor of information and technology',
-    'Third Year',
-    true
+    'Jaspher Tania', 
+    '01-1111-0392812'
   ),
-  Students(
-    'Jaspher',
-    'Tania',
-    '01-1111-0392812',
-    'Bachelor of information and technology',
-    'Third Year',
-    true
-  ),
-  Students(
-    'Jaspher',
-    'Tania',
-    '01-1111-0392812',
-    'Bachelor of information and technology',
-    'Third Year',
-    true
-  ),
-  Students(
-    'Jaspher',
-    'Tania',
-    '01-1111-0392812',
-    'Bachelor of information and technology',
-    'Third Year',
-    true
-  ),
+  // Students(
+  //   'Corporate', 
+  //   '100', 
+  //   'assets/vanguards.png'
+  // ),
 ];

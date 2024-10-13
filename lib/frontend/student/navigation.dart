@@ -3,27 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
+import 'package:use/frontend/authentication/StudentLogin.dart';
 import 'package:use/frontend/student/announcement/announcement.dart';
-<<<<<<< Updated upstream
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
-=======
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/frontend/student/bag.dart';
->>>>>>> Stashed changes
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/notification.dart';
 import 'package:use/frontend/student/profile/profile.dart';
 
-<<<<<<< Updated upstream
-class HomeBase extends StatelessWidget {
-  const HomeBase({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Upang Student Essentials',
-      home: HomeScreen()
-=======
 import '../../backend/bloc/BottomNavCubit.dart';
 import '../colors/colors.dart';
 
@@ -49,105 +39,11 @@ class SHomeBase extends StatelessWidget {
         title: 'Upang Student Essentials',
         home: HomeScreen(studentID: studentId),
       ),
->>>>>>> Stashed changes
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
-<<<<<<< Updated upstream
-  const HomeScreen({super.key});
-  @override 
-  State<HomeScreen> createState() => _Homedestinationtate();
-}
-
-class _Homedestinationtate extends State<HomeScreen> {
-  int _currentIndex = 0;
-  final itemsBN = [
-    SalomonBottomBarItem(
-      icon: const Icon(
-        Icons.home_outlined,
-        size: 20.0
-      ), 
-      title: const Text(
-        'Home',
-        style: TextStyle(
-          fontSize: 10
-        ),
-      ),
-      activeIcon: Icon(Icons.home),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(
-        Icons.campaign_outlined,
-        size: 20.0
-      ), 
-      title: const Text(
-        'Announcement',
-        style: TextStyle(
-          fontSize: 10
-        ),
-      ),
-      activeIcon: Icon(Icons.campaign_rounded),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(
-        Icons.person_outline_sharp,
-        size: 20.0
-      ), 
-      title: const Text(
-        'Profile',
-        style: TextStyle(
-          fontSize: 10
-        ),
-      ),
-      activeIcon: Icon(Icons.person),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
-    )
-  ];
-
-  final destination = const [
-    Home(), Announcement(), Profile()
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<StudentBottomBloc, StudentBottomState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Scaffold(
-          body: destination.elementAt(state.tabIndex),
-          bottomNavigationBar: Container (
-            color: Color.fromARGB(255, 14, 170, 113),
-            child: Stack(
-              children: <Widget>[
-                Align(
-                  heightFactor: 1.0,
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 260.0,
-                    ),
-                    child: SalomonBottomBar(
-                      backgroundColor: Color.fromARGB(255, 14, 170, 113),
-                      items: itemsBN,
-                      currentIndex: state.tabIndex,
-                      duration: Duration(seconds: 1),
-                      onTap: (index) {
-                        BlocProvider.of<StudentBottomBloc>(context)
-                          .add(TabChange(tabIndex: index));
-                      }
-                    ),
-                  ),
-                ),
-              ],
-            ),
-=======
   final String studentID; // Added to pass studentID
 
   const HomeScreen({required this.studentID, Key? key}) : super(key: key);
@@ -213,15 +109,11 @@ class _HometopLevelPagestate extends State<HomeScreen> {
               ]
             ),
             child: _icons(context)
->>>>>>> Stashed changes
           )
         );
-      }
+      },
     );
   }
-<<<<<<< Updated upstream
-}
-=======
 
   double iconSize = 20.0;
   double fontSize = 8.0;
@@ -412,4 +304,3 @@ class _HometopLevelPagestate extends State<HomeScreen> {
   // }
 
 }
->>>>>>> Stashed changes

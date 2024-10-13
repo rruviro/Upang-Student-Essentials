@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
-import 'package:use/frontend/authentication/AdminLogin.dart';
-import 'package:use/frontend/authentication/StudentLogin.dart';
+import 'package:use/backend/apiservice/authApi/aurepoimpl.dart';
+import 'package:use/frontend/Authentication/StudentLogin.dart';
+import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
+import 'package:use/frontend/colors/colors.dart';
+
+import '../frontend/Authentication/AdminLogin.dart';
 
 void main() {
   runApp(const Welcome());
@@ -17,9 +20,9 @@ class Welcome extends StatefulWidget {
   _WelcomeState createState() => _WelcomeState();
 }
 
-final AuthenticationBloc authBloc = AuthenticationBloc();
-class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
+final AuthenticationBloc authBloc = AuthenticationBloc(AuthenticationImplementation());
 
+class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
   final List<String> _images = [
     'assets/splash_image/upang.jpg',
     'assets/splash_image/upang1.jpg',
@@ -60,90 +63,55 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      bloc: authBloc,
-      listenWhen: (previous, current) => current is ActionState,
-      buildWhen: (previous, current) => current is! ActionState,
-      listener: (context, state){
-        if (state is StudentPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => StudnetLogin()));
-        } else if (state is AdminPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AdminLogin()));
-        }
-      },
-      builder: (context, state) {
-        switch (state.runtimeType) {
-          case AuthLoadingState():
-            return CircularProgressIndicator();
-          default:
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              home: Scaffold(
-                body: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: AnimatedOpacity(
-                        opacity: _opacity,
-                        duration: Duration(milliseconds: 1000),
-                        child: Image.asset(
-                          _images[_currentIndex],
-                          fit: BoxFit.cover,
+        bloc: authBloc,
+        listenWhen: (previous, current) => current is ActionState,
+        buildWhen: (previous, current) => current is! ActionState,
+        listener: (context, state) {
+          if (state is StudentPageState) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => StudnetLogin()));
+          } else if (state is AdminPageState) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => AdminLogin()));
+          }
+        },
+        builder: (context, state) {
+          switch (state.runtimeType) {
+            case AuthLoadingState():
+              return CircularProgressIndicator();
+            default:
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: Scaffold(
+                  body: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: AnimatedOpacity(
+                          opacity: _opacity,
+                          duration: Duration(milliseconds: 1000),
+                          child: Image.asset(
+                            _images[_currentIndex],
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    CustomPaint(
-                      painter: WhiteBackgroundPainter(),
-                      child: Container(),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 40.0,
-                          vertical: 50.0,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 450),
-                            Text(
-                              "Welcome to\nUpang Student Essentials",
-                              style: GoogleFonts.inter(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF0EAA72),
-                              ),
-                              textAlign: TextAlign.left,
+                      CustomPaint(
+                        painter: WhiteBackgroundPainter(),
+                        child: Container(),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SingleChildScrollView(
+                          // <-- Wrap Column with SingleChildScrollView
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 40.0,
+                              vertical: 50.0,
                             ),
-                            SizedBox(height: 5),
-                            Text(
-                              "Where you can reserve and check the availability of the items you need.",
-                              style: GoogleFonts.inter(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(159, 14, 170, 113),
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(height: 30),
-                            Column(
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-<<<<<<< Updated upstream
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      authBloc.add(StudentPageEvent());
-                                    },
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.white.withOpacity(0.3),
-                                      side: BorderSide(color: Color(0xFF0EAA72), width: 2.0),
-                                      foregroundColor: Color(0xFF0EAA72),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5),
-=======
                                 SizedBox(height: 450),
                                 Text(
                                   "Welcome to\nUpang Student Essentials",
@@ -194,55 +162,46 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
->>>>>>> Stashed changes
                                       ),
                                     ),
-                                    child: Text(
-                                      "Student",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
+                                    SizedBox(height: 16),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: 50,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          authBloc.add(AdminPageEvent());
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: primary_color,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Admin",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      authBloc.add(AdminPageEvent());
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xFF0EAA72),
-                                      foregroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      "Admin",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-        }
-      }
-    );
+              );
+          }
+        });
   }
 }
 
@@ -259,7 +218,8 @@ class WhiteBackgroundPainter extends CustomPainter {
           Colors.white,
         ],
         stops: [0.2, 0.5, 1.0],
-      ).createShader(Rect.fromLTWH(0, size.height * 0.3, size.height * -0.1, size.width));
+      ).createShader(
+          Rect.fromLTWH(0, size.height * 0.3, size.height * -0.1, size.width));
 
     final Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
     canvas.drawRect(rect, paint);

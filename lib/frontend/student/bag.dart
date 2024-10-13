@@ -1,16 +1,3 @@
-<<<<<<< Updated upstream
-
-
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/model/student/backpack.dart';
-import 'package:use/frontend/student/profile/transaction.dart';
-import 'package:use/frontend/student/widgets/bag.dart';
-
-void main() => runApp(MaterialApp(
-  home: Bag(),
-));
-=======
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -20,74 +7,116 @@ import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import '../colors/colors.dart';
->>>>>>> Stashed changes
 
 class Bag extends StatefulWidget {
-  const Bag({super.key});
+  const Bag({
+    Key? key,
+    required this.studentProfile,
+    required this.Status,
+  }) : super(key: key);
+
+  final StudentProfile studentProfile;
+  final String Status;
 
   @override
   State<Bag> createState() => BagState();
 }
+
 class BagState extends State<Bag> {
+  bool _showLoading = true;
+  List<int> checkedBookIds = [];
+  List<int> checkedItemIds = [];
+
+  bool isAllBooksChecked = false;
+  bool isAllItemsChecked = false;
+
+  Map<int, StudentBagBook> bookMap = {};
+  Map<int, StudentBagItem> itemMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration(milliseconds: 500), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+
+    context.read<StudentExtendedBloc>().add(
+          studentBagItem(widget.studentProfile.id, widget.Status),
+        );
+
+    context.read<StudentExtendedBloc>().add(
+          studentBagBook(widget.studentProfile.id, widget.Status),
+        );
+  }
+
+  Future<void> refreshData() async {
+    Future.delayed(Duration(milliseconds: 400), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+    print("asd");
+    context.read<StudentExtendedBloc>().add(
+          studentBagItem(widget.studentProfile.id, widget.Status),
+        );
+
+    context.read<StudentExtendedBloc>().add(
+          studentBagBook(widget.studentProfile.id, widget.Status),
+        );
+  }
+
+  Future<bool> _onPop() async {
+    Navigator.pop(context, false);
+    return false;
+  }
+
+  void updateCheckedBookIds(int id, bool isChecked) {
+    setState(() {
+      if (isChecked) {
+        checkedBookIds.add(id);
+      } else {
+        checkedBookIds.remove(id);
+      }
+    });
+  }
+
+  void updateCheckedItemIds(int id, bool isChecked) {
+    setState(() {
+      if (isChecked) {
+        checkedItemIds.add(id);
+      } else {
+        checkedItemIds.remove(id);
+      }
+    });
+  }
+
+  void toggleSelectAllBooks(bool? value, List<StudentBagBook> studentBagBooks) {
+    setState(() {
+      isAllBooksChecked = value ?? false;
+      if (isAllBooksChecked) {
+        checkedBookIds = studentBagBooks.map((book) => book.id).toList();
+      } else {
+        checkedBookIds.clear();
+      }
+    });
+  }
+
+  void toggleSelectAllItems(bool? value, List<StudentBagItem> studentBagItems) {
+    setState(() {
+      isAllItemsChecked = value ?? false;
+      if (isAllItemsChecked) {
+        checkedItemIds = studentBagItems.map((item) => item.id).toList();
+      } else {
+        checkedItemIds.clear();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    bool isChecked = false; 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Transform.translate(
-          offset: Offset(-15.0, 0.0),
-          child: Container(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Backpack',
-              style: GoogleFonts.inter(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w600
-              ),
-            )
-          ),
-        ),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(20.0),
-        children: [
-          bag_widget (
-            status : details
-          )
-        ],
-      ),
-      bottomNavigationBar: Container(
-        alignment: Alignment.bottomCenter,
-        width: double.infinity,
-        height: 70,
-        color: Color.fromARGB(255, 14, 170, 113),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 15,
-              bottom: 15,
-              left: 20,
-              child: Container(
-                width: 150,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Transform.scale(
-                        scale: 0.99,
-                        child: Checkbox(
-                          value: isChecked,
-                          onChanged: (bool? value) {
-=======
     return WillPopScope(
       onWillPop: _onPop,
       child: Scaffold(
@@ -549,88 +578,9 @@ class BagState extends State<Bag> {
                             }
                             checkedBookIds.clear();
                             checkedItemIds.clear();
->>>>>>> Stashed changes
                             setState(() {
-                              isChecked = value!;
+                              isAllItemsChecked = false;
                             });
-<<<<<<< Updated upstream
-                          },
-                          activeColor: Colors.white,
-                          checkColor: Color.fromARGB(255, 14, 170, 113),
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Center(
-                      child: Text(
-                        'Select All Items',
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              ),
-            ),
-            Positioned(
-              top: 15,
-              bottom: 15,
-              right: 20,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 40,
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 3),
-                          Text(
-                            'Price: 0',
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600
-                            )
-                          ),
-                          Text(
-                            'Quantity: 0',
-                            style: GoogleFonts.inter(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600
-                            )
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            title: Container(
-                              height: 100,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.check_circle_outline,
-                                  color: Color.fromARGB(255, 14, 170, 113),
-                                  size: 100,
-                                ),
-=======
 
                             showDialog(
                               context: context,
@@ -758,110 +708,10 @@ class BagState extends State<Bag> {
                                 color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
->>>>>>> Stashed changes
                               ),
                             ),
-                            content: Container(
-                              height: 20,
-                              child: Center(
-                                child: Text(
-                                  'Successful, Check your order in your transaction now.',
-                                  style: GoogleFonts.inter(
-                                    color: Colors.black,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            actions: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => Transaction()),
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(2),
-                                          color: Color.fromARGB(255, 14, 170, 113),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Transaction',
-                                            style: GoogleFonts.inter(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(2),
-                                          color: Color.fromARGB(192, 14, 170, 113),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Close',
-                                            style: GoogleFonts.inter(
-                                              color: Color.fromARGB(190, 255, 255, 255),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                            blurRadius: 5,
-                            offset: Offset(1, 8),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Request',
-                          style: GoogleFonts.inter(
-                            color: Color.fromARGB(255, 14, 170, 113),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600
                           ),
                         ),
-<<<<<<< Updated upstream
-                      ),
-=======
                       )
                     ),
                     )
@@ -1025,19 +875,14 @@ class _ItemCardState extends State<ItemCard> {
                           ],
                         ),
                       ],
->>>>>>> Stashed changes
                     ),
                   ),
                 ],
               ),
-            )
-          ],
+              SizedBox(height: 10),
+            ],
+          ),
         ),
-<<<<<<< Updated upstream
-      ),
-    );
-  }
-=======
         Positioned(
           top: 15,
           left: 5,
@@ -1288,5 +1133,4 @@ class _BookCardState extends State<BookCard> {
       ],
     );
   }
->>>>>>> Stashed changes
 }

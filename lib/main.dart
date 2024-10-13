@@ -1,11 +1,16 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:use/SERVICES/bloc/authentication/Route.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
+import 'package:use/backend/apiservice/authApi/aurepoimpl.dart';
+import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/bloc/authentication/Route.dart';
+import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
+
 void main() {
-<<<<<<< Updated upstream
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
-=======
   WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter bindings are initialized
   AwesomeNotifications().initialize(
   null,
@@ -41,9 +46,7 @@ void main() {
       child: MyApp(),
     ),
   );
->>>>>>> Stashed changes
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -57,5 +60,12 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: RouteGenerator().generateRoute,
     );
   }
-  
+}
+
+void _requestPermissions() {
+  AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    if (!isAllowed) {
+      AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  });
 }

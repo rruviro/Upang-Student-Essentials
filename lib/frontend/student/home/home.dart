@@ -2,41 +2,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-<<<<<<< Updated upstream
-=======
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
->>>>>>> Stashed changes
 import 'package:use/SERVICES/model/student/Department.dart';
+import 'package:use/backend/notificationService/notificationService.dart';
+import 'package:use/frontend/admin/home/course.dart';
+import 'package:use/frontend/admin/home/uniform.dart';
 import 'package:use/frontend/student/bag.dart';
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
+
 import 'package:use/frontend/student/home/course.dart';
 import 'package:use/frontend/student/home/uniform.dart';
 import 'package:use/frontend/student/notification.dart';
-import 'package:use/frontend/student/widgets/home/home.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
 
 import '../../admin/home/stocks.dart';
+import '../../colors/colors.dart';
+import '../widgets/home/home.dart';
 
-final StudentExtendedBloc studBloc = StudentExtendedBloc();
+final StudentExtendedBloc studBloc = StudentExtendedBloc(StudentRepositoryImpl());
+
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final StudentProfile studentProfile;
+  const Home({super.key, required this.studentProfile});
 
   @override
   State<Home> createState() => _HomeState();
-
 }
 
 class _HomeState extends State<Home> {
+  NotificationService? _notificationService;
+  
 
   @override
   void initState() {
     super.initState();
+    _notificationService = NotificationService();
+    _notificationService?.startPolling(widget.studentProfile.id);
+    // Trigger fetching of departments
+    studBloc.add(ShowDepartmentsEvent());
+    initializePreferences();
   }
-  
-  @override 
+
+  Future<void> initializePreferences() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('course', widget.studentProfile.course);
+    await pref.setInt('stubagid', widget.studentProfile.id);
+    print(pref.getString('course'));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
       bloc: studBloc,
@@ -44,42 +61,15 @@ class _HomeState extends State<Home> {
       buildWhen: (previous, current) => current is! StudentActionState,
       listener: (context, state) {
         if (state is NotificationPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => notif()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => notif(studentProfile: widget.studentProfile)));
         } else if (state is BackpackPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Bag()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status)));
         } else if (state is CoursePageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => courses()));
-        } else if (state is UniformPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => courses(departmentID: 0, departmentName: '', profile: widget.studentProfile,))
+          );
         }
       },
       builder: (context, state) {
-<<<<<<< Updated upstream
-        switch (state.runtimeType) {
-          case StudentLoadingState():
-            return CircularProgressIndicator();
-          default:
-            return Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                backgroundColor: Color.fromARGB(255, 14, 170, 113),
-                title: Transform.translate(
-                  offset: Offset(-15.0, 0.0),
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Departments',
-                            style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
-                          Text(
-                            'Choose your perspective department for -',
-                            style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
-=======
         if (state is DepartmentsLoadingState) {
           return Center(child: Lottie.asset(
               'assets/lottie/loading.json',
@@ -108,38 +98,10 @@ class _HomeState extends State<Home> {
                               color: Colors.black,
                               fontWeight: FontWeight.w600
                             ),
->>>>>>> Stashed changes
                           ),
                         ],
                       ),
-                    )
-                  ),
-                ),
-                centerTitle: false,
-                actions: <Widget>[
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications, 
-                      color: Colors.white
                     ),
-<<<<<<< Updated upstream
-                    onPressed: () {
-                      studBloc.add(NotificationPageEvent());
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.backpack, 
-                      color: Colors.white
-                    ),
-                    onPressed: () {
-                      studBloc.add(BackpackPageEvent());
-                    },
-                  ),
-                  SizedBox(width: 15),
-                ],
-                elevation: 0,
-=======
                     backgroundColor: Colors.white,
                   ),
                 ];
@@ -259,36 +221,34 @@ class ItemCard extends StatelessWidget {
                   width: 220,
                   height: 220,
                 ),
->>>>>>> Stashed changes
               ),
-              body: ListView(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white
-                        ),
-                        padding: EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: 10),
-                            home_widget (
-                              departments : initials
-                            )
-                          ],
+            ),
+            Positioned(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 25.0, left: 30.0),
+                      child: Text(
+                        visual.name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            );
-        }
-      },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

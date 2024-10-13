@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/frontend/authentication/StudentLogin.dart';
 import 'package:use/frontend/admin/navigation.dart';
 
 import '../admin/home/home.dart';
+import '../colors/colors.dart';
 
 class AdminLogin extends StatelessWidget {
   const AdminLogin({super.key});
@@ -44,7 +45,7 @@ class AdminLogin extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Faculty ID', style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('Faculty ID', style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500)),
                       SizedBox(height: 8),
                       TextField(
                         style: TextStyle(color: Colors.black),
@@ -86,7 +87,7 @@ class AdminLogin extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Password', style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('Password', style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500)),
                       SizedBox(height: 8),
                       PasswordField(),
                     ],
@@ -108,7 +109,7 @@ class AdminLogin extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0EAA72),
+                      backgroundColor: primary_color,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
@@ -127,12 +128,12 @@ class AdminLogin extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Row(
                     children: <Widget>[
-                      Expanded(child: Divider(color: Color.fromARGB(86, 0, 0, 0))),
+                      Expanded(child: Divider(thickness: 0.5, color: tertiary_color)),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text("other", style: TextStyle(color: Color.fromARGB(86, 0, 0, 0))),
+                        child: Text("other", style: TextStyle(fontSize: 12, color: tertiary_color)),
                       ),
-                      Expanded(child: Divider(color: Color.fromARGB(86, 0, 0, 0))),
+                      Expanded(child: Divider(thickness: 0.5, color: tertiary_color)),
                     ],
                   ),
                 ),
@@ -150,8 +151,8 @@ class AdminLogin extends StatelessWidget {
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.white,
-                      side: BorderSide(color: Color(0xFF0EAA72), width: 2.0),
-                      foregroundColor: Color(0xFF0EAA72),
+                      side: BorderSide(color: primary_color, width: 2.0),
+                      foregroundColor: primary_color,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),

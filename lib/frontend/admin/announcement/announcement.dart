@@ -1,19 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-<<<<<<< Updated upstream
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
-import 'package:use/SERVICES/model/student/Announcement.dart';
-import 'package:use/frontend/admin/home/home.dart';
-import 'package:use/frontend/admin/notification.dart';
-import 'package:use/frontend/admin/widgets/announcement/announcement.dart';
-=======
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/frontend/student/announcement/announcement.dart';
 
 import '../../colors/colors.dart';
->>>>>>> Stashed changes
 
 class Announcement extends StatefulWidget {
   const Announcement({super.key});
@@ -23,9 +16,6 @@ class Announcement extends StatefulWidget {
 }
 
 class _AnnouncementState extends State<Announcement> {
-<<<<<<< Updated upstream
-  final TextEditingController _controller = TextEditingController();
-=======
   final TextEditingController _messagecontroller = TextEditingController();
   String? _selectedDepartment;
   List<announcement> announcements = [];
@@ -43,53 +33,11 @@ class _AnnouncementState extends State<Announcement> {
     context.read<AdminExtendedBloc>().add(showAnnouncement());
   }
 
->>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-<<<<<<< Updated upstream
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.notifications, 
-              color: Colors.white
-            ),
-            onPressed: () {
-              adminBloc.add(NotificationPageEvent());
-            },
-          ),
-          SizedBox(width: 15),
-        ],
-        elevation: 0,
-      ),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30),
-              slides(context),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white
-                ),
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 30),
-                    Text(
-                      'Announcement',
-                      style: GoogleFonts.inter(
-                        fontSize: 17,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600
-=======
         backgroundColor: Colors.white,
         title: Container(
           width: double.infinity,
@@ -148,19 +96,20 @@ class _AnnouncementState extends State<Announcement> {
                             status: announcements,
                           )
                         ],
->>>>>>> Stashed changes
                       ),
                     ),
-                    SizedBox(height: 10),
-                    ItemList (
-                      status : details
-                    )
                   ],
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            );
+          }
+
+          if (state is announcementLoadErrorData) {
+            return Center(child: Text('Failed to load announcements.'));
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -180,41 +129,64 @@ class _AnnouncementState extends State<Announcement> {
                 ),
                 content: Container(
                   width: double.infinity,
-                  height: 100,
+                  height: 200,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextFormField(
-                        controller: _controller,
+                      DropdownButtonFormField<String>(
+                        value: _selectedDepartment,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedDepartment = newValue!;
+                          });
+                        },
+                        items: [
+                          'CITE',
+                          'CAHS',
+                          'CEA',
+                          'CMA',
+                          'CELA',
+                          'CCJE',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                         decoration: InputDecoration(
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            borderSide: BorderSide(color: primary_color),
                           ),
-                          hintText: 'Department',
+                          hintText: 'Select Department',
                           hintStyle: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
+                      SizedBox(height: 10),
                       TextFormField(
-                        controller: _controller,
+                        controller: _messagecontroller,
                         decoration: InputDecoration(
                           border: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color.fromARGB(255, 14, 170, 113)),
+                            borderSide: BorderSide(color: primary_color),
                           ),
                           hintText: 'Message',
                           hintStyle: TextStyle(
@@ -230,30 +202,11 @@ class _AnnouncementState extends State<Announcement> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                    ]
+                    ],
                   ),
                 ),
                 actions: [
                   GestureDetector(
-<<<<<<< Updated upstream
-                    onTap: (){
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 112,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        color: Color.fromARGB(255, 14, 170, 113)
-                      ),
-                      child: Center( 
-                        child: Text(
-                          'Publish',
-                          style: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600 
-                          ),
-=======
                     onTap: () {
                       if (_selectedDepartment != null &&
                           _messagecontroller.text.isNotEmpty) {
@@ -286,32 +239,8 @@ class _AnnouncementState extends State<Announcement> {
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: primary_color,
->>>>>>> Stashed changes
                         ),
                       ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 112,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(2),
-                        color: Color.fromARGB(192, 14, 170, 113)
-                      ),
-                      child: Center(
-                        child:Text(
-                          'Cancel',
-                          style: GoogleFonts.inter(
-                            color: const Color.fromARGB(190, 255, 255, 255),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600 
-                          ),
-                        ),
-                      )
                     ),
                   ),
                 ],
@@ -321,56 +250,14 @@ class _AnnouncementState extends State<Announcement> {
         },
         child: Icon(
           Icons.add,
-          color: Colors.white
+          color: Colors.white,
         ),
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        backgroundColor: primary_color,
       ),
     );
   }
 }
 
-<<<<<<< Updated upstream
-Widget slides(BuildContext context) {
-  List<String> imageUrls = [
-    'assets/announcement_image/e6cad8e6-4afa-4f35-a78e-2defea59f7e7.png',
-    'assets/announcement_image/e9c4b145-4d7b-4787-bd61-7b38c4b3ba44.png',
-    'assets/announcement_image/0d88f45a-60dc-4518-9641-6f318056db74.png',
-  ];
-  return Container(
-    child: CarouselSlider(
-      items: imageUrls.map((url) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          margin: EdgeInsets.symmetric(horizontal: 0),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 14, 170, 113),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Image.asset(
-              url,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
-          ),
-        );
-      }).toList(),
-      options: CarouselOptions(
-        height: 140,
-        autoPlay: false, 
-        autoPlayInterval: Duration(seconds: 3), 
-        autoPlayAnimationDuration: Duration(milliseconds: 600),
-        autoPlayCurve: Curves.fastOutSlowIn, 
-        enlargeCenterPage: true,
-      ),
-    ),
-  );
-}
-
-=======
->>>>>>> Stashed changes
 class ItemList extends StatelessWidget {
   final List<announcement> status;
   const ItemList({Key? key, required this.status}) : super(key: key);
@@ -404,9 +291,9 @@ class ItemCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.shade400,
-                blurRadius: 5,
-                offset: Offset(1, 5),
+                color: Colors.grey,
+                blurRadius: 2,
+                offset: Offset(1, 1),
               ),
             ],
           ),
@@ -417,7 +304,7 @@ class ItemCard extends StatelessWidget {
                 height: 40,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
                     topRight: Radius.circular(5),
@@ -429,16 +316,8 @@ class ItemCard extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(
                     horizontal: 10.0, vertical: 10.0),
                 child: Text(
-<<<<<<< Updated upstream
-                  details.description,
-                  style: GoogleFonts.inter(
-                    color: Colors.black,
-                    fontSize: 10
-                  ),
-=======
                   details.body,
                   style: GoogleFonts.inter(color: Colors.black, fontSize: 10),
->>>>>>> Stashed changes
                 ),
               ),
               SizedBox(height: 10),
@@ -463,16 +342,8 @@ class ItemCard extends StatelessWidget {
           child: Container(
             child: Center(
               child: Text(
-<<<<<<< Updated upstream
-                details.published,
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 10
-                ),
-=======
                 details.date,
                 style: GoogleFonts.inter(color: Colors.white, fontSize: 10),
->>>>>>> Stashed changes
               ),
             ),
           ),

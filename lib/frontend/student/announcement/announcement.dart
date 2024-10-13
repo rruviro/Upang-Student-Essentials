@@ -4,13 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-<<<<<<< Updated upstream
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
-import 'package:use/SERVICES/model/student/Announcement.dart';
-import 'package:use/frontend/student/bag.dart';
-import 'package:use/frontend/student/home/home.dart';
-import 'package:use/frontend/student/notification.dart';
-=======
 import 'package:lottie/lottie.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -21,98 +14,36 @@ import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/frontend/student/widgets/announcement.dart';
 
 import '../../colors/colors.dart';
->>>>>>> Stashed changes
 
 class Announcement extends StatefulWidget {
-  const Announcement({super.key});
+  const Announcement({super.key, required this.studentProfile});
+  final StudentProfile studentProfile;
 
   @override
   State<Announcement> createState() => _AnnouncementState();
 }
 
 class _AnnouncementState extends State<Announcement> {
+  
+  List<announcement> announcements = [];
+
+  bool _showLoading = true; 
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+    context.read<StudentExtendedBloc>().add(showAnnouncementData(widget.studentProfile.department));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-<<<<<<< Updated upstream
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.notifications, 
-              color: Colors.white
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
-                    value: studBloc,
-                    child: const notif(),
-                  ),
-                )
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.backpack, 
-              color: Colors.white
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
-                    value: studBloc,
-                    child: const Bag(),
-                  ),
-                )
-              );
-            },
-          ),
-          SizedBox(width: 15),
-        ],
-        elevation: 0,
-      ),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30),
-              slides(context),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white
-                ),
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 5),
-                    Text(
-                      'Announcement',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    ItemList(
-                      status : details
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-=======
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool isScrolled){
           return [
@@ -240,7 +171,6 @@ class _AnnouncementState extends State<Announcement> {
           }
         )
       )
->>>>>>> Stashed changes
     );
   }
 }
@@ -258,7 +188,7 @@ Widget slides(BuildContext context) {
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.symmetric(horizontal: 0),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 14, 170, 113),
+            color: primary_color,
             borderRadius: BorderRadius.circular(5),
           ),
           child: ClipRRect(
@@ -273,7 +203,7 @@ Widget slides(BuildContext context) {
         );
       }).toList(),
       options: CarouselOptions(
-        height: 140,
+        height: 160,
         autoPlay: true, 
         autoPlayInterval: Duration(seconds: 3), 
         autoPlayAnimationDuration: Duration(milliseconds: 600),
@@ -282,110 +212,4 @@ Widget slides(BuildContext context) {
       ),
     ),
   );
-}
-
-class ItemList extends StatelessWidget {
-  final List<announcement> status;
-  const ItemList({Key? key, required this.status}) : super (key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: status
-        .map((e) => ItemCard(
-            details: e,
-          ))
-        .toList(),
-    );
-  }
-}
-
-class ItemCard extends StatelessWidget {
-  final announcement details;
-  const ItemCard({Key? key, required this.details}) : super (key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: 0.0,
-            vertical: 15.0,
-          ),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade400,
-                blurRadius: 5,
-                offset: Offset(1, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 40,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 14, 170, 113),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    topRight: Radius.circular(5),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 10.0
-                ),
-                child: Text(
-                  details.description,
-                  style: GoogleFonts.inter(
-                    color: const Color.fromARGB(255, 0, 0, 0),
-                    fontSize: 10
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-            ],
-          ),
-        ),
-        Positioned(
-          top: 26,
-          left: 10,
-          child: Container(
-            child: Center(
-              child: Text(
-                details.department,
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 10
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 26,
-          right: 10,
-          child: Container(
-            child: Center(
-              child: Text(
-                details.published,
-                style: GoogleFonts.inter(
-                  color: Colors.white,
-                  fontSize: 10
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }

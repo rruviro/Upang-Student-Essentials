@@ -1,12 +1,4 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
-import 'package:google_fonts/google_fonts.dart';
-import 'package:use/SERVICES/bloc/student/student_bloc.dart';
-import 'package:use/frontend/student/home/home.dart';
-class unifrom extends StatefulWidget {
-  const unifrom({super.key});
-=======
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,15 +31,11 @@ class UniformStudent extends StatefulWidget {
       required this.UniformType,
       required this.Body})
       : super(key: key);
->>>>>>> Stashed changes
 
   @override
-  State<unifrom> createState() => _unifromState();
+  State<UniformStudent> createState() => _UniformStudentState();
 }
 
-<<<<<<< Updated upstream
-class _unifromState extends State<unifrom> {
-=======
 class _UniformStudentState extends State<UniformStudent> {
   List<Uniform> uniforms = [];
   List<StudentBagItem> items = [];
@@ -116,49 +104,15 @@ class _UniformStudentState extends State<UniformStudent> {
     );
   }
 
->>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 14, 170, 113),
+        backgroundColor: primary_color,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
-<<<<<<< Updated upstream
-            Navigator.pop(context);
-          },
-        ),
-        title: Transform.translate(
-          offset: Offset(-15.0, 0.0),
-          child: Container(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Uniform',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                Text(
-                  'Course: ',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-              ],
-            ),
-          ),
-        ),
-        bottom: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          toolbarHeight: 300,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-=======
             context
                 .read<StudentExtendedBloc>()
                 .add(ShowStocksEvent(Course: widget.courseName));
@@ -173,100 +127,92 @@ class _UniformStudentState extends State<UniformStudent> {
               Text(
                 'Uniform,',
                 style: TextStyle(color: Colors.white, fontSize: 16),
->>>>>>> Stashed changes
               ),
-              color: Color.fromARGB(255, 14, 170, 113), 
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.10),
-                  blurRadius: 5,
-                  offset: Offset(1, 7),
-                ),
-              ]
-            ),
-            child: Container(
-              height: 300,
-            ),
+              Text(
+                'Course: ${widget.courseName}',
+                style: TextStyle(color: Colors.white, fontSize: 10),
+              ),
+            ],
           ),
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Year',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-                SizedBox(height: 4),
-                Container(
-                  width: 30,
-                  height: 1,
-                  color: Colors.white,
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'First Year',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-              ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 25,
             width: 1,
-            child: Container(
+            child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.white
+                color: Colors.white,
               ),
             ),
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           IconButton(
             icon: Icon(Icons.backpack_outlined, color: Colors.white),
             onPressed: () {
-              studBloc.add(BackpackPageEvent());
-            },
-          ),
-          SizedBox(width: 15),
-        ],
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(20.0),
-        children: [
-          SizedBox(height: 20),
-          Container(
-            width: double.infinity,
-            height: 20,
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: Text(
-                    'Corporate Uniform',
-                    style: GoogleFonts.inter(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600
-                    ),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
+                    value: studBloc,
+                    child:
+                        Bag(studentProfile: widget.profile, Status: "ACTIVE"),
                   ),
                 ),
-<<<<<<< Updated upstream
-                Positioned(
-                  top: 5,
-                  right: 0,
-                  child: Text(
-                    'Stocks : 100',
-                    style: GoogleFonts.inter(
-                      color: Colors.black54,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600
+              );
+            },
+          ),
+          const SizedBox(width: 15),
+        ],
+      ),
+      body: BlocListener<StudentExtendedBloc, StudentExtendedState>(
+        listener: (context, state) {
+          if (state is StudentBagItemLoadSuccessState) {
+            setState(() {
+              items = state.studentBagItem;
+              print(items.length);
+            });
+          }
+          if (state is UniformsLoadingState) {
+            print("Loading student uniforms");
+          } else if (state is UniformsLoadedState) {
+            setState(() {
+              uniforms = state.uniforms;
+            });
+            print('Student uniforms loaded');
+          } else if (state is UniformsErrorState) {
+            print("Error loading student uniforms: ${state.error}");
+          } else {
+            print("Unknown state: $state");
+          }
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                child: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.white,
+                  toolbarHeight: 300,
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      color: primary_color,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.10),
+                          blurRadius: 5,
+                          offset: Offset(1, 7),
+                        ),
+                      ],
                     ),
+                    child: _buildSlides(),
                   ),
-=======
+                ),
               ),
               Container(
                 padding: EdgeInsets.all(20),
@@ -398,18 +344,35 @@ class _UniformStudentState extends State<UniformStudent> {
                             ],
                           ),
                   ],
->>>>>>> Stashed changes
                 ),
-              ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(String title) {
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 10,
+            child: Text(
+              title,
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ],
       ),
     );
   }
-<<<<<<< Updated upstream
-}
-=======
 
   Widget _buildSlides() {
     List<String> imageUrls = ['assets/bsit.png', 'assets/uniuni.png'];
@@ -629,4 +592,3 @@ class _ModalContentState extends State<_ModalContent> {
     );
   }
 }
->>>>>>> Stashed changes

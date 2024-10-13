@@ -4,21 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:use/frontend/admin/announcement/announcement.dart';
-<<<<<<< Updated upstream
-import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
-=======
 import 'package:use/frontend/admin/history.dart';
->>>>>>> Stashed changes
 import 'package:use/frontend/admin/home/home.dart';
 import 'package:use/frontend/admin/notification.dart';
 import 'package:use/frontend/admin/profile/profile.dart';
 
-<<<<<<< Updated upstream
-=======
 import '../../backend/bloc/BottomNavCubit.dart';
 import '../colors/colors.dart';
 
->>>>>>> Stashed changes
 class HomeBase extends StatelessWidget {
   const HomeBase({super.key});
 
@@ -42,60 +35,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HometopLevelPagestate();
 }
 
-<<<<<<< Updated upstream
-class _Homedestinationtate extends State<HomeScreen> {
-  int _currentIndex = 0;
-  final itemsBN = [
-    SalomonBottomBarItem(
-      icon: const Icon(
-        Icons.home_outlined,
-        size: 20.0
-      ), 
-      title: const Text(
-        'Home',
-        style: TextStyle(
-          fontSize: 10
-        ),
-      ),
-      activeIcon: Icon(Icons.home),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(
-        Icons.campaign_outlined,
-        size: 20.0
-      ), 
-      title: const Text(
-        'Announcement',
-        style: TextStyle(
-          fontSize: 10
-        ),
-      ),
-      activeIcon: Icon(Icons.campaign_rounded),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
-    ),
-    SalomonBottomBarItem(
-      icon: const Icon(
-        Icons.person_outline_sharp,
-        size: 20.0
-      ), 
-      title: const Text(
-        'Profile',
-        style: TextStyle(
-          fontSize: 10
-        ),
-      ),
-      activeIcon: Icon(Icons.person),
-      unselectedColor: Colors.white60,
-      selectedColor: Colors.white,
-    )
-  ];
-=======
 class _HometopLevelPagestate extends State<HomeScreen> {
   late PageController pageController;
->>>>>>> Stashed changes
 
   @override
   void initState() {
@@ -120,31 +61,6 @@ class _HometopLevelPagestate extends State<HomeScreen> {
     return BlocBuilder<BottomNavCubit, int>(
       builder: (context, state) {
         return Scaffold(
-<<<<<<< Updated upstream
-          body: destination.elementAt(state.tabIndex),
-          bottomNavigationBar: Container (
-            color: Color.fromARGB(255, 14, 170, 113),
-            child: Stack(
-              children: <Widget>[
-                Align(
-                  heightFactor: 1.0,
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 260.0,
-                    ),
-                    child: SalomonBottomBar(
-                      backgroundColor: Color.fromARGB(255, 14, 170, 113),
-                      items: itemsBN,
-                      currentIndex: state.tabIndex,
-                      duration: Duration(seconds: 1),
-                      onTap: (index) => setState(() {
-                        BlocProvider.of<AdminBottomBloc>(context)
-                          .add(TabChange(tabIndex: index));
-                      }),
-                    ),
-                  ),
-=======
           backgroundColor: Colors.white,
           body: _mainWrapperBody(),
           bottomNavigationBar: Container(
@@ -215,7 +131,6 @@ class _HometopLevelPagestate extends State<HomeScreen> {
                   filledIcon: Icons.person,
                   iconSize: iconSize, // Pass the icon size
                   fontSize: fontSize,  // Pass the font size
->>>>>>> Stashed changes
                 ),
               ],
             ),
