@@ -92,9 +92,15 @@ class _AnnouncementState extends State<Announcement> {
                             ),
                           ),
                           SizedBox(height: 5),
-                          ItemList(
-                            status: announcements,
-                          )
+                          announcements.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icons.shopping_bag,
+                                      size: 50, color: Colors.grey),
+                                )
+                              : ItemList(
+                                  status: announcements,
+                                )
                         ],
                       ),
                     ),

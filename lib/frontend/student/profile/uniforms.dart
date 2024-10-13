@@ -70,9 +70,15 @@ class _uniformsState extends State<uniforms> {
           return ListView(
             children: [
               SizedBox(height: 20),
-              uniform_list(
-                status: items,
-              ),
+              items.isEmpty
+                  ? Container(
+                      alignment: Alignment.center,
+                      child: Icon(Icons.shopping_bag,
+                          size: 50, color: Colors.grey),
+                    )
+                  : uniform_list(
+                      status: items,
+                    ),
             ],
           );
         }));

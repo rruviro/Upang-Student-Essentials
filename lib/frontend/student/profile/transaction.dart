@@ -8,7 +8,11 @@ import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
 
 class Transaction extends StatefulWidget {
-  const Transaction({super.key, required this.page, required this.studentProfile, required this.status});
+  const Transaction(
+      {super.key,
+      required this.page,
+      required this.studentProfile,
+      required this.status});
   final StudentProfile studentProfile;
   final int page;
   final String status;
@@ -22,7 +26,7 @@ class _TransactionState extends State<Transaction> {
   List<StudentBagItem> items = [];
   List<StudentBagBook> books = [];
 
-  bool _showLoading = true; 
+  bool _showLoading = true;
 
   @override
   void initState() {
@@ -33,10 +37,14 @@ class _TransactionState extends State<Transaction> {
         _showLoading = false;
       });
     });
-    context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, widget.status));
-    context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, widget.status));
+    context
+        .read<StudentExtendedBloc>()
+        .add(studentBagItem(widget.studentProfile.id, widget.status));
+    context
+        .read<StudentExtendedBloc>()
+        .add(studentBagBook(widget.studentProfile.id, widget.status));
   }
-  
+
   Future<bool> _onPop() async {
     Navigator.pop(context, true);
     return true;
@@ -63,8 +71,12 @@ class _TransactionState extends State<Transaction> {
         default:
           status = "Request";
       }
-      context.read<StudentExtendedBloc>().add(studentBagItem(widget.studentProfile.id, status));
-      context.read<StudentExtendedBloc>().add(studentBagBook(widget.studentProfile.id, status));
+      context
+          .read<StudentExtendedBloc>()
+          .add(studentBagItem(widget.studentProfile.id, status));
+      context
+          .read<StudentExtendedBloc>()
+          .add(studentBagBook(widget.studentProfile.id, status));
     });
   }
 
@@ -77,7 +89,8 @@ class _TransactionState extends State<Transaction> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new, color: const Color.fromARGB(255, 0, 0, 0)),
+            icon: Icon(Icons.arrow_back_ios_new,
+                color: const Color.fromARGB(255, 0, 0, 0)),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -109,12 +122,11 @@ class _TransactionState extends State<Transaction> {
                         child: Text(
                           'Request',
                           style: TextStyle(
-                            fontSize: 10,
-                            color: _currentSelection == 1
-                              ? Color.fromARGB(255, 0, 0, 0)
-                              : Colors.grey,
-                            fontWeight: FontWeight.w600
-                          ),
+                              fontSize: 10,
+                              color: _currentSelection == 1
+                                  ? Color.fromARGB(255, 0, 0, 0)
+                                  : Colors.grey,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                       SizedBox(width: 20),
@@ -122,9 +134,7 @@ class _TransactionState extends State<Transaction> {
                         height: 25,
                         width: 1,
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black26
-                          ),
+                          decoration: BoxDecoration(color: Colors.black26),
                         ),
                       ),
                       SizedBox(width: 20),
@@ -134,12 +144,11 @@ class _TransactionState extends State<Transaction> {
                         child: Text(
                           'Reserved',
                           style: TextStyle(
-                            fontSize: 10,
-                            color: _currentSelection == 2
-                              ? Color.fromARGB(255, 0, 0, 0)
-                              : Colors.grey,
-                            fontWeight: FontWeight.w600
-                          ),
+                              fontSize: 10,
+                              color: _currentSelection == 2
+                                  ? Color.fromARGB(255, 0, 0, 0)
+                                  : Colors.grey,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                       SizedBox(width: 20),
@@ -147,9 +156,7 @@ class _TransactionState extends State<Transaction> {
                         height: 25,
                         width: 1,
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black26
-                          ),
+                          decoration: BoxDecoration(color: Colors.black26),
                         ),
                       ),
                       SizedBox(width: 20),
@@ -159,23 +166,20 @@ class _TransactionState extends State<Transaction> {
                         child: Text(
                           'Claim',
                           style: TextStyle(
-                            fontSize: 10,
-                            color: _currentSelection == 3
-                              ? Color.fromARGB(255, 0, 0, 0)
-                              : Colors.grey,
-                            fontWeight: FontWeight.w600
-                          ),
+                              fontSize: 10,
+                              color: _currentSelection == 3
+                                  ? Color.fromARGB(255, 0, 0, 0)
+                                  : Colors.grey,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: 10),
                   SizedBox(
-                    height: 1, 
+                    height: 1,
                     width: double.infinity,
-                    child: Container(
-                      color: Colors.black26
-                    ),
+                    child: Container(color: Colors.black26),
                   ),
                 ],
               ),
@@ -191,7 +195,7 @@ class _TransactionState extends State<Transaction> {
               items = state.studentBagItems;
               books = state.studentBagBooks;
             }
-      
+
             return ListView(
               padding: EdgeInsets.all(20.0),
               children: [
@@ -204,20 +208,26 @@ class _TransactionState extends State<Transaction> {
                   ),
                 ),
                 SizedBox(height: 10),
-                ItemList(
-                  status: items.where((item) {
-                    switch (_currentSelection) {
-                      case 1:
-                        return item.status == "Request";
-                      case 2:
-                        return item.status == "Reserved";
-                      case 3:
-                        return item.status == "Claim";
-                      default:
-                        return false;
-                    }
-                  }).toList(),
-                ),
+                items.isEmpty
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Icon(Icons.shopping_bag,
+                            size: 50, color: Colors.grey),
+                      )
+                    : ItemList(
+                        status: items.where((item) {
+                          switch (_currentSelection) {
+                            case 1:
+                              return item.status == "Request";
+                            case 2:
+                              return item.status == "Reserved";
+                            case 3:
+                              return item.status == "Claim";
+                            default:
+                              return false;
+                          }
+                        }).toList(),
+                      ),
                 SizedBox(height: 20),
                 Text(
                   'Books',
@@ -228,20 +238,26 @@ class _TransactionState extends State<Transaction> {
                   ),
                 ),
                 SizedBox(height: 10),
-                BookList(
-                  status: books.where((book) {
-                    switch (_currentSelection) {
-                      case 1:
-                        return book.status == "Request";
-                      case 2:
-                        return book.status == "Reserved";
-                      case 3:
-                        return book.status == "Claim";
-                      default:
-                        return false;
-                    }
-                  }).toList(),
-                ),
+                books.isEmpty
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: Icon(Icons.shopping_bag,
+                            size: 50, color: Colors.grey),
+                      )
+                    : BookList(
+                        status: books.where((book) {
+                          switch (_currentSelection) {
+                            case 1:
+                              return book.status == "Request";
+                            case 2:
+                              return book.status == "Reserved";
+                            case 3:
+                              return book.status == "Claim";
+                            default:
+                              return false;
+                          }
+                        }).toList(),
+                      ),
               ],
             );
           },
@@ -362,7 +378,8 @@ class ItemCard extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Text(
-                          item.dateReceived?.toLocal().toIso8601String() ?? 'N/A',
+                          item.dateReceived?.toLocal().toIso8601String() ??
+                              'N/A',
                           style: TextStyle(
                             fontSize: 10,
                             color: Colors.white54,
@@ -481,15 +498,15 @@ class ItemCard extends StatelessWidget {
 
 class BookList extends StatelessWidget {
   final List<StudentBagBook> status;
-  const BookList({Key? key, required this.status}) : super (key: key);
+  const BookList({Key? key, required this.status}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: status
-        .map((e) => BookCard(
-            book: e,
-          ))
-        .toList(),
+          .map((e) => BookCard(
+                book: e,
+              ))
+          .toList(),
     );
   }
 }
@@ -528,7 +545,8 @@ class BookCard extends StatelessWidget {
                   ),
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: Image.network("assets/b19d1b570a8d62ff56f4f351e389c2db.jpg"), // Placeholder for actual image
+                child: Image.network(
+                    "assets/b19d1b570a8d62ff56f4f351e389c2db.jpg"), // Placeholder for actual image
               ),
               SizedBox(width: 10),
               Stack(
@@ -564,7 +582,7 @@ class BookCard extends StatelessWidget {
                             book.bookName,
                             style: TextStyle(
                               fontSize: 13,
-                color: Colors.white,
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -607,7 +625,8 @@ class BookCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            book.dateReceived?.toLocal().toIso8601String() ?? 'N/A',
+                            book.dateReceived?.toLocal().toIso8601String() ??
+                                'N/A',
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.white54,
@@ -710,5 +729,3 @@ class BookCard extends StatelessWidget {
     );
   }
 }
-
-

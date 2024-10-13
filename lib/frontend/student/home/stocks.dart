@@ -350,8 +350,14 @@ class _StocksState extends State<Stocks> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child:
-                          BookList(books: state.books, onTap: _showBookDialog),
+                      child: items.isEmpty
+                          ? Container(
+                              alignment: Alignment.center,
+                              child: Icon(Icons.shopping_bag,
+                                  size: 50, color: Colors.grey),
+                            )
+                          : BookList(
+                              books: state.books, onTap: _showBookDialog),
                     ),
                   ),
                 ],

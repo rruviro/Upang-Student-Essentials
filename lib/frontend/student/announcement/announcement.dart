@@ -23,10 +23,9 @@ class Announcement extends StatefulWidget {
 }
 
 class _AnnouncementState extends State<Announcement> {
-  
   List<announcement> announcements = [];
 
-  bool _showLoading = true; 
+  bool _showLoading = true;
 
   @override
   void initState() {
@@ -36,125 +35,117 @@ class _AnnouncementState extends State<Announcement> {
         _showLoading = false;
       });
     });
-    context.read<StudentExtendedBloc>().add(showAnnouncementData(widget.studentProfile.department));
+    context
+        .read<StudentExtendedBloc>()
+        .add(showAnnouncementData(widget.studentProfile.department));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Container(
-          width: double.infinity, 
-          height: 35, 
-          child: Row(
-            children: [
-              Image.asset('assets/logo.png'),
-              SizedBox(width: 10),
-              Text(
-                'Upang Student Essentials',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
-                    fontSize: 11,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600
-                  )
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Container(
+            width: double.infinity,
+            height: 35,
+            child: Row(
+              children: [
+                Image.asset('assets/logo.png'),
+                SizedBox(width: 10),
+                Text(
+                  'Upang Student Essentials',
+                  style: GoogleFonts.inter(
+                      textStyle: TextStyle(
+                          fontSize: 11,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600)),
                 ),
-              ),
-            ],
-          ),
-        ),
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.notifications, 
-              color: primary_color
+              ],
             ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
+          ),
+          centerTitle: false,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.notifications, color: primary_color),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
                     child: notif(studentProfile: widget.studentProfile),
                   ),
-                )
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.backpack, 
-              color: primary_color
+                ));
+              },
             ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
+            IconButton(
+              icon: Icon(Icons.backpack, color: primary_color),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
-                    child: Bag(studentProfile: widget.studentProfile, Status: widget.studentProfile.status),
+                    child: Bag(
+                        studentProfile: widget.studentProfile,
+                        Status: widget.studentProfile.status),
                   ),
-                )
-              );
-            },
-          ),
-          SizedBox(width: 15),
-        ],
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
-        builder: (context, state) {
-            if (_showLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (state is announcementLoadSuccessData) {
-              announcements = state.Announcement;
-              return ListView(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      slides(context),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white
-                        ),
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Announcement',
-                              style: TextStyle(
+                ));
+              },
+            ),
+            SizedBox(width: 15),
+          ],
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
+        body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+            builder: (context, state) {
+          if (_showLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is announcementLoadSuccessData) {
+            announcements = state.Announcement;
+            return ListView(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20),
+                    slides(context),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(color: Colors.white),
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Announcement',
+                            style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w600
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            announcement_list(
-                              status: announcements,
-                            )
-                          ],
-                        ),
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(height: 5),
+                          announcements.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icons.shopping_bag,
+                                      size: 50, color: Colors.grey),
+                                )
+                              : announcement_list(
+                                  status: announcements,
+                                )
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              );
-            }
-            if (state is announcementLoadErrorData) {
-              return Center(child: Text('Failed to load announcements.'));
-            }
-            else{
-              return Center(child: CircularProgressIndicator());
-            }
-        }
-      )
-    );
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }
+          if (state is announcementLoadErrorData) {
+            return Center(child: Text('Failed to load announcements.'));
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        }));
   }
 }
 
@@ -187,10 +178,10 @@ Widget slides(BuildContext context) {
       }).toList(),
       options: CarouselOptions(
         height: 160,
-        autoPlay: true, 
-        autoPlayInterval: Duration(seconds: 3), 
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 3),
         autoPlayAnimationDuration: Duration(milliseconds: 600),
-        autoPlayCurve: Curves.fastOutSlowIn, 
+        autoPlayCurve: Curves.fastOutSlowIn,
         enlargeCenterPage: true,
       ),
     ),

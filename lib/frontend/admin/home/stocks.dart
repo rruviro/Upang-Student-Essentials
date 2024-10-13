@@ -354,11 +354,17 @@ class _StocksState extends State<Stocks> {
                       child:
                           ListView(scrollDirection: Axis.horizontal, children: [
                         Container(
-                          child: ItemList(
-                            stocks: state.stocks,
-                            courseName: widget.courseName,
-                            Department: widget.Department,
-                          ),
+                          child: state.stocks.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icons.shopping_bag,
+                                      size: 50, color: Colors.grey),
+                                )
+                              : ItemList(
+                                  stocks: state.stocks,
+                                  courseName: widget.courseName,
+                                  Department: widget.Department,
+                                ),
                         ),
                       ]),
                     ),
@@ -615,7 +621,13 @@ class _StocksState extends State<Stocks> {
                             padding: const EdgeInsets.all(16.0),
                             child: ListView(
                               children: [
-                                BookList(books: state.books),
+                                state.books.isEmpty
+                                    ? Container(
+                                        alignment: Alignment.center,
+                                        child: Icon(Icons.shopping_bag,
+                                            size: 50, color: Colors.grey),
+                                      )
+                                    : BookList(books: state.books),
                               ],
                             ),
                           ),

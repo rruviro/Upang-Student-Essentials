@@ -74,9 +74,15 @@ class _BooksState extends State<Books> {
           return ListView(
             children: [
               SizedBox(height: 20),
-              books_list(
-                status: items,
-              ),
+              items.isEmpty
+                  ? Container(
+                      alignment: Alignment.center,
+                      child: Icon(Icons.shopping_bag,
+                          size: 50, color: Colors.grey),
+                    )
+                  : books_list(
+                      status: items,
+                    ),
             ],
           );
         }));
