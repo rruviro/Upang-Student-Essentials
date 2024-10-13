@@ -159,6 +159,7 @@ class _StocksState extends State<Stocks> {
                                       status: '',
                                       claimingSchedule: '',
                                       stubagId: 0,
+                                      shift: '',
                                     ));
                                   });
                                   Navigator.of(context).pop();
@@ -222,6 +223,7 @@ class _StocksState extends State<Stocks> {
                                       status: '',
                                       claimingSchedule: '',
                                       stubagId: 0,
+                                      shift: '',
                                     ));
                                   });
 

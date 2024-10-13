@@ -2,7 +2,7 @@ class StudentBagItem {
   final int id;
   final String department;
   final String course;
-  final String gender; 
+  final String gender;
   final String type;
   final String body;
   final String size;
@@ -11,6 +11,7 @@ class StudentBagItem {
   final int reservationNumber;
   final String claimingSchedule;
   final int stubagId;
+  final String shift;
   final DateTime? dateReceived;
 
   StudentBagItem({
@@ -23,8 +24,9 @@ class StudentBagItem {
     required this.body,
     required this.size,
     required this.status,
+    required this.shift,
     this.code,
-    required this.claimingSchedule, 
+    required this.claimingSchedule,
     required this.stubagId,
     this.dateReceived,
   });
@@ -42,10 +44,11 @@ class StudentBagItem {
       code: json['code'],
       claimingSchedule: json['claiming_schedule'] ?? '',
       stubagId: json['stubag_id'],
-      dateReceived: json['dateReceived'] != null 
-          ? DateTime.parse(json['dateReceived']) 
+      dateReceived: json['dateReceived'] != null
+          ? DateTime.parse(json['dateReceived'])
           : null,
       reservationNumber: json['reservationNumber'] ?? 0,
+      shift: json['shift'],
     );
   }
 
@@ -53,8 +56,8 @@ class StudentBagItem {
     return {
       'id': id,
       'Department': department,
-      'Course': course, 
-      'Gender': gender, 
+      'Course': course,
+      'Gender': gender,
       'Type': type,
       'Body': body,
       'Size': size,
@@ -63,7 +66,8 @@ class StudentBagItem {
       'claiming_schedule': claimingSchedule,
       'stubag_id': stubagId,
       'dateReceived': dateReceived?.toIso8601String(),
-      'reservationNumber' : reservationNumber
+      'reservationNumber': reservationNumber,
+      'shift': shift,
     };
   }
 }

@@ -79,7 +79,8 @@ class _UniformStudentState extends State<UniformStudent> {
           size: '',
           status: '',
           claimingSchedule: '',
-          stubagId: 0));
+          stubagId: 0,
+          shift: ''));
     });
 
     // Show the dialog with checkmark and message
