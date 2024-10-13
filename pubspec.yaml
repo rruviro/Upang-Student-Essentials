@@ -46,8 +46,14 @@ dependencies:
   image_picker: ^1.1.2
   bloc: ^8.1.4
   flutter_colorpicker: ^1.1.0
+<<<<<<< Updated upstream
   flutter_bloc: ^8.1.6
+=======
+  lottie: ^3.1.2
+>>>>>>> Stashed changes
   # permission_handler: ^11.3.1
+
+  iconly: ^1.0.1
   
 dev_dependencies:
   flutter_test:
@@ -75,6 +81,8 @@ flutter:
     - assets/
     - assets/announcement_image/
     - assets/splash_image/
+    - assets/lottie/
+    - assets/empty_state/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

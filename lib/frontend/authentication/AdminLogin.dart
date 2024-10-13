@@ -7,7 +7,6 @@ import 'package:use/frontend/admin/navigation.dart';
 
 import '../admin/home/home.dart';
 
-final AdminBottomBloc adminBloc = AdminBottomBloc();
 class AdminLogin extends StatelessWidget {
   const AdminLogin({super.key});
 
@@ -101,7 +100,7 @@ class AdminLogin extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => BlocProvider<AdminBottomBloc>.value(
+                          builder: (_) => BlocProvider.value(
                             value: adminBloc,
                             child: const HomeBase(),
                           ),

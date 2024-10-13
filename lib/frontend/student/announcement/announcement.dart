@@ -4,11 +4,24 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+<<<<<<< Updated upstream
 import 'package:use/SERVICES/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Announcement.dart';
 import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/notification.dart';
+=======
+import 'package:lottie/lottie.dart';
+import 'package:use/backend/models/admin/Announcement.dart';
+import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
+import 'package:use/frontend/student/bag.dart';
+import 'package:use/frontend/student/home/home.dart';
+import 'package:use/frontend/student/notification.dart';
+import 'package:use/backend/bloc/student/student_bloc.dart';
+import 'package:use/frontend/student/widgets/announcement.dart';
+
+import '../../colors/colors.dart';
+>>>>>>> Stashed changes
 
 class Announcement extends StatefulWidget {
   const Announcement({super.key});
@@ -22,6 +35,7 @@ class _AnnouncementState extends State<Announcement> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+<<<<<<< Updated upstream
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 14, 170, 113),
         centerTitle: false,
@@ -98,6 +112,135 @@ class _AnnouncementState extends State<Announcement> {
           ),
         ],
       ),
+=======
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool isScrolled){
+          return [
+            SliverAppBar(
+              backgroundColor: Colors.white,
+              title: Text(
+                "Announcement",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            )
+          ];
+        }, 
+        body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+          builder: (context, state) {
+              if (_showLoading) {
+                return Center(child: Lottie.asset(
+                  'assets/lottie/loading.json',
+                  height: 300,
+                  width: 380,
+                  fit: BoxFit.fill
+                ));
+              }
+              if (state is announcementLoadSuccessData) {
+                announcements = state.Announcement;
+                return Container(
+                  child: ListView(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          slides(context),
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white
+                            ),
+                            padding: EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Announcement',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                announcements.isEmpty
+                                  ? Container(
+                                      height: MediaQuery.of(context).size.height - 450, 
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              "assets/empty_state/announcement.png",
+                                              height: 160,
+                                              width: 160,
+                                            ),
+                                            SizedBox(height: 10),
+                                            // Text('', style: TextStyle(fontSize: 15, color: Colors.black)),
+                                            Text('No announcements available', style: TextStyle(fontSize: 10, color: Colors.black)),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : announcement_list(
+                                    status: announcements,
+                                  )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                );
+              }
+              if (state is announcementLoadErrorData) {
+                return Center(child: Container(
+                height: 200,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Icon(
+                        Icons.signal_cellular_connected_no_internet_4_bar_rounded,
+                        color: primary_color,
+                        size: 130,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Center(
+                      child: Text(
+                        'You\'r having trouble with your connection\ncheck your connection.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: tertiary_color,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500
+                        ),
+                      )
+                    )
+                  ],
+                )
+              ),);
+              }
+              else{
+                return Center(child: Lottie.asset(
+                  'assets/lottie/loading.json',
+                  height: 300,
+                  width: 380,
+                  fit: BoxFit.fill
+                ));
+              }
+          }
+        )
+      )
+>>>>>>> Stashed changes
     );
   }
 }

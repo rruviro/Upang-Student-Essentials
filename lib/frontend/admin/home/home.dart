@@ -6,13 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
+<<<<<<< Updated upstream
 import 'package:iconoir_flutter/regular/color_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:use/SERVICES/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/admin/Department.dart';
+=======
+import 'package:lottie/lottie.dart';
+import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
+import 'package:use/backend/bloc/admin/admin_bloc.dart';
+>>>>>>> Stashed changes
 import 'package:use/frontend/admin/home/course.dart';
-import 'package:use/frontend/admin/home/management/manage.dart';
-import 'package:use/frontend/admin/home/uniform.dart';
 import 'package:use/frontend/admin/notification.dart';
 
 final AdminExtendedBloc adminBloc = AdminExtendedBloc();
@@ -97,6 +101,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
+=======
+    adminBloc.add(ShowDepartmentsEvent());
+>>>>>>> Stashed changes
     return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
       bloc: adminBloc,
       listenWhen: (previous, current) => current is AdminActionState,
@@ -105,6 +113,7 @@ class _HomeState extends State<Home> {
         if (state is NotificationPageState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => notif()));
         } else if (state is CoursePageState) {
+<<<<<<< Updated upstream
           Navigator.push(context, MaterialPageRoute(builder: (context) => courses()));
         } else if (state is ManagePageState) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => manage()));
@@ -441,6 +450,47 @@ class _HomeState extends State<Home> {
               ),
               body: Stack(
                 children:[
+=======
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Courses(departmentID: 0, departmentName: '',)));
+        }
+      },
+      builder: (context, state) {
+        if (state is DepartmentsLoadingState) {
+          return Center(child: Lottie.asset(
+              'assets/lottie/loading.json',
+              height: 300,
+              width: 380,
+              fit: BoxFit.fill
+            ));
+        } else if (state is DepartmentsLoadedState) {
+          return Scaffold(
+            backgroundColor: secondary_color,
+            body: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool isScrolled){
+                return [
+                  SliverAppBar(
+                    backgroundColor: Colors.white,
+                    title: Row(
+                      children: [
+                        Image.asset('assets/logo.png'),
+                        SizedBox(width: 10),
+                        Text(
+                          'Upang Student Essentials',
+                          style: GoogleFonts.inter(
+                              textStyle: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600
+                              )
+                            ),
+                          ),
+                        ],
+                      ),
+                  ),
+                ];
+              }, body: Stack(
+                children: [
+>>>>>>> Stashed changes
                   ListView(
                     children: <Widget>[
                       Column(
@@ -448,6 +498,7 @@ class _HomeState extends State<Home> {
                         children: <Widget>[
                           Container(
                             width: double.infinity,
+<<<<<<< Updated upstream
                             decoration: BoxDecoration(
                               color: Colors.white
                             ),
@@ -458,6 +509,30 @@ class _HomeState extends State<Home> {
                                 SizedBox(height: 10), 
                                 ItemList (
                                   departments : initials
+=======
+                            decoration: BoxDecoration(color: Colors.white),
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Departments',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  'Choose your perspective department for -',
+                                  style: TextStyle(
+                                      color: tertiary_color,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(height: 20),
+                                ItemList(
+                                  departments: state.departments,
+>>>>>>> Stashed changes
                                 )
                               ],
                             ),
@@ -466,11 +541,49 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
+<<<<<<< Updated upstream
                 ],
               ),
             );
         }
       }
+=======
+                  Positioned(
+                    top: 5,
+                    right: 23,
+                    child: InkWell(
+                      onTap: () {
+                        adminBloc.add(NewDepartmentPageEvent());
+                      },
+                      child: Icon(
+                        Icons.add,
+                        color: primary_color,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          );
+        } else if (state is DepartmentsErrorState) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Error'),
+            ),
+            body: Center(child: Text('Error: ${state.error}')),
+          );
+        }
+        else{
+          return Center(child: Lottie.asset(
+              'assets/lottie/loading.json',
+              height: 300,
+              width: 380,
+              fit: BoxFit.fill
+            ));
+        }
+        
+      },
+>>>>>>> Stashed changes
     );
   }
 }
@@ -482,10 +595,17 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: departments
+<<<<<<< Updated upstream
         .map((e) => ItemCard(
             visual: e,
           ))
         .toList(),
+=======
+          .map((e) => ItemCard(
+                visual: e,
+              ))
+          .toList(),
+>>>>>>> Stashed changes
     );
   }
 }
@@ -505,7 +625,7 @@ class ItemCard extends StatelessWidget {
       margin: const EdgeInsets.only(
         bottom: 20.0,
       ),
-      height: 80,
+      height: 120, // Increased the height to accommodate the new layout
       decoration: BoxDecoration(
         color: Color.fromARGB(255, 14, 170, 113),
         borderRadius: BorderRadius.circular(5),
@@ -524,8 +644,13 @@ class ItemCard extends StatelessWidget {
             right: -20,
             top: -35,
             child: Container(
+<<<<<<< Updated upstream
               child: Image.asset(
                 visual.imageUrl,
+=======
+              child: Image.network(
+                visual.photoUrl,
+>>>>>>> Stashed changes
                 width: 220,
                 height: 220, 
               ),
@@ -551,10 +676,14 @@ class ItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
+<<<<<<< Updated upstream
                       padding: EdgeInsets.only(
                         top: 25.0,
                         left: 30.0
                       ),
+=======
+                      padding: EdgeInsets.only(top: 25.0, left: 30.0),
+>>>>>>> Stashed changes
                       child: Text(
                         visual.department,
                         style: TextStyle(
@@ -565,9 +694,13 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                     Padding(
+<<<<<<< Updated upstream
                       padding: EdgeInsets.only(
                         left: 30.0
                       ),
+=======
+                      padding: EdgeInsets.only(left: 30.0),
+>>>>>>> Stashed changes
                       child: Container(),
                     ),
                   ],
@@ -580,26 +713,55 @@ class ItemCard extends StatelessWidget {
             right: 0,
             child: Container(
               width: 85,
-              height: 25,
+              height: 100, // Increased the height to fit the column
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(5),
                   topRight: Radius.circular(5),
                 ),
+<<<<<<< Updated upstream
                 color: Color.fromARGB(227, 255, 255, 255)
+=======
+                color: Color.fromARGB(227, 255, 255, 255),
+>>>>>>> Stashed changes
               ),
               child: InkWell(
                 onTap: () {
                   adminBloc.add(ManagePageEvent());
                 },
-                child: Row(
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Align text to the start
                   children: [
-                    SizedBox(width: 10),
+                    /*Row(
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          'Manage',
+                          style: GoogleFonts.inter(
+                            textStyle: TextStyle(
+                                fontSize: 10.5,
+                                color: primary_color,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Icon(
+                          Icons.dashboard_customize_outlined,
+                          color: primary_color,
+                          size: 15,
+                        ),
+                      ],
+                    ),*/
+                    SizedBox(
+                        height:
+                            8), // Add some space between the Row and the Column
                     Text(
-                      'Manage',
+                      'Reserved: ${visual.reserved}',
                       style: GoogleFonts.inter(
                         textStyle: TextStyle(
                           fontSize: 10.5,
+<<<<<<< Updated upstream
                           color: Color.fromARGB(255, 14, 170, 113),
                           fontWeight: FontWeight.w600
                         ),
@@ -611,6 +773,35 @@ class ItemCard extends StatelessWidget {
                       color: Color.fromARGB(255, 14, 170, 113),
                       size: 15,
                     )
+=======
+                          color: primary_color,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 4), // Add space between texts
+                    Text(
+                      'Claim: ${visual.claim}',
+                      style: GoogleFonts.inter(
+                        textStyle: TextStyle(
+                          fontSize: 10.5,
+                          color: primary_color,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 4), // Add space between texts
+                    Text(
+                      'Complete: ${visual.completed}',
+                      style: GoogleFonts.inter(
+                        textStyle: TextStyle(
+                          fontSize: 10.5,
+                          color: primary_color,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+>>>>>>> Stashed changes
                   ],
                 ),
               ),

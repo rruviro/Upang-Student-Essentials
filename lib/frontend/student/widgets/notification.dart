@@ -50,14 +50,6 @@ class ItemCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 15),
-              SizedBox(
-                height: 50,
-                width: 1,
-                child: Container(
-                  decoration: BoxDecoration(color: Colors.white30),
-                ),
-              ),
-              SizedBox(width: 15),
               ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: 100.0,

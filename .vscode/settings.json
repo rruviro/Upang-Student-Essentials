@@ -1,3 +1,7 @@
 {
+<<<<<<< Updated upstream
     "cmake.ignoreCMakeListsMissing": true
+=======
+    "cmake.sourceDirectory": "C:/Users/Louise/Documents/Upang-Student-Essentials/linux"
+>>>>>>> Stashed changes
 }

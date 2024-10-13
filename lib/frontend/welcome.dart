@@ -129,6 +129,7 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+<<<<<<< Updated upstream
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,
@@ -142,6 +143,58 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                       foregroundColor: Color(0xFF0EAA72),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(5),
+=======
+                                SizedBox(height: 450),
+                                Text(
+                                  "Welcome to\nUpang Student Essentials",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  "Where you can reserve and check the availability of the items you need.",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black54,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(height: 30),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: 50,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          authBloc.add(StudentPageEvent());
+                                        },
+                                        style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.white.withOpacity(0.3),
+                                          side: BorderSide(
+                                              color: primary_color,
+                                              width: 2.0),
+                                          foregroundColor: primary_color,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "Student",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+>>>>>>> Stashed changes
                                       ),
                                     ),
                                     child: Text(
