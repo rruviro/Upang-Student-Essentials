@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
@@ -299,6 +300,10 @@ class _ProfileScreenState extends State<Profile> {
                                   actions: [
                                     GestureDetector(
                                       onTap: () async {
+                                        final SharedPreferences logout =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        logout.clear();
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>

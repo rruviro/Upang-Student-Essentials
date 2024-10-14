@@ -20,7 +20,8 @@ class Welcome extends StatefulWidget {
   _WelcomeState createState() => _WelcomeState();
 }
 
-final AuthenticationBloc authBloc = AuthenticationBloc(AuthenticationImplementation());
+final AuthenticationBloc authBloc =
+    AuthenticationBloc(AuthenticationImplementation());
 
 class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
   final List<String> _images = [
@@ -118,7 +119,7 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
-                                    color: primary_color,
+                                    color: Colors.black,
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
@@ -128,7 +129,7 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: primary_color,
+                                    color: Colors.black54,
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
@@ -147,8 +148,7 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                           backgroundColor:
                                               Colors.white.withOpacity(0.3),
                                           side: BorderSide(
-                                              color: primary_color,
-                                              width: 2.0),
+                                              color: primary_color, width: 2.0),
                                           foregroundColor: primary_color,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
