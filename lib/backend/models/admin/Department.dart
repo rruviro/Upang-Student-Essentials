@@ -19,7 +19,7 @@ class department {
 
   // Build the correct URL
   String get photoUrl {
-    return 'https://mighty-depths-84873-c9e5911a9dae.herokuapp.com/uploads/department/$photo';
+    return 'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/uploads/department/$photo';
   }
 
   factory department.fromJson(Map<String, dynamic> json) {
