@@ -8,7 +8,7 @@ import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/SERVICES/model/student/Department.dart';
 import 'package:use/backend/notificationService/notificationService.dart';
-import 'package:use/frontend/admin/home/course.dart';
+import 'package:use/frontend/student/home/course.dart';
 import 'package:use/frontend/admin/home/uniform.dart';
 import 'package:use/frontend/student/bag.dart';
 
@@ -261,9 +261,10 @@ class ItemCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Courses(
+                    builder: (context) => courses(
                       departmentID: visual.id ?? 0,
                       departmentName: visual.name,
+                      profile: this.profile,
                     ),
                   ),
                 );
