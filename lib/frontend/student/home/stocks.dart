@@ -352,7 +352,7 @@ class _StocksState extends State<Stocks> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: items.isEmpty
+                      child: state.books.isEmpty
                           ? Container(
                               alignment: Alignment.center,
                               child: Icon(Icons.shopping_bag,
