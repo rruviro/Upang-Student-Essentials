@@ -48,7 +48,7 @@ class Stock {
   });
 
   String get photoUrl {
-    return 'https://mighty-depths-84873-c9e5911a9dae.herokuapp.com/uploads/uniform/$stockPhoto';
+    return 'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/uploads/uniform/$stockPhoto';
   }
 
   factory Stock.fromJson(Map<String, dynamic> json) {

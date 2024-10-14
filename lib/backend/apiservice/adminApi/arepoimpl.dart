@@ -14,7 +14,7 @@ import 'dart:convert';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
 class AdminRepositoryImpl extends Adminrepo {
-  static const String baseUrl = 'https://mighty-depths-84873-c9e5911a9dae.herokuapp.com/api';
+  static const String baseUrl = 'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api';
   // static const String baseUrl = 'http://127.0.0.1:8000/api';
 
   @override
