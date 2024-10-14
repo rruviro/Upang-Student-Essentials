@@ -60,12 +60,12 @@ class BagState extends State<Bag> {
     });
     print("asd");
     context.read<StudentExtendedBloc>().add(
-          studentBagItem(widget.studentProfile.id, widget.Status),
-        );
+      studentBagItem(widget.studentProfile.id, widget.Status),
+    );
 
     context.read<StudentExtendedBloc>().add(
-          studentBagBook(widget.studentProfile.id, widget.Status),
-        );
+      studentBagBook(widget.studentProfile.id, widget.Status),
+    );
   }
 
   Future<bool> _onPop() async {

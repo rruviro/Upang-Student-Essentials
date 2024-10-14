@@ -47,6 +47,17 @@ class _ProfileScreenState extends State<Profile> {
     super.dispose();
   }
 
+  void _loadStudentData() {
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        _showLoading = false;
+      });
+    });
+
+    print("showStudentProfileData");
+    context.read<AdminExtendedBloc>().add(getStudent());
+  }
+
   void _showItemDetailsDialog(BuildContext context, bool isBook, dynamic item) {
     if (isDialogOpen) return;
 
@@ -567,7 +578,7 @@ class _ProfileScreenState extends State<Profile> {
                                         icon:
                                             Icon(Icons.add, color: primary_color),
                                         onPressed: () {
-                                          _showCreateDialog(context);
+                                          _showCreateDialog(context, _loadStudentData);
                                         }),
                                   ),
                                 ],
@@ -597,6 +608,7 @@ class _ProfileScreenState extends State<Profile> {
     );
   }
 }
+
 
 class ItemList extends StatelessWidget {
   final List<StudentProfile> students;
@@ -770,7 +782,7 @@ class ItemCard extends StatelessWidget {
   }
 }
 
-void _showCreateDialog(BuildContext context) {
+void _showCreateDialog(BuildContext context, VoidCallback voice) {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   int _selectedYear = 1;
@@ -1037,16 +1049,17 @@ void _showCreateDialog(BuildContext context) {
                         );
                       } else {
                         context.read<AdminExtendedBloc>().add(
-                              createStudent(
-                                capitalizeFirstLetter(
-                                    _firstNameController.text),
-                                capitalizeFirstLetter(_lastNameController.text),
-                                selectedCourse.toString(),
-                                _selectedYear,
-                                _isEnrolled ? "ACTIVE" : "INACTIVE",
-                                selectedDepartment.toString(),
-                              ),
-                            );
+                          createStudent(
+                            capitalizeFirstLetter(
+                                _firstNameController.text),
+                            capitalizeFirstLetter(_lastNameController.text),
+                            selectedCourse.toString(),
+                            _selectedYear,
+                            _isEnrolled ? "ACTIVE" : "INACTIVE",
+                            selectedDepartment.toString(),
+                          ),
+                        );  
+                        voice();
                         Navigator.pop(context);
                       }
                     },
@@ -1344,17 +1357,16 @@ void _showUpdate(BuildContext context, String firstname, String lastname,
                       } else {
                         // Trigger update event
                         context.read<AdminExtendedBloc>().add(
-                              updateStudent(
-                                capitalizeFirstLetter(
-                                    _firstNameController.text),
-                                capitalizeFirstLetter(_lastNameController.text),
-                                _selectedCourse.toUpperCase(),
-                                _selectedYear,
-                                _isEnrolled ? "ACTIVE" : "INACTIVE",
-                                id,
-                                _selectedDepartment.toUpperCase(),
-                              ),
-                            );
+                          updateStudent(
+                            capitalizeFirstLetter(_firstNameController.text),
+                            capitalizeFirstLetter(_lastNameController.text),
+                            _selectedCourse.toUpperCase(),
+                            _selectedYear,
+                            _isEnrolled ? "ACTIVE" : "INACTIVE",
+                            id,
+                            _selectedDepartment.toUpperCase(),
+                          ),
+                        );
                         Navigator.pop(context);
                       }
                     },
@@ -1442,21 +1454,21 @@ void _showDeleteDialog(BuildContext context, int id) {
                 Navigator.pop(context);
               },
               child: Container(
-                  height: 30,
-                  width: 112,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: Color.fromARGB(190, 14, 170, 113),
+                height: 30,
+                width: 112,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: Color.fromARGB(190, 14, 170, 113),
+                ),
+                child: Center(
+                  child: Text(
+                    'No',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600),
                   ),
-                  child: Center(
-                    child: Text(
-                      'No',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )),
+                )),
             ),
           ],
         );
