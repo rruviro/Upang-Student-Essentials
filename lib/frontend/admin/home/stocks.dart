@@ -744,7 +744,7 @@ class _ItemCardState extends State<ItemCard> {
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.asset(
+                      child: Image.network(
                         widget.stock.photoUrl,
                         fit: BoxFit.cover,
                       ),

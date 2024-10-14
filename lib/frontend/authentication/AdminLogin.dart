@@ -16,7 +16,6 @@ class AdminLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Controllers for TextField inputs
     final TextEditingController _adminIDController = TextEditingController();
     final TextEditingController _passwordController = TextEditingController();
 
@@ -112,7 +111,7 @@ class AdminLogin extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         TextField(
-                          controller: _adminIDController, // Set the controller here
+                          controller: _adminIDController,
                           style: TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             filled: true,
@@ -160,7 +159,7 @@ class AdminLogin extends StatelessWidget {
                               fontWeight: FontWeight.w500),
                         ),
                         SizedBox(height: 8),
-                        PasswordField(controller: _passwordController), // Pass the controller here
+                        PasswordField(controller: _passwordController),
                       ],
                     ),
                   ),
@@ -170,8 +169,8 @@ class AdminLogin extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        String adminID = _adminIDController.text.trim(); // Get the admin ID from TextField
-                        String password = _passwordController.text.trim(); // Get the password from PasswordField
+                        String adminID = _adminIDController.text.trim();
+                        String password = _passwordController.text.trim();
                         context.read<AuthenticationBloc>().add(AdminLoginLogin(adminID, password));
                       },
                       style: ElevatedButton.styleFrom(
@@ -255,9 +254,9 @@ class AdminLogin extends StatelessWidget {
 }
 
 class PasswordField extends StatefulWidget {
-  final TextEditingController controller; // Add a controller property
+  final TextEditingController controller;
 
-  const PasswordField({Key? key, required this.controller}) : super(key: key); // Receive it in the constructor
+  const PasswordField({Key? key, required this.controller}) : super(key: key);
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -269,7 +268,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: widget.controller, // Use the passed controller
+      controller: widget.controller,
       style: TextStyle(color: Colors.black),
       obscureText: _obscureText,
       decoration: InputDecoration(

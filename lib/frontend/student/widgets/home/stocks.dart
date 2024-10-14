@@ -90,8 +90,8 @@ class ItemCard extends StatelessWidget {
                 Positioned.fill(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      stock.stockPhoto,
+                    child: Image.network(
+                      stock.photoUrl,
                       fit: BoxFit.cover,
                     ),
                   ),

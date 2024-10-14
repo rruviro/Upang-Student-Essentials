@@ -224,7 +224,7 @@ class ItemCard extends StatelessWidget {
               right: -20,
               top: -35,
               child: Container(
-                child: Image.asset(
+                child: Image.network(
                   visual.photoUrl,
                   width: 220,
                   height: 220,
