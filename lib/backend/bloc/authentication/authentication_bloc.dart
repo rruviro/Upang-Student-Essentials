@@ -27,6 +27,7 @@ class AuthenticationBloc
         login.setString('StudentId', event.StudentId);
         login.setString('Password', event.Password);
         login.setBool('isLogin', true);
+        login.setBool('isAdmin', false);
         emit(LoginSuccess(event.StudentId, event.Password));
       } catch (e) {
         emit(LoginError('Error logging in: ${e.toString()}'));
@@ -41,8 +42,9 @@ class AuthenticationBloc
         await _authrepo.adminLogin(event.adminID, event.password);
 
         login.setString('adminID', event.adminID);
-        login.setString('adminID', event.password);
+        login.setString('1Password', event.password);
         login.setBool('isLogin', true);
+        login.setBool('isAdmin', true);
         emit(AdminLoginSuccess(event.adminID, event.password));
       } catch (e){
         emit(AdminLoginError('Error logging in: ${e.toString()}'));

@@ -59,25 +59,51 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       final SharedPreferences login = await SharedPreferences.getInstance();
       String studentId = login.getString('StudentId') ?? '';
       String password = login.getString('Password') ?? '';
+      String adminId = login.getString('adminID') ?? '';
+      String apassword = login.getString('1Password') ?? '';
       bool islogin = login.getBool('isLogin') ?? false;
-      if (islogin == true) {
-        Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider<StudentBottomBloc>.value(
-                    value: studentBloc,
-                    child: SHomeBase(studentId: studentId)
-                ),
-              )
-        );
-      } else {
-        Future.delayed(Duration(milliseconds: 500), () {
-          if (mounted) {
-            _controller.reverse().then((_) {
-              _navigateToWelcomeScreen();
-            });
-          }
-        });
+      bool? isAdmin = login.getBool('isAdmin');
+      if(isAdmin == false){
+        if (islogin == true) {
+          Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                      value: studentBloc,
+                      child: SHomeBase(studentId: studentId)
+                  ),
+                )
+          );
+        } else {
+          Future.delayed(Duration(milliseconds: 500), () {
+            if (mounted) {
+              _controller.reverse().then((_) {
+                _navigateToWelcomeScreen();
+              });
+            }
+        }
+      );}
+      }else
+      {
+        if (islogin == true) {
+          Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                      value: studentBloc,
+                      child: HomeBase()
+                  ),
+                )
+          );
+        } else {
+          Future.delayed(Duration(milliseconds: 500), () {
+            if (mounted) {
+              _controller.reverse().then((_) {
+                _navigateToWelcomeScreen();
+              });
+            }
+        }
+      );}
       }
+      
     });
 
     Future.delayed(Duration(milliseconds: 500), () {
