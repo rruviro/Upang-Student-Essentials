@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/frontend/student/announcement/announcement.dart';
@@ -61,7 +62,9 @@ class _AnnouncementState extends State<Announcement> {
       body: BlocBuilder<AdminExtendedBloc, AdminExtendedState>(
         builder: (context, state) {
           if (_showLoading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
           }
 
           if (state is announcementLoadSuccessData) {
@@ -107,7 +110,9 @@ class _AnnouncementState extends State<Announcement> {
           if (state is announcementLoadErrorData) {
             return Center(child: Text('Failed to load announcements.'));
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
           }
         },
       ),

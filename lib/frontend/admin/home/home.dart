@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/admin/Department.dart';
@@ -38,9 +39,9 @@ class Home extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => Courses(
-                    departmentID: 0,
-                    departmentName: '',
-                  )));
+                        departmentID: 0,
+                        departmentName: '',
+                      )));
         } else if (state is ManagePageState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => manage()));
@@ -48,7 +49,9 @@ class Home extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is DepartmentsLoadingState) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         } else if (state is DepartmentsLoadedState) {
           return Scaffold(
             backgroundColor: Colors.white,
@@ -142,7 +145,9 @@ class Home extends StatelessWidget {
             body: Center(child: Text('Error: ${state.error}')),
           );
         } else {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         }
       },
     );
@@ -158,8 +163,8 @@ class ItemList extends StatelessWidget {
     return Column(
       children: departments
           .map((e) => ItemCard(
-        visual: e,
-      ))
+                visual: e,
+              ))
           .toList(),
     );
   }
@@ -226,10 +231,7 @@ class ItemCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.white,
-                      Color.fromRGBO(11, 133, 214, 113)
-                    ],
+                    colors: [Colors.white, Color.fromRGBO(11, 133, 214, 113)],
                     stops: [0.50, 0.70],
                   ),
                 ),
@@ -249,8 +251,8 @@ class ItemCard extends StatelessWidget {
           ),
           // Information Row (Reserved, Claim, Complete)
           Positioned(
-            bottom: 30,  // Positioning the Row at the bottom of the container
-            left: 30,  // Adjust this value to align better if necessary
+            bottom: 30, // Positioning the Row at the bottom of the container
+            left: 30, // Adjust this value to align better if necessary
             right: 30,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,

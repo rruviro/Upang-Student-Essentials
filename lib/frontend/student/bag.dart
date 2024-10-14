@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/frontend/student/profile/transaction.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
@@ -124,12 +125,6 @@ class BagState extends State<Bag> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: primary_color,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-            ),
             title: Transform.translate(
               offset: Offset(-15.0, 0.0),
               child: Container(
@@ -149,7 +144,9 @@ class BagState extends State<Bag> {
             builder: (context, state) {
               if (_showLoading) {
                 print('loading...');
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: Lottie.asset('assets/lottie/loading.json',
+                        height: 300, width: 380, fit: BoxFit.fill));
               }
               if (state is BookDataDeleted || state is ItemDataDeleted) {
                 refreshData();
@@ -216,14 +213,20 @@ class BagState extends State<Bag> {
               } else if (state is StudentBagItemLoadingState ||
                   state is StudentBagBookLoadingState) {
                 print("loading: $state");
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: Lottie.asset('assets/lottie/loading.json',
+                        height: 300, width: 380, fit: BoxFit.fill));
               } else if (state is StudentBagItemErrorState ||
                   state is StudentBagBookErrorState) {
                 print("error: $state");
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: Lottie.asset('assets/lottie/loading.json',
+                        height: 300, width: 380, fit: BoxFit.fill));
               } else {
                 print("error");
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: Lottie.asset('assets/lottie/loading.json',
+                        height: 300, width: 380, fit: BoxFit.fill));
               }
             },
           ),

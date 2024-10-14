@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/models/admin/Uniform.dart';
@@ -35,8 +36,10 @@ class _UniformAdminState extends State<UniformAdmin> {
       });
     });
     BlocProvider.of<AdminExtendedBloc>(context).add(ShowUniformsEvent(
-      widget.courseName, widget.stock.Gender, widget.stock.Type, widget.stock.Body
-    ));
+        widget.courseName,
+        widget.stock.Gender,
+        widget.stock.Type,
+        widget.stock.Body));
   }
 
   @override
@@ -45,10 +48,14 @@ class _UniformAdminState extends State<UniformAdmin> {
       listener: (context, state) {},
       builder: (context, state) {
         if (_showLoading) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         }
         if (state is UniformsLoadingState) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         } else if (state is UniformsLoadedState) {
           return Scaffold(
             backgroundColor: Colors.white,
@@ -129,7 +136,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         Text(
+                        Text(
                           '${widget.stock.stockName}',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
@@ -148,7 +155,9 @@ class _UniformAdminState extends State<UniformAdmin> {
         } else if (state is UniformsErrorState) {
           return Center(child: Text(state.error));
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         }
       },
     );

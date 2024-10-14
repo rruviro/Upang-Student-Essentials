@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
@@ -189,7 +190,9 @@ class _TransactionState extends State<Transaction> {
         body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
           builder: (context, state) {
             if (_showLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                  child: Lottie.asset('assets/lottie/loading.json',
+                      height: 300, width: 380, fit: BoxFit.fill));
             }
             if (state is StudentBagCombinedLoadSuccessState) {
               items = state.studentBagItems;

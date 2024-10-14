@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
@@ -40,13 +41,6 @@ class _notifState extends State<notif> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new,
-                  color: const Color.fromARGB(255, 0, 0, 0)),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
             title: Transform.translate(
               offset: Offset(-15.0, 0.0),
               child: Text(
@@ -99,7 +93,9 @@ class _notifState extends State<notif> {
               mails = state.studentNotifcationMail;
             } else if (state is StudentNotificationMailLoadingState) {
               print("here");
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                  child: Lottie.asset('assets/lottie/loading.json',
+                      height: 300, width: 380, fit: BoxFit.fill));
             } else if (state is StudentNotificationMailErrorState) {
               return Center(child: Text('Error: ${state.error}'));
             }

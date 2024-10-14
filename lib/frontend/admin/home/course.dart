@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Course.dart';
 import '../../colors/colors.dart';
@@ -57,7 +58,9 @@ class Courses extends StatelessWidget {
           child: BlocBuilder<AdminExtendedBloc, AdminExtendedState>(
             builder: (context, state) {
               if (state is CoursesLoadingState) {
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: Lottie.asset('assets/lottie/loading.json',
+                        height: 300, width: 380, fit: BoxFit.fill));
               } else if (state is CoursesLoadedState) {
                 return ListView(
                   children: state.courses

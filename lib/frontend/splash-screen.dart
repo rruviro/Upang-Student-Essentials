@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/SERVICES/bloc/authentication/authentication_bloc.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
@@ -27,7 +28,8 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _textFadeAnimation;
@@ -55,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       ),
     );
 
-    _controller.forward().then((_)async {
+    _controller.forward().then((_) async {
       final SharedPreferences login = await SharedPreferences.getInstance();
       String studentId = login.getString('StudentId') ?? '';
       String password = login.getString('Password') ?? '';
@@ -63,16 +65,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       String apassword = login.getString('1Password') ?? '';
       bool islogin = login.getBool('isLogin') ?? false;
       bool? isAdmin = login.getBool('isAdmin');
-      if(isAdmin == false){
+      if (isAdmin == false) {
         if (islogin == true) {
-          Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider<StudentBottomBloc>.value(
-                      value: studentBloc,
-                      child: SHomeBase(studentId: studentId)
-                  ),
-                )
-          );
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                value: studentBloc, child: SHomeBase(studentId: studentId)),
+          ));
         } else {
           Future.delayed(Duration(milliseconds: 500), () {
             if (mounted) {
@@ -80,19 +78,14 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 _navigateToWelcomeScreen();
               });
             }
+          });
         }
-      );}
-      }else
-      {
+      } else {
         if (islogin == true) {
-          Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider<StudentBottomBloc>.value(
-                      value: studentBloc,
-                      child: HomeBase()
-                  ),
-                )
-          );
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                value: studentBloc, child: HomeBase()),
+          ));
         } else {
           Future.delayed(Duration(milliseconds: 500), () {
             if (mounted) {
@@ -100,10 +93,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 _navigateToWelcomeScreen();
               });
             }
+          });
         }
-      );}
       }
-      
     });
 
     Future.delayed(Duration(milliseconds: 500), () {
@@ -143,7 +135,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       },
       builder: (context, state) {
         if (state is AuthLoadingState) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         } else {
           return Scaffold(
             backgroundColor: Colors.white,
@@ -153,7 +147,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 children: <Widget>[
                   FadeTransition(
                     opacity: _fadeAnimation,
-                    child: Image.asset('assets/logo.png', width: 160, height: 160),
+                    child:
+                        Image.asset('assets/logo.png', width: 160, height: 160),
                   ),
                   if (_textVisible)
                     FadeTransition(

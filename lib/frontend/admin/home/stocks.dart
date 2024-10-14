@@ -7,6 +7,7 @@ import "package:flutter/services.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
+import "package:lottie/lottie.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:use/backend/bloc/admin/admin_bloc.dart";
 import "package:use/SERVICES/model/admin/BookStocks.dart";
@@ -110,7 +111,9 @@ class _StocksState extends State<Stocks> {
       // }
     }, builder: (context, state) {
       if (state is StocksLoadingState) {
-        return Center(child: CircularProgressIndicator());
+        return Center(
+            child: Lottie.asset('assets/lottie/loading.json',
+                height: 300, width: 380, fit: BoxFit.fill));
       } else if (state is StocksLoadedState) {
         return Scaffold(
           appBar: AppBar(
@@ -644,7 +647,9 @@ class _StocksState extends State<Stocks> {
       } else if (state is StocksErrorState) {
         return Center(child: Text(state.error));
       } else {
-        return Center(child: CircularProgressIndicator());
+        return Center(
+            child: Lottie.asset('assets/lottie/loading.json',
+                height: 300, width: 380, fit: BoxFit.fill));
       }
     }
         // }

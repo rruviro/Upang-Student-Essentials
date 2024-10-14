@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/models/admin/Announcement.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/frontend/student/bag.dart';
@@ -97,7 +98,9 @@ class _AnnouncementState extends State<Announcement> {
         body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
             builder: (context, state) {
           if (_showLoading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
           }
           if (state is announcementLoadSuccessData) {
             announcements = state.Announcement;
@@ -143,7 +146,9 @@ class _AnnouncementState extends State<Announcement> {
           if (state is announcementLoadErrorData) {
             return Center(child: Text('Failed to load announcements.'));
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
           }
         }));
   }

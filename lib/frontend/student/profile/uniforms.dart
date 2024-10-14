@@ -1,6 +1,7 @@
 // ignore_for_file: prefer__ructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/frontend/student/widgets/profile/uniform.dart';
@@ -62,7 +63,9 @@ class _uniformsState extends State<uniforms> {
         body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
             builder: (context, state) {
           if (_showLoading) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
           }
           if (state is StudentBagItemLoadSuccessState) {
             items = state.studentBagItem;
