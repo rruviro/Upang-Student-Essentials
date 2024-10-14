@@ -277,7 +277,7 @@ class _HometopLevelPagestate extends State<HomeScreen> {
                 await prefs.clear();
                 Navigator.of(context).pop();
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => StudentLogin()),
+                  MaterialPageRoute(builder: (context) => StudnetLogin()),
                 );
               },
               child: Text('Ok'),
