@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
@@ -36,6 +37,7 @@ class _ProfileScreenState extends State<Profile> {
 
   @override
   void initState() {
+    super.initState();
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         _showLoading = false;
@@ -43,7 +45,6 @@ class _ProfileScreenState extends State<Profile> {
     });
     print("showStudentProfileData");
     context.read<AdminExtendedBloc>().add(getStudent());
-    super.initState();
   }
 
   @override
@@ -238,372 +239,404 @@ class _ProfileScreenState extends State<Profile> {
       },
       builder: (context, state) {
         if (_showLoading) {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         }
         if (state is AdminLoadingState) {
           print(state);
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         } else if (state is studentLoading) {
           print(state);
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         } else if (state is studentLoaded) {
           return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              title: Container(
-                width: double.infinity,
-                height: 35,
-                child: Row(
-                  children: [
-                    Image.asset('assets/logo.png'),
-                    SizedBox(width: 10),
-                    Text(
-                      'Upang Student Essentials',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              centerTitle: false,
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.logout, color: primary_color),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          title: Text(
-                            'Logout',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          content: Text(
-                            'Are you sure you wanna logout?',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          actions: [
-                            GestureDetector(
-                              onTap: () async {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => AdminLogin()));
-                              },
-                              child: Container(
-                                height: 30,
-                                width: 112,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(2),
-                                  color: primary_color,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Yes',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: 30,
-                                width: 112,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    color: primary_color),
-                                child: Center(
-                                  child: Text(
-                                    'No',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-                SizedBox(width: 15),
-              ],
               backgroundColor: Colors.white,
-              elevation: 0,
-            ),
-            body: ListView(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hello Admin',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(height: 30),
-                          Container(
-                              alignment: Alignment.center,
-                              child: FractionallySizedBox(
-                                widthFactor: 1.2,
-                                child: SizedBox(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: Container(
-                                    decoration:
-                                        BoxDecoration(color: secondary_color),
+              body: NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool isScrolled) {
+                  return [
+                    SliverAppBar(
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        'Profile',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      actions: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                ),
-                              )),
-                          SizedBox(height: 20),
-                          Text(
-                            'Pick-Up Code',
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(
-                            'Student product code for claiming',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: tertiary_color,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          SizedBox(height: 15),
-                          Container(
-                            width: double.infinity,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              color: primary_color,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade400,
-                                  blurRadius: 5,
-                                  offset: Offset(1, 1),
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20),
-                              width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      // Wrap TextFormField with Flexible to allow it to resize dynamically
-                                      Flexible(
-                                        child: TextFormField(
-                                          controller: codeController,
-                                          decoration: InputDecoration(
-                                            hintText: 'ENTER THE CODE',
-                                            hintStyle: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                            hoverColor: Colors.white,
-                                            border: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.white),
-                                            ),
-                                            focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.white),
-                                            ),
-                                            enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                          textInputAction: TextInputAction.done,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                          inputFormatters: [
-                                            LengthLimitingTextInputFormatter(5),
-                                            FilteringTextInputFormatter
-                                                .digitsOnly,
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Container(
-                                        color: Colors.white,
-                                        width: 1,
+                                  title: Text(
+                                    'Logout',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    'Are you sure you wanna logout?',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  actions: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AdminLogin()));
+                                      },
+                                      child: Container(
                                         height: 30,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text('Item',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      Transform.scale(
-                                        scale: 0.8,
-                                        child: Switch(
-                                          value: isBook,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              isBook = value;
-                                            });
-                                          },
-                                          activeColor: Colors.white,
+                                        width: 112,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          color: primary_color,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Yes',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      Text('Book',
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 112,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            color: primary_color),
+                                        child: Center(
+                                          child: Text(
+                                            'No',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: primary_color,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Icon(Icons.logout,
+                                size: 15, color: Colors.white),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                      ],
+                    )
+                  ];
+                },
+                body: ListView(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(color: Colors.white),
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Romero, Justine Louise',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(
+                                      '01-2223-0389',
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ]),
+                              SizedBox(height: 30),
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: FractionallySizedBox(
+                                    widthFactor: 1.2,
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: double.infinity,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: secondary_color),
+                                      ),
+                                    ),
+                                  )),
+                              SizedBox(height: 20),
+                              Text(
+                                'Pick-Up Code',
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                'Student product code for claiming',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: tertiary_color,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              SizedBox(height: 15),
+                              Container(
+                                width: double.infinity,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: primary_color,
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.shade400,
+                                      blurRadius: 5,
+                                      offset: Offset(1, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 20),
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          // Wrap TextFormField with Flexible to allow it to resize dynamically
+                                          Flexible(
+                                            child: TextFormField(
+                                              controller: codeController,
+                                              decoration: InputDecoration(
+                                                hintText: 'ENTER THE CODE',
+                                                hintStyle: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                hoverColor: Colors.white,
+                                                border: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white),
+                                                ),
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white),
+                                                ),
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              textInputAction:
+                                                  TextInputAction.done,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              inputFormatters: [
+                                                LengthLimitingTextInputFormatter(
+                                                    5),
+                                                FilteringTextInputFormatter
+                                                    .digitsOnly,
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Container(
+                                            color: Colors.white,
+                                            width: 1,
+                                            height: 30,
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text('Item',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          Transform.scale(
+                                            scale: 0.8,
+                                            child: Switch(
+                                              value: isBook,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  isBook = value;
+                                                });
+                                              },
+                                              activeColor: Colors.white,
+                                            ),
+                                          ),
+                                          Text('Book',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                        ],
+                                      ),
+                                      SizedBox(height: 15),
+                                      Container(
+                                        width: double.infinity,
+                                        height: 50,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            if (isBook) {
+                                              context
+                                                  .read<AdminExtendedBloc>()
+                                                  .add(showCodeBookData(
+                                                      codeController.text));
+                                              print(codeController.text);
+                                            } else {
+                                              print(codeController.text);
+                                              context
+                                                  .read<AdminExtendedBloc>()
+                                                  .add(showCodeItemData(
+                                                      codeController.text));
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.white,
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Complete",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: primary_color,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                  SizedBox(height: 15),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 50,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        if (isBook) {
-                                          context.read<AdminExtendedBloc>().add(
-                                              showCodeBookData(
-                                                  codeController.text));
-                                          print(codeController.text);
-                                        } else {
-                                          print(codeController.text);
-                                          context.read<AdminExtendedBloc>().add(
-                                              showCodeItemData(
-                                                  codeController.text));
-                                        }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "Complete",
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Color(0xFF0EAA72),
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                ),
+                              ),
+                              SizedBox(height: 30),
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: FractionallySizedBox(
+                                    widthFactor: 1.2,
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: double.infinity,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: secondary_color),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  )),
+                              SizedBox(height: 20),
+                              Container(
+                                width: double.infinity,
+                                height: 50,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        top: 5,
+                                        left: 0,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Overview",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            Text("Student Details",
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: tertiary_color,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                          ],
+                                        )),
+                                    Positioned(
+                                      top: 3,
+                                      right: 0,
+                                      child: IconButton(
+                                          iconSize: 15,
+                                          icon: Icon(Icons.add,
+                                              color: primary_color),
+                                          onPressed: () {
+                                            _showCreateDialog(context);
+                                          }),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
+                              SizedBox(height: 10),
+                              ItemList(students: student)
+                            ],
                           ),
-                          SizedBox(height: 30),
-                          Container(
-                              alignment: Alignment.center,
-                              child: FractionallySizedBox(
-                                widthFactor: 1.2,
-                                child: SizedBox(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: Container(
-                                    decoration:
-                                        BoxDecoration(color: secondary_color),
-                                  ),
-                                ),
-                              )),
-                          SizedBox(height: 20),
-                          Container(
-                            width: double.infinity,
-                            height: 50,
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                    top: 5,
-                                    left: 0,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Overview",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        Text("Student Details",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color: tertiary_color,
-                                                fontWeight: FontWeight.w400)),
-                                      ],
-                                    )),
-                                Positioned(
-                                  top: 3,
-                                  right: 0,
-                                  child: IconButton(
-                                      iconSize: 15,
-                                      icon:
-                                          Icon(Icons.add, color: primary_color),
-                                      onPressed: () {
-                                        _showCreateDialog(context);
-                                      }),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          ItemList(students: student)
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          );
+              ));
         } else {
           print(state);
           return Center(
-            child: CircularProgressIndicator(),
-          );
+              child: Lottie.asset('assets/lottie/loading.json',
+                  height: 300, width: 380, fit: BoxFit.fill));
         }
       },
     );

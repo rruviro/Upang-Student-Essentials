@@ -14,7 +14,8 @@ import 'dart:convert';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
 class AdminRepositoryImpl extends Adminrepo {
-  static const String baseUrl = 'https://mighty-depths-84873-c9e5911a9dae.herokuapp.com/api';
+  static const String baseUrl =
+      'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api';
   // static const String baseUrl = 'http://127.0.0.1:8000/api';
 
   @override
@@ -249,8 +250,10 @@ class AdminRepositoryImpl extends Adminrepo {
 
   // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
   @override
-  Future<List<Uniform>> showUniforms(String Course, String Gender, String Type, String Body) async {
-    final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course/$Gender/$Type/$Body'));
+  Future<List<Uniform>> showUniforms(
+      String Course, String Gender, String Type, String Body) async {
+    final response = await http
+        .get(Uri.parse('$baseUrl/uniforms/$Course/$Gender/$Type/$Body'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Uniform.fromJson(data)).toList();
@@ -333,7 +336,7 @@ class AdminRepositoryImpl extends Adminrepo {
     final response = await http.get(Uri.parse('$baseUrl/completebook'));
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
-      List<dynamic> itemsJson = responseBody['bookCollections'];
+      List<dynamic> itemsJson = responseBody['items'];
       return itemsJson.map((json) => StudentBagBook.fromJson(json)).toList();
     } else {
       throw Exception(response.body);

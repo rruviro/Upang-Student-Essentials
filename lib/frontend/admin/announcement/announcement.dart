@@ -86,21 +86,15 @@ class _AnnouncementState extends State<Announcement> {
                           Text(
                             'Announcement',
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 13,
                               color: Colors.black,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           SizedBox(height: 5),
-                          announcements.isEmpty
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  child: Icon(Icons.shopping_bag,
-                                      size: 50, color: Colors.grey),
-                                )
-                              : ItemList(
-                                  status: announcements,
-                                )
+                          ItemList(
+                            status: announcements,
+                          )
                         ],
                       ),
                     ),

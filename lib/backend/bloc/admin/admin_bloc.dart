@@ -231,7 +231,8 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       emit(UniformsLoadingState());
       try {
         print('fetching data for uniforms');
-        final uniformData = await _adminrepo.showUniforms(event.Course, event.Gender, event.Type, event.Body);
+        final uniformData = await _adminrepo.showUniforms(
+            event.Course, event.Gender, event.Type, event.Body);
         print('uniforms fetched successfully');
         emit(UniformsLoadedState(uniforms: uniformData));
       } catch (e) {
@@ -252,7 +253,8 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       try {
         await _adminrepo.uniformreservefirst(event.count, event.Course,
             event.Gender, event.Type, event.Body, event.Size);
-        add(ShowUniformsEvent(event.Course, event.Gender, event.Type, event.Body));
+        add(ShowUniformsEvent(
+            event.Course, event.Gender, event.Type, event.Body));
       } catch (e) {
         print('error fetching stocks or books: $e');
       }
@@ -266,7 +268,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
     on<studentBagItem>((event, emit) async {
       studentBagItems = [];
       itemsLoaded = false;
-
+      emit(studentLoading());
       try {
         final itemData = await _adminrepo.showStudentBagItemData();
         studentBagItems = itemData;
@@ -289,6 +291,7 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
       studentBagBooks = [];
       booksLoaded = false;
       print("book work");
+      emit(studentLoading());
       try {
         print("book work2");
         final bookData = await _adminrepo.showStudentBagBookData();

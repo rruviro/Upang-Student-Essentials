@@ -208,26 +208,20 @@ class _TransactionState extends State<Transaction> {
                   ),
                 ),
                 SizedBox(height: 10),
-                items.isEmpty
-                    ? Container(
-                        alignment: Alignment.center,
-                        child: Icon(Icons.shopping_bag,
-                            size: 50, color: Colors.grey),
-                      )
-                    : ItemList(
-                        status: items.where((item) {
-                          switch (_currentSelection) {
-                            case 1:
-                              return item.status == "Request";
-                            case 2:
-                              return item.status == "Reserved";
-                            case 3:
-                              return item.status == "Claim";
-                            default:
-                              return false;
-                          }
-                        }).toList(),
-                      ),
+                ItemList(
+                  status: items.where((item) {
+                    switch (_currentSelection) {
+                      case 1:
+                        return item.status == "Request";
+                      case 2:
+                        return item.status == "Reserved";
+                      case 3:
+                        return item.status == "Claim";
+                      default:
+                        return false;
+                    }
+                  }).toList(),
+                ),
                 SizedBox(height: 20),
                 Text(
                   'Books',
@@ -238,26 +232,20 @@ class _TransactionState extends State<Transaction> {
                   ),
                 ),
                 SizedBox(height: 10),
-                books.isEmpty
-                    ? Container(
-                        alignment: Alignment.center,
-                        child: Icon(Icons.shopping_bag,
-                            size: 50, color: Colors.grey),
-                      )
-                    : BookList(
-                        status: books.where((book) {
-                          switch (_currentSelection) {
-                            case 1:
-                              return book.status == "Request";
-                            case 2:
-                              return book.status == "Reserved";
-                            case 3:
-                              return book.status == "Claim";
-                            default:
-                              return false;
-                          }
-                        }).toList(),
-                      ),
+                BookList(
+                  status: books.where((book) {
+                    switch (_currentSelection) {
+                      case 1:
+                        return book.status == "Request";
+                      case 2:
+                        return book.status == "Reserved";
+                      case 3:
+                        return book.status == "Claim";
+                      default:
+                        return false;
+                    }
+                  }).toList(),
+                ),
               ],
             );
           },
