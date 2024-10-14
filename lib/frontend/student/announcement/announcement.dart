@@ -11,7 +11,8 @@ import 'package:use/frontend/student/bag.dart';
 import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/notification.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
-import 'package:use/frontend/student/widgets/announce.dart';
+import 'package:use/frontend/student/widgets/announcement.dart';
+import 'package:use/frontend/student/widgets/announcement.dart';
 
 import '../../colors/colors.dart';
 
@@ -24,9 +25,10 @@ class Announcement extends StatefulWidget {
 }
 
 class _AnnouncementState extends State<Announcement> {
+  
   List<announcement> announcements = [];
 
-  bool _showLoading = true;
+  bool _showLoading = true; 
 
   @override
   void initState() {
@@ -36,121 +38,141 @@ class _AnnouncementState extends State<Announcement> {
         _showLoading = false;
       });
     });
-    context
-        .read<StudentExtendedBloc>()
-        .add(showAnnouncementData(widget.studentProfile.department));
+    context.read<StudentExtendedBloc>().add(showAnnouncementData(widget.studentProfile.department));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Container(
-            width: double.infinity,
-            height: 35,
-            child: Row(
-              children: [
-                Image.asset('assets/logo.png'),
-                SizedBox(width: 10),
-                Text(
-                  'Upang Student Essentials',
-                  style: GoogleFonts.inter(
-                      textStyle: TextStyle(
-                          fontSize: 11,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600)),
+      backgroundColor: Colors.white,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool isScrolled){
+          return [
+            SliverAppBar(
+              backgroundColor: Colors.white,
+              title: Text(
+                "Announcement",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
-            ),
-          ),
-          centerTitle: false,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.notifications, color: primary_color),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
-                    value: studBloc,
-                    child: notif(studentProfile: widget.studentProfile),
-                  ),
-                ));
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.backpack, color: primary_color),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider<StudentExtendedBloc>.value(
-                    value: studBloc,
-                    child: Bag(
-                        studentProfile: widget.studentProfile,
-                        Status: widget.studentProfile.status),
-                  ),
-                ));
-              },
-            ),
-            SizedBox(width: 15),
-          ],
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
+              )
+            )
+          ];
+        }, 
         body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
-            builder: (context, state) {
-          if (_showLoading) {
-            return Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill));
-          }
-          if (state is announcementLoadSuccessData) {
-            announcements = state.Announcement;
-            return ListView(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20),
-                    slides(context),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding: EdgeInsets.all(20.0),
-                      child: Column(
+          builder: (context, state) {
+              if (_showLoading) {
+                return Center(child: Lottie.asset(
+                  'assets/lottie/loading.json',
+                  height: 300,
+                  width: 380,
+                  fit: BoxFit.fill
+                ));
+              }
+              if (state is announcementLoadSuccessData) {
+                announcements = state.Announcement;
+                return Container(
+                  child: ListView(
+                    children: <Widget>[
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Announcement',
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                          SizedBox(height: 20),
+                          slides(context),
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white
+                            ),
+                            padding: EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Announcement',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                announcements.isEmpty
+                                  ? Container(
+                                      height: MediaQuery.of(context).size.height - 450, 
+                                      width: double.infinity,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              "assets/empty_state/announcement.png",
+                                              height: 160,
+                                              width: 160,
+                                            ),
+                                            SizedBox(height: 10),
+                                            // Text('', style: TextStyle(fontSize: 15, color: Colors.black)),
+                                            Text('No announcements available', style: TextStyle(fontSize: 10, color: Colors.black)),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : announcement_list(
+                                    status: announcements,
+                                  )
+                              ],
+                            ),
                           ),
-                          SizedBox(height: 5),
-                          announcements.isEmpty
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  child: Icon(Icons.shopping_bag,
-                                      size: 50, color: Colors.grey),
-                                )
-                              : announcement_list(
-                                  status: announcements,
-                                )
                         ],
                       ),
+                    ],
+                  )
+                );
+              }
+              if (state is announcementLoadErrorData) {
+                return Center(child: Container(
+                height: 200,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Icon(
+                        Icons.signal_cellular_connected_no_internet_4_bar_rounded,
+                        color: primary_color,
+                        size: 130,
+                      ),
                     ),
+                    SizedBox(height: 5),
+                    Center(
+                      child: Text(
+                        'You\'r having trouble with your connection\ncheck your connection.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: tertiary_color,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500
+                        ),
+                      )
+                    )
                   ],
-                ),
-              ],
-            );
+                )
+              ),);
+              }
+              else{
+                return Center(child: Lottie.asset(
+                  'assets/lottie/loading.json',
+                  height: 300,
+                  width: 380,
+                  fit: BoxFit.fill
+                ));
+              }
           }
-          if (state is announcementLoadErrorData) {
-            return Center(child: Text('Failed to load announcements.'));
-          } else {
-            return Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill));
-          }
-        }));
+        )
+      )
+    );
   }
 }
 
@@ -183,10 +205,10 @@ Widget slides(BuildContext context) {
       }).toList(),
       options: CarouselOptions(
         height: 160,
-        autoPlay: true,
-        autoPlayInterval: Duration(seconds: 3),
+        autoPlay: true, 
+        autoPlayInterval: Duration(seconds: 3), 
         autoPlayAnimationDuration: Duration(milliseconds: 600),
-        autoPlayCurve: Curves.fastOutSlowIn,
+        autoPlayCurve: Curves.fastOutSlowIn, 
         enlargeCenterPage: true,
       ),
     ),

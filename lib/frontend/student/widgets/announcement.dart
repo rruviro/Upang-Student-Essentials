@@ -36,9 +36,9 @@ class ItemCard extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                blurRadius: 5,
-                offset: Offset(1, 8),
+                color: Colors.grey,
+                blurRadius: 2,
+                offset: Offset(1, 1),
               ),
             ],
           ),

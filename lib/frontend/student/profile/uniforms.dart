@@ -1,7 +1,6 @@
 // ignore_for_file: prefer__ructors
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/frontend/student/widgets/profile/uniform.dart';
@@ -60,30 +59,47 @@ class _uniformsState extends State<uniforms> {
             ),
           ),
         ),
-        body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+        body: Container(
+          margin: EdgeInsets.all(20),
+          child: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
             builder: (context, state) {
-          if (_showLoading) {
-            return Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill));
-          }
-          if (state is StudentBagItemLoadSuccessState) {
-            items = state.studentBagItem;
-          }
-          return ListView(
-            children: [
-              SizedBox(height: 20),
-              items.isEmpty
-                  ? Container(
-                      alignment: Alignment.center,
-                      child: Icon(Icons.shopping_bag,
-                          size: 50, color: Colors.grey),
-                    )
-                  : uniform_list(
+              if (_showLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (state is StudentBagItemLoadSuccessState) {
+                items = state.studentBagItem;
+              }
+              return ListView(
+                children: [
+                  items.isEmpty
+                    ? Container(
+                        height: MediaQuery.of(context).size.height - 200, // Adjust the height as needed
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                "assets/empty_state/announcement.png",
+                                height: 160,
+                                width: 160,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                'No announcements available',
+                                style: TextStyle(fontSize: 10, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : uniform_list(
                       status: items,
                     ),
-            ],
-          );
-        }));
+                ],
+              );
+          }
+        )
+      )
+    );
   }
 }
