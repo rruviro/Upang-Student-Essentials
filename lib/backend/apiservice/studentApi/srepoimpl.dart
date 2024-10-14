@@ -18,7 +18,8 @@ import 'dart:convert';
 import 'package:use/backend/models/student/StudentNotificationData/StudentNotificationMail.dart';
 
 class StudentRepositoryImpl extends Studentrepo {
-  static const String baseUrl = 'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api';
+  static const String baseUrl =
+      'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api';
   // static const String baseUrl = 'http://127.0.0.1:8000/api';
   //static const String baseUrl = 'http://localhost:8000/api';
 
@@ -232,7 +233,7 @@ class StudentRepositoryImpl extends Studentrepo {
     String shift,
   ) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/bookcollections/'),
+      Uri.parse('$baseUrl/bookcollections'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
@@ -242,7 +243,7 @@ class StudentRepositoryImpl extends Studentrepo {
         'BookName': bookName,
         'SubjectCode': subjectCode,
         'SubjectDesc': subjectDesc,
-        'status': status,
+        'Status': status,
         'stubag_id': id,
         'shift': shift,
       }),
@@ -323,7 +324,7 @@ class StudentRepositoryImpl extends Studentrepo {
         'BookName': bookName,
         'SubjectCode': subjectCode,
         'SubjectDesc': subjectDesc,
-        'status': status,
+        'Status': status,
         'stubag_id': id,
         'shift': shift,
       }),
@@ -482,8 +483,8 @@ class StudentRepositoryImpl extends Studentrepo {
   // BOOKS
   @override
   Future<List<Book>> showBooks(String Course) async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/item-books/$Course')); // changed from dep to course
+    final response = await http.get(
+        Uri.parse('$baseUrl/item-books/$Course')); // changed from dep to course
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Book.fromJson(data)).toList();
@@ -495,7 +496,8 @@ class StudentRepositoryImpl extends Studentrepo {
 
 // STOCK
   @override
-  Future<List<Stock>> showStocks(String Course) async { // changed from dep to course
+  Future<List<Stock>> showStocks(String Course) async {
+    // changed from dep to course
     final response = await http.get(Uri.parse('$baseUrl/stocks/$Course'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
@@ -508,8 +510,10 @@ class StudentRepositoryImpl extends Studentrepo {
 
   // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
   @override
-  Future<List<Uniform>> showUniforms(String Course, String Gender, String Type, String Body) async {
-    final response = await http.get(Uri.parse('$baseUrl/uniforms/$Course/$Gender/$Type/$Body'));
+  Future<List<Uniform>> showUniforms(
+      String Course, String Gender, String Type, String Body) async {
+    final response = await http
+        .get(Uri.parse('$baseUrl/uniforms/$Course/$Gender/$Type/$Body'));
     if (response.statusCode == 200) {
       final List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Uniform.fromJson(data)).toList();
