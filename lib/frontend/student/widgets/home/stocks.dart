@@ -68,6 +68,7 @@ class ItemCard extends StatelessWidget {
                           Gender: stock.Gender,
                           UniformType: stock.Type,
                           Body: stock.Body,
+                          stockPhoto: stock.photoUrl,
                         )));
           },
           child: Container(

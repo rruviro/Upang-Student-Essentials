@@ -117,7 +117,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                             ),
                           ],
                         ),
-                        child: slides(context),
+                        child: Image.network(widget.stock.photoUrl),
                       ),
                     ),
                   ),

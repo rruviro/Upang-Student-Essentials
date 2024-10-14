@@ -14,6 +14,7 @@ import 'package:use/frontend/student/home/home.dart';
 
 class UniformStudent extends StatefulWidget {
   final StudentProfile profile;
+  final String stockPhoto;
   final String courseName;
   final String department;
   final String type;
@@ -24,6 +25,7 @@ class UniformStudent extends StatefulWidget {
   const UniformStudent(
       {Key? key,
       required this.courseName,
+        required this.stockPhoto,
       required this.profile,
       required this.department,
       required this.type,
@@ -131,7 +133,7 @@ class _UniformStudentState extends State<UniformStudent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Uniform,',
+                'Uniform',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(
@@ -187,7 +189,7 @@ class _UniformStudentState extends State<UniformStudent> {
           if (state is UniformsLoadingState) {
             print("Loading student uniforms");
 
-            // Introduce a 2-second delay
+            //2-second delay
             await Future.delayed(Duration(seconds: 3));
 
           } else if (state is UniformsLoadedState) {
@@ -220,7 +222,7 @@ class _UniformStudentState extends State<UniformStudent> {
                         ),
                       ],
                     ),
-                    child: _buildSlides(),
+                    child: Image.network(widget.stockPhoto)
                   ),
                 ),
               ),
@@ -385,36 +387,36 @@ class _UniformStudentState extends State<UniformStudent> {
     );
   }
 
-  Widget _buildSlides() {
-    List<String> imageUrls = ['assets/bsit.png', 'assets/uniuni.png'];
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 30),
-      child: CarouselSlider(
-        items: imageUrls.map((url) {
-          return Container(
-            margin: EdgeInsets.all(5.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                image: AssetImage(url),
-                fit: BoxFit.cover,
-              ),
-            ),
-          );
-        }).toList(),
-        options: CarouselOptions(
-          height: 200.0,
-          enlargeCenterPage: true,
-          autoPlay: true,
-          aspectRatio: 16 / 9,
-          autoPlayCurve: Curves.fastOutSlowIn,
-          enableInfiniteScroll: true,
-          autoPlayAnimationDuration: Duration(milliseconds: 800),
-          viewportFraction: 0.8,
-        ),
-      ),
-    );
-  }
+  // Widget _buildSlides() {
+  //   List<String> imageUrls = [widget.stockPhoto, 'https://via.assets.so/game.png?id=1&q=95&w=360&h=360&fit=fill'];
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(vertical: 30),
+  //     child: CarouselSlider(
+  //       items: imageUrls.map((url) {
+  //         return Container(
+  //           margin: EdgeInsets.all(5.0),
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(10),
+  //             image: DecorationImage(
+  //               image: AssetImage(url),
+  //               fit: BoxFit.cover,
+  //             ),
+  //           ),
+  //         );
+  //       }).toList(),
+  //       options: CarouselOptions(
+  //         height: 200.0,
+  //         enlargeCenterPage: true,
+  //         autoPlay: true,
+  //         aspectRatio: 16 / 9,
+  //         autoPlayCurve: Curves.fastOutSlowIn,
+  //         enableInfiniteScroll: true,
+  //         autoPlayAnimationDuration: Duration(milliseconds: 800),
+  //         viewportFraction: 0.8,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void _showAddToBackpackModal(BuildContext context, String type) {
     showModalBottomSheet(
@@ -508,14 +510,14 @@ class _ModalContent extends StatefulWidget {
   final Function(Uniform, String?) onSubmit;
   final String submitButtonText;
   final IconData submitButtonIcon;
-  final List<Uniform> uniforms; // Pass the list of uniforms
+  final List<Uniform> uniforms;
 
   const _ModalContent({
     Key? key,
     required this.onSubmit,
     required this.submitButtonText,
     required this.submitButtonIcon,
-    required this.uniforms, // Change from sizes to uniforms
+    required this.uniforms,
   }) : super(key: key);
 
   @override
@@ -542,56 +544,6 @@ class _ModalContentState extends State<_ModalContent> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     Container(
-            //       padding: const EdgeInsets.all(30),
-            //       child: Image.asset(
-            //         'assets/uniuni.png',
-            //         height: 170,
-            //         width: 100,
-            //         fit: BoxFit.cover,
-            //       ),
-            //     ),
-            //     const SizedBox(width: 16),
-            //     Expanded(
-            //       child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Row(
-            //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //             children: const [
-            //               Text(
-            //                 'Corporate Top',
-            //                 style: TextStyle(
-            //                   fontSize: 13,
-            //                   fontWeight: FontWeight.bold,
-            //                   color: Colors.black,
-            //                 ),
-            //               ),
-            //               Text(
-            //                 'Stock: 300',
-            //                 style: TextStyle(
-            //                   fontSize: 10,
-            //                   color: Colors.black,
-            //                 ),
-            //               ),
-            //             ],
-            //           ),
-            //           const SizedBox(height: 4),
-            //           const Text(
-            //             'The Corporate Top of BSIT',
-            //             style: TextStyle(
-            //               fontSize: 8,
-            //               color: Colors.grey,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
             const SizedBox(height: 16),
             Divider(color: Colors.grey),
             const SizedBox(height: 16),
