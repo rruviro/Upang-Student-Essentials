@@ -86,7 +86,7 @@ class _HometopLevelPagestate extends State<HomeScreen> {
             studentProfile = state.studentProfile;
             isProfileLoaded = true;
             if (studentProfile.status != "ACTIVE") {
-              // _showAccountLockedDialog();
+              _showAccountLockedDialog();
             }
           });
         }
@@ -263,28 +263,28 @@ class _HometopLevelPagestate extends State<HomeScreen> {
     );
   }
 
-  // void _showAccountLockedDialog() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title: Text('Account Locked'),
-  //         content: Text('ACCOUNT IS LOCKED. PLEASE ENROLL.'),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () async {
-  //               SharedPreferences prefs = await SharedPreferences.getInstance();
-  //               await prefs.clear();
-  //               Navigator.of(context).pop();
-  //               Navigator.of(context).push(
-  //                 MaterialPageRoute(builder: (context) => StudentLogin()),
-  //               );
-  //             },
-  //             child: Text('Ok'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _showAccountLockedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Account Locked'),
+          content: Text('ACCOUNT IS LOCKED. PLEASE ENROLL.'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => StudentLogin()),
+                );
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
