@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class NotificationService {
   static final NotificationService instance = NotificationService._internal();
   Timer? timer;
@@ -19,7 +18,7 @@ class NotificationService {
 
   Future<void> startPolling(int studentId) async {
     print('Starting polling');
-    
+
     if (timer?.isActive ?? false) {
       print('Timer already running. Cancelling the existing timer.');
       stopPolling();
@@ -28,7 +27,8 @@ class NotificationService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int lastNotificationId = prefs.getInt('last_notification_id') ?? 0;
     // final String baseUrl = 'http://10.0.2.2:8000/api/mails';
-    final String baseUrl = 'http://127.0.0.1:8000/api/mails';
+    final String baseUrl =
+        'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api/mails';
 
     timer = Timer.periodic(Duration(seconds: 30), (Timer t) async {
       print("Polling...");
@@ -49,7 +49,8 @@ class NotificationService {
                   notificationLayout: NotificationLayout.Default,
                 ),
               );
-              await http.put(Uri.parse('http://127.0.0.1:8000/api/notificationdone/${notification['id']}'));
+              await http.put(Uri.parse(
+                  'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api/notificationdone/${notification['id']}'));
               lastNotificationId = notification['id'];
               await prefs.setInt('last_notification_id', lastNotificationId);
               redirect(notification['redirectTo']);
@@ -57,7 +58,8 @@ class NotificationService {
           }
         }
       } else {
-        print('Failed to fetch notifications: ${response.statusCode} - ${response.body}');
+        print(
+            'Failed to fetch notifications: ${response.statusCode} - ${response.body}');
       }
     });
   }
@@ -70,13 +72,12 @@ class NotificationService {
     await prefs.clear();
   }
 
-  void redirect(String redirectTo){ 
+  void redirect(String redirectTo) {
     AwesomeNotifications().setListeners(
-      onActionReceivedMethod: (receivedNotification) async {
-        if(redirectTo != "Announcement"){
-          print("hello world");
-        }
+        onActionReceivedMethod: (receivedNotification) async {
+      if (redirectTo != "Announcement") {
+        print("hello world");
       }
-    );
+    });
   }
 }
