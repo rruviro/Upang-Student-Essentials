@@ -387,37 +387,6 @@ class _UniformStudentState extends State<UniformStudent> {
     );
   }
 
-  // Widget _buildSlides() {
-  //   List<String> imageUrls = [widget.stockPhoto, 'https://via.assets.so/game.png?id=1&q=95&w=360&h=360&fit=fill'];
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(vertical: 30),
-  //     child: CarouselSlider(
-  //       items: imageUrls.map((url) {
-  //         return Container(
-  //           margin: EdgeInsets.all(5.0),
-  //           decoration: BoxDecoration(
-  //             borderRadius: BorderRadius.circular(10),
-  //             image: DecorationImage(
-  //               image: AssetImage(url),
-  //               fit: BoxFit.cover,
-  //             ),
-  //           ),
-  //         );
-  //       }).toList(),
-  //       options: CarouselOptions(
-  //         height: 200.0,
-  //         enlargeCenterPage: true,
-  //         autoPlay: true,
-  //         aspectRatio: 16 / 9,
-  //         autoPlayCurve: Curves.fastOutSlowIn,
-  //         enableInfiniteScroll: true,
-  //         autoPlayAnimationDuration: Duration(milliseconds: 800),
-  //         viewportFraction: 0.8,
-  //       ),
-  //     ),
-  //   );
-  // }
-
   void _showAddToBackpackModal(BuildContext context, String type) {
     showModalBottomSheet(
       context: context,

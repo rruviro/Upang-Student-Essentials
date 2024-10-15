@@ -37,7 +37,9 @@ class AdminLogin extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        CircularProgressIndicator(),
+                        CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(primary_color),
+                        ),
                         SizedBox(width: 20),
                         Text("Logging In..."),
                       ],
@@ -67,9 +69,42 @@ class AdminLogin extends StatelessWidget {
               Navigator.of(context).pop();
             }
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Login Error: ${state.message}")),
-            );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.red,
+                  duration:
+                      const Duration(seconds: 3),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.warning_amber_rounded,
+                            color: Colors.yellow,
+                          ),
+                          const SizedBox(
+                              width: 10),
+                          const Expanded(
+                            child: Text(
+                              "Incorrect Credentials: Please try again",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
           }
         },
         child: Stack(

@@ -176,13 +176,6 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final itemWidth = 50.0;
-    final spacing = 10.0;
-    final initialSpacing = 50.0;
-    final availableWidth = screenWidth * 0.5 - initialSpacing;
-    final itemsPerRow = (availableWidth / (itemWidth + spacing)).floor();
-
     return Container(
       margin: const EdgeInsets.only(bottom: 20.0),
       height: 100,
@@ -201,9 +194,9 @@ class ItemCard extends StatelessWidget {
       width: double.infinity,
       child: Stack(
         children: [
-          // Department image
+          // Adjusted Department image to move further right
           Positioned(
-            right: -20,
+            right: -40, // it Adjust the IMAGE
             top: -35,
             child: Container(
               child: Image.network(
@@ -213,7 +206,8 @@ class ItemCard extends StatelessWidget {
               ),
             ),
           ),
-          // Department name and background
+          
+          // Adjusted Gradient background to move further right
           Positioned.fill(
             child: InkWell(
               onTap: () {
@@ -232,11 +226,11 @@ class ItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   gradient: LinearGradient(
                     colors: [Colors.white, Color.fromRGBO(11, 133, 214, 113)],
-                    stops: [0.50, 0.70],
+                    stops: [0.55, 0.90],
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 25.0, left: 30.0),
+                  padding: const EdgeInsets.only(top: 25.0, left: 20.0),
                   child: Text(
                     visual.name,
                     style: TextStyle(
@@ -249,10 +243,10 @@ class ItemCard extends StatelessWidget {
               ),
             ),
           ),
-          // Information Row (Reserved, Claim, Complete)
+
           Positioned(
-            bottom: 30, // Positioning the Row at the bottom of the container
-            left: 30, // Adjust this value to align better if necessary
+            bottom: 30,
+            left: 20,
             right: 30,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -261,7 +255,7 @@ class ItemCard extends StatelessWidget {
                   'Reserved: ${visual.reserved}  | ',
                   style: GoogleFonts.inter(
                     textStyle: TextStyle(
-                      fontSize: 10.5,
+                      fontSize: 8.5,
                       color: Colors.grey,
                       fontWeight: FontWeight.w400,
                     ),
@@ -272,7 +266,7 @@ class ItemCard extends StatelessWidget {
                   'Claim: ${visual.claim}  | ',
                   style: GoogleFonts.inter(
                     textStyle: TextStyle(
-                      fontSize: 10.5,
+                      fontSize: 8.5,
                       color: Colors.grey,
                       fontWeight: FontWeight.w400,
                     ),
@@ -283,7 +277,7 @@ class ItemCard extends StatelessWidget {
                   'Complete: ${visual.completed}',
                   style: GoogleFonts.inter(
                     textStyle: TextStyle(
-                      fontSize: 10.5,
+                      fontSize: 8.5,
                       color: Colors.grey,
                       fontWeight: FontWeight.w400,
                     ),

@@ -26,6 +26,132 @@ class UniformAdmin extends StatefulWidget {
 }
 
 class _UniformAdminState extends State<UniformAdmin> {
+  List<Map<String, String>> measures = [
+    {"size": "XS", "chest": "17.5", "hips": "25.5"},
+    {"size": "S", "chest": "18.5", "hips": "26.5"},
+    {"size": "M", "chest": "19.5", "hips": "27.5"},
+    {"size": "L", "chest": "20.5", "hips": "28.5"},
+    {"size": "XL", "chest": "21.5", "hips": "29.5"},
+    {"size": "XXL", "chest": "22.5", "hips": "30.5"},
+  ];
+
+  List<File> _images = [];
+  List<bool> _selectedImages = [];
+  bool _isDeleteMode = false;
+
+  final TextEditingController _sizeController = TextEditingController();
+
+  void _toggleDeleteMode() {
+    setState(() {
+      _isDeleteMode = !_isDeleteMode;
+      if (_isDeleteMode) {
+        if (_selectedImages.length != _images.length) {
+          _selectedImages = List.filled(_images.length, false);
+        }
+      } else {
+        _selectedImages = List.filled(_images.length, false);
+      }
+    });
+  }
+
+  void _selectImage(int index) {
+    if (index < 0 || index >= _selectedImages.length) {
+      print(
+          'Invalid index: $index, _selectedImages length: ${_selectedImages.length}');
+      return;
+    }
+    setState(() {
+      _selectedImages[index] = !_selectedImages[index];
+    });
+  }
+
+  void _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _images.add(File(pickedFile.path));
+        _selectedImages.add(false);
+      });
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  void _deleteSelectedImages() {
+    setState(() {
+      if (_images.isEmpty || _selectedImages.isEmpty) return;
+
+      for (int i = _images.length - 1; i >= 0; i--) {
+        if (_selectedImages[i]) {
+          _images.removeAt(i);
+          _selectedImages.removeAt(i);
+        }
+      }
+    });
+  }
+
+  void _showAddSizeDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white, // White background
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // Rounded corners
+          ),
+          title: Text(
+            'Add Size',
+            style: TextStyle(
+              color: primary_color, // Primary color for the title
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _sizeController,
+                decoration: InputDecoration(
+                  labelText: 'Enter size', // Label for size input
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close dialog on Cancel
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                    color: Colors.grey), // Grey color for cancel button
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                if (_sizeController.text.isNotEmpty) {
+                  // Add your logic to handle the entered size here
+                  print("Added size: ${_sizeController.text}");
+                  Navigator.pop(context); // Close dialog after adding size
+                }
+              },
+              child: Text(
+                'Add',
+                style: TextStyle(
+                    color: primary_color), // Primary color for add button
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   bool _showLoading = true;
   @override
   void initState() {
@@ -110,44 +236,253 @@ class _UniformAdminState extends State<UniformAdmin> {
                   Container(
                     child: AppBar(
                       automaticallyImplyLeading: false,
-                      backgroundColor: Colors.white,
+                      backgroundColor: primary_color,
                       toolbarHeight: 300,
                       flexibleSpace: Container(
                         decoration: BoxDecoration(
                           color: primary_color,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 0, 0, 0)
-                                  .withOpacity(0.10),
-                              blurRadius: 5,
-                              offset: const Offset(1, 7),
-                            ),
-                          ],
                         ),
-                        child: Image.network(widget.stock.photoUrl),
+                        child: Center(
+                          child: ClipRect(
+                            child: Image.network(
+                              widget.stock.photoUrl,
+                              width: 300,
+                              height: 300,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
 
-                  // Title Row without the Plus Button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         '${widget.stock.stockName}',
+                  //         style: TextStyle(
+                  //             fontSize: 15, fontWeight: FontWeight.bold),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '${widget.stock.stockName}',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${_images.length + 2} Images",
+                              style: TextStyle(fontSize: 10),
+                            ),
+                            if (_images.isNotEmpty)
+                              IconButton(
+                                icon: Icon(
+                                  _isDeleteMode ? Icons.check : Icons.delete,
+                                  color:
+                                      _isDeleteMode ? Colors.green : Colors.red,
+                                ),
+                                onPressed: () {
+                                  if (_isDeleteMode) {
+                                    _showDeleteConfirmation();
+                                  } else {
+                                    _toggleDeleteMode();
+                                  }
+                                },
+                              ),
+                          ],
                         ),
-                        // Removed the IconButton here
+                        SizedBox(height: 8),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFD9D9D9),
+                                ),
+                                padding: EdgeInsets.all(8),
+                                child: Image.asset(
+                                  'assets/bsit.png',
+                                  height: 60,
+                                  width: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFD9D9D9),
+                                ),
+                                padding: EdgeInsets.all(8),
+                                child: Image.asset(
+                                  'assets/uniuni.png',
+                                  height: 60,
+                                  width: 30,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              ..._images.asMap().entries.map((entry) {
+                                int index = entry.key;
+                                File image = entry.value;
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    if (_isDeleteMode) {
+                                      _selectImage(index);
+                                    }
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 10),
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFD9D9D9),
+                                        ),
+                                        padding: EdgeInsets.all(6),
+                                        child: Image.file(
+                                          image,
+                                          height: 64,
+                                          width: 35,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      if (_isDeleteMode)
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: CircleAvatar(
+                                            radius: 12,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              _selectedImages[index]
+                                                  ? Icons.check_circle
+                                                  : Icons.circle_outlined,
+                                              color: Colors.red,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                              GestureDetector(
+                                onTap: _pickImage,
+                                child: Container(
+                                  height: 75,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFD9D9D9),
+                                  ),
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 20,
+                                    color: primary_color,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
 
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        _buildHeader(
+                            '${widget.stock.stockName}', '8.5k Ordered'),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Size Stocks",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.add),
+                                  color: primary_color,
+                                  onPressed: () {
+                                    _showAddSizeDialog();
+                                  },
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            uniformsList(state.uniforms),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Size Chart",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "See what size best suits you.",
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          height: 330,
+                          width: 460,
+                          color: Colors.white,
+                          child: Container(
+                            child: DataTable(
+                              columns: [
+                                DataColumn(label: Center(child: Text("SIZE"))),
+                                DataColumn(label: Center(child: Text("CHEST"))),
+                                DataColumn(label: Center(child: Text("HIPS"))),
+                              ],
+                              rows: measures.map((measure) {
+                                return DataRow(cells: [
+                                  DataCell(Center(
+                                      child: Text(measure["size"] ?? ""))),
+                                  DataCell(Center(
+                                      child: Text(measure["chest"] ?? ""))),
+                                  DataCell(Center(
+                                      child: Text(measure["hips"] ?? ""))),
+                                ]);
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 20),
-                  uniformsList(state.uniforms),
                 ],
               ),
             ),
@@ -200,116 +535,122 @@ class _UniformAdminState extends State<UniformAdmin> {
   }
 
   Widget uniformsList(List<Uniform> uniforms) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: uniforms.length,
-      itemBuilder: (context, index) {
-        final uniform = uniforms[index];
-        return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Size: ${uniform.Size}'),
-                Text(
-                  'Stock: ${uniform.Stock}',
-                  style: TextStyle(
-                    color: uniform.Stock > 0 ? Colors.green : Colors.red,
-                  ),
-                ),
-                Text(
-                  'Reserved: ${uniform.Reserved}',
-                  style: TextStyle(
-                    color: uniform.Reserved > 0 ? Colors.green : Colors.red,
-                  ),
-                ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: uniforms.asMap().entries.map((entry) {
+          int index = entry.key;
+          Uniform uniform = entry.value;
 
-                // Update and delete buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+          double leftPadding = index == 0 ? 0 : 10;
+          double rightPadding = index == uniforms.length - 1 ? 0 : 10;
+
+          return Padding(
+            padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
+            child: Card(
+              color: Colors.white,
+              margin: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              elevation: 8,
+              child: Container(
+                width:
+                    MediaQuery.of(context).size.width * 0.5, // Adjusted width
+                height: 50,
+                child: Row(
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        _showUpdateUniformDialog(context, uniform); // update
-                      },
-                      child: const Text('Add Stocks'),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.10, // 15%
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        color: primary_color,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${uniform.Size}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
                     ),
-                    /*TextButton(
-                      onPressed: () {
-                        _deleteUniform(uniform.id); // delete
-                      },
-                      child: const Text('Delete',
-                          style: TextStyle(color: Colors.red)),
-                    ),*/
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 10,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Stock: ${uniform.Stock}',
+                                  style: TextStyle(
+                                    color: uniform.Stock > 0
+                                        ? primary_color
+                                        : Colors.redAccent,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                Text(
+                                  'Reserved: ${uniform.Reserved}',
+                                  style: TextStyle(
+                                    color: uniform.Reserved > 0
+                                        ? Colors.green
+                                        : Colors.red,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                _showUpdateUniformDialog(context, uniform);
+                              },
+                              icon: Icon(
+                                Icons.add,
+                                color: primary_color,
+                              ),
+                            ),
+                            Container(
+                              // Add this container for the minus button
+                              width: 40, // Adjust width as needed
+                              child: IconButton(
+                                onPressed: () {
+                                  // Implement remove functionality here
+                                },
+                                icon: Icon(
+                                  Icons.remove,
+                                  color: primary_color,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        }).toList(),
+      ),
     );
   }
 
-  // ADD UNIFORM DAPAT ITO PERO EDIT LANG NEED
-
-  // Future<void> _showAddUniformDialog(BuildContext context) async {
-  //   // No need to manually input Department and Course since they're automatically assigned
-  //   TextEditingController genderController = TextEditingController();
-  //   TextEditingController typeController = TextEditingController();
-  //   TextEditingController bodyController = TextEditingController();
-  //   TextEditingController sizeController = TextEditingController();
-  //   TextEditingController stockController = TextEditingController();
-  //
-  //   return showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title: const Text('Add Uniform'),
-  //         content: SingleChildScrollView(
-  //           child: Column(
-  //             children: [
-  //               TextField(controller: genderController, decoration: const InputDecoration(labelText: 'Gender')),
-  //               TextField(controller: typeController, decoration: const InputDecoration(labelText: 'Type')),
-  //               TextField(controller: bodyController, decoration: const InputDecoration(labelText: 'Body')),
-  //               TextField(controller: sizeController, decoration: const InputDecoration(labelText: 'Size')),
-  //               TextField(controller: stockController, decoration: const InputDecoration(labelText: 'Stock')),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop(); // Close the dialog
-  //             },
-  //             child: const Text('Cancel'),
-  //           ),
-  //           TextButton(
-  //             onPressed: () {
-  //               // Add uniform logic
-  //               _addUniform(
-  //                 widget.Department, // Automatically set Department
-  //                 widget.courseName,  // Automatically set Course
-  //                 genderController.text,
-  //                 typeController.text,
-  //                 bodyController.text,
-  //                 sizeController.text,
-  //                 int.parse(stockController.text),
-  //               );
-  //               Navigator.of(context).pop(); // Close the dialog
-  //             },
-  //             child: const Text('Add'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
-  // UPDATE SHOW DIALOG
   Future<void> _showUpdateUniformDialog(
       BuildContext context, Uniform uniform) async {
     TextEditingController stockController = TextEditingController();
@@ -318,14 +659,40 @@ class _UniformAdminState extends State<UniformAdmin> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Update Uniform Stock'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          backgroundColor: Colors.white,
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              'Update Uniform Stock',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent,
+              ),
+            ),
+          ),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Uniform Size: ${uniform.Size}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 10),
                 TextField(
                   controller: stockController,
-                  decoration: const InputDecoration(labelText: 'Stock'),
+                  decoration: InputDecoration(
+                    labelText: 'Stock',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                  ),
                   keyboardType: TextInputType.number,
                 ),
               ],
@@ -336,34 +703,26 @@ class _UniformAdminState extends State<UniformAdmin> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
             TextButton(
               onPressed: () {
                 if (stockController.text.isNotEmpty) {
-                  BlocProvider.of<AdminExtendedBloc>(context).add(
-                    itemreservefirst(
-                      int.parse(stockController.text),
-                      widget.courseName,
-                      uniform.Gender,
-                      uniform.Type,
-                      uniform.Body,
-                      uniform.Size,
-                    ),
-                  );
-                  BlocProvider.of<AdminExtendedBloc>(context)
-                      .add(ShowUniformsEvent(
-                    widget.courseName,
-                    widget.stock.Gender,
-                    widget.stock.Type,
-                    widget.stock.Body,
-                  ));
                   Navigator.of(context).pop();
                 } else {
                   print('Stock input is empty');
                 }
               },
-              child: const Text('Update'),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.greenAccent,
+              ),
+              child: const Text(
+                'Update',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ],
         );
@@ -371,8 +730,94 @@ class _UniformAdminState extends State<UniformAdmin> {
     );
   }
 
-  void _updateUniform(int id, String department, String course, String gender,
-      String type, String body, String size, int stock) {}
+  Widget _buildHeader(String title, String stockInfo) {
+    return SizedBox(
+      width: double.infinity,
+      height: 70,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                stockInfo,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                    fontWeight: FontWeight.normal),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
-  void _deleteUniform(int id) {}
+  void _showDeleteConfirmation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          backgroundColor: Colors.white,
+          title: Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 24),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Are you sure you want to delete?',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            SizedBox(width: 10),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey[300],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                'No',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                'Yes',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                _deleteSelectedImages();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

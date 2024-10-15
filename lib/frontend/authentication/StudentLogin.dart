@@ -20,58 +20,93 @@ class StudnetLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is LoginLoading) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(width: 20),
-                        Text("Logging In..."),
-                      ],
+        resizeToAvoidBottomInset: false,
+        body: BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            if (state is LoginLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(primary_color),
+                          ),
+                          SizedBox(width: 20),
+                          Text("Logging In..."),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else if (state is LoginSuccess) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Login Successfully: Welcome!")),
+              );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider<StudentBottomBloc>.value(
+                    value: studentBloc,
+                    child: SHomeBase(studentId: state.StudentId),
                   ),
-                );
-              },
-            );
-          } else if (state is LoginSuccess) {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            }
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Login Successfully: Welcome!")),
-            );
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => BlocProvider<StudentBottomBloc>.value(
-                  value: studentBloc,
-                  child: SHomeBase(studentId: state.StudentId),
                 ),
-              ),
-            );
-          } else if (state is LoginError) {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            }
+              );
+            } else if (state is LoginError) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Incorrect Credentials: Please try again")),
-            );
-          }
-        },
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.red,
+                  duration:
+                      const Duration(seconds: 3),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.warning_amber_rounded,
+                            color: Colors.yellow,
+                          ),
+                          const SizedBox(
+                              width: 10),
+                          const Expanded(
+                            child: Text(
+                              "Incorrect Credentials: Please try again",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -102,11 +137,19 @@ class StudnetLogin extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Student ID', style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500)),
+                          Text(
+                            'Student ID',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
                           SizedBox(height: 8),
                           TextField(
-                            controller: studentIdController, // Add controller
+                            controller: studentIdController,
                             style: TextStyle(color: Colors.black),
+                            cursorColor:
+                                Colors.black,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.3),
@@ -127,13 +170,22 @@ class StudnetLogin extends StatelessWidget {
                               ),
                               hintText: 'XX-XXXX-XXXXXX',
                               hintStyle: TextStyle(
-                                  color: Colors.black.withOpacity(0.3),
-                                  fontSize: 13),
+                                color: Colors.black.withOpacity(0.3),
+                                fontSize: 13,
+                              ),
                               contentPadding:
                                   EdgeInsets.symmetric(horizontal: 12.0),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0),
-                                borderSide: BorderSide(color: Colors.black),
+                                borderSide: BorderSide(
+                                    color:
+                                        Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                borderSide: BorderSide(
+                                    color:
+                                        primary_color),
                               ),
                             ),
                           ),
@@ -146,7 +198,11 @@ class StudnetLogin extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Password', style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500)),
+                          Text('Password',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500)),
                           SizedBox(height: 8),
                           PasswordField(controller: passwordController),
                         ],
@@ -186,12 +242,19 @@ class StudnetLogin extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: Row(
                         children: <Widget>[
-                          Expanded(child: Divider(thickness: 0.5, color: tertiary_color)),
+                          Expanded(
+                              child: Divider(
+                                  thickness: 0.5, color: tertiary_color)),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text("other", style: TextStyle(fontSize: 12, color: tertiary_color)),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text("other",
+                                style: TextStyle(
+                                    fontSize: 12, color: tertiary_color)),
                           ),
-                          Expanded(child: Divider(thickness: 0.5, color: tertiary_color)),
+                          Expanded(
+                              child: Divider(
+                                  thickness: 0.5, color: tertiary_color)),
                         ],
                       ),
                     ),
@@ -212,8 +275,7 @@ class StudnetLogin extends StatelessWidget {
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: Colors.white,
-                          side:
-                              BorderSide(color: primary_color, width: 2.0),
+                          side: BorderSide(color: primary_color, width: 2.0),
                           foregroundColor: primary_color,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
