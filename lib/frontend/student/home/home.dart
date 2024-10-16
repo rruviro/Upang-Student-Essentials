@@ -109,21 +109,6 @@ class _HomeState extends State<Home> {
                 ),
               ),
               centerTitle: false,
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.notifications, color: primary_color),
-                  onPressed: () {
-                    studBloc.add(NotificationPageEvent());
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.backpack, color: primary_color),
-                  onPressed: () {
-                    studBloc.add(BackpackPageEvent());
-                  },
-                ),
-                SizedBox(width: 15),
-              ],
               backgroundColor: Colors.white,
               elevation: 0,
             ),

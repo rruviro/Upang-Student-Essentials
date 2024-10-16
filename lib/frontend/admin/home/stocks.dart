@@ -485,6 +485,7 @@ class _ItemCardState extends State<ItemCard> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(5),
@@ -509,6 +510,17 @@ class _ItemCardState extends State<ItemCard> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    bottom: 14,
+                    right: 15,
+                    child: InkWell(
+                      onTap: (){},
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      )
+                    ),
+                  )
                 ],
               ),
             ),
@@ -638,7 +650,7 @@ class _BookCardState extends State<BookCard> {
                     'Stock: ${widget.visual.Stock}',
                     style: TextStyle(
                       color:
-                          widget.visual.Stock > 0 ? Colors.green : Colors.red,
+                          widget.visual.Stock > 0 ? Colors.white : Colors.red,
                       fontSize: 12,
                       fontWeight: FontWeight.normal,
                     ),
@@ -660,7 +672,7 @@ class _BookCardState extends State<BookCard> {
                     'Reserved: ${widget.visual.Reserved}',
                     style: TextStyle(
                       color: widget.visual.Reserved > 0
-                          ? Colors.green
+                          ? Colors.white
                           : Colors.red,
                       fontSize: 12,
                       fontWeight: FontWeight.normal,
@@ -689,6 +701,14 @@ class _BookCardState extends State<BookCard> {
                 ),
               ),
               SizedBox(width: 8),
+              IconButton(
+                onPressed: () {
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
+              ),
             ],
           ),
         ),
