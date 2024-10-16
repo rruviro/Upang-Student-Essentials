@@ -191,7 +191,7 @@ class ItemCard extends StatefulWidget {
 }
 
 class _ItemCardState extends State<ItemCard> {
-  late int isTapped;
+  late bool isTapped;
 
   @override
   void initState() {
@@ -202,66 +202,19 @@ class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         context
             .read<StudentExtendedBloc>()
             .add(notiftapped(widget.mails.id, widget.mails.redirectTo));
         setState(() {
-          isTapped = 1;
+          isTapped = true;
         });
-        await Future.delayed(Duration(milliseconds: 500));
-        switch (widget.mails.redirectTo) {
-          case 'Announcement':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    Announcement(studentProfile: widget.profile),
-              ),
-            );
-            break;
-          case 'Reserve':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Transaction(
-                  studentProfile: widget.profile,
-                  page: 2,
-                  status: 'Reserve',
-                ),
-              ),
-            );
-            break;
-          case 'Claim':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Transaction(
-                  studentProfile: widget.profile,
-                  page: 3,
-                  status: 'Claim',
-                ),
-              ),
-            );
-            break;
-          case 'Complete':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Profile(studentProfile: widget.profile),
-              ),
-            );
-            break;
-          default:
-        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: isTapped == 1
-              ? Colors.white
-              : Colors.lightBlueAccent, // Change color based on isTapped
+          color: isTapped == true ? Colors.white : Colors.lightBlueAccent,
         ),
         child: Container(
           child: Column(

@@ -158,6 +158,7 @@ class _ProfileScreenState extends State<Profile> {
                   isDialogOpen = false;
                   Navigator.of(context).pop();
                   _showSuccessDialog(context);
+
                   context.read<AdminExtendedBloc>().add(getStudent());
                 },
               ),

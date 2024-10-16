@@ -2,7 +2,7 @@ class StudentNotifcationMail {
   final int id;
   final String description;
   final String time;
-  final int istapped;
+  final bool istapped;
   final int notificationId;
   final String redirectTo;
 

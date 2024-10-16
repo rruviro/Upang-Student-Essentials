@@ -69,7 +69,7 @@ class _HometopLevelPagestate extends State<HomeScreen> {
         .read<StudentExtendedBloc>()
         .add(studentProfileGet(widget.studentID));
 
-    _notificationTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+    _notificationTimer = Timer.periodic(Duration(seconds: 3), (timer) {
       context
           .read<StudentExtendedBloc>()
           .add(studentProfileGet(widget.studentID));
@@ -78,7 +78,7 @@ class _HometopLevelPagestate extends State<HomeScreen> {
   }
 
   void _startNotificationTimer() {
-    _notificationTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+    _notificationTimer = Timer.periodic(Duration(seconds: 3), (timer) {
       context
           .read<StudentExtendedBloc>()
           .add(studentProfileGet(widget.studentID));
@@ -94,7 +94,7 @@ class _HometopLevelPagestate extends State<HomeScreen> {
   void onPageChanged(int page) {
     BlocProvider.of<StudentBottomBloc>(context).add(TabChange(tabIndex: page));
 
-    if (page != 0 && page != 1 && page != 2 && page != 3) {
+    if (page != 1 && page != 2 && page != 3) {
       _stopNotificationTimer();
     } else {
       if (_notificationTimer == null) {

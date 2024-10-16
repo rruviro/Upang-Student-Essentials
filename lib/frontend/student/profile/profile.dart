@@ -458,6 +458,15 @@ class _ProfileScreenState extends State<Profile> {
               if (state is StudentBagCombinedLoadSuccessState) {
                 items = state.studentBagItems;
                 books = state.studentBagBooks;
+                print(
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                print(books.length);
+                print(
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                print(
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                print(
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
               }
               switch (state.runtimeType) {
                 case StudentLoadingState:
@@ -926,7 +935,7 @@ class _ProfileScreenState extends State<Profile> {
                                     alignment: Alignment.center,
                                     child: FractionallySizedBox(
                                       widthFactor: 1.2,
-                                      child: items.isEmpty
+                                      child: books.isEmpty
                                           ? Center(
                                               child: Column(
                                                 children: [
