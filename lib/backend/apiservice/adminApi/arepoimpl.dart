@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:use/backend/apiservice/adminApi/arepo.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -233,6 +235,58 @@ class AdminRepositoryImpl extends Adminrepo {
     }
   }
 
+  Future<void> deleteStock(int id) async {
+    final response = await http.delete(Uri.parse('$baseUrl/stocks/$id'));
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      print(responseData['message']); // Success message
+    } else {
+      // Handle error
+    }
+  }
+
+
+  @override
+  Future<void> createStock(
+      String stockName,
+      File stockPhoto, // Accept File for the photo
+      String course,
+      String gender,
+      String type,
+      String body,
+      ) async {
+    try {
+      // Create a multipart request
+      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/uniforms/create'));
+      request.fields['stockName'] = stockName;
+      request.fields['Course'] = course;
+      request.fields['Gender'] = gender;
+      request.fields['Type'] = type;
+      request.fields['Body'] = body;
+
+      // Attach the file to the request
+      request.files.add(await http.MultipartFile.fromPath(
+        'stockPhoto', // The name of the field in your Laravel API
+        stockPhoto.path, // The path to the file
+      ));
+
+      // Send the request
+      var response = await request.send();
+
+      // Check the response
+      if (response.statusCode == 200) {
+        final responseData = await response.stream.bytesToString();
+        final data = json.decode(responseData);
+        print('Success: ${data['message']}');
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
   // BOOKS
   @override
   Future<List<Book>> showBooks(String Department) async {
@@ -247,6 +301,58 @@ class AdminRepositoryImpl extends Adminrepo {
       throw Exception('Failed to load books');
     }
   }
+
+  // CREATE BOOK
+  Future<void> createBook(
+      String Course,
+      String Department,
+      String BookName,
+      String SubjectCode,
+      String SubjectDesc,
+      int Stock,
+      int Reserved,
+      ) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/item-books'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'Course': Course,
+          'Department': Department,
+          'BookName': BookName,
+          'SubjectCode': SubjectCode,
+          'SubjectDesc': SubjectDesc,
+          'Stock': Stock,
+          'Reserved': Reserved,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Success: ${data['message']}');
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  // DELETE BOOK
+  Future<void> deleteBook(int id) async {
+    final response = await http.delete(Uri.parse('$baseUrl/item-books/$id'));
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      print(responseData['message']); // Success message
+    } else {
+      // Handle error
+    }
+  }
+
 
   // UNIFORM (PARA SA LAHAT ITO AH, YUNG RSOS KASI NA TABLE GAMIT KO
   @override
