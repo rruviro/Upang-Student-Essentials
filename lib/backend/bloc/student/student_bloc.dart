@@ -324,6 +324,25 @@ class StudentExtendedBloc
       }
     });
 
+    on<notiftapped>((event, emit) async {
+      try {
+        await _studentrepo.notiftapped(event.id);
+        print("done");
+        emit(NotificationTappedSuccessState(event.redirect));
+      } catch (e) {
+        print("Shit na malagkit");
+      }
+    });
+
+    on<zeronotif>((event, emit) async {
+      try {
+        await _studentrepo.zeronotif(event.id);
+        print("done");
+      } catch (e) {
+        print("Shit na malagkit");
+      }
+    });
+
     // LANCE
     // FOR DEPARTMENTS
     on<ShowDepartmentsEvent>((event, emit) async {
@@ -365,7 +384,8 @@ class StudentExtendedBloc
     on<ShowStocksEvent>((event, emit) async {
       emit(StocksLoadingState());
       try {
-        print('Fetching data for department: ${event.Course}'); // PINALITAN KO YUNG COURSES, DEPARTMENT DATI
+        print(
+            'Fetching data for department: ${event.Course}'); // PINALITAN KO YUNG COURSES, DEPARTMENT DATI
         final stockData = await _studentrepo.showStocks(event.Course);
         final bookData = await _studentrepo.showBooks(event.Course);
         print('Stocks and books fetched successfully');
@@ -379,7 +399,8 @@ class StudentExtendedBloc
     on<ShowUniformsEvent>((event, emit) async {
       emit(UniformsLoadingState());
       try {
-        final uniformData = await _studentrepo.showUniforms(event.Course, event.Gender, event.Type, event.Body);
+        final uniformData = await _studentrepo.showUniforms(
+            event.Course, event.Gender, event.Type, event.Body);
         emit(UniformsLoadedState(uniforms: uniformData));
       } catch (e) {
         emit(UniformsErrorState('An error occurred: ${e.toString()}'));

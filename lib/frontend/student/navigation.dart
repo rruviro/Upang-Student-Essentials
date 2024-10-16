@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
@@ -54,27 +55,65 @@ class HomeScreen extends StatefulWidget {
 
 class _HometopLevelPagestate extends State<HomeScreen> {
   late PageController pageController;
-  late StudentProfile studentProfile; // Make sure to handle nullability
+  late StudentProfile studentProfile;
   bool isProfileLoaded = false;
+  int unreadNotificationCount = 0;
+
+  Timer? _notificationTimer;
 
   @override
   void initState() {
     super.initState();
     pageController = PageController();
-    // Load student profile when initializing
     context
         .read<StudentExtendedBloc>()
         .add(studentProfileGet(widget.studentID));
+
+    _notificationTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+      context
+          .read<StudentExtendedBloc>()
+          .add(studentProfileGet(widget.studentID));
+      _stopNotificationTimer();
+    });
   }
 
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
+  void _startNotificationTimer() {
+    _notificationTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+      context
+          .read<StudentExtendedBloc>()
+          .add(studentProfileGet(widget.studentID));
+      _loadUnreadNotificationCount();
+    });
+  }
+
+  void _stopNotificationTimer() {
+    _notificationTimer?.cancel();
+    _notificationTimer = null;
   }
 
   void onPageChanged(int page) {
     BlocProvider.of<StudentBottomBloc>(context).add(TabChange(tabIndex: page));
+
+    if (page != 0 && page != 1 && page != 2 && page != 3) {
+      _stopNotificationTimer();
+    } else {
+      if (_notificationTimer == null) {
+        _startNotificationTimer();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _notificationTimer?.cancel();
+    pageController.dispose();
+    super.dispose();
+  }
+
+  void _loadUnreadNotificationCount() {
+    setState(() {
+      unreadNotificationCount = studentProfile.notifcount;
+    });
   }
 
   @override
@@ -85,6 +124,7 @@ class _HometopLevelPagestate extends State<HomeScreen> {
           setState(() {
             studentProfile = state.studentProfile;
             isProfileLoaded = true;
+            _loadUnreadNotificationCount();
             if (studentProfile.status != "ACTIVE") {
               _showAccountLockedDialog();
             }
@@ -93,29 +133,22 @@ class _HometopLevelPagestate extends State<HomeScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-            backgroundColor: Colors.white,
-            body: isProfileLoaded
-                ? _mainWrapperBody()
-                : Center(
-                    child: Lottie.asset('assets/lottie/loading.json',
-                        height: 300, width: 380, fit: BoxFit.fill)),
-            bottomNavigationBar: Container(
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 1,
-                    offset: Offset(1, -0.5),
-                  ),
-                ]),
-                child: _icons(context)));
+          backgroundColor: Colors.white,
+          body: isProfileLoaded ? _mainWrapperBody() : _loadingWidget(),
+          bottomNavigationBar: _bottomAppBar(),
+        );
       },
     );
   }
 
-  double iconSize = 20.0;
-  double fontSize = 8.0;
+  Widget _loadingWidget() {
+    return Center(
+      child: Lottie.asset('assets/lottie/loading.json',
+          height: 300, width: 380, fit: BoxFit.fill),
+    );
+  }
 
-  BottomAppBar _icons(BuildContext context) {
+  BottomAppBar _bottomAppBar() {
     return BottomAppBar(
       color: Colors.white,
       height: 69,
@@ -170,39 +203,8 @@ class _HometopLevelPagestate extends State<HomeScreen> {
     );
   }
 
-  PageView _mainWrapperBody() {
-    return PageView(
-      onPageChanged: (int page) => onPageChanged(page),
-      controller: pageController,
-      children: [
-        isProfileLoaded
-            ? Home(studentProfile: studentProfile)
-            : Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill)),
-        isProfileLoaded
-            ? Announcement(studentProfile: studentProfile)
-            : Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill)),
-        isProfileLoaded
-            ? Bag(studentProfile: studentProfile, Status: studentProfile.status)
-            : Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill)),
-        isProfileLoaded
-            ? notif(studentProfile: studentProfile)
-            : Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill)),
-        isProfileLoaded
-            ? Profile(studentProfile: studentProfile)
-            : Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill)),
-      ],
-    );
-  }
+  double iconSize = 20.0;
+  double fontSize = 8.0;
 
   Widget _bottomAppBarItem(
     BuildContext context, {
@@ -213,6 +215,14 @@ class _HometopLevelPagestate extends State<HomeScreen> {
   }) {
     return GestureDetector(
       onTap: () {
+        if (page == 3) {
+          context
+              .read<StudentExtendedBloc>()
+              .add(zeronotif(this.studentProfile.id));
+          setState(() {
+            unreadNotificationCount = 0;
+          });
+        }
         BlocProvider.of<StudentBottomBloc>(context)
             .add(TabChange(tabIndex: page));
         pageController.animateToPage(page,
@@ -224,42 +234,92 @@ class _HometopLevelPagestate extends State<HomeScreen> {
         children: [
           Container(
             color: Colors.transparent,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            child: Stack(
               children: [
-                const SizedBox(height: 5),
-                Icon(
-                  context.watch<StudentBottomBloc>().state.tabIndex == page
-                      ? filledIcon // Directly use filledIcon
-                      : defaultIcon, // Directly use defaultIcon
-                  color:
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 5),
+                    Icon(
                       context.watch<StudentBottomBloc>().state.tabIndex == page
-                          ? primary_color
-                          : Colors.grey,
-                  size: iconSize,
+                          ? filledIcon
+                          : defaultIcon,
+                      color:
+                          context.watch<StudentBottomBloc>().state.tabIndex ==
+                                  page
+                              ? primary_color
+                              : Colors.grey,
+                      size: iconSize,
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        color:
+                            context.watch<StudentBottomBloc>().state.tabIndex ==
+                                    page
+                                ? primary_color
+                                : Colors.grey,
+                        fontSize: fontSize,
+                        fontWeight:
+                            context.watch<StudentBottomBloc>().state.tabIndex ==
+                                    page
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                  ],
                 ),
-                const SizedBox(height: 3),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: context.watch<StudentBottomBloc>().state.tabIndex ==
-                            page
-                        ? primary_color
-                        : Colors.grey,
-                    fontSize: fontSize,
-                    fontWeight:
-                        context.watch<StudentBottomBloc>().state.tabIndex ==
-                                page
-                            ? FontWeight.w600
-                            : FontWeight.w400,
+                if (page == 3 && unreadNotificationCount > 0)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        unreadNotificationCount.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  PageView _mainWrapperBody() {
+    return PageView(
+      onPageChanged: (int page) => onPageChanged(page),
+      controller: pageController,
+      children: [
+        isProfileLoaded
+            ? Home(studentProfile: studentProfile)
+            : _loadingWidget(),
+        isProfileLoaded
+            ? Announcement(studentProfile: studentProfile)
+            : _loadingWidget(),
+        isProfileLoaded
+            ? Bag(studentProfile: studentProfile, Status: studentProfile.status)
+            : _loadingWidget(),
+        isProfileLoaded
+            ? notif(studentProfile: studentProfile)
+            : _loadingWidget(),
+        isProfileLoaded
+            ? Profile(studentProfile: studentProfile)
+            : _loadingWidget(),
+      ],
     );
   }
 
