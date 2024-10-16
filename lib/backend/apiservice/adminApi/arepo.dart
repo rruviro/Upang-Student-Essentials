@@ -42,8 +42,8 @@ abstract class Adminrepo {
 
   // UNIFORM
   Future<List<Uniform>> showUniforms(String Course, String Gender, String Type, String Body);
-  // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock);
-  // Future<void> updateUniform(int id);
+  Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock, int Reserved);
+  Future<void> deleteUniform(int id);
 
   Future<void> bookreservefirst(int count, String bookname);
   Future<void> uniformreservefirst(int count, String course, String gender,

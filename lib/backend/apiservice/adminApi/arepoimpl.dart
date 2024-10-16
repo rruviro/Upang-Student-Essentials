@@ -263,24 +263,58 @@ class AdminRepositoryImpl extends Adminrepo {
     }
   }
 
-  // @override
-  // Future<void> createUniform(String Department, String Course, String Gender, String Type, String Body, String Size, int Stock) async {
-  //   final response = await http.post(
-  //     Uri.parse('$baseUrl/uniforms'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(<String, dynamic>{
-  //       'Department': Department,
-  //       'Course': Course,
-  //       'Gender': Gender,
-  //       'Type': Type,
-  //       'Body': Body,
-  //       'Size': Size,
-  //       'Stock': Stock,
-  //     }),
-  //   );
-  // }
+  @override
+  Future<void> createUniform(
+      String Department,
+      String Course,
+      String Gender,
+      String Type,
+      String Body,
+      String Size,
+      int Stock,
+      int Reserved,
+      ) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/uniforms/create'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'Department': Department,
+          'Course': Course,
+          'Gender': Gender,
+          'Type': Type,
+          'Body': Body,
+          'Size': Size,
+          'Stock': Stock,
+          'Reserved': Reserved,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Success: ${data['message']}');
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  // DELETE UNIFORM
+  Future<void> deleteUniform(int id) async {
+    final response = await http.delete(Uri.parse('$baseUrl/uniforms/delete/$id'));
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      print(responseData['message']); // Success message
+    } else {
+      // Handle error
+    }
+  }
 
   @override
   Future<void> updateUniform(int id, int stock) async {
