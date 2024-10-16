@@ -67,27 +67,27 @@ class _BooksState extends State<Books> {
             return ListView(
               children: [
                 items.isEmpty
-                    ? Container(
-                        height: MediaQuery.of(context).size.height - 200, // Adjust the height as needed
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/empty_state/announcement.png",
-                                height: 160,
-                                width: 160,
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                'No announcements available',
-                                style: TextStyle(fontSize: 10, color: Colors.black),
-                              ),
-                            ],
-                          ),
+                  ? Container(
+                      height: MediaQuery.of(context).size.height - 200, // Adjust the height as needed
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/empty_state/announcement.png",
+                              height: 160,
+                              width: 160,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'No announcements available',
+                              style: TextStyle(fontSize: 10, color: Colors.black),
+                            ),
+                          ],
                         ),
-                      )
-                    : books_list(status: items),
+                      ),
+                    )
+                  : books_list(status: items),
               ],
             );
           },
