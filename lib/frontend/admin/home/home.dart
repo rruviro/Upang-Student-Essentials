@@ -1,7 +1,11 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
@@ -17,9 +21,32 @@ import '../../colors/colors.dart';
 
 final AdminExtendedBloc adminBloc = AdminExtendedBloc(AdminRepositoryImpl());
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+
+  final TextEditingController DepartmentController = TextEditingController();
+  final int maxLength = 25;
+  int _countProd = 0;
+
+  File? _image;
+  File? get image => _image;
+
+  final _picker = ImagePicker();
+  Future<void> _openImagePicker() async {
+    final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     adminBloc.add(ShowDepartmentsEvent());
@@ -121,19 +148,19 @@ class Home extends StatelessWidget {
                     ),
                   ],
                 ),
-                // Positioned(
-                //   top: 5,
-                //   right: 23,
-                //   child: InkWell(
-                //     onTap: () {
-                //       adminBloc.add(NewDepartmentPageEvent());
-                //     },
-                //     child: Icon(
-                //       Icons.add,
-                //       color: primary_color,
-                //     ),
-                //   ),
-                // ),
+                Positioned(
+                  top: 5,
+                  right: 23,
+                  child: InkWell(
+                    onTap: () {
+                      _showAddDepartmentDialog();
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: primary_color,
+                    ),
+                  ),
+                ),
               ],
             ),
           );
@@ -152,6 +179,271 @@ class Home extends StatelessWidget {
       },
     );
   }
+
+  void _showAddDepartmentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(5.0),
+          ),
+          title: Container(
+            height: 45,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'New Faculity Department',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Department Details',
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
+          ),
+          content: Container(
+            height: 320,
+            width: 200,
+            child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      _openImagePicker();
+                    },
+                    child: Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: primary_color,
+                          borderRadius:
+                              BorderRadius.circular(
+                                  5)),
+                      child: _image != null
+                          ? Image.file(_image!,
+                              fit: BoxFit.contain)
+                          : Icon(
+                              Icons
+                                  .image_search_rounded,
+                              color: Colors.white,
+                            ),
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller: DepartmentController,
+                      decoration: InputDecoration(
+                        border:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey),
+                        ),
+                        focusedBorder:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: primary_color),
+                        ),
+                        hintText: 'Department Name',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w400,
+                        ),
+                        suffix: Text(
+                          '$_countProd/$maxLength',
+                          style: TextStyle(
+                            color: primary_color,
+                            fontSize: 12,
+                          ),
+                        ),
+                        suffixStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      keyboardType:
+                          TextInputType.text,
+                      textInputAction:
+                          TextInputAction.done,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            23),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller: DepartmentController,
+                      decoration: InputDecoration(
+                        border:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey),
+                        ),
+                        focusedBorder:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: primary_color),
+                        ),
+                        hintText: 'Course Acronym',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w400,
+                        ),
+                        suffix: Text(
+                          '$_countProd/$maxLength',
+                          style: TextStyle(
+                            color: primary_color,
+                            fontSize: 12,
+                          ),
+                        ),
+                        suffixStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      keyboardType:
+                          TextInputType.text,
+                      textInputAction:
+                          TextInputAction.done,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            23),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller: DepartmentController,
+                      decoration: InputDecoration(
+                        border:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey),
+                        ),
+                        focusedBorder:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: primary_color),
+                        ),
+                        hintText: 'Course Name',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w400,
+                        ),
+                        suffix: Text(
+                          '$_countProd/$maxLength',
+                          style: TextStyle(
+                            color: primary_color,
+                            fontSize: 12,
+                          ),
+                        ),
+                        suffixStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      keyboardType:
+                          TextInputType.text,
+                      textInputAction:
+                          TextInputAction.done,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            23),
+                      ],
+                    ),
+                  ),
+                ]
+              ),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                height: 30,
+                width: 112,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(2),
+                    color: primary_color),
+                child: Center(
+                  child: Text(
+                    'Deploy',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight:
+                            FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                  height: 30,
+                  width: 112,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(2),
+                      color: primary_color),
+                  child: Center(
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w600),
+                    ),
+                  )),
+            ),
+          ],
+        );
+      }
+    );
+  }
+  
 }
 
 class ItemList extends StatelessWidget {
@@ -290,4 +582,5 @@ class ItemCard extends StatelessWidget {
       ),
     );
   }
+
 }

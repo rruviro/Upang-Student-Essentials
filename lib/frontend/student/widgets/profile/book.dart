@@ -72,7 +72,7 @@ class BookCard extends StatelessWidget {
                           Positioned(
                             left: 0,
                             child: Text(
-                              "${book.bookName ?? 'N/A'}",
+                              limitText("${book.bookName ?? 'N/A'}", 15),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.white,
@@ -111,4 +111,8 @@ class BookCard extends StatelessWidget {
       ],
     );
   }
+}
+
+String limitText(String text, int maxLength) {
+  return text.length > maxLength ? '${text.substring(0, maxLength)}...' : text;
 }

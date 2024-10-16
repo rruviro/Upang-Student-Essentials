@@ -163,7 +163,6 @@ class ItemCard extends StatelessWidget {
               ),
             ),
           );
-
           if (result == true) {
             studentBloc.add(ShowCoursesEvent(departmentID: id));
           }

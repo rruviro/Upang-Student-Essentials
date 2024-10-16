@@ -135,7 +135,15 @@ class _HometopLevelPagestate extends State<HomeScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           body: isProfileLoaded ? _mainWrapperBody() : _loadingWidget(),
-          bottomNavigationBar: _bottomAppBar(),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                blurRadius: 1,
+                offset: Offset(1, -0.5),
+              ),
+            ]),
+          child: _bottomAppBar()),
         );
       },
     );

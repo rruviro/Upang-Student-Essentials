@@ -212,23 +212,6 @@ class _UniformAdminState extends State<UniformAdmin> {
                   ],
                 ),
               ),
-              actions: [
-                const SizedBox(
-                  height: 25,
-                  width: 1,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 5),
-                const Icon(
-                  Icons.backpack_outlined,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 15),
-              ],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -332,7 +315,6 @@ class _UniformAdminState extends State<UniformAdmin> {
                               ..._images.asMap().entries.map((entry) {
                                 int index = entry.key;
                                 File image = entry.value;
-
                                 return GestureDetector(
                                   onTap: () {
                                     if (_isDeleteMode) {
@@ -395,9 +377,8 @@ class _UniformAdminState extends State<UniformAdmin> {
                       ],
                     ),
                   ),
-
                   Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(
                       children: [
                         _buildHeader(
@@ -733,7 +714,7 @@ class _UniformAdminState extends State<UniformAdmin> {
   Widget _buildHeader(String title, String stockInfo) {
     return SizedBox(
       width: double.infinity,
-      height: 70,
+      height: 30,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

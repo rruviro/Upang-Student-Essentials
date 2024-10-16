@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
@@ -906,10 +907,10 @@ class _ProfileScreenState extends State<Profile> {
                                           onTap: () {
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Books(
-                                                      studentProfile: widget
-                                                          .studentProfile)),
+                                              PageTransition(
+                                                child: Books(studentProfile: widget.studentProfile),
+                                                type: PageTransitionType.rightToLeft
+                                              )
                                             );
                                           },
                                           child: Container(
@@ -996,11 +997,10 @@ class _ProfileScreenState extends State<Profile> {
                                           onTap: () {
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      uniforms(
-                                                          studentProfile: widget
-                                                              .studentProfile)),
+                                              PageTransition(
+                                                child: uniforms(studentProfile: widget.studentProfile),
+                                                type: PageTransitionType.rightToLeft
+                                              )
                                             );
                                           },
                                           child: Container(

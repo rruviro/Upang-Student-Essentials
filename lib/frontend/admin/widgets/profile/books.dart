@@ -78,6 +78,8 @@ class ItemCard extends StatelessWidget {
                         children: [
                           Text(
                             'Department :',
+                            maxLines: 1, // Limits the text to 2 lines
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.white,
