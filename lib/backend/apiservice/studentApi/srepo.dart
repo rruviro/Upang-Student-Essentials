@@ -81,6 +81,8 @@ abstract class Studentrepo {
       int stubag_id, String status);
   Future<void> createNotificationData(int id, String message);
   Future<void> changePasswords(int id, String password, String cpassword);
+  Future<void> notiftapped(int id);
+  Future<void> zeronotif(int id);
 
   // BY LANCE
   // DEPARTMENTS
@@ -96,7 +98,8 @@ abstract class Studentrepo {
   Future<List<Book>> showBooks(String Course); // dep tocourse
 
   // UNIFORM
-  Future<List<Uniform>> showUniforms(String Course, String Gender, String Type, String Body);
+  Future<List<Uniform>> showUniforms(
+      String Course, String Gender, String Type, String Body);
 
   Future<void> itemreduceStocks(int count, String department, String course,
       String gender, String type, String body, String size);

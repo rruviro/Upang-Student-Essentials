@@ -105,6 +105,18 @@ class StudentBagCombinedLoadSuccessState extends StudentExtendedState {
 //STUDENT NOTIFICATION
 class StudentNotificationMailLoadingState extends StudentActionState {}
 
+class NotificationTappedSuccessState extends StudentActionState {
+  final String redirect;
+
+  NotificationTappedSuccessState(this.redirect);
+}
+
+class NotificationTappedErrorState extends StudentActionState {
+  final String error;
+
+  NotificationTappedErrorState(this.error);
+}
+
 class StudentNotificationMailLoadSuccessState extends StudentActionState {
   final List<StudentNotifcationMail> studentNotifcationMail;
 

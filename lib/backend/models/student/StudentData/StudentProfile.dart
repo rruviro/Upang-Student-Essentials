@@ -7,6 +7,8 @@ class StudentProfile {
   final int year;
   final String status;
   final String stuId;
+  final int notifcount;
+  final int anncount;
 
   StudentProfile({
     required this.id,
@@ -17,6 +19,8 @@ class StudentProfile {
     required this.year,
     required this.status,
     required this.stuId,
+    required this.notifcount,
+    required this.anncount,
   });
 
   factory StudentProfile.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,8 @@ class StudentProfile {
       year: json['Year'],
       status: json['Status'],
       stuId: json['stu_id'],
+      notifcount: json['notifcount'],
+      anncount: json['anncount'],
     );
   }
 }

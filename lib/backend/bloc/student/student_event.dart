@@ -23,6 +23,19 @@ class NotificationPageEvent extends StudentExtendedEvent {}
 
 class TransactionPageEvent extends StudentExtendedEvent {}
 
+class notiftapped extends StudentExtendedEvent {
+  final int id;
+  final String redirect;
+
+  notiftapped(this.id, this.redirect);
+}
+
+class zeronotif extends StudentExtendedEvent {
+  final int id;
+
+  zeronotif(this.id);
+}
+
 class studentProfileGet extends StudentExtendedEvent {
   final String studentId;
 
@@ -133,8 +146,15 @@ class AddStudentBagBook extends StudentExtendedEvent {
   final String status;
   final String shift;
 
-  AddStudentBagBook(this.id, this.course, this.department, this.bookName, this.subjectCode, //DAGDAG NI LANCE
-      this.subjectDesc, this.status, this.shift);
+  AddStudentBagBook(
+      this.id,
+      this.course,
+      this.department,
+      this.bookName,
+      this.subjectCode, //DAGDAG NI LANCE
+      this.subjectDesc,
+      this.status,
+      this.shift);
 }
 
 class AddStudentBagItem extends StudentExtendedEvent {
@@ -172,8 +192,16 @@ class AddReserveBagBook extends StudentExtendedEvent {
   final String shift;
   final int stocks;
 
-  AddReserveBagBook(this.id, this.course, this.department, this.bookName, this.subjectCode, // DAGDAG NI LANCE SA COURSE
-      this.subjectDesc, this.status, this.shift, this.stocks);
+  AddReserveBagBook(
+      this.id,
+      this.course,
+      this.department,
+      this.bookName,
+      this.subjectCode, // DAGDAG NI LANCE SA COURSE
+      this.subjectDesc,
+      this.status,
+      this.shift,
+      this.stocks);
 }
 
 class AddReserveBagItem extends StudentExtendedEvent {
@@ -231,8 +259,9 @@ class ShowCoursesEvent extends StudentExtendedEvent {
 
 // STOCK
 class ShowStocksEvent extends StudentExtendedEvent {
-  final String Course;                     //                                              |
-  ShowStocksEvent({required this.Course}); // INEDIT NI LANCE FROM DEPARTMENT TO COURSE    |
+  final String Course; //                                              |
+  ShowStocksEvent(
+      {required this.Course}); // INEDIT NI LANCE FROM DEPARTMENT TO COURSE    |
 }
 
 // UNIFORM
@@ -242,7 +271,7 @@ class ShowUniformsEvent extends StudentExtendedEvent {
   final String Type;
   final String Body;
 
-  ShowUniformsEvent( this.Course,  this.Gender,  this.Type,  this.Body);
+  ShowUniformsEvent(this.Course, this.Gender, this.Type, this.Body);
 }
 
 class itemreduceStocks extends StudentExtendedEvent {

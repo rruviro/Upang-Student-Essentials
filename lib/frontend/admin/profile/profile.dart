@@ -158,6 +158,7 @@ class _ProfileScreenState extends State<Profile> {
                   isDialogOpen = false;
                   Navigator.of(context).pop();
                   _showSuccessDialog(context);
+
                   context.read<AdminExtendedBloc>().add(getStudent());
                 },
               ),
@@ -1113,7 +1114,7 @@ void _showCreateDialog(BuildContext context) {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 15,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),

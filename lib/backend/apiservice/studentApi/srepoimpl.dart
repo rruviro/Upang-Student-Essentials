@@ -557,4 +557,22 @@ class StudentRepositoryImpl extends Studentrepo {
       throw Exception('Failed to reduce stock: ${response.statusCode}');
     }
   }
+
+  @override
+  Future<void> notiftapped(int id) async {
+    final response = await http.put(Uri.parse('$baseUrl/notiftapped/$id'));
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception('Failed to reduce stock: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<void> zeronotif(int id) async {
+    final response = await http.put(Uri.parse('$baseUrl/readall/$id'));
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception('Failed to reduce stock: ${response.statusCode}');
+    }
+  }
 }

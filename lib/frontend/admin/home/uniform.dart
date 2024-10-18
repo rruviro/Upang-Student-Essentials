@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/models/admin/Uniform.dart';
@@ -39,7 +40,17 @@ class _UniformAdminState extends State<UniformAdmin> {
   List<bool> _selectedImages = [];
   bool _isDeleteMode = false;
 
-  final TextEditingController _sizeController = TextEditingController();
+
+  // final TextEditingController DepartmentController = TextEditingController();
+  // final TextEditingController CourseController = TextEditingController();
+  // final TextEditingController GenderController = TextEditingController();
+  // final TextEditingController TypeController = TextEditingController();
+  // final TextEditingController BodyController = TextEditingController();
+  final TextEditingController SizeController = TextEditingController();
+  // final TextEditingController StockController = TextEditingController();
+  // final TextEditingController ReservedController = TextEditingController();
+
+  final adminRepository = AdminRepositoryImpl();
 
   void _toggleDeleteMode() {
     setState(() {
@@ -113,7 +124,7 @@ class _UniformAdminState extends State<UniformAdmin> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: _sizeController,
+                controller: SizeController,
                 decoration: InputDecoration(
                   labelText: 'Enter size', // Label for size input
                   border: OutlineInputBorder(),
@@ -133,12 +144,22 @@ class _UniformAdminState extends State<UniformAdmin> {
               ),
             ),
             TextButton(
-              onPressed: () {
-                if (_sizeController.text.isNotEmpty) {
-                  // Add your logic to handle the entered size here
-                  print("Added size: ${_sizeController.text}");
-                  Navigator.pop(context); // Close dialog after adding size
-                }
+              onPressed: () async {
+                await adminRepository.createUniform(
+                  widget.Department,
+                  widget.courseName,
+                  widget.stock.Gender,
+                  widget.stock.Type,
+                  widget.stock.Body,
+                  SizeController.text,
+                  10,
+                  0,);
+                BlocProvider.of<AdminExtendedBloc>(context).add(ShowUniformsEvent(
+                    widget.courseName,
+                    widget.stock.Gender,
+                    widget.stock.Type,
+                    widget.stock.Body));
+                Navigator.pop(context);
               },
               child: Text(
                 'Add',
@@ -212,23 +233,6 @@ class _UniformAdminState extends State<UniformAdmin> {
                   ],
                 ),
               ),
-              actions: [
-                const SizedBox(
-                  height: 25,
-                  width: 1,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 5),
-                const Icon(
-                  Icons.backpack_outlined,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 15),
-              ],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -332,7 +336,6 @@ class _UniformAdminState extends State<UniformAdmin> {
                               ..._images.asMap().entries.map((entry) {
                                 int index = entry.key;
                                 File image = entry.value;
-
                                 return GestureDetector(
                                   onTap: () {
                                     if (_isDeleteMode) {
@@ -395,9 +398,8 @@ class _UniformAdminState extends State<UniformAdmin> {
                       ],
                     ),
                   ),
-
                   Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(
                       children: [
                         _buildHeader(
@@ -644,7 +646,16 @@ class _UniformAdminState extends State<UniformAdmin> {
                               width: 40, // Adjust width as needed
                               child: IconButton(
                                 onPressed: () {
-                                  // Implement remove functionality here
+                                  adminRepository
+                                      .deleteUniform(uniform.id);
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    BlocProvider.of<AdminExtendedBloc>(context).add(ShowUniformsEvent(
+                                      widget.courseName,
+                                      widget.stock.Gender,
+                                      widget.stock.Type,
+                                      widget.stock.Body,
+                                    ));
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.remove,
@@ -748,7 +759,7 @@ class _UniformAdminState extends State<UniformAdmin> {
   Widget _buildHeader(String title, String stockInfo) {
     return SizedBox(
       width: double.infinity,
-      height: 70,
+      height: 30,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
