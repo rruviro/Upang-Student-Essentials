@@ -95,9 +95,42 @@ class _AnnouncementState extends State<Announcement> {
                             ),
                           ),
                           SizedBox(height: 5),
-                          ItemList(
-                            status: announcements,
-                          )
+                          announcements.isEmpty
+                            ? Container(
+                                height:
+                                    MediaQuery.of(context).size.height - 450,
+                                width: double.infinity,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "assets/empty_state/announcement.png",
+                                        height: 140,
+                                        width: 140,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'No Announcements Available',
+                                        style: TextStyle(fontSize: 13, color: Colors.black),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Container(
+                                        width: 300,
+                                        child: Text(
+                                          'Looks like there’s nothing new to share right now. Check back soon for the latest updates and important news.',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.black54),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : ItemList(
+                              status: announcements,
+                            )
                         ],
                       ),
                     ),

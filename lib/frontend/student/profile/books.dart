@@ -55,7 +55,7 @@ class _BooksState extends State<Books> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(horizontal: 20),
         child: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
           builder: (context, state) {
             if (_showLoading) {
@@ -80,8 +80,18 @@ class _BooksState extends State<Books> {
                             ),
                             SizedBox(height: 10),
                             Text(
-                              'No announcements available',
-                              style: TextStyle(fontSize: 10, color: Colors.black),
+                              'No Books Claimed Yet',
+                              style: TextStyle(fontSize: 17, color: Colors.black),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 300,
+                              child: Text(
+                                "You haven't claimed any books yet. Once you do, they\n'll be listed here for your reference.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.black54),
+                              ),
                             ),
                           ],
                         ),

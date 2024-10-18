@@ -198,16 +198,55 @@ class StudnetLogin extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Password',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500)),
+                          Text(
+                            'Password',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                           SizedBox(height: 8),
-                          PasswordField(controller: passwordController),
+                          PasswordField(
+                            controller: passwordController, 
+                            cursorColor: Colors.black,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.3),
+                              prefixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(width: 12),
+                                  Icon(Icons.lock_outline, color: Colors.black),
+                                  SizedBox(width: 8),
+                                  Container(
+                                    width: 1.0,
+                                    height: 20.0,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(width: 12),
+                                ],
+                              ),
+                              hintText: 'Enter your password',
+                              hintStyle: TextStyle(
+                                color: Colors.black.withOpacity(0.3),
+                                fontSize: 13,
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                borderSide: BorderSide(color: primary_color),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
+                    
                     SizedBox(height: 40),
                     Container(
                       height: 50,
@@ -302,7 +341,7 @@ class StudnetLogin extends StatelessWidget {
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
 
-  PasswordField({required this.controller}); // Accept controller
+  PasswordField({required this.controller, required Color cursorColor, required InputDecoration decoration});
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -314,9 +353,10 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: widget.controller, // Set controller
+      controller: widget.controller,
       style: TextStyle(color: Colors.black),
       obscureText: _obscureText,
+      cursorColor: Colors.black,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white.withOpacity(0.3),
@@ -354,6 +394,10 @@ class _PasswordFieldState extends State<PasswordField> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
           borderSide: BorderSide(color: Colors.black),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: BorderSide(color: primary_color),
         ),
       ),
     );

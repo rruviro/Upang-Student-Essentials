@@ -66,6 +66,7 @@ class _HistoryState extends State<History> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
+              centerTitle: false,
             ),
           ];
         },
@@ -91,7 +92,7 @@ class _HistoryState extends State<History> {
               return Center(child: CircularProgressIndicator());
             } else if (state is StudentBagCombinedLoadSuccessState) {
               return Container(
-                margin: EdgeInsets.all(20),
+                margin: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView(
                   children: [
                     Container(
@@ -136,20 +137,45 @@ class _HistoryState extends State<History> {
                     ),
                     SizedBox(height: 20),
                     Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(left: 40),
-                      child: FractionallySizedBox(
-                        widthFactor: 1.2,
-                        child: book_list(
-                          status: books
-                              .where((book) =>
-                                  book.status ==
-                                  (_currentSelection == 1
-                                      ? "Complete"
-                                      : "Cancelled"))
-                              .toList(),
+                      alignment: Alignment.centerLeft,
+                      child: books.isEmpty
+                        ? Center(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 50),
+                                Image.asset(
+                                  "assets/empty_state/announcement.png",
+                                  height: 140,
+                                  width: 140,
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'No Books Claimed Yet',
+                                  style: TextStyle(fontSize: 14, color: Colors.black),
+                                ),
+                                SizedBox(height: 5),
+                                Container(
+                                  width: 300,
+                                  child: Text(
+                                    "You haven't claimed any books yet. Once you do, they\n'll be listed here for your reference.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 10, color: Colors.black54),
+                                  ),
+                                ),
+                                SizedBox(height: 100),
+                              ],
+                            ),
+                          )
+                        : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                          child: book_list(
+                            status: books
+                                .where((book) => book.status ==
+                                    (_currentSelection == 1 ? "Complete" : "Cancelled"))
+                                .toList(),
+                          ),
                         ),
-                      ),
                     ),
                     SizedBox(height: 20),
                     Container(
@@ -193,15 +219,44 @@ class _HistoryState extends State<History> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    uniform_list(
-                      status: items
-                          .where((item) =>
-                              item.status ==
-                              (_currentSelection == 1
-                                  ? "Complete"
-                                  : "Cancelled"))
-                          .toList(),
-                    ),
+                    items.isEmpty
+                      ? Center(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 50),
+                              Image.asset(
+                                "assets/empty_state/announcement.png",
+                                height: 140,
+                                width: 140,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                'No Uniforms Claimed Yet',
+                                style: TextStyle(fontSize: 14, color: Colors.black),
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                width: 300,
+                                child: Text(
+                                  "You haven't claimed any uniforms yet. Once you do, they'll appear here for easy tracking.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.black54),
+                                ),
+                              ),
+                              SizedBox(height: 100),
+                            ],
+                          ),
+                        )
+                      : uniform_list(
+                          status: items
+                            .where((item) =>
+                                item.status ==
+                                (_currentSelection == 1
+                                    ? "Complete"
+                                    : "Cancelled"))
+                            .toList(),
+                      ),
                   ],
                 ),
               );

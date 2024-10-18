@@ -68,7 +68,6 @@ class AdminLogin extends StatelessWidget {
             if (Navigator.of(context).canPop()) {
               Navigator.of(context).pop();
             }
-
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.red,
@@ -165,7 +164,7 @@ class AdminLogin extends StatelessWidget {
                                 SizedBox(width: 12),
                               ],
                             ),
-                            hintText: 'XX-XXXX-XXXXXX',
+                            hintText: 'ID',
                             hintStyle: TextStyle(
                                 color: Colors.black.withOpacity(0.3),
                                 fontSize: 13),
@@ -175,6 +174,12 @@ class AdminLogin extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5.0),
                               borderSide: BorderSide(color: Colors.black),
                             ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              borderSide: BorderSide(
+                                color: primary_color,
+                              )
+                            )
                           ),
                         ),
                       ],
@@ -344,6 +349,10 @@ class _PasswordFieldState extends State<PasswordField> {
           borderRadius: BorderRadius.circular(5.0),
           borderSide: BorderSide(color: Colors.black),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: BorderSide(color: primary_color)
+        )
       ),
     );
   }

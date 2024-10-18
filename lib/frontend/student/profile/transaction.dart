@@ -7,6 +7,7 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagBook.dart';
 import 'package:use/backend/models/student/StudentBagData/StudentBagItem.dart';
+import 'package:use/frontend/colors/colors.dart';
 
 class Transaction extends StatefulWidget {
   const Transaction(
@@ -198,7 +199,6 @@ class _TransactionState extends State<Transaction> {
               items = state.studentBagItems;
               books = state.studentBagBooks;
             }
-
             return ListView(
               padding: EdgeInsets.all(20.0),
               children: [
@@ -210,22 +210,53 @@ class _TransactionState extends State<Transaction> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                SizedBox(height: 15),
+                items.isEmpty
+                  ? Container(
+                    padding: EdgeInsets.only(top: 40, bottom: 90),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/empty_state/announcement.png",
+                            height: 160,
+                            width: 160,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'No Uniforms Claimed Yet',
+                            style: TextStyle(fontSize: 17, color: Colors.black),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
+                            width: 300,
+                            child: Text(
+                              "You haven't claimed any uniforms yet. Once you do, they'll appear here for easy tracking.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 10, color: Colors.black54),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  : ItemList(
+                      status: items.where((item) {
+                        switch (_currentSelection) {
+                          case 1:
+                            return item.status == "Request";
+                          case 2:
+                            return item.status == "Reserved";
+                          case 3:
+                            return item.status == "Claim";
+                          default:
+                            return false;
+                        }
+                      }).toList(),
+                    ),
                 SizedBox(height: 10),
-                ItemList(
-                  status: items.where((item) {
-                    switch (_currentSelection) {
-                      case 1:
-                        return item.status == "Request";
-                      case 2:
-                        return item.status == "Reserved";
-                      case 3:
-                        return item.status == "Claim";
-                      default:
-                        return false;
-                    }
-                  }).toList(),
-                ),
-                SizedBox(height: 20),
                 Text(
                   'Books',
                   style: TextStyle(
@@ -235,20 +266,51 @@ class _TransactionState extends State<Transaction> {
                   ),
                 ),
                 SizedBox(height: 10),
-                BookList(
-                  status: books.where((book) {
-                    switch (_currentSelection) {
-                      case 1:
-                        return book.status == "Request";
-                      case 2:
-                        return book.status == "Reserved";
-                      case 3:
-                        return book.status == "Claim";
-                      default:
-                        return false;
-                    }
-                  }).toList(),
-                ),
+                books.isEmpty
+                  ? Container(
+                      padding: EdgeInsets.only(top: 40, bottom: 90),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/empty_state/announcement.png",
+                              height: 160,
+                              width: 160,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'No Books Claimed Yet',
+                              style: TextStyle(fontSize: 17, color: Colors.black),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 300,
+                              child: Text(
+                                "You haven't claimed any books yet. Once you do, they\n'll be listed here for your reference.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.black54),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : BookList(
+                      status: books.where((book) {
+                        switch (_currentSelection) {
+                          case 1:
+                            return book.status == "Request";
+                          case 2:
+                            return book.status == "Reserved";
+                          case 3:
+                            return book.status == "Claim";
+                          default:
+                            return false;
+                        }
+                      }).toList(),
+                    ),
               ],
             );
           },
@@ -279,16 +341,16 @@ class ItemCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(bottom: 30.0),
+          margin: const EdgeInsets.only(bottom: 15.0),
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Color.fromARGB(255, 14, 170, 113),
+            color: primary_color,
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                blurRadius: 5,
-                offset: Offset(1, 8),
+                color: Colors.grey,
+                blurRadius: 3,
+                offset: Offset(1, 1),
               ),
             ],
           ),
@@ -476,7 +538,7 @@ class ItemCard extends StatelessWidget {
                 child: Icon(
                   Icons.info_outline,
                   size: 15.0,
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                 ),
               ),
             ),

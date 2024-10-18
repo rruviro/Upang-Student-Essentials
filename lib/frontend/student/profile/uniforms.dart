@@ -60,7 +60,7 @@ class _uniformsState extends State<uniforms> {
           ),
         ),
         body: Container(
-          margin: EdgeInsets.all(20),
+          margin: EdgeInsets.symmetric(horizontal: 20),
           child: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
             builder: (context, state) {
               if (_showLoading) {
@@ -85,8 +85,18 @@ class _uniformsState extends State<uniforms> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                'No announcements available',
-                                style: TextStyle(fontSize: 10, color: Colors.black),
+                                'No Uniforms Claimed Yet',
+                                style: TextStyle(fontSize: 17, color: Colors.black),
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                width: 300,
+                                child: Text(
+                                  "You haven't claimed any uniforms yet. Once you do, they'll appear here for easy tracking.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.black54),
+                                ),
                               ),
                             ],
                           ),

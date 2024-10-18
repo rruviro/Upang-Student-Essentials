@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:use/SERVICES/model/student/Transaction.dart';
+import '../../../colors/colors.dart';
 
 class transaction_widget extends StatelessWidget {
   final List<TransactionStatus> categoryList;
@@ -31,7 +32,7 @@ class ItemCard extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Color.fromARGB(255, 14, 170, 113),
+            color: primary_color,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey,
@@ -204,7 +205,7 @@ class ItemCard extends StatelessWidget {
                 child: Icon(
                   Icons.info_outline, 
                   size: 15.0,
-                  color: Color.fromARGB(255, 14, 170, 113),
+                  color: primary_color,
                 ),
               ),
             ),

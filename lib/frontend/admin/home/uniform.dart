@@ -212,6 +212,23 @@ class _UniformAdminState extends State<UniformAdmin> {
                   ],
                 ),
               ),
+              actions: [
+                const SizedBox(
+                  height: 25,
+                  width: 1,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                const Icon(
+                  Icons.backpack_outlined,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 15),
+              ],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -315,6 +332,7 @@ class _UniformAdminState extends State<UniformAdmin> {
                               ..._images.asMap().entries.map((entry) {
                                 int index = entry.key;
                                 File image = entry.value;
+
                                 return GestureDetector(
                                   onTap: () {
                                     if (_isDeleteMode) {
@@ -377,8 +395,9 @@ class _UniformAdminState extends State<UniformAdmin> {
                       ],
                     ),
                   ),
+
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
                         _buildHeader(
@@ -439,24 +458,39 @@ class _UniformAdminState extends State<UniformAdmin> {
                           height: 330,
                           width: 460,
                           color: Colors.white,
-                          child: Container(
-                            child: DataTable(
-                              columns: [
-                                DataColumn(label: Center(child: Text("SIZE"))),
-                                DataColumn(label: Center(child: Text("CHEST"))),
-                                DataColumn(label: Center(child: Text("HIPS"))),
-                              ],
-                              rows: measures.map((measure) {
-                                return DataRow(cells: [
-                                  DataCell(Center(
-                                      child: Text(measure["size"] ?? ""))),
-                                  DataCell(Center(
-                                      child: Text(measure["chest"] ?? ""))),
-                                  DataCell(Center(
-                                      child: Text(measure["hips"] ?? ""))),
-                                ]);
-                              }).toList(),
-                            ),
+                          child: DataTable(
+                            columns: [
+                              DataColumn(
+                                label: Expanded(
+                                  child: Center(child: Text("SIZE")),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Center(child: Text("CHEST")),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Center(child: Text("HIPS")),
+                                ),
+                              ),
+                            ],
+                            rows: measures.map((measure) {
+                              return DataRow(
+                                cells: [
+                                  DataCell(
+                                    Center(child: Text(measure["size"] ?? "")),
+                                  ),
+                                  DataCell(
+                                    Center(child: Text(measure["chest"] ?? "")),
+                                  ),
+                                  DataCell(
+                                    Center(child: Text(measure["hips"] ?? "")),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
                           ),
                         ),
                         const SizedBox(height: 30),
@@ -714,7 +748,7 @@ class _UniformAdminState extends State<UniformAdmin> {
   Widget _buildHeader(String title, String stockInfo) {
     return SizedBox(
       width: double.infinity,
-      height: 30,
+      height: 70,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

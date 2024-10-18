@@ -137,13 +137,14 @@ class BagState extends State<Bag> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  centerTitle: false,
                 )
               ];
             },
             body: Scaffold(
               backgroundColor: Colors.white,
               body: Container(
-                  margin: EdgeInsets.all(20),
+                  margin: EdgeInsets.symmetric(horizontal: 20),
                   child: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
                     builder: (context, state) {
                       if (_showLoading) {
@@ -192,11 +193,46 @@ class BagState extends State<Bag> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   SizedBox(height: 10),
-                                  BookList(
-                                    status: book,
-                                    refresh: refreshData,
-                                    onCheckboxChanged: updateCheckedBookIds,
-                                    checkedBookIds: checkedBookIds,
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: book.isEmpty
+                                      ? Center(
+                                          child: Column(
+                                            children: [
+                                              SizedBox(height: 50),
+                                              Image.asset(
+                                                "assets/empty_state/announcement.png",
+                                                height: 140,
+                                                width: 140,
+                                              ),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                'No Books Claimed Yet',
+                                                style: TextStyle(fontSize: 14, color: Colors.black),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Container(
+                                                width: 300,
+                                                child: Text(
+                                                  "You haven't claimed any books yet. Once you do, they\n'll be listed here for your reference.",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 10, color: Colors.black54),
+                                                ),
+                                              ),
+                                              SizedBox(height: 100),
+                                            ],
+                                          ),
+                                        )
+                                      : SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                        child: BookList(
+                                          status: book,
+                                          refresh: refreshData,
+                                          onCheckboxChanged: updateCheckedBookIds,
+                                          checkedBookIds: checkedBookIds,
+                                        ),
+                                      ),
                                   ),
                                   SizedBox(height: 10),
                                 ],
@@ -214,12 +250,41 @@ class BagState extends State<Bag> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   SizedBox(height: 10),
-                                  ItemList(
-                                    status: item,
-                                    refresh: refreshData,
-                                    onCheckboxChanged: updateCheckedItemIds,
-                                    checkedItemIds: checkedItemIds,
-                                  ),
+                                  item.isEmpty
+                                    ? Center(
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 50),
+                                            Image.asset(
+                                              "assets/empty_state/announcement.png",
+                                              height: 140,
+                                              width: 140,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              'No Uniforms Claimed Yet',
+                                              style: TextStyle(fontSize: 14, color: Colors.black),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Container(
+                                              width: 300,
+                                              child: Text(
+                                                "You haven't claimed any uniforms yet. Once you do, they'll appear here for easy tracking.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 10, color: Colors.black54),
+                                              ),
+                                            ),
+                                            SizedBox(height: 100),
+                                          ],
+                                        ),
+                                      )
+                                    : ItemList(
+                                      status: item,
+                                      refresh: refreshData,
+                                      onCheckboxChanged: updateCheckedItemIds,
+                                      checkedItemIds: checkedItemIds,
+                                    ),
                                 ],
                               ),
                             ),

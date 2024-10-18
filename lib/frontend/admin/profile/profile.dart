@@ -258,122 +258,117 @@ class _ProfileScreenState extends State<Profile> {
         } else if (state is studentLoaded) {
           return Scaffold(
               backgroundColor: Colors.white,
-              body: NestedScrollView(
-                headerSliverBuilder: (BuildContext context, bool isScrolled) {
-                  return [
-                    SliverAppBar(
-                      backgroundColor: Colors.white,
-                      title: Text(
-                        'Profile',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      actions: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                title: Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                actions: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            title: Text(
+                              'Logout',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            content: Text(
+                              'Are you sure you wanna logout?',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            actions: [
+                              GestureDetector(
+                                onTap: () async {
+                                  final SharedPreferences logout =
+                                      await SharedPreferences
+                                          .getInstance();
+                                  logout.clear();
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AdminLogin()));
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 112,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(2),
+                                    color: primary_color,
                                   ),
-                                  title: Text(
-                                    'Logout',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  content: Text(
-                                    'Are you sure you wanna logout?',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  actions: [
-                                    GestureDetector(
-                                      onTap: () async {
-                                        final SharedPreferences logout =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        logout.clear();
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AdminLogin()));
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 112,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          color: primary_color,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Yes',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
+                                  child: Center(
+                                    child: Text(
+                                      'Yes',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 112,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(2),
-                                            color: primary_color),
-                                        child: Center(
-                                          child: Text(
-                                            'No',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 112,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(2),
+                                      color: primary_color),
+                                  child: Center(
+                                    child: Text(
+                                      'No',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                color: primary_color,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Icon(Icons.logout,
-                                size: 15, color: Colors.white),
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                      ],
-                    )
-                  ];
-                },
-                body: ListView(
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                          color: primary_color,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Icon(Icons.logout,
+                          size: 15, color: Colors.white),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                ],
+              ),
+              body: ListView(
                   children: <Widget>[
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -381,7 +376,7 @@ class _ProfileScreenState extends State<Profile> {
                         Container(
                           width: double.infinity,
                           decoration: BoxDecoration(color: Colors.white),
-                          padding: EdgeInsets.all(20.0),
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -637,7 +632,7 @@ class _ProfileScreenState extends State<Profile> {
                     ),
                   ],
                 ),
-              ));
+              );
         } else {
           print(state);
           return Center(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:use/backend/apiservice/authApi/aurepoimpl.dart';
 import 'package:use/frontend/Authentication/StudentLogin.dart';
 import 'package:use/backend/bloc/authentication/authentication_bloc.dart';
@@ -26,7 +27,7 @@ final AuthenticationBloc authBloc =
 class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
   final List<String> _images = [
     'assets/splash_image/upang.jpg',
-    'assets/splash_image/upang1.jpg',
+    'assets/splash_image/upang4.jpg',
     'assets/splash_image/upang2.jpg',
   ];
 
@@ -142,7 +143,14 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                       height: 50,
                                       child: TextButton(
                                         onPressed: () {
-                                          authBloc.add(StudentPageEvent());
+                                          // authBloc.add(StudentPageEvent());
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              child: StudnetLogin(), // The destination widget
+                                              type: PageTransitionType.rightToLeft,
+                                            ),
+                                          );
                                         },
                                         style: TextButton.styleFrom(
                                           backgroundColor:
@@ -170,7 +178,14 @@ class _WelcomeState extends State<Welcome> with SingleTickerProviderStateMixin {
                                       height: 50,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          authBloc.add(AdminPageEvent());
+                                          // authBloc.add(AdminPageEvent()); // Trigger the event
+                                          Navigator.push(
+                                            context,
+                                            PageTransition(
+                                              child: AdminLogin(), // The destination widget
+                                              type: PageTransitionType.rightToLeft,
+                                            ),
+                                          );
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: primary_color,

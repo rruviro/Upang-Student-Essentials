@@ -25,7 +25,7 @@ class UniformStudent extends StatefulWidget {
   const UniformStudent(
       {Key? key,
       required this.courseName,
-        required this.stockPhoto,
+      required this.stockPhoto,
       required this.profile,
       required this.department,
       required this.type,
@@ -39,6 +39,15 @@ class UniformStudent extends StatefulWidget {
 }
 
 class _UniformStudentState extends State<UniformStudent> {
+  List<Map<String, String>> measures = [
+    {"size": "XS", "chest": "17.5", "hips": "25.5"},
+    {"size": "S", "chest": "18.5", "hips": "26.5"},
+    {"size": "M", "chest": "19.5", "hips": "27.5"},
+    {"size": "L", "chest": "20.5", "hips": "28.5"},
+    {"size": "XL", "chest": "21.5", "hips": "29.5"},
+    {"size": "XXL", "chest": "22.5", "hips": "30.5"},
+  ];
+
   List<Uniform> uniforms = [];
   List<StudentBagItem> items = [];
   String? _course;
@@ -169,7 +178,7 @@ class _UniformStudentState extends State<UniformStudent> {
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
                     child:
-                    Bag(studentProfile: widget.profile, Status: "ACTIVE"),
+                        Bag(studentProfile: widget.profile, Status: "ACTIVE"),
                   ),
                 ),
               );
@@ -191,7 +200,6 @@ class _UniformStudentState extends State<UniformStudent> {
 
             //2-second delay
             await Future.delayed(Duration(seconds: 3));
-
           } else if (state is UniformsLoadedState) {
             setState(() {
               uniforms = state.uniforms;
@@ -212,27 +220,16 @@ class _UniformStudentState extends State<UniformStudent> {
                   backgroundColor: Colors.white,
                   toolbarHeight: 300,
                   flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                      color: primary_color,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.10),
-                          blurRadius: 5,
-                          offset: Offset(1, 7),
-                        ),
-                      ],
-                    ),
-                    child: Image.network(widget.stockPhoto)
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 8),
-                  ],
+                      decoration: BoxDecoration(
+                        color: primary_color,
+                      ),
+                      child: Center(
+                          child: ClipRect(
+                              child: Image.network(
+                        widget.stockPhoto,
+                        width: 300,
+                        height: 300,
+                      )))),
                 ),
               ),
               Padding(
@@ -261,100 +258,128 @@ class _UniformStudentState extends State<UniformStudent> {
                     ),
                     const SizedBox(height: 20),
                     Container(
-                      height: 250,
+                      height: 330,
                       width: 460,
-                      color: Color(0xFFD9D9D9),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("image"),
+                      color: Colors.white,
+                      child: DataTable(
+                        columns: [
+                          DataColumn(
+                            label: Expanded(
+                              child: Center(child: Text("SIZE")),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Center(child: Text("CHEST")),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Expanded(
+                              child: Center(child: Text("HIPS")),
+                            ),
+                          ),
                         ],
+                        rows: measures.map((measure) {
+                          return DataRow(
+                            cells: [
+                              DataCell(
+                                Center(child: Text(measure["size"] ?? "")),
+                              ),
+                              DataCell(
+                                Center(child: Text(measure["chest"] ?? "")),
+                              ),
+                              DataCell(
+                                Center(child: Text(measure["hips"] ?? "")),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
                     ),
                     const SizedBox(height: 30),
                     _course != widget.courseName
                         ? Text(
-                      'Not Available for your course',
-                      style: TextStyle(color: Colors.red, fontSize: 14),
-                    )
+                            'Not Available for your course',
+                            style: TextStyle(color: Colors.red, fontSize: 14),
+                          )
                         : Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: isUniformInBag(uniforms.first)
-                                    ? null
-                                    : () {
-                                  _showAddToBackpackModal(
-                                      context, widget.type);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.blue,
-                                  side: BorderSide(color: primary_color),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(8),
-                                  ),
-                                  minimumSize: const Size.fromHeight(60),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.add, color: primary_color),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      isUniformInBag(uniforms.first)
-                                          ? 'You already have a uniform'
-                                          : 'Add to Backpack',
-                                      style: TextStyle(
-                                          color: primary_color,
-                                          fontSize: 10),
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: isUniformInBag(uniforms.first)
+                                          ? null
+                                          : () {
+                                              _showAddToBackpackModal(
+                                                  context, widget.type);
+                                            },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.blue,
+                                        side: BorderSide(color: primary_color),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        minimumSize: const Size.fromHeight(60),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.add, color: primary_color),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            isUniformInBag(uniforms.first)
+                                                ? 'You already have a uniform'
+                                                : 'Add to Backpack',
+                                            style: TextStyle(
+                                                color: primary_color,
+                                                fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: isUniformInBag(uniforms.first)
-                                    ? null
-                                    : () => _showRequestModal(
-                                    context, widget.type),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  foregroundColor: Colors.blue,
-                                  side: BorderSide(color: primary_color),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(8),
                                   ),
-                                  minimumSize: const Size.fromHeight(60),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.request_page,
-                                        color: primary_color),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      isUniformInBag(uniforms.first)
-                                          ? 'You already have a uniform'
-                                          : 'Request',
-                                      style: TextStyle(
-                                          color: primary_color,
-                                          fontSize: 10),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: isUniformInBag(uniforms.first)
+                                          ? null
+                                          : () => _showRequestModal(
+                                              context, widget.type),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.blue,
+                                        side: BorderSide(color: primary_color),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        minimumSize: const Size.fromHeight(60),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.request_page,
+                                              color: primary_color),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            isUniformInBag(uniforms.first)
+                                                ? 'You already have a uniform'
+                                                : 'Request',
+                                            style: TextStyle(
+                                                color: primary_color,
+                                                fontSize: 10),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                            ],
+                          ),
                   ],
                 ),
               ),
@@ -364,7 +389,6 @@ class _UniformStudentState extends State<UniformStudent> {
       ),
     );
   }
-
 
   Widget _buildHeader(String title) {
     return SizedBox(
@@ -501,7 +525,6 @@ class _ModalContentState extends State<_ModalContent> {
     {'display': 'Shift B: Thursday | Friday | Saturday', 'value': 'B'}
   ];
 
-
   @override
   Widget build(BuildContext context) {
     final uniqueSizes = widget.uniforms.map((u) => u.Size).toSet().toList();
@@ -590,8 +613,7 @@ class _ModalContentState extends State<_ModalContent> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                    )
-                );
+                    ));
               }).toList(),
               onChanged: (value) {
                 setState(() {
@@ -601,7 +623,8 @@ class _ModalContentState extends State<_ModalContent> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color(0xFFD9D9D9),
-                contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -635,12 +658,11 @@ class _ModalContentState extends State<_ModalContent> {
                 onPressed: () {
                   if (selectedSize != null && selectedSchedule != null) {
                     Uniform? selectedUniform = widget.uniforms.firstWhere(
-                          (uniform) => uniform.Size == selectedSize,
+                      (uniform) => uniform.Size == selectedSize,
                     );
 
                     if (selectedUniform != null) {
-                      widget.onSubmit(
-                          selectedUniform, selectedSchedule);
+                      widget.onSubmit(selectedUniform, selectedSchedule);
                     }
                   } else {
                     print('Please select a size and schedule.');

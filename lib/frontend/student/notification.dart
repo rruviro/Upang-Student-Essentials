@@ -110,6 +110,7 @@ class _notifState extends State<notif> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+                centerTitle: false,
               ),
               body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
                   builder: (context, state) {
@@ -128,7 +129,8 @@ class _notifState extends State<notif> {
                       color: Colors.white,
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       child: mails.isEmpty
-                          ? Center(
+                          ? Container(
+                            child: Center(
                               child: Column(
                                 children: [
                                   SizedBox(height: 20),
@@ -139,18 +141,28 @@ class _notifState extends State<notif> {
                                   ),
                                   SizedBox(height: 10),
                                   Text(
-                                    'No announcements available',
-                                    style: TextStyle(
-                                        fontSize: 10, color: Colors.black),
+                                    'No Notifications Yet',
+                                    style: TextStyle(fontSize: 17, color: Colors.black),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: 300,
+                                    child: Text(
+                                      'Stay tuned! We’ll let you know when there’s something important to share. Check back later for updates.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.black54),
+                                    ),
                                   ),
                                   SizedBox(height: 20),
                                 ],
                               ),
                             )
+                          )
                           : ItemList(
-                              status: mails.toList(),
-                              profile: widget.studentProfile,
-                            ),
+                            status: mails.toList(),
+                            profile: widget.studentProfile,
+                          ),
                     ),
                   ],
                 );

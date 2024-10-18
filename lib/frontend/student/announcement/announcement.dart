@@ -50,15 +50,17 @@ class _AnnouncementState extends State<Announcement> {
             headerSliverBuilder: (BuildContext context, bool isScrolled) {
           return [
             SliverAppBar(
-                backgroundColor: Colors.white,
-                title: Text(
-                  "Announcement",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ))
+              backgroundColor: Colors.white,
+              title: Text(
+                "Announcement",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              centerTitle: false
+            )
           ];
         }, body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
                 builder: (context, state) {
@@ -134,22 +136,31 @@ class _AnnouncementState extends State<Announcement> {
                                     children: [
                                       Image.asset(
                                         "assets/empty_state/announcement.png",
-                                        height: 160,
-                                        width: 160,
+                                        height: 140,
+                                        width: 140,
                                       ),
                                       SizedBox(height: 10),
-                                      // Text('', style: TextStyle(fontSize: 15, color: Colors.black)),
-                                      Text('No announcements available',
+                                      Text(
+                                        'No Announcements Available',
+                                        style: TextStyle(fontSize: 13, color: Colors.black),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Container(
+                                        width: 300,
+                                        child: Text(
+                                          'Looks like there’s nothing new to share right now. Check back soon for the latest updates and important news.',
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.black)),
+                                              fontSize: 10, color: Colors.black54),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
                               )
                             : announcement_list(
-                                status: announcements,
-                              )
+                              status: announcements,
+                            )
                       ],
                     ),
                   ),

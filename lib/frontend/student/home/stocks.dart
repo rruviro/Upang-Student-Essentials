@@ -58,7 +58,7 @@ class _StocksState extends State<Stocks> {
 
   void _showBookDialog(BuildContext context, Book book) {
     String selectedShift = 'Shift A';
-    List<String> shiftDays = ['Shift A: M|T|W', 'Shift B: TH|F|S'];
+    List<String> shiftDays = ['Shift A: Mon | Tue | Wed', 'Shift B: Thu | Fri | Sat'];
 
     bool bookExists = items.any((item) => item.bookName == book.BookName);
     bool isCourseDifferent = _course != widget.courseName;
@@ -307,63 +307,104 @@ class _StocksState extends State<Stocks> {
                     ));
                   },
                 ),
+                SizedBox(width: 20)
               ],
             ),
-            body: Container(
-              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: ListView(
-                children: [
-                  Text('Uniform',
-                      style: GoogleFonts.inter(
-                          fontSize: 13,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600)),
-                  SizedBox(height: 15),
-                  Container(
-                    height: 270,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        stocks_widget(
-                          stocks: state.stocks,
-                          courseName: widget.courseName,
-                          profile: widget.profile,
-                          department: widget.Department,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text('Books',
-                      style: GoogleFonts.inter(
-                          fontSize: 13,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600)),
-                  SizedBox(height: 20),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: primary_color,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade400,
-                            blurRadius: 5,
-                            offset: Offset(1, 5))
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: state.books.isEmpty
-                          ? Container(
+            body: ListView(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 20,
+                        width: double.infinity,
+                        child: Stack(children: [
+                          Positioned(
+                            top: 0,
+                            left: 20,
+                            child: Text(
+                              'Uniform',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ]),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        height: 270,
+                        width: double.infinity,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Container(
                               alignment: Alignment.center,
-                              child: Icon(Icons.shopping_bag,
-                                  size: 50, color: Colors.grey),
-                            )
-                          : BookList(
-                              books: state.books, onTap: _showBookDialog),
-                    ),
+                              child: stocks_widget(
+                                stocks: state.stocks,
+                                courseName: widget.courseName,
+                                profile: widget.profile,
+                                department: widget.Department,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Container(
+                          height: 20,
+                          width: double.infinity,
+                          child: Stack(children: [
+                            Positioned(
+                              top: -3,
+                              left: 20,
+                              child: Text(
+                                'Books',
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.all(17.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: primary_color,
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade400,
+                                blurRadius: 5,
+                                offset: Offset(1, 5),
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: state.books.isEmpty
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    child: Icon(Icons.shopping_bag,
+                                        size: 50, color: Colors.grey),
+                                  )
+                                : BookList(
+                                    books: state.books, onTap: _showBookDialog),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         } else if (state is StocksErrorState) {

@@ -320,748 +320,760 @@ class _ProfileScreenState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool isScrolled) {
-            return [
-              SliverAppBar(
-                title: Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                centerTitle: false,
-                actions: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      showChangePasswordDialog(context, widget.studentProfile);
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          color: primary_color,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Icon(Icons.lock, size: 15, color: Colors.white),
+        title: Text(
+          'Profile',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: false,
+        actions: <Widget>[
+          InkWell(
+            onTap: () {
+              showChangePasswordDialog(context, widget.studentProfile);
+            },
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                  color: primary_color,
+                  borderRadius: BorderRadius.circular(5)),
+              child: Icon(Icons.lock, size: 15, color: Colors.white),
+            ),
+          ),
+          SizedBox(width: 10),
+          InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            title: Text(
-                              'Logout',
+                    title: Text(
+                      'Logout',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    content: Text(
+                      'Are you sure you wanna logout?',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    actions: [
+                      GestureDetector(
+                        onTap: () async {
+                          _notificationService?.stopPolling();
+                          final SharedPreferences logout =
+                              await SharedPreferences.getInstance();
+                          logout.clear();
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => StudnetLogin()),
+                          );
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 112,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: primary_color,
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Yes',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
+                                color: Colors.white,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            content: Text(
-                              'Are you sure you wanna logout?',
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 112,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              color: primary_color),
+                          child: Center(
+                            child: Text(
+                              'No',
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            actions: [
-                              GestureDetector(
-                                onTap: () async {
-                                  _notificationService?.stopPolling();
-                                  final SharedPreferences logout =
-                                      await SharedPreferences.getInstance();
-                                  logout.clear();
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => StudnetLogin()),
-                                  );
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 112,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    color: primary_color,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Yes',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 112,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(2),
-                                      color: primary_color),
-                                  child: Center(
-                                    child: Text(
-                                      'No',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          color: primary_color,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Icon(Icons.logout, size: 15, color: Colors.white),
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                ],
-                backgroundColor: Colors.white,
-                elevation: 0,
-              )
-            ];
-          },
-          body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
-            builder: (context, state) {
-              if (_showLoading) {
-                return Center(
-                    child: Lottie.asset('assets/lottie/loading.json',
-                        height: 300, width: 380, fit: BoxFit.fill));
-              }
-              if (state is StudentBagCombinedLoadSuccessState) {
-                items = state.studentBagItems;
-                books = state.studentBagBooks;
-                print(
-                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                print(books.length);
-                print(
-                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                print(
-                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                print(
-                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-              }
-              switch (state.runtimeType) {
-                case StudentLoadingState:
-                  return Center(
-                      child: Lottie.asset('assets/lottie/loading.json',
-                          height: 300, width: 380, fit: BoxFit.fill));
-                case StudentErrorState:
-                  return Center(child: Text('Error'));
-                default:
-                  return ListView(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 20),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(color: Colors.white),
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
+                  color: primary_color,
+                  borderRadius: BorderRadius.circular(5)),
+              child: Icon(Icons.logout, size: 15, color: Colors.white),
+            ),
+          ),
+          SizedBox(width: 15),
+        ],
+        elevation: 0,
+      ),
+      body: BlocBuilder<StudentExtendedBloc, StudentExtendedState>(
+        builder: (context, state) {
+          if (_showLoading) {
+            return Center(
+              child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
+            );
+          }
+          if (state is StudentBagCombinedLoadSuccessState) {
+            items = state.studentBagItems;
+            books = state.studentBagBooks;
+            print(
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            print(books.length);
+            print(
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            print(
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            print(
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          }
+          switch (state.runtimeType) {
+            case StudentLoadingState:
+              return Center(
+                  child: Lottie.asset('assets/lottie/loading.json',
+                      height: 300, width: 380, fit: BoxFit.fill));
+            case StudentErrorState:
+              return Center(child: Text('Error'));
+            default:
+              return ListView(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(color: Colors.white),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Container(
+                                  height: 54,
+                                  width: 54,
+                                  decoration: BoxDecoration(
+                                      color: primary_color,
+                                      borderRadius:
+                                          BorderRadius.circular(2)),
+                                ),
+                                VerticalDivider(width: 10),
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      height: 54,
-                                      width: 54,
-                                      decoration: BoxDecoration(
-                                          color: primary_color,
-                                          borderRadius:
-                                              BorderRadius.circular(2)),
+                                    Text(
+                                      "${widget.studentProfile.firstName} ${widget.studentProfile.lastName}",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                    VerticalDivider(width: 10),
-                                    Column(
+                                    Text(
+                                      "Course: ${widget.studentProfile.course}",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${widget.studentProfile.firstName} ${widget.studentProfile.lastName}",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Course: ${widget.studentProfile.course}",
+                                          "${widget.studentProfile.stuId} | Year: ${widget.studentProfile.year} |",
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 11,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "${widget.studentProfile.stuId} | Year: ${widget.studentProfile.year} |",
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              '${widget.studentProfile.status}',
-                                              style: TextStyle(
-                                                color: primary_color,
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          '${widget.studentProfile.status}',
+                                          style: TextStyle(
+                                            color: primary_color,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 20),
-                                Container(
-                                    alignment: Alignment.center,
-                                    child: FractionallySizedBox(
-                                      widthFactor: 1.2,
-                                      child: SizedBox(
-                                        height: 20,
-                                        width: double.infinity,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: secondary_color),
-                                        ),
-                                      ),
-                                    )),
-                                SizedBox(height: 20),
-                                Container(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        left: 0,
-                                        child: Text(
-                                          'Transaction',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 0,
-                                        child: InkWell(
-                                          onTap: () {},
-                                          child: Container(
-                                              height: 20,
-                                              width: 100,
-                                              child: Center(
-                                                child: Text(
-                                                  'View Transaction >',
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: tertiary_color,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              )),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 15),
-                                Container(
-                                  width: double.infinity,
-                                  height: 90,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: primary_color,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.shade400,
-                                        blurRadius: 5,
-                                        offset: Offset(1, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Container(
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                                alignment: Alignment.center,
+                                child: FractionallySizedBox(
+                                  widthFactor: 1.2,
+                                  child: SizedBox(
+                                    height: 20,
                                     width: double.infinity,
-                                    height: 80,
-                                    padding: EdgeInsets.only(top: 5),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              final result =
-                                                  await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Transaction(
-                                                            page: 1,
-                                                            studentProfile: widget
-                                                                .studentProfile,
-                                                            status: 'Request')),
-                                              );
-                                              if (result == true) {
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagBook(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagItem(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                              } else {
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagBook(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagItem(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                              }
-                                            },
-                                            child: Column(
-                                              children: [
-                                                SizedBox(height: 13),
-                                                Icon(
-                                                  Icons.request_page_outlined,
-                                                  color: Colors.white,
-                                                  size: 30,
-                                                ),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  'Request',
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(width: 30),
-                                          InkWell(
-                                            onTap: () async {
-                                              final result =
-                                                  await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Transaction(
-                                                            page: 2,
-                                                            studentProfile: widget
-                                                                .studentProfile,
-                                                            status:
-                                                                'Reserved')),
-                                              );
-                                              if (result == true) {
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagBook(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagItem(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                              } else {
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagBook(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagItem(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                              }
-                                            },
-                                            child: Column(
-                                              children: [
-                                                SizedBox(height: 13),
-                                                Icon(
-                                                  Icons.calendar_month_outlined,
-                                                  color: Colors.white,
-                                                  size: 30,
-                                                ),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  'Reserved',
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(width: 30),
-                                          InkWell(
-                                            onTap: () async {
-                                              final result =
-                                                  await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Transaction(
-                                                            page: 3,
-                                                            studentProfile: widget
-                                                                .studentProfile,
-                                                            status: 'Claim')),
-                                              );
-                                              if (result == true) {
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagBook(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagItem(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                              } else {
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagBook(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                                context
-                                                    .read<StudentExtendedBloc>()
-                                                    .add(studentBagItem(
-                                                        widget
-                                                            .studentProfile.id,
-                                                        "Complete"));
-                                              }
-                                            },
-                                            child: Column(
-                                              children: [
-                                                SizedBox(height: 13),
-                                                Icon(
-                                                  Icons.back_hand_outlined,
-                                                  color: Colors.white,
-                                                  size: 30,
-                                                ),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  'Claim',
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: secondary_color),
                                     ),
                                   ),
-                                ),
-                                SizedBox(height: 30),
-                                Container(
-                                    alignment: Alignment.center,
-                                    child: FractionallySizedBox(
-                                      widthFactor: 1.2,
-                                      child: SizedBox(
-                                        height: 20,
-                                        width: double.infinity,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: secondary_color),
-                                        ),
-                                      ),
-                                    )),
-                                SizedBox(height: 20),
-                                Text(
-                                  'History',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                SizedBox(height: 15),
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      key: _Complete,
-                                      onTap: () => _selectedItem(1),
-                                      child: Text(
-                                        'Complete',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: _currentSelection == 1
-                                                ? primary_color
-                                                : tertiary_color,
-                                            fontWeight: _currentSelection == 1
-                                                ? FontWeight.w600
-                                                : FontWeight.w400),
-                                      ),
+                                )),
+                            SizedBox(height: 20),
+                            Container(
+                              height: 20,
+                              width: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    left: 0,
+                                    child: Text(
+                                      'Transaction',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
                                     ),
-                                    SizedBox(width: 15),
-                                    InkWell(
-                                      key: _Cancelled,
-                                      onTap: () => _selectedItem(2),
-                                      child: Text(
-                                        'Cancelled',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            color: _currentSelection == 2
-                                                ? primary_color
-                                                : tertiary_color,
-                                            fontWeight: _currentSelection == 2
-                                                ? FontWeight.w600
-                                                : FontWeight.w400),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 15),
-                                SizedBox(
-                                  height: 1,
-                                  width: double.infinity,
-                                  child: Container(
-                                    decoration:
-                                        BoxDecoration(color: Colors.black26),
                                   ),
-                                ),
-                                SizedBox(height: 15),
-                                Container(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        left: 0,
-                                        child: Text(
-                                          'Books',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: -5,
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                child: Books(studentProfile: widget.studentProfile),
-                                                type: PageTransitionType.rightToLeft
-                                              )
-                                            );
-                                          },
-                                          child: Container(
-                                              height: 20,
-                                              width: 100,
-                                              child: Center(
-                                                child: Text(
-                                                  'View All Books >',
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: tertiary_color,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              )),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 20),
-                                Container(
-                                    alignment: Alignment.center,
-                                    child: FractionallySizedBox(
-                                      widthFactor: 1.2,
-                                      child: books.isEmpty
-                                          ? Center(
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 20),
-                                                  Image.asset(
-                                                    "assets/empty_state/announcement.png",
-                                                    height: 160,
-                                                    width: 160,
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                  Text(
-                                                    'No announcements available',
-                                                    style: TextStyle(
-                                                        fontSize: 10,
-                                                        color: Colors.black),
-                                                  ),
-                                                  SizedBox(height: 20),
-                                                ],
+                                  Positioned(
+                                    right: 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            child: Transaction(
+                                                page: 1,
+                                                studentProfile: widget.studentProfile,
+                                                status: 'Request'
                                               ),
-                                            )
-                                          : Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.only(left: 40),
-                                              child: FractionallySizedBox(
-                                                widthFactor: 1.2,
-                                                child: book_list(
-                                                  status: books
-                                                      .where((book) =>
-                                                          book.status ==
-                                                          (_currentSelection ==
-                                                                  1
-                                                              ? "Complete"
-                                                              : "Cancelled"))
-                                                      .toList(),
-                                                ),
-                                              ),
+                                            type: PageTransitionType.rightToLeft
+                                          )
+                                        );
+                                      },
+                                      child: Container(
+                                          height: 20,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'View Transaction >',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: tertiary_color,
+                                                  fontWeight:
+                                                      FontWeight.w400),
                                             ),
-                                    )),
-                                SizedBox(height: 20),
-                                Container(
-                                  height: 20,
-                                  width: double.infinity,
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        left: 0,
-                                        child: Text(
-                                          'Uniform',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: -5,
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                child: uniforms(studentProfile: widget.studentProfile),
-                                                type: PageTransitionType.rightToLeft
-                                              )
-                                            );
-                                          },
-                                          child: Container(
-                                              height: 20,
-                                              width: 100,
-                                              child: Center(
-                                                child: Text(
-                                                  'View All Uniform >',
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      color: tertiary_color,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                ),
-                                              )),
-                                        ),
-                                      )
-                                    ],
+                                          )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Container(
+                              width: double.infinity,
+                              height: 90,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: primary_color,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 5,
+                                    offset: Offset(1, 4),
                                   ),
-                                ),
-                                SizedBox(height: 20),
-                                items.isEmpty
-                                    ? Center(
+                                ],
+                              ),
+                              child: Container(
+                                width: double.infinity,
+                                height: 80,
+                                padding: EdgeInsets.only(top: 5),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          final result =
+                                              await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Transaction(
+                                                        page: 1,
+                                                        studentProfile: widget
+                                                            .studentProfile,
+                                                        status: 'Request')),
+                                          );
+                                          if (result == true) {
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                          } else {
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                          }
+                                        },
                                         child: Column(
                                           children: [
-                                            SizedBox(height: 20),
-                                            Image.asset(
-                                              "assets/empty_state/announcement.png",
-                                              height: 160,
-                                              width: 160,
+                                            SizedBox(height: 13),
+                                            Icon(
+                                              Icons.request_page_outlined,
+                                              color: Colors.white,
+                                              size: 30,
                                             ),
                                             SizedBox(height: 10),
                                             Text(
-                                              'No announcements available',
+                                              'Request',
                                               style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.black),
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
-                                            SizedBox(height: 20),
                                           ],
                                         ),
-                                      )
-                                    : uniform_list(
-                                        status: items
-                                            .where((item) =>
-                                                item.status ==
-                                                (_currentSelection == 1
-                                                    ? "Complete"
-                                                    : "Cancelled"))
-                                            .toList(),
                                       ),
+                                      SizedBox(width: 30),
+                                      InkWell(
+                                        onTap: () async {
+                                          final result =
+                                              await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Transaction(
+                                                        page: 2,
+                                                        studentProfile: widget
+                                                            .studentProfile,
+                                                        status:
+                                                            'Reserved')),
+                                          );
+                                          if (result == true) {
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                          } else {
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                          }
+                                        },
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 13),
+                                            Icon(
+                                              Icons.calendar_month_outlined,
+                                              color: Colors.white,
+                                              size: 30,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              'Reserved',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 30),
+                                      InkWell(
+                                        onTap: () async {
+                                          final result =
+                                              await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Transaction(
+                                                        page: 3,
+                                                        studentProfile: widget
+                                                            .studentProfile,
+                                                        status: 'Claim')),
+                                          );
+                                          if (result == true) {
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                          } else {
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagBook(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                            context
+                                                .read<StudentExtendedBloc>()
+                                                .add(studentBagItem(
+                                                    widget
+                                                        .studentProfile.id,
+                                                    "Complete"));
+                                          }
+                                        },
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 13),
+                                            Icon(
+                                              Icons.back_hand_outlined,
+                                              color: Colors.white,
+                                              size: 30,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              'Claim',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                            Container(
+                                alignment: Alignment.center,
+                                child: FractionallySizedBox(
+                                  widthFactor: 1.2,
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: double.infinity,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: secondary_color),
+                                    ),
+                                  ),
+                                )),
+                            SizedBox(height: 20),
+                            Text(
+                              'History',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(height: 15),
+                            Row(
+                              children: [
+                                InkWell(
+                                  key: _Complete,
+                                  onTap: () => _selectedItem(1),
+                                  child: Text(
+                                    'Complete',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        color: _currentSelection == 1
+                                            ? primary_color
+                                            : tertiary_color,
+                                        fontWeight: _currentSelection == 1
+                                            ? FontWeight.w600
+                                            : FontWeight.w400),
+                                  ),
+                                ),
+                                SizedBox(width: 15),
+                                InkWell(
+                                  key: _Cancelled,
+                                  onTap: () => _selectedItem(2),
+                                  child: Text(
+                                    'Cancelled',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        color: _currentSelection == 2
+                                            ? primary_color
+                                            : tertiary_color,
+                                        fontWeight: _currentSelection == 2
+                                            ? FontWeight.w600
+                                            : FontWeight.w400),
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 15),
+                            SizedBox(
+                              height: 1,
+                              width: double.infinity,
+                              child: Container(
+                                decoration:
+                                    BoxDecoration(color: Colors.black26),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Container(
+                              height: 20,
+                              width: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    left: 0,
+                                    child: Text(
+                                      'Books',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: -5,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            child: Books(studentProfile: widget.studentProfile),
+                                            type: PageTransitionType.rightToLeft
+                                          )
+                                        );
+                                      },
+                                      child: Container(
+                                          height: 20,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'View All Books >',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: tertiary_color,
+                                                  fontWeight:
+                                                      FontWeight.w400),
+                                            ),
+                                          )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: books.isEmpty
+                                ? Center(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(height: 50),
+                                        Image.asset(
+                                          "assets/empty_state/announcement.png",
+                                          height: 140,
+                                          width: 140,
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'No Books Claimed Yet',
+                                          style: TextStyle(fontSize: 14, color: Colors.black),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Container(
+                                          width: 300,
+                                          child: Text(
+                                            "You haven't claimed any books yet. Once you do, they\n'll be listed here for your reference.",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 10, color: Colors.black54),
+                                          ),
+                                        ),
+                                        SizedBox(height: 100),
+                                      ],
+                                    ),
+                                  )
+                                : SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                  child: book_list(
+                                    status: books
+                                        .where((book) => book.status ==
+                                            (_currentSelection == 1 ? "Complete" : "Cancelled"))
+                                        .toList(),
+                                  ),
+                                ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              height: 20,
+                              width: double.infinity,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    left: 0,
+                                    child: Text(
+                                      'Uniform',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: -5,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            child: uniforms(studentProfile: widget.studentProfile),
+                                            type: PageTransitionType.rightToLeft
+                                          )
+                                        );
+                                      },
+                                      child: Container(
+                                          height: 20,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'View All Uniform >',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: tertiary_color,
+                                                  fontWeight:
+                                                      FontWeight.w400),
+                                            ),
+                                          )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            items.isEmpty
+                              ? Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 50),
+                                      Image.asset(
+                                        "assets/empty_state/announcement.png",
+                                        height: 140,
+                                        width: 140,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        'No Uniforms Claimed Yet',
+                                        style: TextStyle(fontSize: 14, color: Colors.black),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Container(
+                                        width: 300,
+                                        child: Text(
+                                          "You haven't claimed any uniforms yet. Once you do, they'll appear here for easy tracking.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 10, color: Colors.black54),
+                                        ),
+                                      ),
+                                      SizedBox(height: 100),
+                                    ],
+                                  ),
+                                )
+                              : uniform_list(
+                                  status: items
+                                    .where((item) =>
+                                        item.status ==
+                                        (_currentSelection == 1
+                                            ? "Complete"
+                                            : "Cancelled"))
+                                    .toList(),
+                              ),
+                          ],
+                        ),
                       ),
                     ],
-                  );
-              }
-            },
-          ),
-        ));
+                  ),
+                ],
+              );
+          }
+        },
+      ),
+    );
   }
 }
