@@ -300,6 +300,7 @@ class _StocksState extends State<Stocks> {
                         ]
                       ),
                     ),
+                    
                     Padding(
                       padding: EdgeInsets.only(top: 15),
                       child: Container(
@@ -458,6 +459,9 @@ class _ItemCardState extends State<ItemCard> {
                             stock: widget.stock,
                           )));
             },
+
+            // image
+
             child: Container(
               height: 250,
               width: 250,

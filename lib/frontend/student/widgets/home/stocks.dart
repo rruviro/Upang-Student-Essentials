@@ -76,25 +76,23 @@ class ItemCard extends StatelessWidget {
             width: 250,
             decoration: BoxDecoration(
               color: primary_color,
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 4.0,
-                  offset: Offset(1, 8),
+                  color: Colors.grey,
+                  blurRadius: 2,
+                  offset: Offset(1, 1),
                 ),
               ],
             ),
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      stock.photoUrl,
-                      fit: BoxFit.cover,
-                    ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network(
+                    stock.photoUrl,
+                    fit: BoxFit.contain,
                   ),
                 ),
                 Align(

@@ -458,24 +458,39 @@ class _UniformAdminState extends State<UniformAdmin> {
                           height: 330,
                           width: 460,
                           color: Colors.white,
-                          child: Container(
-                            child: DataTable(
-                              columns: [
-                                DataColumn(label: Center(child: Text("SIZE"))),
-                                DataColumn(label: Center(child: Text("CHEST"))),
-                                DataColumn(label: Center(child: Text("HIPS"))),
-                              ],
-                              rows: measures.map((measure) {
-                                return DataRow(cells: [
-                                  DataCell(Center(
-                                      child: Text(measure["size"] ?? ""))),
-                                  DataCell(Center(
-                                      child: Text(measure["chest"] ?? ""))),
-                                  DataCell(Center(
-                                      child: Text(measure["hips"] ?? ""))),
-                                ]);
-                              }).toList(),
-                            ),
+                          child: DataTable(
+                            columns: [
+                              DataColumn(
+                                label: Expanded(
+                                  child: Center(child: Text("SIZE")),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Center(child: Text("CHEST")),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Center(child: Text("HIPS")),
+                                ),
+                              ),
+                            ],
+                            rows: measures.map((measure) {
+                              return DataRow(
+                                cells: [
+                                  DataCell(
+                                    Center(child: Text(measure["size"] ?? "")),
+                                  ),
+                                  DataCell(
+                                    Center(child: Text(measure["chest"] ?? "")),
+                                  ),
+                                  DataCell(
+                                    Center(child: Text(measure["hips"] ?? "")),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
                           ),
                         ),
                         const SizedBox(height: 30),
