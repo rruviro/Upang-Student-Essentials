@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Stock.dart';
 import 'package:use/backend/models/admin/Uniform.dart';
@@ -39,46 +40,16 @@ class _UniformAdminState extends State<UniformAdmin> {
   List<bool> _selectedImages = [];
   bool _isDeleteMode = false;
 
-  final TextEditingController _sizeController = TextEditingController();
+  // final TextEditingController DepartmentController = TextEditingController();
+  // final TextEditingController CourseController = TextEditingController();
+  // final TextEditingController GenderController = TextEditingController();
+  // final TextEditingController TypeController = TextEditingController();
+  // final TextEditingController BodyController = TextEditingController();
+  final TextEditingController SizeController = TextEditingController();
+  // final TextEditingController StockController = TextEditingController();
+  // final TextEditingController ReservedController = TextEditingController();
 
-  void _toggleDeleteMode() {
-    setState(() {
-      _isDeleteMode = !_isDeleteMode;
-      if (_isDeleteMode) {
-        if (_selectedImages.length != _images.length) {
-          _selectedImages = List.filled(_images.length, false);
-        }
-      } else {
-        _selectedImages = List.filled(_images.length, false);
-      }
-    });
-  }
-
-  void _selectImage(int index) {
-    if (index < 0 || index >= _selectedImages.length) {
-      print(
-          'Invalid index: $index, _selectedImages length: ${_selectedImages.length}');
-      return;
-    }
-    setState(() {
-      _selectedImages[index] = !_selectedImages[index];
-    });
-  }
-
-  void _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _images.add(File(pickedFile.path));
-        _selectedImages.add(false);
-      });
-    } else {
-      print('No image selected.');
-    }
-  }
+  final adminRepository = AdminRepositoryImpl();
 
   void _deleteSelectedImages() {
     setState(() {
@@ -98,14 +69,14 @@ class _UniformAdminState extends State<UniformAdmin> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, // White background
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10), // Rounded corners
+            borderRadius: BorderRadius.circular(10),
           ),
           title: Text(
             'Add Size',
             style: TextStyle(
-              color: primary_color, // Primary color for the title
+              color: primary_color,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -113,9 +84,9 @@ class _UniformAdminState extends State<UniformAdmin> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: _sizeController,
+                controller: SizeController,
                 decoration: InputDecoration(
-                  labelText: 'Enter size', // Label for size input
+                  labelText: 'Enter size',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -124,21 +95,30 @@ class _UniformAdminState extends State<UniformAdmin> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Close dialog on Cancel
+                Navigator.pop(context);
               },
               child: Text(
                 'Cancel',
                 style: TextStyle(
-                    color: Colors.grey), // Grey color for cancel button
+                    color: Colors.grey),
               ),
             ),
             TextButton(
-              onPressed: () {
-                if (_sizeController.text.isNotEmpty) {
-                  // Add your logic to handle the entered size here
-                  print("Added size: ${_sizeController.text}");
-                  Navigator.pop(context); // Close dialog after adding size
-                }
+              onPressed: () async {
+                await adminRepository.createUniform(
+                  widget.Department,
+                  widget.courseName,
+                  widget.stock.Gender,
+                  widget.stock.Type,
+                  widget.stock.Body,
+                  SizeController.text,
+                  10,
+                  0,
+                );
+                BlocProvider.of<AdminExtendedBloc>(context).add(
+                    ShowUniformsEvent(widget.courseName, widget.stock.Gender,
+                        widget.stock.Type, widget.stock.Body));
+                Navigator.pop(context);
               },
               child: Text(
                 'Add',
@@ -212,23 +192,6 @@ class _UniformAdminState extends State<UniformAdmin> {
                   ],
                 ),
               ),
-              actions: [
-                const SizedBox(
-                  height: 25,
-                  width: 1,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 5),
-                const Icon(
-                  Icons.backpack_outlined,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 15),
-              ],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -255,153 +218,151 @@ class _UniformAdminState extends State<UniformAdmin> {
                     ),
                   ),
 
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //     children: [
-                  //       Text(
-                  //         '${widget.stock.stockName}',
-                  //         style: TextStyle(
-                  //             fontSize: 15, fontWeight: FontWeight.bold),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  SizedBox(height: 20),
 
-                  Container(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "${_images.length + 2} Images",
-                              style: TextStyle(fontSize: 10),
-                            ),
-                            if (_images.isNotEmpty)
-                              IconButton(
-                                icon: Icon(
-                                  _isDeleteMode ? Icons.check : Icons.delete,
-                                  color:
-                                      _isDeleteMode ? Colors.green : Colors.red,
-                                ),
-                                onPressed: () {
-                                  if (_isDeleteMode) {
-                                    _showDeleteConfirmation();
-                                  } else {
-                                    _toggleDeleteMode();
-                                  }
-                                },
-                              ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFD9D9D9),
-                                ),
-                                padding: EdgeInsets.all(8),
-                                child: Image.asset(
-                                  'assets/bsit.png',
-                                  height: 60,
-                                  width: 30,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFD9D9D9),
-                                ),
-                                padding: EdgeInsets.all(8),
-                                child: Image.asset(
-                                  'assets/uniuni.png',
-                                  height: 60,
-                                  width: 30,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              ..._images.asMap().entries.map((entry) {
-                                int index = entry.key;
-                                File image = entry.value;
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    if (_isDeleteMode) {
-                                      _selectImage(index);
-                                    }
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(right: 10),
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFD9D9D9),
-                                        ),
-                                        padding: EdgeInsets.all(6),
-                                        child: Image.file(
-                                          image,
-                                          height: 64,
-                                          width: 35,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      if (_isDeleteMode)
-                                        Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: CircleAvatar(
-                                            radius: 12,
-                                            backgroundColor: Colors.white,
-                                            child: Icon(
-                                              _selectedImages[index]
-                                                  ? Icons.check_circle
-                                                  : Icons.circle_outlined,
-                                              color: Colors.red,
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                              GestureDetector(
-                                onTap: _pickImage,
-                                child: Container(
-                                  height: 75,
-                                  width: 45,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFD9D9D9),
-                                  ),
-                                  child: Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: primary_color,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        Text(
+                          '${widget.stock.stockName}',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                   ),
 
+                  // Container(
+                  //   padding: EdgeInsets.all(20),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Text(
+                  //             "${_images.length + 2} Images",
+                  //             style: TextStyle(fontSize: 10),
+                  //           ),
+                  //           if (_images.isNotEmpty)
+                  //             IconButton(
+                  //               icon: Icon(
+                  //                 _isDeleteMode ? Icons.check : Icons.delete,
+                  //                 color:
+                  //                     _isDeleteMode ? Colors.green : Colors.red,
+                  //               ),
+                  //               onPressed: () {
+                  //                 if (_isDeleteMode) {
+                  //                   _showDeleteConfirmation();
+                  //                 } else {
+                  //                   _toggleDeleteMode();
+                  //                 }
+                  //               },
+                  //             ),
+                  //         ],
+                  //       ),
+                  //       SizedBox(height: 8),
+                  //       SingleChildScrollView(
+                  //         scrollDirection: Axis.horizontal,
+                  //         child: Row(
+                  //           children: [
+                  //             Container(
+                  //               decoration: BoxDecoration(
+                  //                 color: Color(0xFFD9D9D9),
+                  //               ),
+                  //               padding: EdgeInsets.all(8),
+                  //               child: Image.asset(
+                  //                 'assets/bsit.png',
+                  //                 height: 60,
+                  //                 width: 30,
+                  //                 fit: BoxFit.cover,
+                  //               ),
+                  //             ),
+                  //             SizedBox(width: 8),
+                  //             Container(
+                  //               decoration: BoxDecoration(
+                  //                 color: Color(0xFFD9D9D9),
+                  //               ),
+                  //               padding: EdgeInsets.all(8),
+                  //               child: Image.asset(
+                  //                 'assets/uniuni.png',
+                  //                 height: 60,
+                  //                 width: 30,
+                  //                 fit: BoxFit.cover,
+                  //               ),
+                  //             ),
+                  //             SizedBox(width: 8),
+                  //             ..._images.asMap().entries.map((entry) {
+                  //               int index = entry.key;
+                  //               File image = entry.value;
+                  //               return GestureDetector(
+                  //                 onTap: () {
+                  //                   if (_isDeleteMode) {
+                  //                     _selectImage(index);
+                  //                   }
+                  //                 },
+                  //                 child: Stack(
+                  //                   children: [
+                  //                     Container(
+                  //                       margin: EdgeInsets.only(right: 10),
+                  //                       decoration: BoxDecoration(
+                  //                         color: Color(0xFFD9D9D9),
+                  //                       ),
+                  //                       padding: EdgeInsets.all(6),
+                  //                       child: Image.file(
+                  //                         image,
+                  //                         height: 64,
+                  //                         width: 35,
+                  //                         fit: BoxFit.cover,
+                  //                       ),
+                  //                     ),
+                  //                     if (_isDeleteMode)
+                  //                       Positioned(
+                  //                         top: 0,
+                  //                         right: 0,
+                  //                         child: CircleAvatar(
+                  //                           radius: 12,
+                  //                           backgroundColor: Colors.white,
+                  //                           child: Icon(
+                  //                             _selectedImages[index]
+                  //                                 ? Icons.check_circle
+                  //                                 : Icons.circle_outlined,
+                  //                             color: Colors.red,
+                  //                             size: 18,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                   ],
+                  //                 ),
+                  //               );
+                  //             }).toList(),
+                  //             GestureDetector(
+                  //               onTap: _pickImage,
+                  //               child: Container(
+                  //                 height: 75,
+                  //                 width: 45,
+                  //                 decoration: BoxDecoration(
+                  //                   color: Color(0xFFD9D9D9),
+                  //                 ),
+                  //                 child: Icon(
+                  //                   Icons.add,
+                  //                   size: 20,
+                  //                   color: primary_color,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(
                       children: [
-                        _buildHeader(
-                            '${widget.stock.stockName}', '8.5k Ordered'),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -414,13 +375,16 @@ class _UniformAdminState extends State<UniformAdmin> {
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.add),
-                                  color: primary_color,
-                                  onPressed: () {
-                                    _showAddSizeDialog();
-                                  },
-                                )
+
+                                // add button
+
+                                // IconButton(
+                                //   icon: Icon(Icons.add),
+                                //   color: primary_color,
+                                //   onPressed: () {
+                                //     _showAddSizeDialog();
+                                //   },
+                                // )
                               ],
                             ),
                             SizedBox(height: 20),
@@ -630,21 +594,31 @@ class _UniformAdminState extends State<UniformAdmin> {
                                 ),
                               ],
                             ),
-                            IconButton(
-                              onPressed: () {
-                                _showUpdateUniformDialog(context, uniform);
-                              },
-                              icon: Icon(
-                                Icons.add,
-                                color: primary_color,
-                              ),
-                            ),
+
+                            // add button
+
+                            // IconButton(
+                            //   onPressed: () {
+                            //     _showUpdateUniformDialog(context, uniform);
+                            //   },
+                            //   icon: Icon(
+                            //     Icons.add,
+                            //     color: primary_color,
+                            //   ),
+                            // ),
                             Container(
-                              // Add this container for the minus button
-                              width: 40, // Adjust width as needed
+                              width: 40,
                               child: IconButton(
                                 onPressed: () {
-                                  // Implement remove functionality here
+                                  adminRepository.deleteUniform(uniform.id);
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    BlocProvider.of<AdminExtendedBloc>(context)
+                                        .add(ShowUniformsEvent(
+                                            widget.courseName,
+                                            widget.stock.Gender,
+                                            widget.stock.Type,
+                                            widget.stock.Body));
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.remove,
@@ -726,6 +700,19 @@ class _UniformAdminState extends State<UniformAdmin> {
             TextButton(
               onPressed: () {
                 if (stockController.text.isNotEmpty) {
+                  // Add the event to Bloc and update stock
+                  BlocProvider.of<AdminExtendedBloc>(context).add(
+                    itemreservefirst(
+                      int.parse(stockController.text),
+                      uniform.Course,
+                      uniform.Gender,
+                      uniform.Type,
+                      uniform.Body,
+                      uniform.Size,
+                    ),
+                  );
+
+                  // Close the dialog
                   Navigator.of(context).pop();
                 } else {
                   print('Stock input is empty');
@@ -738,97 +725,6 @@ class _UniformAdminState extends State<UniformAdmin> {
                 'Update',
                 style: TextStyle(color: Colors.black),
               ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildHeader(String title, String stockInfo) {
-    return SizedBox(
-      width: double.infinity,
-      height: 70,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                stockInfo,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 10,
-                    fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteConfirmation() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          backgroundColor: Colors.white,
-          title: Row(
-            children: [
-              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 24),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  'Are you sure you want to delete?',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            SizedBox(width: 10),
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.grey[300],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                'No',
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                'Yes',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                _deleteSelectedImages();
-                Navigator.of(context).pop();
-              },
             ),
           ],
         );

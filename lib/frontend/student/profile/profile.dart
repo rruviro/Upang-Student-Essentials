@@ -938,8 +938,9 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 20),
+
                             Container(
-                              alignment: Alignment.centerLeft,
+                              alignment: Alignment.center,
                               child: books.isEmpty
                                 ? Center(
                                     child: Column(
@@ -970,7 +971,7 @@ class _ProfileScreenState extends State<Profile> {
                                     ),
                                   )
                                 : SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                                  scrollDirection: Axis.horizontal,
                                   child: book_list(
                                     status: books
                                         .where((book) => book.status ==
@@ -979,6 +980,8 @@ class _ProfileScreenState extends State<Profile> {
                                   ),
                                 ),
                             ),
+
+                            
                             SizedBox(height: 20),
                             Container(
                               height: 20,

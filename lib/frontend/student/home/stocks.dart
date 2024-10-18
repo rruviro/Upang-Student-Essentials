@@ -307,7 +307,6 @@ class _StocksState extends State<Stocks> {
                     ));
                   },
                 ),
-                SizedBox(width: 20)
               ],
             ),
             body: ListView(

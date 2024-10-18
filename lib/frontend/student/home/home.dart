@@ -244,7 +244,7 @@ class ItemCard extends StatelessWidget {
         children: [
           // Department image
           Positioned(
-            right: -20,
+            right: -30,
             top: -35,
             child: Container(
               child: Image.network(

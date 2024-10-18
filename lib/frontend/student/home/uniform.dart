@@ -344,10 +344,16 @@ class _UniformStudentState extends State<UniformStudent> {
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: ElevatedButton(
-                                      onPressed: isUniformInBag(uniforms.first)
-                                          ? null
-                                          : () => _showRequestModal(
-                                              context, widget.type),
+                                      onPressed: (uniforms.isNotEmpty &&
+                                              !isUniformInBag(uniforms.first))
+                                          ? () {
+                                              Future.delayed(
+                                                  Duration(seconds: 1), () {
+                                                _showRequestModal(
+                                                    context, widget.type);
+                                              });
+                                            }
+                                          : null,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,
                                         foregroundColor: Colors.blue,
@@ -365,9 +371,11 @@ class _UniformStudentState extends State<UniformStudent> {
                                               color: primary_color),
                                           SizedBox(width: 8),
                                           Text(
-                                            isUniformInBag(uniforms.first)
-                                                ? 'You already have a uniform'
-                                                : 'Request',
+                                            (uniforms.isNotEmpty &&
+                                                    !isUniformInBag(
+                                                        uniforms.first))
+                                                ? 'Request'
+                                                : 'You already have a uniform',
                                             style: TextStyle(
                                                 color: primary_color,
                                                 fontSize: 10),
@@ -442,7 +450,7 @@ class _UniformStudentState extends State<UniformStudent> {
           },
           submitButtonText: 'Add to Backpack',
           submitButtonIcon: Icons.backpack,
-          uniforms: uniforms, // Pass the entire list of uniforms
+          uniforms: uniforms,
         );
       },
     );

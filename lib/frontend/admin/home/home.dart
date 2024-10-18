@@ -148,19 +148,22 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                Positioned(
-                  top: 5,
-                  right: 23,
-                  child: InkWell(
-                    onTap: () {
-                      _showAddDepartmentDialog();
-                    },
-                    child: Icon(
-                      Icons.add,
-                      color: primary_color,
-                    ),
-                  ),
-                ),
+
+                // add button
+
+                // Positioned(
+                //   top: 5,
+                //   right: 23,
+                //   child: InkWell(
+                //     onTap: () {
+                //       _showAddDepartmentDialog();
+                //     },
+                //     child: Icon(
+                //       Icons.add,
+                //       color: primary_color,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );
@@ -582,5 +585,4 @@ class ItemCard extends StatelessWidget {
       ),
     );
   }
-
 }

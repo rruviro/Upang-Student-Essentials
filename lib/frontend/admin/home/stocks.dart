@@ -9,6 +9,7 @@ import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
 import "package:lottie/lottie.dart";
 import "package:shared_preferences/shared_preferences.dart";
+import "package:use/backend/apiservice/adminApi/arepoimpl.dart";
 import "package:use/backend/bloc/admin/admin_bloc.dart";
 import "package:use/SERVICES/model/admin/BookStocks.dart";
 import "package:use/SERVICES/model/admin/Stocks.dart";
@@ -16,6 +17,8 @@ import "package:use/backend/models/admin/Book.dart";
 import "package:use/backend/models/admin/Stock.dart";
 import "package:use/frontend/admin/home/uniform.dart";
 import "package:use/frontend/admin/profile/profile.dart";
+import 'package:file_picker/file_picker.dart';
+
 
 import "../../colors/colors.dart";
 
@@ -41,8 +44,12 @@ final TextEditingController ProdBController = TextEditingController();
 final TextEditingController ProdBBController = TextEditingController();
 final TextEditingController ProdBMController = TextEditingController();
 final TextEditingController ProdBMMController = TextEditingController();
-final int maxLength = 25;
-int _countProd = 0;
+
+final TextEditingController BookNameController = TextEditingController();
+final TextEditingController SubjectDescController = TextEditingController();
+final TextEditingController stockNameController = TextEditingController();
+// final int maxLength = 25;
+// int _countProd = 0;
 
 class _StocksState extends State<Stocks> {
   List<bool> _bottomSheetSelectedBooks = List.generate(5, (index) => false);
@@ -51,6 +58,8 @@ class _StocksState extends State<Stocks> {
 
   File? _image;
   File? get image => _image;
+
+  final adminRepository = AdminRepositoryImpl();
 
   final _picker = ImagePicker();
   Future<void> _openImagePicker() async {
@@ -72,24 +81,24 @@ class _StocksState extends State<Stocks> {
     context
         .read<AdminExtendedBloc>()
         .add(ShowStocksEvent(Course: widget.courseName));
-    ProdController.addListener(_updateCounter);
-    ProdMController.addListener(_updateCounter);
-    ProdBController.addListener(_updateCounter);
-    ProdBBController.addListener(_updateCounter);
-    ProdBMController.addListener(_updateCounter);
-    ProdBMMController.addListener(_updateCounter);
+    // ProdController.addListener(_updateCounter);
+    // ProdMController.addListener(_updateCounter);
+    // ProdBController.addListener(_updateCounter);
+    // ProdBBController.addListener(_updateCounter);
+    // ProdBMController.addListener(_updateCounter);
+    // ProdBMMController.addListener(_updateCounter);
   }
 
-  void _updateCounter() {
-    setState(() {
-      _countProd = ProdController.text.length;
-      _countProd = ProdMController.text.length;
-      _countProd = ProdBController.text.length;
-      _countProd = ProdBBController.text.length;
-      _countProd = ProdBMController.text.length;
-      _countProd = ProdBMMController.text.length;
-    });
-  }
+  // void _updateCounter() {
+  //   setState(() {
+  //     _countProd = ProdController.text.length;
+  //     _countProd = ProdMController.text.length;
+  //     _countProd = ProdBController.text.length;
+  //     _countProd = ProdBBController.text.length;
+  //     _countProd = ProdBMController.text.length;
+  //     _countProd = ProdBMMController.text.length;
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -105,40 +114,192 @@ class _StocksState extends State<Stocks> {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius:
+                BorderRadius.circular(5.0),
           ),
-          title: Text(
-            "Add Uniform",
-            style: TextStyle(
-              color: primary_color,
-              fontWeight: FontWeight.bold,
+          title: Container(
+            height: 45,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'New Uniform Product',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Uniform Details',
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
             ),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Enter uniform",
-                  border: OutlineInputBorder(),
-                ),
-              )
-            ],
+          content: Container(
+            height: 240,
+            width: 200,
+            child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      _openImagePicker();
+                    },
+                    child: Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: primary_color,
+                          borderRadius:
+                              BorderRadius.circular(
+                                  5)),
+                      child: _image != null
+                          ? Image.file(_image!,
+                              fit: BoxFit.contain)
+                          : Icon(
+                              Icons
+                                  .image_search_rounded,
+                              color: Colors.white,
+                            ),
+                    ),
+                  ),
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller: stockNameController,
+                      decoration: InputDecoration(
+                        border:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey),
+                        ),
+                        focusedBorder:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: primary_color),
+                        ),
+                        hintText: 'Corporate Top',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w400,
+                        ),
+                        // suffix: Text(
+                        //   '$_countProd/$maxLength',
+                        //   style: TextStyle(
+                        //     color: primary_color,
+                        //     fontSize: 12,
+                        //   ),
+                        // ),
+                        suffixStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      keyboardType:
+                          TextInputType.text,
+                      textInputAction:
+                          TextInputAction.done,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            23),
+                      ],
+                    ),
+                  ),
+                ]),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
+            // TEMPORARY COMMENT WAG TATANGGALIN!
+
+            // GestureDetector(
+            //   onTap: () async {
+            //     // Pick the stock photo file
+            //     FilePickerResult? result = await FilePicker.platform.pickFiles(
+            //       type: FileType.image, // You can specify the type you want
+            //     );
+            //
+            //     if (result != null) {
+            //       // Get the selected file
+            //       File stockPhotoFile = File(result.files.single.path!);
+            //
+            //       // Call createStock function with appropriate parameters
+            //       await adminRepository.createStock(
+            //         stockNameController.text, // Replace with actual stock name input if available
+            //         stockPhotoFile, // Use the selected file
+            //         widget.courseName, // Course name from your widget
+            //         'Male', // Example gender, replace with actual input if available
+            //         'Corporate', // Example type, replace with actual input if available
+            //         'Pants', // Example body, replace with actual input if available
+            //       );
+            //
+            //
+            //       BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
+            //         Course: widget.courseName,
+            //       ));
+            //
+            //     } else {
+            //       // Handle the case when no file is selected
+            //       print('No file selected.');
+            //     }
+            //   },
+            //   child: Container(
+            //     height: 30,
+            //     width: 112,
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(2),
+            //       color: primary_color,
+            //     ),
+            //     child: Center(
+            //       child: Text(
+            //         'Deploy',
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontSize: 13,
+            //           fontWeight: FontWeight.w600,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            GestureDetector(
+              onTap: () {
                 Navigator.pop(context);
               },
-              child: Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Add", style: TextStyle(color: primary_color)),
+              child: Container(
+                height: 30,
+                width: 112,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: primary_color,
+                ),
+                child: Center(
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
+
         );
       }
     );
@@ -151,38 +312,196 @@ class _StocksState extends State<Stocks> {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(19),
+            borderRadius:
+                BorderRadius.circular(5.0),
           ),
-          title: Text(
-            "Add Book",
-            style: TextStyle(
-              color: primary_color,
-              fontWeight: FontWeight.bold,
+          title: Container(
+            height: 45,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'New Book Product',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight:
+                          FontWeight.w600),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Book Details',
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13,
+                      fontWeight:
+                          FontWeight.w400),
+                ),
+              ],
             ),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Enter book title",
-                  border: OutlineInputBorder(),
-                ),
-              )
-            ],
+          content: Container(
+            height: 80,
+            width: 200,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller: BookNameController,
+                      decoration: InputDecoration(
+                        border:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey),
+                        ),
+                        focusedBorder:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color:
+                                  primary_color),
+                        ),
+                        hintText: 'SSP 012',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w400,
+                        ),
+                        suffixStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      keyboardType:
+                          TextInputType.text,
+                      textInputAction:
+                          TextInputAction.done,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight:
+                            FontWeight.w400,
+                      ),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            23),
+                      ],
+                    ),
+                  ),
+
+
+                  Container(
+                    height: 40,
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller:
+                          SubjectDescController,
+                      decoration: InputDecoration(
+                        border:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.grey),
+                        ),
+                        focusedBorder:
+                            UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color:
+                                  primary_color),
+                        ),
+                        hintText:
+                            'Student Success Program',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w400,
+                        ),
+                        suffixStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                      keyboardType:
+                          TextInputType.text,
+                      textInputAction:
+                          TextInputAction.done,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight:
+                            FontWeight.w400,
+                      ),
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                            23),
+                      ],
+                    ),
+                  ),
+
+
+                ]),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
+            GestureDetector(
+              onTap: () async {
+                await adminRepository.createBook(
+                    widget.courseName,
+                    widget.Department,
+                    BookNameController.text,
+                    'NA 000',
+                    SubjectDescController.text,
+                    10,
+                    0);
+                BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
+                  Course: widget.courseName,
+                ));
                 Navigator.pop(context);
               },
-              child: Text("Cancel", style: TextStyle(color: Colors.grey)),
+              child: Container(
+                height: 30,
+                width: 112,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(2),
+                    color: primary_color),
+                child: Center(
+                  child: Text(
+                    'Deploy',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight:
+                            FontWeight.w600),
+                  ),
+                ),
+              ),
             ),
-            TextButton(
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 Navigator.pop(context);
               },
-              child: Text("Add", style: TextStyle(color: primary_color)),
+              child: Container(
+                  height: 30,
+                  width: 112,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(
+                              2),
+                      color: primary_color),
+                  child: Center(
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight:
+                              FontWeight.w600),
+                    ),
+                  )),
             ),
           ],
         );
@@ -432,6 +751,8 @@ class _ItemCardState extends State<ItemCard> {
   File? _image;
   File? get image => _image;
 
+  final adminRepository = AdminRepositoryImpl();
+
   final _picker = ImagePicker();
   Future<void> _openImagePicker() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
@@ -489,10 +810,11 @@ class _ItemCardState extends State<ItemCard> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(5),
-                            bottomRight: Radius.circular(5)),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5)),
                         color: Colors.white,
                       ),
                       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -513,6 +835,25 @@ class _ItemCardState extends State<ItemCard> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    bottom: 14,
+                    right: 15,
+                    child: InkWell(
+                      onTap: (){
+                        adminRepository.deleteStock(widget.stock.id);
+                        Future.delayed(Duration(seconds: 1), () {
+                          BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
+                              Course: widget.courseName
+                          ));
+                        });
+
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red, // DELETE STOCK
+                      )
+                    ),
+                  )
                 ],
               ),
             ),
@@ -596,6 +937,8 @@ class _BookCardState extends State<BookCard> {
   File? _image;
   File? get image => _image;
 
+  final adminRepository = AdminRepositoryImpl();
+
   final _picker = ImagePicker();
   Future<void> _openImagePicker() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
@@ -642,7 +985,7 @@ class _BookCardState extends State<BookCard> {
                     'Stock: ${widget.visual.Stock}',
                     style: TextStyle(
                       color:
-                          widget.visual.Stock > 0 ? Colors.green : Colors.red,
+                          widget.visual.Stock > 0 ? Colors.white : Colors.red,
                       fontSize: 12,
                       fontWeight: FontWeight.normal,
                     ),
@@ -664,7 +1007,7 @@ class _BookCardState extends State<BookCard> {
                     'Reserved: ${widget.visual.Reserved}',
                     style: TextStyle(
                       color: widget.visual.Reserved > 0
-                          ? Colors.green
+                          ? Colors.white
                           : Colors.red,
                       fontSize: 12,
                       fontWeight: FontWeight.normal,
@@ -693,6 +1036,20 @@ class _BookCardState extends State<BookCard> {
                 ),
               ),
               SizedBox(width: 8),
+              IconButton(
+                onPressed: () {
+                  adminRepository.deleteBook(widget.visual.id);
+                  Future.delayed(Duration(seconds: 1), () {
+                    BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
+                      Course: widget.visual.Course
+                    ));
+                  });
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red, //test
+                ),
+              ),
             ],
           ),
         ),
@@ -742,7 +1099,6 @@ class CustomCircularCheckbox extends StatelessWidget {
 
 Future<void> _showUpdateUniformDialog(BuildContext context, Book book) async {
   TextEditingController stockController = TextEditingController();
-
   return showDialog(
     context: context,
     builder: (context) {

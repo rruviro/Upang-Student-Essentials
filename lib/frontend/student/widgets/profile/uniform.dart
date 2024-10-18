@@ -45,6 +45,7 @@ class ItemCard extends StatelessWidget {
             children: [
               Container(
                 height: 115,
+                width: 130,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
@@ -52,7 +53,10 @@ class ItemCard extends StatelessWidget {
                   ),
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: Image.network("assets/check.png"), // Placeholder for actual image
+                child: Image.network(
+                  "assets/check.png",
+                  fit: BoxFit.contain,
+                ), // Placeholder for actual image
               ),
               SizedBox(width: 10),
               Stack(
