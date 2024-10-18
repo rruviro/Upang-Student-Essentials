@@ -92,7 +92,7 @@ class ItemCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                   child: Image.network(
                     stock.photoUrl,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.contian,
                   ),
                 ),
                 Align(

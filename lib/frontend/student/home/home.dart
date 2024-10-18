@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/models/admin/Department.dart';
@@ -110,6 +109,21 @@ class _HomeState extends State<Home> {
                 ),
               ),
               centerTitle: false,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.notifications, color: primary_color),
+                  onPressed: () {
+                    studBloc.add(NotificationPageEvent());
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.backpack, color: primary_color),
+                  onPressed: () {
+                    studBloc.add(BackpackPageEvent());
+                  },
+                ),
+                SizedBox(width: 15),
+              ],
               backgroundColor: Colors.white,
               elevation: 0,
             ),
@@ -246,14 +260,13 @@ class ItemCard extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  PageTransition(
-                    child: courses(
+                  MaterialPageRoute(
+                    builder: (context) => courses(
                       departmentID: visual.id ?? 0,
                       departmentName: visual.name,
                       profile: this.profile,
                     ),
-                    type: PageTransitionType.rightToLeft
-                  )
+                  ),
                 );
               },
               child: Container(
