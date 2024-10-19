@@ -583,6 +583,8 @@ class _StocksState extends State<Stocks> {
                                 fontWeight: FontWeight.w600),
                           ),
                         ),
+                        // ADD BUTTON
+
                         // Positioned(
                         //   top: -15,
                         //   right: 20,
@@ -593,6 +595,8 @@ class _StocksState extends State<Stocks> {
                         //     },
                         //   ),
                         // ),
+
+                        //
                       ]),
                     ),
                     SizedBox(height: 10),
@@ -835,25 +839,29 @@ class _ItemCardState extends State<ItemCard> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 14,
-                    right: 15,
-                    child: InkWell(
-                      onTap: (){
-                        adminRepository.deleteStock(widget.stock.id);
-                        Future.delayed(Duration(seconds: 1), () {
-                          BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
-                              Course: widget.courseName
-                          ));
-                        });
 
-                      },
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.red, // DELETE STOCK
-                      )
-                    ),
-                  )
+                  // DELETE BUTTON
+                  // Positioned(
+                  //   bottom: 14,
+                  //   right: 15,
+                  //   child: InkWell(
+                  //     onTap: (){
+                  //       adminRepository.deleteStock(widget.stock.id);
+                  //       Future.delayed(Duration(seconds: 1), () {
+                  //         BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
+                  //             Course: widget.courseName
+                  //         ));
+                  //       });
+                  //
+                  //     },
+                  //     child: Icon(
+                  //       Icons.delete,
+                  //       color: Colors.red, // DELETE STOCK
+                  //     )
+                  //   ),
+                  // )
+
+                  //
                 ],
               ),
             ),

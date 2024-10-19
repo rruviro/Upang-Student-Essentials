@@ -24,14 +24,14 @@ class UniformStudent extends StatefulWidget {
 
   const UniformStudent(
       {Key? key,
-      required this.courseName,
-      required this.stockPhoto,
-      required this.profile,
-      required this.department,
-      required this.type,
-      required this.Gender,
-      required this.UniformType,
-      required this.Body})
+        required this.courseName,
+        required this.stockPhoto,
+        required this.profile,
+        required this.department,
+        required this.type,
+        required this.Gender,
+        required this.UniformType,
+        required this.Body})
       : super(key: key);
 
   @override
@@ -100,7 +100,7 @@ class _UniformStudentState extends State<UniformStudent> {
       builder: (BuildContext context) {
         return Dialog(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -132,9 +132,7 @@ class _UniformStudentState extends State<UniformStudent> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
-            context
-                .read<StudentExtendedBloc>()
-                .add(ShowStocksEvent(Course: widget.courseName));
+            context.read<StudentExtendedBloc>().add(ShowStocksEvent(Course: widget.courseName));
             Navigator.pop(context, true);
           },
         ),
@@ -143,14 +141,8 @@ class _UniformStudentState extends State<UniformStudent> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Uniform',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              Text(
-                'Course: ${widget.courseName}',
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
+              Text('Uniform', style: TextStyle(color: Colors.white, fontSize: 16)),
+              Text('Course: ${widget.courseName}', style: TextStyle(color: Colors.white, fontSize: 10)),
             ],
           ),
         ),
@@ -166,9 +158,7 @@ class _UniformStudentState extends State<UniformStudent> {
             height: 25,
             width: 1,
             child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
+              decoration: BoxDecoration(color: Colors.white),
             ),
           ),
           const SizedBox(width: 5),
@@ -179,8 +169,7 @@ class _UniformStudentState extends State<UniformStudent> {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider<StudentExtendedBloc>.value(
                     value: studBloc,
-                    child:
-                        Bag(studentProfile: widget.profile, Status: "ACTIVE"),
+                    child: Bag(studentProfile: widget.profile, Status: "ACTIVE"),
                   ),
                 ),
               );
@@ -199,9 +188,8 @@ class _UniformStudentState extends State<UniformStudent> {
           }
           if (state is UniformsLoadingState) {
             print("Loading student uniforms");
-
-            //2-second delay
-            await Future.delayed(Duration(seconds: 3));
+            // You can uncomment this if you want to delay the loading state
+            // await Future.delayed(Duration(seconds: 3));
           } else if (state is UniformsLoadedState) {
             setState(() {
               uniforms = state.uniforms;
@@ -222,16 +210,17 @@ class _UniformStudentState extends State<UniformStudent> {
                   backgroundColor: Colors.white,
                   toolbarHeight: 300,
                   flexibleSpace: Container(
-                      decoration: BoxDecoration(
-                        color: primary_color,
+                    decoration: BoxDecoration(color: primary_color),
+                    child: Center(
+                      child: ClipRect(
+                        child: Image.network(
+                          widget.stockPhoto,
+                          width: 300,
+                          height: 300,
+                        ),
                       ),
-                      child: Center(
-                          child: ClipRect(
-                              child: Image.network(
-                        widget.stockPhoto,
-                        width: 300,
-                        height: 300,
-                      )))),
+                    ),
+                  ),
                 ),
               ),
               Padding(
@@ -245,16 +234,8 @@ class _UniformStudentState extends State<UniformStudent> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Size Charts",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "See what size best suits you.",
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.normal),
-                          ),
+                          Text("Size Charts", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                          Text("See what size best suits you.", style: TextStyle(fontSize: 10, fontWeight: FontWeight.normal)),
                         ],
                       ),
                     ),
@@ -265,34 +246,16 @@ class _UniformStudentState extends State<UniformStudent> {
                       color: Colors.white,
                       child: DataTable(
                         columns: [
-                          DataColumn(
-                            label: Expanded(
-                              child: Center(child: Text("SIZE")),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Center(child: Text("CHEST")),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Center(child: Text("HIPS")),
-                            ),
-                          ),
+                          DataColumn(label: Expanded(child: Center(child: Text("SIZE")))),
+                          DataColumn(label: Expanded(child: Center(child: Text("CHEST")))),
+                          DataColumn(label: Expanded(child: Center(child: Text("HIPS")))),
                         ],
                         rows: measures.map((measure) {
                           return DataRow(
                             cells: [
-                              DataCell(
-                                Center(child: Text(measure["size"] ?? "")),
-                              ),
-                              DataCell(
-                                Center(child: Text(measure["chest"] ?? "")),
-                              ),
-                              DataCell(
-                                Center(child: Text(measure["hips"] ?? "")),
-                              ),
+                              DataCell(Center(child: Text(measure["size"] ?? ""))),
+                              DataCell(Center(child: Text(measure["chest"] ?? ""))),
+                              DataCell(Center(child: Text(measure["hips"] ?? ""))),
                             ],
                           );
                         }).toList(),
@@ -300,96 +263,84 @@ class _UniformStudentState extends State<UniformStudent> {
                     ),
                     const SizedBox(height: 30),
                     _course != widget.courseName
-                        ? Text(
-                            'Not Available for your course',
-                            style: TextStyle(color: Colors.red, fontSize: 14),
-                          )
+                        ? Text('Not Available for your course', style: TextStyle(color: Colors.red, fontSize: 14))
                         : Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: isUniformInBag(uniforms.first)
-                                          ? null
-                                          : () {
-                                              _showAddToBackpackModal(
-                                                  context, widget.type);
-                                            },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: Colors.blue,
-                                        side: BorderSide(color: primary_color),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        minimumSize: const Size.fromHeight(60),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.add, color: primary_color),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            isUniformInBag(uniforms.first)
-                                                ? 'You already have a uniform'
-                                                : 'Add to Backpack',
-                                            style: TextStyle(
-                                                color: primary_color,
-                                                fontSize: 10),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: (uniforms.isNotEmpty && !isUniformInBag(uniforms.first))
+                                    ? () {
+                                  // Add a 2-second delay before showing the modal
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    _showAddToBackpackModal(context, widget.type);
+                                  });
+                                }
+                                    : null, // Disable the button if not available
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.blue,
+                                  side: BorderSide(color: primary_color),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: (uniforms.isNotEmpty &&
-                                              !isUniformInBag(uniforms.first))
-                                          ? () {
-                                              Future.delayed(
-                                                  Duration(seconds: 1), () {
-                                                _showRequestModal(
-                                                    context, widget.type);
-                                              });
-                                            }
-                                          : null,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: Colors.blue,
-                                        side: BorderSide(color: primary_color),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        minimumSize: const Size.fromHeight(60),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.request_page,
-                                              color: primary_color),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            (uniforms.isNotEmpty &&
-                                                    !isUniformInBag(
-                                                        uniforms.first))
-                                                ? 'Request'
-                                                : 'You already have a uniform',
-                                            style: TextStyle(
-                                                color: primary_color,
-                                                fontSize: 10),
-                                          ),
-                                        ],
-                                      ),
+                                  minimumSize: const Size.fromHeight(60),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.add, color: primary_color),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      (uniforms.isNotEmpty && !isUniformInBag(uniforms.first))
+                                          ? 'Add to Backpack'
+                                          : 'You already have a uniform',
+                                      style: TextStyle(color: primary_color, fontSize: 10),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: (uniforms.isNotEmpty && !isUniformInBag(uniforms.first))
+                                    ? () {
+                                  // Add a 2-second delay before showing the request modal
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    _showRequestModal(context, widget.type);
+                                  });
+                                }
+                                    : null, // Disable the button if not available
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.blue,
+                                  side: BorderSide(color: primary_color),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  minimumSize: const Size.fromHeight(60),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.request_page, color: primary_color),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      (uniforms.isNotEmpty && !isUniformInBag(uniforms.first))
+                                          ? 'Request'
+                                          : 'You already have a uniform',
+                                      style: TextStyle(color: primary_color, fontSize: 10),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -399,6 +350,7 @@ class _UniformStudentState extends State<UniformStudent> {
       ),
     );
   }
+
 
   Widget _buildHeader(String title) {
     return SizedBox(
@@ -452,7 +404,7 @@ class _UniformStudentState extends State<UniformStudent> {
           },
           submitButtonText: 'Add to Backpack',
           submitButtonIcon: Icons.backpack,
-          uniforms: uniforms,
+          uniforms: uniforms, // Pass the entire list of uniforms
         );
       },
     );
@@ -634,7 +586,7 @@ class _ModalContentState extends State<_ModalContent> {
                 filled: true,
                 fillColor: const Color(0xFFD9D9D9),
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -668,7 +620,7 @@ class _ModalContentState extends State<_ModalContent> {
                 onPressed: () {
                   if (selectedSize != null && selectedSchedule != null) {
                     Uniform? selectedUniform = widget.uniforms.firstWhere(
-                      (uniform) => uniform.Size == selectedSize,
+                          (uniform) => uniform.Size == selectedSize,
                     );
 
                     if (selectedUniform != null) {
