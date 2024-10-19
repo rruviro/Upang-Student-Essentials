@@ -17,7 +17,7 @@ import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
 
 class AdminRepositoryImpl extends Adminrepo {
   static const String baseUrl =
-      'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api';
+      'https://polar-brushlands-76526-d0a1bfc35881.herokuapp.com/api';
   // static const String baseUrl = 'http://127.0.0.1:8000/api';
 
   @override
@@ -65,9 +65,9 @@ class AdminRepositoryImpl extends Adminrepo {
       print(
           "~~~~~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     } else {
+      print('$baseUrl/studentbagitems/$id/$status');
       print(response.statusCode);
-      print(response.body);
-      throw Exception();
+      throw Exception('$baseUrl/studentbagitems/$id/$status');
     }
   }
 

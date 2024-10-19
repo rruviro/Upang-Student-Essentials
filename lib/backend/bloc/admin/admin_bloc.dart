@@ -93,6 +93,8 @@ class AdminExtendedBloc extends Bloc<AdminExtendedEvent, AdminExtendedState> {
         emit(ItemStatusChanged());
         add(getStudent());
       } catch (e) {
+        print(event.id);
+        print(event.status);
         print('Error: $e to change Item status.');
         // add(getStudent());
       }

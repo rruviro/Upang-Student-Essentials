@@ -92,7 +92,7 @@ class ItemCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            visual.department,
+                            limitText(visual.department, 10),
                             style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                 fontSize: 13,
@@ -214,4 +214,8 @@ class ItemCard extends StatelessWidget {
       ],
     );
   }
+}
+
+String limitText(String text, int maxLength) {
+  return text.length > maxLength ? '${text.substring(0, maxLength)}...' : text;
 }

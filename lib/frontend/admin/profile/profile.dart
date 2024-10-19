@@ -29,7 +29,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileScreenState extends State<Profile> {
   bool isBook = false;
-  bool isDialogOpen = false; // New flag to track if a dialog is open
+  bool isDialogOpen = false;
   StudentBagItem? itemCode;
   StudentBagBook? bookCode;
   TextEditingController codeController = TextEditingController();
@@ -82,6 +82,7 @@ class _ProfileScreenState extends State<Profile> {
     String today = getDayOfWeek(now.weekday);
 
     if (item.shift != today) {
+      isDialogOpen = true;
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -95,12 +96,6 @@ class _ProfileScreenState extends State<Profile> {
           );
         },
       );
-
-      itemCode = null;
-      bookCode = null;
-      codeController.clear();
-      isDialogOpen = false;
-      context.read<AdminExtendedBloc>().add(getStudent());
     } else {
       showDialog(
         context: context,
@@ -119,14 +114,7 @@ class _ProfileScreenState extends State<Profile> {
                         Text("Reservation Number: ${item.reservationNumber}"),
                       ]
                     : [
-                        Text("Course: ${item.course}"),
-                        Text("Gender: ${item.gender}"),
-                        Text("Type: ${item.type}"),
-                        Text("Body: ${item.body}"),
-                        Text("Size: ${item.size}"),
-                        Text("Status: ${item.status}"),
-                        Text("Claiming Schedule: ${item.claimingSchedule}"),
-                        Text("Reservation Number: ${item.reservationNumber}"),
+                        Text("Course: ${item.id}"),
                       ],
               ),
             ),
@@ -145,11 +133,11 @@ class _ProfileScreenState extends State<Profile> {
                   if (isBook) {
                     context
                         .read<AdminExtendedBloc>()
-                        .add(changeBookStatus(id, "Complete"));
+                        .add(changeBookStatus(item.id, "Complete"));
                   } else {
                     context
                         .read<AdminExtendedBloc>()
-                        .add(changeItemStatus(id, "Complete"));
+                        .add(changeItemStatus(item.id, "Complete"));
                   }
 
                   itemCode = null;
@@ -167,6 +155,11 @@ class _ProfileScreenState extends State<Profile> {
         },
       );
     }
+     itemCode = null;
+      bookCode = null;
+      codeController.clear();
+      isDialogOpen = false;
+      context.read<AdminExtendedBloc>().add(getStudent());
   }
 
   void _showSuccessDialog(BuildContext context) {
@@ -884,7 +877,7 @@ void _showCreateDialog(BuildContext context) {
           ),
         ),
         content: Container(
-          height: 400,
+          height: 420,
           width: double.infinity,
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
@@ -1024,7 +1017,7 @@ void _showCreateDialog(BuildContext context) {
                       DropdownMenuItem(value: 2, child: Text('Second Year')),
                       DropdownMenuItem(value: 3, child: Text('Third Year')),
                       DropdownMenuItem(value: 4, child: Text('Fourth Year')),
-                      DropdownMenuItem(value: 5, child: Text('Fifth Year')),
+                      DropdownMenuItem(value: 5, child: Text('Fifth Year')),                       
                     ],
                     onChanged: (value) {
                       setState(() {

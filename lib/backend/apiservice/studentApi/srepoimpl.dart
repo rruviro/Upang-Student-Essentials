@@ -19,7 +19,7 @@ import 'package:use/backend/models/student/StudentNotificationData/StudentNotifi
 
 class StudentRepositoryImpl extends Studentrepo {
   static const String baseUrl =
-      'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api';
+      'https://polar-brushlands-76526-d0a1bfc35881.herokuapp.com/api';
   // static const String baseUrl = 'http://127.0.0.1:8000/api';
   //static const String baseUrl = 'http://localhost:8000/api';
 

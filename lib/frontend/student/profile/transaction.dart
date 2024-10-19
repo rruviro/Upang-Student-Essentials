@@ -256,7 +256,6 @@ class _TransactionState extends State<Transaction> {
                         }
                       }).toList(),
                     ),
-                SizedBox(height: 10),
                 Text(
                   'Books',
                   style: TextStyle(
@@ -265,7 +264,7 @@ class _TransactionState extends State<Transaction> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 15),
                 books.isEmpty
                   ? Container(
                       padding: EdgeInsets.only(top: 40, bottom: 90),
@@ -359,6 +358,7 @@ class ItemCard extends StatelessWidget {
             children: [
               Container(
                 height: 115,
+                width: 130,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
@@ -573,16 +573,16 @@ class BookCard extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(bottom: 30.0),
+          margin: const EdgeInsets.only(bottom: 15.0),
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: Color.fromARGB(255, 14, 170, 113),
+            color: primary_color,
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
-                blurRadius: 5,
-                offset: Offset(1, 8),
+                color: Colors.grey,
+                blurRadius: 3,
+                offset: Offset(1, 1),
               ),
             ],
           ),
@@ -591,6 +591,7 @@ class BookCard extends StatelessWidget {
             children: [
               Container(
                 height: 115,
+                width: 130,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5),
@@ -632,7 +633,7 @@ class BookCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            book.bookName,
+                            limitText(book.bookName, 15),
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.white,
@@ -781,4 +782,8 @@ class BookCard extends StatelessWidget {
       ],
     );
   }
+}
+
+String limitText(String text, int maxLength) {
+  return text.length > maxLength ? '${text.substring(0, maxLength)}...' : text;
 }

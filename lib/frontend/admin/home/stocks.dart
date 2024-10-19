@@ -583,16 +583,16 @@ class _StocksState extends State<Stocks> {
                                 fontWeight: FontWeight.w600),
                           ),
                         ),
-                        Positioned(
-                          top: -15,
-                          right: 20,
-                          child: IconButton(
-                            icon: Icon(Icons.add, color: primary_color,),
-                            onPressed: () {
-                              _showAddUniformDialog();
-                            },
-                          ),
-                        ),
+                        // Positioned(
+                        //   top: -15,
+                        //   right: 20,
+                        //   child: IconButton(
+                        //     icon: Icon(Icons.add, color: primary_color,),
+                        //     onPressed: () {
+                        //       _showAddUniformDialog();
+                        //     },
+                        //   ),
+                        // ),
                       ]),
                     ),
                     SizedBox(height: 10),

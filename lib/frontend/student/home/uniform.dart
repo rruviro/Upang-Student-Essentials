@@ -118,9 +118,11 @@ class _UniformStudentState extends State<UniformStudent> {
         );
       },
     );
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.of(context).pop();
+    });
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(

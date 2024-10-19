@@ -597,15 +597,15 @@ class _UniformAdminState extends State<UniformAdmin> {
 
                             // add button
 
-                            // IconButton(
-                            //   onPressed: () {
-                            //     _showUpdateUniformDialog(context, uniform);
-                            //   },
-                            //   icon: Icon(
-                            //     Icons.add,
-                            //     color: primary_color,
-                            //   ),
-                            // ),
+                            IconButton(
+                              onPressed: () {
+                                _showUpdateUniformDialog(context, uniform);
+                              },
+                              icon: Icon(
+                                Icons.add,
+                                color: primary_color,
+                              ),
+                            ),
                             Container(
                               width: 40,
                               child: IconButton(
