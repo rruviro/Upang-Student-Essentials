@@ -938,7 +938,6 @@ class _ProfileScreenState extends State<Profile> {
                               ),
                             ),
                             SizedBox(height: 20),
-
                             Container(
                               alignment: Alignment.center,
                               child: books.isEmpty

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:use/backend/apiservice/adminApi/arepoimpl.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/SERVICES/model/admin/Department.dart';
@@ -63,12 +64,14 @@ class _HomeState extends State<Home> {
                   builder: (context) => notif(studentProfile: 0)));
         } else if (state is CoursePageState) {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Courses(
-                        departmentID: 0,
-                        departmentName: '',
-                      )));
+            context,
+            PageTransition(
+              child: Courses(
+                departmentID: 0,
+                departmentName: '',
+              ),
+              type: PageTransitionType.rightToLeft
+            ));
         } else if (state is ManagePageState) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => manage()));
@@ -508,12 +511,13 @@ class ItemCard extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => Courses(
+                  PageTransition(
+                    child: Courses(
                       departmentID: visual.id ?? 0,
                       departmentName: visual.name,
                     ),
-                  ),
+                    type: PageTransitionType.rightToLeft
+                  )
                 );
               },
               child: Container(

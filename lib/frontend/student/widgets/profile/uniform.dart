@@ -54,7 +54,7 @@ class ItemCard extends StatelessWidget {
                 ),
                 clipBehavior: Clip.hardEdge,
                 child: Image.network(
-                  "assets/check.png",
+                  "assets/upnag.jpg",
                   fit: BoxFit.contain,
                 ), // Placeholder for actual image
               ),

@@ -150,332 +150,338 @@ class _UniformAdminState extends State<UniformAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if (_showLoading) {
-          return Center(
-              child: Lottie.asset('assets/lottie/loading.json',
-                  height: 300, width: 380, fit: BoxFit.fill));
-        }
-        if (state is UniformsLoadingState) {
-          return Center(
-              child: Lottie.asset('assets/lottie/loading.json',
-                  height: 300, width: 380, fit: BoxFit.fill));
-        } else if (state is UniformsLoadedState) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: primary_color,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context);
-                  context
-                      .read<AdminExtendedBloc>()
-                      .add(ShowStocksEvent(Course: widget.courseName));
-                },
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: primary_color,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+            context
+                .read<AdminExtendedBloc>()
+                .add(ShowStocksEvent(Course: widget.courseName));
+          },
+        ),
+        title: Transform.translate(
+          offset: const Offset(-15.0, 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Uniform',
+                style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-              title: Transform.translate(
-                offset: const Offset(-15.0, 0.0),
+              Text(
+                'Course: ${widget.courseName} ${widget.stock.stockName}',
+                style: const TextStyle(color: Colors.white, fontSize: 10),
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (_showLoading) {
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
+          }
+          if (state is UniformsLoadingState) {
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
+          } else if (state is UniformsLoadedState) {
+            return SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Uniform',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    Text(
-                      'Course: ${widget.courseName} ${widget.stock.stockName}',
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    child: AppBar(
-                      automaticallyImplyLeading: false,
-                      backgroundColor: primary_color,
-                      toolbarHeight: 300,
-                      flexibleSpace: Container(
-                        decoration: BoxDecoration(
-                          color: primary_color,
-                        ),
-                        child: Center(
-                          child: ClipRect(
-                            child: Image.network(
-                              widget.stock.photoUrl,
-                              width: 300,
-                              height: 300,
+                    Container(
+                      child: AppBar(
+                        automaticallyImplyLeading: false,
+                        backgroundColor: primary_color,
+                        toolbarHeight: 300,
+                        flexibleSpace: Container(
+                          decoration: BoxDecoration(
+                            color: primary_color,
+                          ),
+                          child: Center(
+                            child: ClipRect(
+                              child: Image.network(
+                                widget.stock.photoUrl,
+                                width: 300,
+                                height: 300,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${widget.stock.stockName}',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                    SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${widget.stock.stockName}',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-
-                  // Container(
-                  //   padding: EdgeInsets.all(20),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //         children: [
-                  //           Text(
-                  //             "${_images.length + 2} Images",
-                  //             style: TextStyle(fontSize: 10),
-                  //           ),
-                  //           if (_images.isNotEmpty)
-                  //             IconButton(
-                  //               icon: Icon(
-                  //                 _isDeleteMode ? Icons.check : Icons.delete,
-                  //                 color:
-                  //                     _isDeleteMode ? Colors.green : Colors.red,
-                  //               ),
-                  //               onPressed: () {
-                  //                 if (_isDeleteMode) {
-                  //                   _showDeleteConfirmation();
-                  //                 } else {
-                  //                   _toggleDeleteMode();
-                  //                 }
-                  //               },
-                  //             ),
-                  //         ],
-                  //       ),
-                  //       SizedBox(height: 8),
-                  //       SingleChildScrollView(
-                  //         scrollDirection: Axis.horizontal,
-                  //         child: Row(
-                  //           children: [
-                  //             Container(
-                  //               decoration: BoxDecoration(
-                  //                 color: Color(0xFFD9D9D9),
-                  //               ),
-                  //               padding: EdgeInsets.all(8),
-                  //               child: Image.asset(
-                  //                 'assets/bsit.png',
-                  //                 height: 60,
-                  //                 width: 30,
-                  //                 fit: BoxFit.cover,
-                  //               ),
-                  //             ),
-                  //             SizedBox(width: 8),
-                  //             Container(
-                  //               decoration: BoxDecoration(
-                  //                 color: Color(0xFFD9D9D9),
-                  //               ),
-                  //               padding: EdgeInsets.all(8),
-                  //               child: Image.asset(
-                  //                 'assets/uniuni.png',
-                  //                 height: 60,
-                  //                 width: 30,
-                  //                 fit: BoxFit.cover,
-                  //               ),
-                  //             ),
-                  //             SizedBox(width: 8),
-                  //             ..._images.asMap().entries.map((entry) {
-                  //               int index = entry.key;
-                  //               File image = entry.value;
-                  //               return GestureDetector(
-                  //                 onTap: () {
-                  //                   if (_isDeleteMode) {
-                  //                     _selectImage(index);
-                  //                   }
-                  //                 },
-                  //                 child: Stack(
-                  //                   children: [
-                  //                     Container(
-                  //                       margin: EdgeInsets.only(right: 10),
-                  //                       decoration: BoxDecoration(
-                  //                         color: Color(0xFFD9D9D9),
-                  //                       ),
-                  //                       padding: EdgeInsets.all(6),
-                  //                       child: Image.file(
-                  //                         image,
-                  //                         height: 64,
-                  //                         width: 35,
-                  //                         fit: BoxFit.cover,
-                  //                       ),
-                  //                     ),
-                  //                     if (_isDeleteMode)
-                  //                       Positioned(
-                  //                         top: 0,
-                  //                         right: 0,
-                  //                         child: CircleAvatar(
-                  //                           radius: 12,
-                  //                           backgroundColor: Colors.white,
-                  //                           child: Icon(
-                  //                             _selectedImages[index]
-                  //                                 ? Icons.check_circle
-                  //                                 : Icons.circle_outlined,
-                  //                             color: Colors.red,
-                  //                             size: 18,
-                  //                           ),
-                  //                         ),
-                  //                       ),
-                  //                   ],
-                  //                 ),
-                  //               );
-                  //             }).toList(),
-                  //             GestureDetector(
-                  //               onTap: _pickImage,
-                  //               child: Container(
-                  //                 height: 75,
-                  //                 width: 45,
-                  //                 decoration: BoxDecoration(
-                  //                   color: Color(0xFFD9D9D9),
-                  //                 ),
-                  //                 child: Icon(
-                  //                   Icons.add,
-                  //                   size: 20,
-                  //                   color: primary_color,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Size Stocks",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-
-                                // add button
-
-                                IconButton(
-                                  icon: Icon(Icons.add),
-                                  color: primary_color,
-                                  onPressed: () {
-                                    _showAddSizeDialog();
-                                  },
-                                )
-
-                                //
-                              ],
-                            ),
-                            SizedBox(height: 20),
-                            uniformsList(state.uniforms),
-                            SizedBox(height: 20),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                    // Container(
+                    //   padding: EdgeInsets.all(20),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           Text(
+                    //             "${_images.length + 2} Images",
+                    //             style: TextStyle(fontSize: 10),
+                    //           ),
+                    //           if (_images.isNotEmpty)
+                    //             IconButton(
+                    //               icon: Icon(
+                    //                 _isDeleteMode ? Icons.check : Icons.delete,
+                    //                 color:
+                    //                     _isDeleteMode ? Colors.green : Colors.red,
+                    //               ),
+                    //               onPressed: () {
+                    //                 if (_isDeleteMode) {
+                    //                   _showDeleteConfirmation();
+                    //                 } else {
+                    //                   _toggleDeleteMode();
+                    //                 }
+                    //               },
+                    //             ),
+                    //         ],
+                    //       ),
+                    //       SizedBox(height: 8),
+                    //       SingleChildScrollView(
+                    //         scrollDirection: Axis.horizontal,
+                    //         child: Row(
+                    //           children: [
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 color: Color(0xFFD9D9D9),
+                    //               ),
+                    //               padding: EdgeInsets.all(8),
+                    //               child: Image.asset(
+                    //                 'assets/bsit.png',
+                    //                 height: 60,
+                    //                 width: 30,
+                    //                 fit: BoxFit.cover,
+                    //               ),
+                    //             ),
+                    //             SizedBox(width: 8),
+                    //             Container(
+                    //               decoration: BoxDecoration(
+                    //                 color: Color(0xFFD9D9D9),
+                    //               ),
+                    //               padding: EdgeInsets.all(8),
+                    //               child: Image.asset(
+                    //                 'assets/uniuni.png',
+                    //                 height: 60,
+                    //                 width: 30,
+                    //                 fit: BoxFit.cover,
+                    //               ),
+                    //             ),
+                    //             SizedBox(width: 8),
+                    //             ..._images.asMap().entries.map((entry) {
+                    //               int index = entry.key;
+                    //               File image = entry.value;
+                    //               return GestureDetector(
+                    //                 onTap: () {
+                    //                   if (_isDeleteMode) {
+                    //                     _selectImage(index);
+                    //                   }
+                    //                 },
+                    //                 child: Stack(
+                    //                   children: [
+                    //                     Container(
+                    //                       margin: EdgeInsets.only(right: 10),
+                    //                       decoration: BoxDecoration(
+                    //                         color: Color(0xFFD9D9D9),
+                    //                       ),
+                    //                       padding: EdgeInsets.all(6),
+                    //                       child: Image.file(
+                    //                         image,
+                    //                         height: 64,
+                    //                         width: 35,
+                    //                         fit: BoxFit.cover,
+                    //                       ),
+                    //                     ),
+                    //                     if (_isDeleteMode)
+                    //                       Positioned(
+                    //                         top: 0,
+                    //                         right: 0,
+                    //                         child: CircleAvatar(
+                    //                           radius: 12,
+                    //                           backgroundColor: Colors.white,
+                    //                           child: Icon(
+                    //                             _selectedImages[index]
+                    //                                 ? Icons.check_circle
+                    //                                 : Icons.circle_outlined,
+                    //                             color: Colors.red,
+                    //                             size: 18,
+                    //                           ),
+                    //                         ),
+                    //                       ),
+                    //                   ],
+                    //                 ),
+                    //               );
+                    //             }).toList(),
+                    //             GestureDetector(
+                    //               onTap: _pickImage,
+                    //               child: Container(
+                    //                 height: 75,
+                    //                 width: 45,
+                    //                 decoration: BoxDecoration(
+                    //                   color: Color(0xFFD9D9D9),
+                    //                 ),
+                    //                 child: Icon(
+                    //                   Icons.add,
+                    //                   size: 20,
+                    //                   color: primary_color,
+                    //                 ),
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Size Chart",
+                                    "Size Stocks",
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Text(
-                                    "See what size best suits you.",
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.normal),
-                                  ),
+
+                                  // add button
+
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    color: primary_color,
+                                    onPressed: () {
+                                      _showAddSizeDialog();
+                                    },
+                                  )
+
+                                  //
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          height: 330,
-                          width: 460,
-                          color: Colors.white,
-                          child: DataTable(
-                            columns: [
-                              DataColumn(
-                                label: Expanded(
-                                  child: Center(child: Text("SIZE")),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Center(child: Text("CHEST")),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Center(child: Text("HIPS")),
+                              SizedBox(height: 20),
+                              uniformsList(state.uniforms),
+                              SizedBox(height: 20),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Size Chart",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "See what size best suits you.",
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
-                            rows: measures.map((measure) {
-                              return DataRow(
-                                cells: [
-                                  DataCell(
-                                    Center(child: Text(measure["size"] ?? "")),
-                                  ),
-                                  DataCell(
-                                    Center(child: Text(measure["chest"] ?? "")),
-                                  ),
-                                  DataCell(
-                                    Center(child: Text(measure["hips"] ?? "")),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
                           ),
-                        ),
-                        const SizedBox(height: 30),
-                      ],
+                          const SizedBox(height: 20),
+                          Container(
+                            height: 330,
+                            width: 460,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 2,
+                                  offset: Offset(1, 1),
+                                ),
+                              ],
+                            ),
+                            child: DataTable(
+                              columns: [
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Center(child: Text("SIZE")),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Center(child: Text("CHEST")),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Center(child: Text("HIPS")),
+                                  ),
+                                ),
+                              ],
+                              rows: measures.map((measure) {
+                                return DataRow(
+                                  cells: [
+                                    DataCell(
+                                      Center(child: Text(measure["size"] ?? "")),
+                                    ),
+                                    DataCell(
+                                      Center(child: Text(measure["chest"] ?? "")),
+                                    ),
+                                    DataCell(
+                                      Center(child: Text(measure["hips"] ?? "")),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          );
-        } else if (state is UniformsErrorState) {
-          return Center(child: Text(state.error));
-        } else {
-          return Center(
+                    const SizedBox(height: 20),
+                  ],
+                ),
+            );
+          } else if (state is UniformsErrorState) {
+            return Center(child: Text(state.error));
+          } else {
+            return Center(
               child: Lottie.asset('assets/lottie/loading.json',
-                  height: 300, width: 380, fit: BoxFit.fill));
-        }
-      },
+              height: 300, width: 380, fit: BoxFit.fill));
+          }
+        },
+      )
     );
   }
 

@@ -8,6 +8,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:image_picker/image_picker.dart";
 import "package:lottie/lottie.dart";
+import "package:page_transition/page_transition.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:use/backend/apiservice/adminApi/arepoimpl.dart";
 import "package:use/backend/bloc/admin/admin_bloc.dart";
@@ -15,6 +16,7 @@ import "package:use/SERVICES/model/admin/BookStocks.dart";
 import "package:use/SERVICES/model/admin/Stocks.dart";
 import "package:use/backend/models/admin/Book.dart";
 import "package:use/backend/models/admin/Stock.dart";
+import "package:use/frontend/admin/home/course.dart";
 import "package:use/frontend/admin/home/uniform.dart";
 import "package:use/frontend/admin/profile/profile.dart";
 import 'package:file_picker/file_picker.dart';
@@ -277,7 +279,16 @@ class _StocksState extends State<Stocks> {
             // ),
             GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    child: Courses(
+                      departmentID: widget.courseID ?? 0,
+                      departmentName: widget.courseName,
+                    ),
+                    type: PageTransitionType.fade,
+                  )
+                );
               },
               child: Container(
                 height: 30,
@@ -316,134 +327,126 @@ class _StocksState extends State<Stocks> {
                 BorderRadius.circular(5.0),
           ),
           title: Container(
-            height: 45,
-            width: double.infinity,
             child: Column(
+             mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'New Book Product',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight:
-                          FontWeight.w600),
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600
+                  ),
                 ),
                 SizedBox(height: 5),
                 Text(
                   'Book Details',
                   style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 13,
-                      fontWeight:
-                          FontWeight.w400),
+                    color: Colors.grey,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400
+                  ),
                 ),
               ],
             ),
           ),
-          content: Container(
-            height: 80,
-            width: 200,
+          content: SingleChildScrollView(
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-
-                  Container(
-                    height: 40,
-                    width: double.infinity,
-                    child: TextFormField(
-                      controller: BookNameController,
-                      decoration: InputDecoration(
-                        border:
-                            UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.grey),
-                        ),
-                        focusedBorder:
-                            UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color:
-                                  primary_color),
-                        ),
-                        hintText: 'SSP 012',
-                        hintStyle: TextStyle(
-                          fontSize: 13,
-                          fontWeight:
-                              FontWeight.w400,
-                        ),
-                        suffixStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 40,
+                  width: double.infinity,
+                  child: TextFormField(
+                    controller: BookNameController,
+                    decoration: InputDecoration(
+                      border:
+                          UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.grey),
                       ),
-                      keyboardType:
-                          TextInputType.text,
-                      textInputAction:
-                          TextInputAction.done,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
+                      focusedBorder:
+                          UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                primary_color),
+                      ),
+                      hintText: 'SSP 012',
+                      hintStyle: TextStyle(
+                        fontSize: 13,
                         fontWeight:
                             FontWeight.w400,
                       ),
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(
-                            23),
-                      ],
-                    ),
-                  ),
-
-
-                  Container(
-                    height: 40,
-                    width: double.infinity,
-                    child: TextFormField(
-                      controller:
-                          SubjectDescController,
-                      decoration: InputDecoration(
-                        border:
-                            UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.grey),
-                        ),
-                        focusedBorder:
-                            UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color:
-                                  primary_color),
-                        ),
-                        hintText:
-                            'Student Success Program',
-                        hintStyle: TextStyle(
-                          fontSize: 13,
-                          fontWeight:
-                              FontWeight.w400,
-                        ),
-                        suffixStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                      keyboardType:
-                          TextInputType.text,
-                      textInputAction:
-                          TextInputAction.done,
-                      style: TextStyle(
-                        color: Colors.black,
+                      suffixStyle: TextStyle(
+                        color: Colors.grey,
                         fontSize: 12,
+                      ),
+                    ),
+                    keyboardType:
+                        TextInputType.text,
+                    textInputAction:
+                        TextInputAction.done,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight:
+                          FontWeight.w400,
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(
+                          23),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 40,
+                  width: double.infinity,
+                  child: TextFormField(
+                    controller:
+                        SubjectDescController,
+                    decoration: InputDecoration(
+                      border:
+                          UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.grey),
+                      ),
+                      focusedBorder:
+                          UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color:
+                                primary_color),
+                      ),
+                      hintText:
+                          'Student Success Program',
+                      hintStyle: TextStyle(
+                        fontSize: 13,
                         fontWeight:
                             FontWeight.w400,
                       ),
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(
-                            23),
-                      ],
+                      suffixStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                      ),
                     ),
+                    keyboardType:
+                        TextInputType.text,
+                    textInputAction:
+                        TextInputAction.done,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight:
+                          FontWeight.w400,
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(
+                          23),
+                    ],
                   ),
-
-
-                ]),
+                ),
+              ]
+            ),
           ),
           actions: [
             GestureDetector(
@@ -511,201 +514,207 @@ class _StocksState extends State<Stocks> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
-        listener: (context, state) {
-      // if (state is UniformPageState) {
-      //   Navigator.push(context, MaterialPageRoute(builder: (context) => UniformAdmin(courseName: widget.courseName, Department: widget.Department,)));
-      // } else if (state is UniformManagePageState) {
-      //   // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
-      // } else if (state is NewDepartmentPageState) {
-      //   // Navigator.push(context, MaterialPageRoute(builder: (context) => unifrom()));
-      // }
-    }, builder: (context, state) {
-      if (state is StocksLoadingState) {
-        return Center(
-            child: Lottie.asset('assets/lottie/loading.json',
-                height: 300, width: 380, fit: BoxFit.fill));
-      } else if (state is StocksLoadedState) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: primary_color,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-                BlocProvider.of<AdminExtendedBloc>(context)
-                    .add(ShowCoursesEvent(departmentID: widget.departmentId));
-              },
-            ),
-            title: Transform.translate(
-              offset: Offset(-15.0, 0.0),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Stocks',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    Text(
-                      'Course : ${widget.courseName}',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primary_color,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+            BlocProvider.of<AdminExtendedBloc>(context)
+                .add(ShowCoursesEvent(departmentID: widget.departmentId));
+          },
+        ),
+        title: Transform.translate(
+          offset: Offset(-15.0, 0.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Stocks',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
-              ),
+                Text(
+                  'Course : ${widget.courseName}',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
             ),
           ),
-          body: ListView(
-            children: [
-
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 20,
-                      width: double.infinity,
-                      child: Stack(children: [
-                        Positioned(
-                          top: 0,
-                          left: 20,
-                          child: Text(
-                            'Uniform',
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        // ADD BUTTON
-
-                        // Positioned(
-                        //   top: -15,
-                        //   right: 20,
-                        //   child: IconButton(
-                        //     icon: Icon(Icons.add, color: primary_color,),
-                        //     onPressed: () {
-                        //       _showAddUniformDialog();
-                        //     },
-                        //   ),
-                        // ),
-
-                        //
-                      ]),
-                    ),
-                    SizedBox(height: 10),
-                    // STOCK LIST | START
-                    Container(
-                      height: 270,
-                      width: double.infinity,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal, 
-                        children: [
-                          Container(
-                            child: state.stocks.isEmpty
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  child: Icon(Icons.shopping_bag,
-                                      size: 50, color: Colors.grey),
-                                )
-                              : ItemList(
-                                  stocks: state.stocks,
-                                  courseName: widget.courseName,
-                                  Department: widget.Department,
-                                ),
-                          ),
-                        ]
-                      ),
-                    ),
-                    
-                    Padding(
-                      padding: EdgeInsets.only(top: 15),
-                      child: Container(
+        ),
+      ),
+      body: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
+        listener: (context, state) {
+          // Add navigation logic here if needed.
+          // Uncomment and adjust as necessary:
+          // if (state is UniformPageState) {
+          //   Navigator.push(context, MaterialPageRoute(
+          //     builder: (context) => UniformAdmin(
+          //       courseName: widget.courseName,
+          //       Department: widget.Department,
+          //     ),
+          //   ));
+          // }
+        },
+        builder: (context, state) {
+          if (state is StocksLoadingState) {
+            return Center(
+              child: Lottie.asset(
+                'assets/lottie/loading.json',
+                height: 300,
+                width: 380,
+                fit: BoxFit.fill,
+              ),
+            );
+          } else if (state is StocksLoadedState) {
+            return ListView(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
                         height: 20,
                         width: double.infinity,
                         child: Stack(children: [
                           Positioned(
-                            top: -3,
+                            top: 0,
                             left: 20,
                             child: Text(
-                              'Books',
+                              'Uniform',
                               style: TextStyle(
                                   fontSize: 13,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
-                          Positioned(
-                            top: -15,
-                            right: 20,
-                            child: IconButton(
-                              icon: Icon(Icons.add, color: primary_color,),
-                              onPressed: () {
-                                _showAddBookDialog();
-                              },
-                            ),
-                          ),
+                          // ADD BUTTON
+
+                          // Positioned(
+                          //   top: -15,
+                          //   right: 20,
+                          //   child: IconButton(
+                          //     icon: Icon(Icons.add, color: primary_color,),
+                          //     onPressed: () {
+                          //       _showAddUniformDialog();
+                          //     },
+                          //   ),
+                          // ),
+
+                          //
                         ]),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(children: [
-                        SizedBox(height: 20),
-                        Container(
-                          width: double.infinity,
-                          height: 400,
-                          decoration: BoxDecoration(
-                            color: primary_color,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade400,
-                                blurRadius: 5,
-                                offset: Offset(1, 5),
-                              ),
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: ListView(
-                              children: [
-                                state.books.isEmpty
-                                    ? Container(
-                                        alignment: Alignment.center,
-                                        child: Icon(Icons.shopping_bag,
-                                            size: 50, color: Colors.grey),
-                                      )
-                                    : BookList(books: state.books),
-                              ],
+                      SizedBox(height: 10),
+                      // STOCK LIST | START
+                      Container(
+                        height: 270,
+                        width: double.infinity,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal, 
+                          children: [
+                            Container(
+                              child: state.stocks.isEmpty
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    child: Icon(Icons.shopping_bag,
+                                        size: 50, color: Colors.grey),
+                                  )
+                                : ItemList(
+                                    stocks: state.stocks,
+                                    courseName: widget.courseName,
+                                    Department: widget.Department,
+                                  ),
                             ),
-                          ),
+                          ]
                         ),
-                        SizedBox(height: 20),
-                      ]),
-                    ),
-                  ],
+                      ),
+                      
+                      Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: Container(
+                          height: 20,
+                          width: double.infinity,
+                          child: Stack(children: [
+                            Positioned(
+                              top: -3,
+                              left: 20,
+                              child: Text(
+                                'Books',
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            Positioned(
+                              top: -15,
+                              right: 20,
+                              child: IconButton(
+                                icon: Icon(Icons.add, color: primary_color,),
+                                onPressed: () {
+                                  _showAddBookDialog();
+                                },
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        margin:EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 400,
+                              decoration: BoxDecoration(
+                                color: primary_color,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade400,
+                                    blurRadius: 5,
+                                    offset: Offset(1, 5),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: ListView(
+                                  children: [
+                                    state.books.isEmpty
+                                      ? Container(
+                                          alignment: Alignment.center,
+                                          child: Icon(Icons.shopping_bag,
+                                              size: 50, color: Colors.grey),
+                                        )
+                                      : BookList(books: state.books),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                          ]
+                        )
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      } else if (state is StocksErrorState) {
-        return Center(child: Text(state.error));
-      } else {
-        return Center(
-            child: Lottie.asset('assets/lottie/loading.json',
-                height: 300, width: 380, fit: BoxFit.fill));
-      }
-    }
-        // }
-        );
+              ],
+            );
+          } else {
+            return Center(child: Text('Something went wrong.'));
+          }
+        },
+      )
+    );
   }
 }
 
@@ -776,13 +785,16 @@ class _ItemCardState extends State<ItemCard> {
           InkWell(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UniformAdmin(
-                            courseName: widget.courseName,
-                            Department: widget.Department,
-                            stock: widget.stock,
-                          )));
+                context,
+                PageTransition(
+                  child: UniformAdmin(
+                          courseName: widget.courseName,
+                          Department: widget.Department,
+                          stock: widget.stock,
+                        ),
+                  type: PageTransitionType.fade,
+                )
+              );
             },
 
             // image
@@ -907,22 +919,21 @@ class BookList extends StatelessWidget {
   final List<Book> books;
 
   const BookList({Key? key, required this.books})
-      : super(
-            key:
-                key); ////////////////////////////////////////////////////////////
+      : super(key: key); 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: books
           .map((book) => BookCard(
-                // courseID: 0,  ///////////////////////////////////////////////////////////
-                visual: book,
-                isSelected: false,
-                onChanged: (bool? value) {},
-              ))
-          .toList(),
+              // courseID: 0, 
+              visual: book,
+              isSelected: false,
+              onChanged: (bool? value) {},
+            ))
+        .toList(),
     );
   }
+
 }
 
 class BookCard extends StatefulWidget {
@@ -969,7 +980,7 @@ class _BookCardState extends State<BookCard> {
       children: [
         ListTile(
           title: Text(
-            widget.visual.BookName,
+            limitText(widget.visual.BookName, 16),
             style: TextStyle(
                 fontSize: 13, color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -977,7 +988,7 @@ class _BookCardState extends State<BookCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.visual.SubjectDesc,
+                limitText(widget.visual.SubjectDesc, 20),
                 style: TextStyle(
                   fontSize: 10,
                   color: Colors.white.withOpacity(0.7),
@@ -1025,27 +1036,30 @@ class _BookCardState extends State<BookCard> {
               ),
             ],
           ),
-          iconColor: Colors.white,
-          leading: Icon(
-            Icons.book,
-            size: 32,
-            color: Colors.white,
-          ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   _showUpdateUniformDialog(context, widget.visual);
                 },
-                icon: Icon(
-                  Icons.dashboard_customize_outlined,
-                  color: Colors.white,
-                ),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)
+                  ),
+                  child: Icon(
+                    size: 17,
+                    Icons.dashboard_customize_outlined,
+                    color: primary_color,
+                  ),
+                )
               ),
               SizedBox(width: 8),
-              IconButton(
-                onPressed: () {
+              InkWell(
+                onTap: () {
                   adminRepository.deleteBook(widget.visual.id);
                   Future.delayed(Duration(seconds: 1), () {
                     BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
@@ -1053,10 +1067,19 @@ class _BookCardState extends State<BookCard> {
                     ));
                   });
                 },
-                icon: Icon(
-                  Icons.delete,
-                  color: Colors.red, //test
-                ),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)
+                  ),
+                  child: Icon(
+                    size: 17,
+                    Icons.delete,
+                    color: Colors.red, 
+                  ),
+                )
               ),
             ],
           ),
@@ -1112,81 +1135,155 @@ Future<void> _showUpdateUniformDialog(BuildContext context, Book book) async {
     builder: (context) {
       return AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(5.0),
         ),
         backgroundColor: Colors.white,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            'Update Book Stock',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueAccent,
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Update Book Stock',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w600
+              ),
             ),
-          ),
+            Text(
+              'Book Name: ${book.BookName}',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+                fontWeight: FontWeight.w400
+              ),
+            ),
+          ]
         ),
         content: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Book Name: ${book.BookName}',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 10),
-              TextField(
+              TextFormField(
                 controller: stockController,
                 decoration: InputDecoration(
-                  labelText: 'Stock',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                  border:
+                      UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colors.grey),
                   ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
+                  focusedBorder:
+                      UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color:
+                            primary_color),
+                  ),
+                  hintText: 'Stocks',
+                  hintStyle: TextStyle(
+                    fontSize: 13,
+                    fontWeight:
+                        FontWeight.w400,
+                  ),
+                  suffixStyle: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType:
+                    TextInputType.text,
+                textInputAction:
+                    TextInputAction.done,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight:
+                      FontWeight.w400,
+                ),
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(
+                      23),
+                ],
               ),
             ],
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              if (stockController.text.isNotEmpty) {
-                BlocProvider.of<AdminExtendedBloc>(context).add(
-                  bookreservefirst(
-                    book.BookName,
-                    int.parse(stockController.text),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    if (stockController.text.isNotEmpty) {
+                      BlocProvider.of<AdminExtendedBloc>(context).add(
+                        bookreservefirst(
+                          book.BookName,
+                          int.parse(stockController.text),
+                        ),
+                      );
+                      BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
+                        Course: book.Course,
+                      ));
+                      Navigator.of(context).pop();
+                    } else {
+                      print('Stock input is empty');
+                    }
+                  },
+                  child: Container(
+                    height: 30,
+                    width: 112,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(2),
+                        color: primary_color),
+                    child: Center(
+                      child: Text(
+                        'Update',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight:
+                                FontWeight.w600),
+                      ),
+                    ),
                   ),
-                );
-                BlocProvider.of<AdminExtendedBloc>(context).add(ShowStocksEvent(
-                  Course: book.Course,
-                ));
-                Navigator.of(context).pop();
-              } else {
-                print('Stock input is empty');
-              }
-            },
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.greenAccent,
-            ),
-            child: const Text(
-              'Update',
-              style: TextStyle(color: Colors.black),
-            ),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    height: 30,
+                    width: 112,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(2),
+                        color: primary_color),
+                    child: Center(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight:
+                                FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ]
           ),
         ],
       );
     },
   );
+}
+
+String limitText(String text, int maxLength) {
+  return text.length > maxLength ? '${text.substring(0, maxLength)}...' : text;
 }

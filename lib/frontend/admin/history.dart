@@ -53,173 +53,87 @@ class _HistoryState extends State<History> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool isScrolled) {
-          return [
-            SliverAppBar(
-              backgroundColor: Colors.white,
-              title: Text(
-                'History',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              centerTitle: false,
-            ),
-          ];
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(
+          'History',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: false,
+      ),
+      body: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
+        listener: (context, state) {
+          if (state is StudentBagCombinedLoadSuccessState) {
+            setState(() {
+              items = state.studentBagItems;
+              books = state.studentBagBooks;
+            });
+          }
+          if (state is StudentBagCombinedLoadSuccessState) {
+            setState(() {});
+          }
         },
-        body: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
-          listener: (context, state) {
-            if (state is StudentBagCombinedLoadSuccessState) {
-              setState(() {
-                items = state.studentBagItems;
-                books = state.studentBagBooks;
-              });
-            }
-            if (state is StudentBagCombinedLoadSuccessState) {
-              setState(() {});
-            }
-          },
-          builder: (context, state) {
-            if (state is studentLoading) {
-              return Center(
-                  child: Lottie.asset('assets/lottie/loading.json',
-                      height: 300, width: 380, fit: BoxFit.fill));
-            }
-            if (_showLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is StudentBagCombinedLoadSuccessState) {
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView(
-                  children: [
-                    Container(
-                      height: 20,
-                      width: double.infinity,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 0,
-                            child: Text(
-                              'Books',
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          Positioned(
-                            right: -5,
-                            child: InkWell(
-                              onTap: () {
-                                // Navigate to view all books
-                              },
-                              child: Container(
-                                height: 20,
-                                width: 100,
-                                child: Center(
-                                  child: Text(
-                                    'View All Books >',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: tertiary_color,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: books.isEmpty
-                        ? Center(
-                            child: Column(
-                              children: [
-                                SizedBox(height: 50),
-                                Image.asset(
-                                  "assets/empty_state/announcement.png",
-                                  height: 140,
-                                  width: 140,
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  'No Books Claimed Yet',
-                                  style: TextStyle(fontSize: 14, color: Colors.black),
-                                ),
-                                SizedBox(height: 5),
-                                Container(
-                                  width: 300,
-                                  child: Text(
-                                    "You haven't claimed any books yet. Once you do, they\n'll be listed here for your reference.",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 10, color: Colors.black54),
-                                  ),
-                                ),
-                                SizedBox(height: 100),
-                              ],
-                            ),
-                          )
-                        : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                          child: book_list(
-                            status: books
-                                .where((book) => book.status ==
-                                    (_currentSelection == 1 ? "Complete" : "Cancelled"))
-                                .toList(),
+        builder: (context, state) {
+          if (state is studentLoading) {
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json',
+                    height: 300, width: 380, fit: BoxFit.fill));
+          }
+          if (_showLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is StudentBagCombinedLoadSuccessState) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: ListView(
+                children: [
+                  Container(
+                    height: 20,
+                    width: double.infinity,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          child: Text(
+                            'Books',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 20,
-                      width: double.infinity,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 0,
-                            child: Text(
-                              'Uniform',
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          Positioned(
-                            right: -5,
-                            child: InkWell(
-                              onTap: () {
-                                // Navigate to view all uniforms
-                              },
-                              child: Container(
-                                height: 20,
-                                width: 100,
-                                child: Center(
-                                  child: Text(
-                                    'View All Uniform >',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: tertiary_color,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                        Positioned(
+                          right: -5,
+                          child: InkWell(
+                            onTap: () {
+                              // Navigate to view all books
+                            },
+                            child: Container(
+                              height: 20,
+                              width: 100,
+                              child: Center(
+                                child: Text(
+                                  'View All Books >',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: tertiary_color,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 20),
-                    items.isEmpty
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: books.isEmpty
                       ? Center(
                           child: Column(
                             children: [
@@ -231,14 +145,14 @@ class _HistoryState extends State<History> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                'No Uniforms Claimed Yet',
+                                'No Books Claimed Yet',
                                 style: TextStyle(fontSize: 14, color: Colors.black),
                               ),
                               SizedBox(height: 5),
                               Container(
                                 width: 300,
                                 child: Text(
-                                  "You haven't claimed any uniforms yet. Once you do, they'll appear here for easy tracking.",
+                                  "You haven't claimed any books yet. Once you do, they\n'll be listed here for your reference.",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 10, color: Colors.black54),
@@ -248,23 +162,103 @@ class _HistoryState extends State<History> {
                             ],
                           ),
                         )
-                      : uniform_list(
-                          status: items
-                            .where((item) =>
-                                item.status ==
-                                (_currentSelection == 1
-                                    ? "Complete"
-                                    : "Cancelled"))
-                            .toList(),
+                      : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+                        child: book_list(
+                          status: books
+                              .where((book) => book.status ==
+                                  (_currentSelection == 1 ? "Complete" : "Cancelled"))
+                              .toList(),
+                        ),
                       ),
-                  ],
-                ),
-              );
-            } else {
-              return Center(child: Text('No data available.'));
-            }
-          },
-        ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    height: 20,
+                    width: double.infinity,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          child: Text(
+                            'Uniform',
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Positioned(
+                          right: -5,
+                          child: InkWell(
+                            onTap: () {
+                              // Navigate to view all uniforms
+                            },
+                            child: Container(
+                              height: 20,
+                              width: 100,
+                              child: Center(
+                                child: Text(
+                                  'View All Uniform >',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: tertiary_color,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  items.isEmpty
+                    ? Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 50),
+                            Image.asset(
+                              "assets/empty_state/announcement.png",
+                              height: 140,
+                              width: 140,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'No Uniforms Claimed Yet',
+                              style: TextStyle(fontSize: 14, color: Colors.black),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: 300,
+                              child: Text(
+                                "You haven't claimed any uniforms yet. Once you do, they'll appear here for easy tracking.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.black54),
+                              ),
+                            ),
+                            SizedBox(height: 100),
+                          ],
+                        ),
+                      )
+                    : uniform_list(
+                        status: items
+                          .where((item) =>
+                              item.status ==
+                              (_currentSelection == 1
+                                  ? "Complete"
+                                  : "Cancelled"))
+                          .toList(),
+                    ),
+                ],
+              ),
+            );
+          } else {
+            return Center(child: Text('No data available.'));
+          }
+        },
       ),
     );
   }

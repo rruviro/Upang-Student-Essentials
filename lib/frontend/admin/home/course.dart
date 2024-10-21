@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:use/backend/bloc/admin/admin_bloc.dart';
 import 'package:use/backend/models/admin/Course.dart';
+import 'package:use/frontend/admin/home/home.dart';
+import 'package:use/frontend/admin/navigation.dart';
 import '../../colors/colors.dart';
 import 'stocks.dart';
 
@@ -27,7 +30,13 @@ class Courses extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                PageTransition(
+                  child: HomeBase(),
+                  type: PageTransitionType.leftToRight
+                )
+              );
             },
           ),
           title: Transform.translate(
@@ -101,14 +110,15 @@ class ItemCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => Stocks(
+            PageTransition(
+              child: Stocks(
                 courseID: course.id,
                 courseName: course.courseName,
                 Department: departmentName,
                 departmentId: departmentId,
               ),
-            ),
+              type: PageTransitionType.fade,
+            )
           );
         },
         child: Container(
