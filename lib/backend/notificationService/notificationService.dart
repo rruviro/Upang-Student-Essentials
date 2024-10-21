@@ -28,7 +28,7 @@ class NotificationService {
     int lastNotificationId = prefs.getInt('last_notification_id') ?? 0;
     // final String baseUrl = 'http://10.0.2.2:8000/api/mails';
     final String baseUrl =
-        'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api/mails';
+        'https://polar-brushlands-76526-d0a1bfc35881.herokuapp.com/api/mails';
 
     timer = Timer.periodic(Duration(seconds: 30), (Timer t) async {
       print("Polling...");
@@ -50,7 +50,7 @@ class NotificationService {
                 ),
               );
               await http.put(Uri.parse(
-                  'https://warm-hollows-72745-fdd680fc4383.herokuapp.com/api/notificationdone/${notification['id']}'));
+                  'https://polar-brushlands-76526-d0a1bfc35881.herokuapp.com/api/notificationdone/${notification['id']}'));
               lastNotificationId = notification['id'];
               await prefs.setInt('last_notification_id', lastNotificationId);
               redirect(notification['redirectTo']);

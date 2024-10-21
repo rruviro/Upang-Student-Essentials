@@ -75,6 +75,47 @@ class _UniformStudentState extends State<UniformStudent> {
     return items
         .any((item) => item.type == widget.type && item.body == uniform.Body);
   }
+  void showSuccessDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      // Automatically dismiss the dialog after 2 seconds
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.of(context).pop(); // Close dialog after 2 seconds
+      });
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        contentPadding: EdgeInsets.zero,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Large checkmark at the top
+            Container(
+              padding: EdgeInsets.only(top: 16),
+              child: Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 80,
+              ),
+            ),
+            SizedBox(height: 16),
+            // Success message
+            Text(
+              "Book Added to Backpack!",
+              style: TextStyle(
+                color: primary_color,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(height: 16),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   // Function to add the uniform to the bag and show success dialog
   void _addUniformToBackpack(Uniform uniform) {
@@ -307,7 +348,6 @@ class _UniformStudentState extends State<UniformStudent> {
                               child: ElevatedButton(
                                 onPressed: (uniforms.isNotEmpty && !isUniformInBag(uniforms.first))
                                     ? () {
-                                  // Add a 2-second delay before showing the request modal
                                   Future.delayed(Duration(seconds: 1), () {
                                     _showRequestModal(context, widget.type);
                                   });
@@ -400,8 +440,9 @@ class _UniformStudentState extends State<UniformStudent> {
                 widget.profile.id,
                 selectedSchedule!));
             _addUniformToBackpack(uniforms.first);
-            Navigator.pop(context);
+            showSuccessDialog(context);
           },
+          
           submitButtonText: 'Add to Backpack',
           submitButtonIcon: Icons.backpack,
           uniforms: uniforms, // Pass the entire list of uniforms
@@ -450,7 +491,7 @@ class _UniformStudentState extends State<UniformStudent> {
                 selectedSchedule!,
                 selectedUniform.Stock));
             _addUniformToBackpack(uniforms.first);
-            Navigator.pop(context);
+            showSuccessDialog(context);
           },
           submitButtonText: 'Request',
           submitButtonIcon: Icons.request_page,

@@ -224,16 +224,13 @@ class BagState extends State<Bag> {
                                             ],
                                           ),
                                         )
-                                      : SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                                        child: BookList(
+                                      : BookList(
                                           status: book,
                                           refresh: refreshData,
                                           onCheckboxChanged: updateCheckedBookIds,
                                           checkedBookIds: checkedBookIds,
                                         ),
                                       ),
-                                  ),
                                   SizedBox(height: 10),
                                 ],
                               ),

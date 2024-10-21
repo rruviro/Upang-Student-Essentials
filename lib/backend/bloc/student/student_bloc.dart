@@ -214,7 +214,7 @@ class StudentExtendedBloc
             .showStudenNotificationMailData(event.stunotification_id);
         emit(StudentNotificationMailLoadSuccessState(mailData));
       } catch (e) {
-        print(e);
+        print(event.stunotification_id);
       }
     });
 

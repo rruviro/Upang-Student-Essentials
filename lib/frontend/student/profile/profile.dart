@@ -633,68 +633,7 @@ class _ProfileScreenState extends State<Profile> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      InkWell(
-                                        onTap: () async {
-                                          final result =
-                                              await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Transaction(
-                                                        page: 1,
-                                                        studentProfile: widget
-                                                            .studentProfile,
-                                                        status: 'Request')),
-                                          );
-                                          if (result == true) {
-                                            context
-                                                .read<StudentExtendedBloc>()
-                                                .add(studentBagBook(
-                                                    widget
-                                                        .studentProfile.id,
-                                                    "Complete"));
-                                            context
-                                                .read<StudentExtendedBloc>()
-                                                .add(studentBagItem(
-                                                    widget
-                                                        .studentProfile.id,
-                                                    "Complete"));
-                                          } else {
-                                            context
-                                                .read<StudentExtendedBloc>()
-                                                .add(studentBagBook(
-                                                    widget
-                                                        .studentProfile.id,
-                                                    "Complete"));
-                                            context
-                                                .read<StudentExtendedBloc>()
-                                                .add(studentBagItem(
-                                                    widget
-                                                        .studentProfile.id,
-                                                    "Complete"));
-                                          }
-                                        },
-                                        child: Column(
-                                          children: [
-                                            SizedBox(height: 13),
-                                            Icon(
-                                              Icons.request_page_outlined,
-                                              color: Colors.white,
-                                              size: 30,
-                                            ),
-                                            SizedBox(height: 10),
-                                            Text(
-                                              'Request',
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 30),
+
                                       InkWell(
                                         onTap: () async {
                                           final result =
