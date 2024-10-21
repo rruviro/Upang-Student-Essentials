@@ -101,7 +101,7 @@ class _ProfileScreenState extends State<Profile> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(isBook ? "Book Details" : "Item Details"),
+            title: Text(isBook ? "Book Details" : "Uniform Details"),
             content: SingleChildScrollView(
               child: ListBody(
                 children: isBook
@@ -109,12 +109,15 @@ class _ProfileScreenState extends State<Profile> {
                         Text("Book Name: ${item.bookName}"),
                         Text("Subject Code: ${item.subjectCode}"),
                         Text("Subject Description: ${item.subjectDesc}"),
-                        Text("Status: ${item.status}"),
                         Text("Claiming Schedule: ${item.claimingSchedule}"),
-                        Text("Reservation Number: ${item.reservationNumber}"),
                       ]
                     : [
-                        Text("Course: ${item.id}"),
+                        Text("Course: ${item.course}"),
+                        Text("Gender: ${item.gender}"),
+                        Text("Type: ${item.type}"),
+                        Text("Body: ${item.body}"),
+                        Text("Size: ${item.size}"),
+                        Text("Claiming Schedule: ${item.claimingSchedule}"),
                       ],
               ),
             ),
@@ -172,8 +175,6 @@ class _ProfileScreenState extends State<Profile> {
         );
       },
     );
-
-    // Close the success dialog after 2 seconds
     Future.delayed(Duration(seconds: 2), () {
       Navigator.of(context).pop();
     });
@@ -181,7 +182,11 @@ class _ProfileScreenState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
       listener: (context, state) {
         if (state is itemCodeDataLoaded) {
           setState(() {
@@ -633,7 +638,7 @@ class _ProfileScreenState extends State<Profile> {
                   height: 300, width: 380, fit: BoxFit.fill));
         }
       },
-    );
+    ));
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:use/backend/bloc/student/student_bloc.dart';
@@ -267,7 +268,9 @@ class _StocksState extends State<Stocks> {
       },
       builder: (context, state) {
         if (state is StocksLoadingState) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
+            );
         } else if (state is StocksLoadedState) {
           print(items.length);
           return Scaffold(
@@ -407,13 +410,11 @@ class _StocksState extends State<Stocks> {
             ),
           );
         } else if (state is StocksErrorState) {
-          print("hatdog");
           return Center(child: Text(state.error));
         } else {
-          print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-          print(state);
-          print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
+            );
         }
       },
     );

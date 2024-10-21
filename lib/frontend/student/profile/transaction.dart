@@ -61,9 +61,6 @@ class _TransactionState extends State<Transaction> {
       _currentSelection = id;
       String status;
       switch (id) {
-        case 1:
-          status = "Request";
-          break;
         case 2:
           status = "Reserved";
           break;
@@ -71,7 +68,7 @@ class _TransactionState extends State<Transaction> {
           status = "Claim";
           break;
         default:
-          status = "Request";
+          status = "Reserved";
       }
       context
           .read<StudentExtendedBloc>()
@@ -118,28 +115,6 @@ class _TransactionState extends State<Transaction> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      InkWell(
-                        key: _requestKey,
-                        onTap: () => _selectedItem(1),
-                        child: Text(
-                          'Request',
-                          style: TextStyle(
-                              fontSize: 10,
-                              color: _currentSelection == 1
-                                  ? Color.fromARGB(255, 0, 0, 0)
-                                  : Colors.grey,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      SizedBox(
-                        height: 25,
-                        width: 1,
-                        child: Container(
-                          decoration: BoxDecoration(color: Colors.black26),
-                        ),
-                      ),
-                      SizedBox(width: 20),
                       InkWell(
                         key: _reservedKey,
                         onTap: () => _selectedItem(2),
@@ -652,7 +627,7 @@ class BookCard extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            book.code,
+                            book.code!,
                             style: TextStyle(
                               fontSize: 10,
                               color: Colors.white54,
