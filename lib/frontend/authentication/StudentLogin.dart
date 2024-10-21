@@ -68,7 +68,6 @@ class StudnetLogin extends StatelessWidget {
               if (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();
               }
-
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   backgroundColor: Colors.red,
@@ -246,7 +245,6 @@ class StudnetLogin extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
                     SizedBox(height: 40),
                     Container(
                       height: 50,

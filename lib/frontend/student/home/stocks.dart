@@ -258,61 +258,62 @@ class _StocksState extends State<Stocks> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
-      listener: (context, state) {
-        if (state is StudentBagBookLoadSuccessState) {
-          setState(() {
-            items = state.studentBagBook;
-          });
-        } else if (state is UniformPageState) {}
-      },
-      builder: (context, state) {
-        if (state is StocksLoadingState) {
-          return Center(
-              child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
-            );
-        } else if (state is StocksLoadedState) {
-          print(items.length);
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: primary_color,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-              ),
-              title: Transform.translate(
-                offset: Offset(-15.0, 0.0),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Stocks',
-                          style: TextStyle(color: Colors.white, fontSize: 16)),
-                      Text('Course: ${widget.courseName}',
-                          style: TextStyle(color: Colors.white, fontSize: 10)),
-                    ],
-                  ),
-                ),
-              ),
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.backpack_outlined, color: Colors.white),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => BlocProvider<StudentExtendedBloc>.value(
-                        value: studBloc,
-                        child: Bag(
-                            studentProfile: widget.profile, Status: "ACTIVE"),
-                      ),
-                    ));
-                  },
-                ),
+    return  Scaffold(
+      appBar: AppBar(
+        backgroundColor: primary_color,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+        title: Transform.translate(
+          offset: Offset(-15.0, 0.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Stocks',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                Text('Course: ${widget.courseName}',
+                    style: TextStyle(color: Colors.white, fontSize: 10)),
               ],
             ),
-            body: ListView(
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.backpack_outlined, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                builder: (_) => BlocProvider<StudentExtendedBloc>.value(
+                  value: studBloc,
+                  child: Bag(
+                      studentProfile: widget.profile, Status: "ACTIVE"),
+                ),
+              ));
+            },
+          ),
+        ],
+      ),
+      body: BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
+        listener: (context, state) {
+          if (state is StudentBagBookLoadSuccessState) {
+            setState(() {
+              items = state.studentBagBook;
+            });
+          } else if (state is UniformPageState) {}
+        },
+        builder: (context, state) {
+          if (state is StocksLoadingState) {
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
+              );
+          } else if (state is StocksLoadedState) {
+            print(items.length);
+            return ListView(
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
@@ -393,13 +394,13 @@ class _StocksState extends State<Stocks> {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: state.books.isEmpty
-                                ? Container(
-                                    alignment: Alignment.center,
-                                    child: Icon(Icons.shopping_bag,
-                                        size: 50, color: Colors.grey),
-                                  )
-                                : BookList(
-                                    books: state.books, onTap: _showBookDialog),
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icons.shopping_bag,
+                                      size: 50, color: Colors.grey),
+                                )
+                              : BookList(
+                                  books: state.books, onTap: _showBookDialog),
                           ),
                         ),
                       ),
@@ -407,16 +408,16 @@ class _StocksState extends State<Stocks> {
                   ),
                 ),
               ],
-            ),
-          );
-        } else if (state is StocksErrorState) {
-          return Center(child: Text(state.error));
-        } else {
-          return Center(
-              child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
             );
+          } else if (state is StocksErrorState) {
+            return Center(child: Text(state.error));
+          } else {
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
+              );
+          }
         }
-      },
+      )
     );
   }
 }

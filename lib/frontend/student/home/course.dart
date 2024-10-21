@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
-import 'package:use/SERVICES/model/student/Course.dart';
 import 'package:use/backend/models/admin/Course.dart';
-import 'package:use/backend/models/admin/Department.dart';
 import 'package:use/backend/models/student/StudentData/StudentProfile.dart';
-import 'package:use/frontend/student/bag.dart';
-import 'package:use/frontend/student/home/home.dart';
 import 'package:use/frontend/student/home/stocks.dart';
-import 'package:use/frontend/student/widgets/home/course.dart';
+import 'package:use/frontend/student/navigation.dart';
 
 import '../../colors/colors.dart';
 
@@ -37,51 +33,57 @@ class _coursesState extends State<courses> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
-      listenWhen: (previous, current) => current is StudentActionState,
-      buildWhen: (previous, current) => current is! StudentActionState,
-      listener: (context, state) {
-        if (state is StockPageState) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks(courseID: 0, courseName: '', Department: '',profile: widget.profile)));
-        }
-      },
-      builder: (context, state) {
-        if (state is CoursesLoadingState) {
-          return Center(
-              child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primary_color,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                child: SHomeBase(studentId: widget.profile.stuId),
+                type: PageTransitionType.leftToRight
+              )
             );
-        } else if (state is CoursesLoadedState) {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: primary_color,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              title: Transform.translate(
-                offset: const Offset(-15.0, 0.0),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Courses',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      Text(
-                        'Department: ${widget.departmentName}',
-                        style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
-                      ),
-                    ],
-                  ),
+          },
+        ),
+        title: Transform.translate(
+          offset: const Offset(-15.0, 0.0),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Courses',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
-              ),
-              actions: [],
+                Text(
+                  'Department: ${widget.departmentName}',
+                  style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
+                ),
+              ],
             ),
-            body: Container(
+          ),
+        ),
+        actions: [],
+      ),
+      body: BlocConsumer<StudentExtendedBloc, StudentExtendedState>(
+        listenWhen: (previous, current) => current is StudentActionState,
+        buildWhen: (previous, current) => current is! StudentActionState,
+        listener: (context, state) {
+          if (state is StockPageState) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Stocks(courseID: 0, courseName: '', Department: '',profile: widget.profile)));
+          }
+        },
+        builder: (context, state) {
+          if (state is CoursesLoadingState) {
+            return Center(
+                child: Lottie.asset('assets/lottie/loading.json', height: 300, width: 380, fit: BoxFit.fill)
+              );
+          } else if (state is CoursesLoadedState) {
+            return Container(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20.0),
               child: ListView(
                 children: [
@@ -93,13 +95,13 @@ class _coursesState extends State<courses> {
                   ),
                 ],
               ),
-            ),
-          );
-        } else if (state is CoursesErrorState) {
-          return Center(child: Text(state.error));
-        }
-        return Container();
-      },
+            );
+          } else if (state is CoursesErrorState) {
+            return Center(child: Text(state.error));
+          }
+          return Container();
+        },
+      )
     );
   }
 }
@@ -157,14 +159,15 @@ class ItemCard extends StatelessWidget {
         onTap: () async {
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => Stocks(
+            PageTransition(
+              child: Stocks(
                 courseID: course.id,
                 courseName: course.courseName,
                 Department: departmentName,
                 profile: this.profile
               ),
-            ),
+              type: PageTransitionType.fade,
+            )
           );
           if (result == true) {
             studentBloc.add(ShowCoursesEvent(departmentID: id));

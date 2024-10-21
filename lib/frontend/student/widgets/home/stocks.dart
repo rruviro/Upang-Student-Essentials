@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:use/SERVICES/model/admin/Course.dart';
 import 'package:use/backend/bloc/student/student_bloc.dart';
 import 'package:use/SERVICES/model/student/Stocks.dart';
@@ -58,18 +59,21 @@ class ItemCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => UniformStudent(
-                          courseName: courseName,
-                          profile: this.profile,
-                          department: this.department,
-                          type: this.stock.stockName,
-                          Gender: stock.Gender,
-                          UniformType: stock.Type,
-                          Body: stock.Body,
-                          stockPhoto: stock.photoUrl,
-                        )));
+              context,
+              PageTransition(
+                child: UniformStudent(
+                  courseName: courseName,
+                  profile: this.profile,
+                  department: this.department,
+                  type: this.stock.stockName,
+                  Gender: stock.Gender,
+                  UniformType: stock.Type,
+                  Body: stock.Body,
+                  stockPhoto: stock.photoUrl,
+                ),
+                type: PageTransitionType.fade,
+              )
+            );
           },
           child: Container(
             height: 250,

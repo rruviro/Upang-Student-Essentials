@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:use/backend/apiservice/studentApi/srepoimpl.dart';
 import 'package:use/backend/models/admin/Department.dart';
@@ -75,13 +76,15 @@ class _HomeState extends State<Home> {
                       Status: widget.studentProfile.status)));
         } else if (state is CoursePageState) {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => courses(
-                        departmentID: 0,
-                        departmentName: '',
-                        profile: widget.studentProfile,
-                      )));
+            context,
+            PageTransition(
+              child: courses(
+                departmentID: 0,
+                departmentName: '',
+                profile: widget.studentProfile,
+              ),
+            type: PageTransitionType.rightToLeft
+          ));
         }
       },            
       builder: (context, state) {
@@ -248,14 +251,14 @@ class ItemCard extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => courses(
+                  PageTransition(
+                    child: courses(
                       departmentID: visual.id ?? 0,
                       departmentName: visual.name,
                       profile: this.profile,
                     ),
-                  ),
-                );
+                  type: PageTransitionType.rightToLeft
+                ));
               },
               child: Container(
                 decoration: BoxDecoration(
