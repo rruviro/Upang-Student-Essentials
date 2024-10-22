@@ -202,14 +202,50 @@ class _ProfileScreenState extends State<Profile> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Error'),
-                content: Text('No code found.'),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0)
+                ),
+                title: Container(
+                  child: Column(
+                    mainAxisSize:  MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Error",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                content: Text('No code entered.'),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    child: Container(
+                      height: 30,
+                      width: 112,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: primary_color,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "OK",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -882,7 +918,7 @@ void _showCreateDialog(BuildContext context) {
           ),
         ),
         content: Container(
-          height: 420,
+          height: 400,
           width: double.infinity,
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {

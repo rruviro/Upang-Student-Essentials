@@ -488,23 +488,24 @@ class _StocksState extends State<Stocks> {
                 Navigator.pop(context);
               },
               child: Container(
-                  height: 30,
-                  width: 112,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(
-                              2),
-                      color: primary_color),
-                  child: Center(
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight:
-                              FontWeight.w600),
-                    ),
-                  )),
+                height: 30,
+                width: 112,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(
+                            2),
+                    color: primary_color),
+                child: Center(
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight:
+                            FontWeight.w600),
+                  ),
+                )
+              ),
             ),
           ],
         );

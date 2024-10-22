@@ -71,37 +71,85 @@ class _UniformAdminState extends State<UniformAdmin> {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5.0),
           ),
-          title: Text(
-            'Add Size',
-            style: TextStyle(
-              color: primary_color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: SizeController,
-                decoration: InputDecoration(
-                  labelText: 'Enter size',
-                  border: OutlineInputBorder(),
-                ),
+              Text(
+                'Add Size',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600),
               ),
+              SizedBox(height: 10),
+              Text(
+                'Enter uniform size (e.g., S, M, L)',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                ),
+              )
             ],
+          ),
+
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 40,
+                  width: double.infinity,
+                  child: TextFormField(
+                    controller: SizeController,
+                    decoration: InputDecoration(
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primary_color,
+                          ),
+                        ),
+                        hintText: 'Enter Size',
+                        hintStyle: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        suffixStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(vertical: 8.0)),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                    color: Colors.grey),
-              ),
+              child: Container(
+                  height: 30,
+                  width: 112,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: primary_color),
+                  child: Center(
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )),
             ),
             TextButton(
               onPressed: () async {
@@ -120,11 +168,21 @@ class _UniformAdminState extends State<UniformAdmin> {
                         widget.stock.Type, widget.stock.Body));
                 Navigator.pop(context);
               },
-              child: Text(
-                'Add',
-                style: TextStyle(
-                    color: primary_color), // Primary color for add button
-              ),
+              child: Container(
+                  height: 30,
+                  width: 112,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: primary_color),
+                  child: Center(
+                    child: Text(
+                      'Add',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )),
             ),
           ],
         );
@@ -151,49 +209,49 @@ class _UniformAdminState extends State<UniformAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: primary_color,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-            context
-                .read<AdminExtendedBloc>()
-                .add(ShowStocksEvent(Course: widget.courseName));
-          },
-        ),
-        title: Transform.translate(
-          offset: const Offset(-15.0, 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Uniform',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              Text(
-                'Course: ${widget.courseName} ${widget.stock.stockName}',
-                style: const TextStyle(color: Colors.white, fontSize: 10),
-              ),
-            ],
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: primary_color,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+              context
+                  .read<AdminExtendedBloc>()
+                  .add(ShowStocksEvent(Course: widget.courseName));
+            },
+          ),
+          title: Transform.translate(
+            offset: const Offset(-15.0, 0.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Uniform',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                Text(
+                  'Course: ${widget.courseName} ${widget.stock.stockName}',
+                  style: const TextStyle(color: Colors.white, fontSize: 10),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      body: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          if (_showLoading) {
-            return Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill));
-          }
-          if (state is UniformsLoadingState) {
-            return Center(
-                child: Lottie.asset('assets/lottie/loading.json',
-                    height: 300, width: 380, fit: BoxFit.fill));
-          } else if (state is UniformsLoadedState) {
-            return SingleChildScrollView(
+        body: BlocConsumer<AdminExtendedBloc, AdminExtendedState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            if (_showLoading) {
+              return Center(
+                  child: Lottie.asset('assets/lottie/loading.json',
+                      height: 300, width: 380, fit: BoxFit.fill));
+            }
+            if (state is UniformsLoadingState) {
+              return Center(
+                  child: Lottie.asset('assets/lottie/loading.json',
+                      height: 300, width: 380, fit: BoxFit.fill));
+            } else if (state is UniformsLoadedState) {
+              return SingleChildScrollView(
                 child: Column(
                   children: [
                     Container(
@@ -231,131 +289,6 @@ class _UniformAdminState extends State<UniformAdmin> {
                         ],
                       ),
                     ),
-                    // Container(
-                    //   padding: EdgeInsets.all(20),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Text(
-                    //             "${_images.length + 2} Images",
-                    //             style: TextStyle(fontSize: 10),
-                    //           ),
-                    //           if (_images.isNotEmpty)
-                    //             IconButton(
-                    //               icon: Icon(
-                    //                 _isDeleteMode ? Icons.check : Icons.delete,
-                    //                 color:
-                    //                     _isDeleteMode ? Colors.green : Colors.red,
-                    //               ),
-                    //               onPressed: () {
-                    //                 if (_isDeleteMode) {
-                    //                   _showDeleteConfirmation();
-                    //                 } else {
-                    //                   _toggleDeleteMode();
-                    //                 }
-                    //               },
-                    //             ),
-                    //         ],
-                    //       ),
-                    //       SizedBox(height: 8),
-                    //       SingleChildScrollView(
-                    //         scrollDirection: Axis.horizontal,
-                    //         child: Row(
-                    //           children: [
-                    //             Container(
-                    //               decoration: BoxDecoration(
-                    //                 color: Color(0xFFD9D9D9),
-                    //               ),
-                    //               padding: EdgeInsets.all(8),
-                    //               child: Image.asset(
-                    //                 'assets/bsit.png',
-                    //                 height: 60,
-                    //                 width: 30,
-                    //                 fit: BoxFit.cover,
-                    //               ),
-                    //             ),
-                    //             SizedBox(width: 8),
-                    //             Container(
-                    //               decoration: BoxDecoration(
-                    //                 color: Color(0xFFD9D9D9),
-                    //               ),
-                    //               padding: EdgeInsets.all(8),
-                    //               child: Image.asset(
-                    //                 'assets/uniuni.png',
-                    //                 height: 60,
-                    //                 width: 30,
-                    //                 fit: BoxFit.cover,
-                    //               ),
-                    //             ),
-                    //             SizedBox(width: 8),
-                    //             ..._images.asMap().entries.map((entry) {
-                    //               int index = entry.key;
-                    //               File image = entry.value;
-                    //               return GestureDetector(
-                    //                 onTap: () {
-                    //                   if (_isDeleteMode) {
-                    //                     _selectImage(index);
-                    //                   }
-                    //                 },
-                    //                 child: Stack(
-                    //                   children: [
-                    //                     Container(
-                    //                       margin: EdgeInsets.only(right: 10),
-                    //                       decoration: BoxDecoration(
-                    //                         color: Color(0xFFD9D9D9),
-                    //                       ),
-                    //                       padding: EdgeInsets.all(6),
-                    //                       child: Image.file(
-                    //                         image,
-                    //                         height: 64,
-                    //                         width: 35,
-                    //                         fit: BoxFit.cover,
-                    //                       ),
-                    //                     ),
-                    //                     if (_isDeleteMode)
-                    //                       Positioned(
-                    //                         top: 0,
-                    //                         right: 0,
-                    //                         child: CircleAvatar(
-                    //                           radius: 12,
-                    //                           backgroundColor: Colors.white,
-                    //                           child: Icon(
-                    //                             _selectedImages[index]
-                    //                                 ? Icons.check_circle
-                    //                                 : Icons.circle_outlined,
-                    //                             color: Colors.red,
-                    //                             size: 18,
-                    //                           ),
-                    //                         ),
-                    //                       ),
-                    //                   ],
-                    //                 ),
-                    //               );
-                    //             }).toList(),
-                    //             GestureDetector(
-                    //               onTap: _pickImage,
-                    //               child: Container(
-                    //                 height: 75,
-                    //                 width: 45,
-                    //                 decoration: BoxDecoration(
-                    //                   color: Color(0xFFD9D9D9),
-                    //                 ),
-                    //                 child: Icon(
-                    //                   Icons.add,
-                    //                   size: 20,
-                    //                   color: primary_color,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
@@ -364,7 +297,8 @@ class _UniformAdminState extends State<UniformAdmin> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Size Stocks",
@@ -452,13 +386,16 @@ class _UniformAdminState extends State<UniformAdmin> {
                                 return DataRow(
                                   cells: [
                                     DataCell(
-                                      Center(child: Text(measure["size"] ?? "")),
+                                      Center(
+                                          child: Text(measure["size"] ?? "")),
                                     ),
                                     DataCell(
-                                      Center(child: Text(measure["chest"] ?? "")),
+                                      Center(
+                                          child: Text(measure["chest"] ?? "")),
                                     ),
                                     DataCell(
-                                      Center(child: Text(measure["hips"] ?? "")),
+                                      Center(
+                                          child: Text(measure["hips"] ?? "")),
                                     ),
                                   ],
                                 );
@@ -472,17 +409,16 @@ class _UniformAdminState extends State<UniformAdmin> {
                     const SizedBox(height: 20),
                   ],
                 ),
-            );
-          } else if (state is UniformsErrorState) {
-            return Center(child: Text(state.error));
-          } else {
-            return Center(
-              child: Lottie.asset('assets/lottie/loading.json',
-              height: 300, width: 380, fit: BoxFit.fill));
-          }
-        },
-      )
-    );
+              );
+            } else if (state is UniformsErrorState) {
+              return Center(child: Text(state.error));
+            } else {
+              return Center(
+                  child: Lottie.asset('assets/lottie/loading.json',
+                      height: 300, width: 380, fit: BoxFit.fill));
+            }
+          },
+        ));
   }
 
   Widget slides(BuildContext context) {
@@ -529,8 +465,8 @@ class _UniformAdminState extends State<UniformAdmin> {
           int index = entry.key;
           Uniform uniform = entry.value;
 
-          double leftPadding = index == 0 ? 0 : 10;
-          double rightPadding = index == uniforms.length - 1 ? 0 : 10;
+          double leftPadding = index == 0 ? 0 : 5;
+          double rightPadding = index == uniforms.length - 1 ? 0 : 5;
 
           return Padding(
             padding: EdgeInsets.only(left: leftPadding, right: rightPadding),
@@ -543,12 +479,12 @@ class _UniformAdminState extends State<UniformAdmin> {
               elevation: 8,
               child: Container(
                 width:
-                    MediaQuery.of(context).size.width * 0.5, // Adjusted width
+                    MediaQuery.of(context).size.width * 0.4, // Adjusted to 40%
                 height: 50,
                 child: Row(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.10, // 15%
+                      width: MediaQuery.of(context).size.width * 0.10, // 10%
                       height: double.infinity,
                       decoration: BoxDecoration(
                         color: primary_color,
@@ -568,76 +504,66 @@ class _UniformAdminState extends State<UniformAdmin> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 10,
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Stock: ${uniform.Stock}',
-                                  style: TextStyle(
-                                    color: uniform.Stock > 0
-                                        ? primary_color
-                                        : Colors.redAccent,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                                Text(
-                                  'Reserved: ${uniform.Reserved}',
-                                  style: TextStyle(
-                                    color: uniform.Reserved > 0
-                                        ? Colors.green
-                                        : Colors.red,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            // add button
-
-                            IconButton(
-                               onPressed: () {
-                                 _showUpdateUniformDialog(context, uniform);
-                               },
-                               icon: Icon(
-                                 Icons.add,
-                                 color: primary_color,
-   ),
-                             ),
-
-
-                            Container(
-                              width: 40,
-                              child: IconButton(
-                                onPressed: () {
-                                  adminRepository.deleteUniform(uniform.id);
-                                  Future.delayed(Duration(seconds: 1), () {
-                                    BlocProvider.of<AdminExtendedBloc>(context)
-                                        .add(ShowUniformsEvent(
-                                            widget.courseName,
-                                            widget.stock.Gender,
-                                            widget.stock.Type,
-                                            widget.stock.Body));
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.remove,
-                                  color: primary_color,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment:
+                            MainAxisAlignment.start, // Align to start
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Stock: ${uniform.Stock}',
+                                style: TextStyle(
+                                  color: uniform.Stock > 0
+                                      ? primary_color
+                                      : Colors.redAccent,
+                                  fontSize: 10,
                                 ),
                               ),
+                              Text(
+                                'Reserved: ${uniform.Reserved}',
+                                style: TextStyle(
+                                  color: uniform.Reserved > 0
+                                      ? Colors.green
+                                      : Colors.red,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              _showUpdateUniformDialog(context, uniform);
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              color: primary_color,
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(width: 4), // Adjust spacing
+                          IconButton(
+                            onPressed: () {
+                              adminRepository.deleteUniform(uniform.id);
+                              Future.delayed(Duration(seconds: 1), () {
+                                BlocProvider.of<AdminExtendedBloc>(context).add(
+                                    ShowUniformsEvent(
+                                        widget.courseName,
+                                        widget.stock.Gender,
+                                        widget.stock.Type,
+                                        widget.stock.Body));
+                              });
+                            },
+                            icon: Icon(
+                              Icons.remove,
+                              color: primary_color,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -659,7 +585,7 @@ class _UniformAdminState extends State<UniformAdmin> {
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(5.0),
           ),
           backgroundColor: Colors.white,
           title: Padding(
@@ -667,9 +593,9 @@ class _UniformAdminState extends State<UniformAdmin> {
             child: Text(
               'Update Uniform Stock',
               style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
             ),
           ),
@@ -679,21 +605,42 @@ class _UniformAdminState extends State<UniformAdmin> {
               children: [
                 Text(
                   'Uniform Size: ${uniform.Size}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  style: TextStyle(color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 10),
-                TextField(
-                  controller: stockController,
-                  decoration: InputDecoration(
-                    labelText: 'Stock',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[200],
+
+                Container(
+                  height: 40,
+                  width: double.infinity,
+                  child: TextFormField(
+                    controller: stockController,
+                    decoration: InputDecoration(
+                        border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                          color: primary_color,
+                        )),
+                        hintText: 'Stock',
+                        hintStyle: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w400),
+                        suffixStyle:
+                            TextStyle(color: Colors.grey, fontSize: 12)),
                   ),
-                  keyboardType: TextInputType.number,
-                ),
+                )
+
+                // TextField(
+                //   controller: stockController,
+                //   decoration: InputDecoration(
+                //     labelText: 'Stock',
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(10.0),
+                //     ),
+                //     filled: true,
+                //     fillColor: Colors.grey[200],
+                //   ),
+                //   keyboardType: TextInputType.number,
+                // ),
               ],
             ),
           ),
@@ -702,10 +649,21 @@ class _UniformAdminState extends State<UniformAdmin> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.black),
-              ),
+              child: Container(
+                  height: 30,
+                  width: 112,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: primary_color),
+                  child: Center(
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )),
             ),
             TextButton(
               onPressed: () {
@@ -728,13 +686,21 @@ class _UniformAdminState extends State<UniformAdmin> {
                   print('Stock input is empty');
                 }
               },
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.greenAccent,
-              ),
-              child: const Text(
-                'Update',
-                style: TextStyle(color: Colors.black),
-              ),
+              child: Container(
+                  height: 30,
+                  width: 112,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: primary_color),
+                  child: Center(
+                    child: Text(
+                      'Update',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )),
             ),
           ],
         );
